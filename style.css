@@ -1,0 +1,88 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  background: #ede8df;
+}
+
+/* ── Hero Section ── */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: #ede8df;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* ── Blobs ── */
+.blob {
+  position: absolute;
+  width: 52vw;
+  height: 52vw;
+  background: #0a0a0a;
+  border-radius: 50%;
+  filter: blur(48px);
+}
+
+.blob-tl {
+  top: -26vw;
+  left: -26vw;
+}
+
+.blob-tr {
+  top: -26vw;
+  right: -26vw;
+}
+
+.blob-bl {
+  bottom: -26vw;
+  left: -26vw;
+}
+
+.blob-br {
+  bottom: -26vw;
+  right: -26vw;
+}
+
+/* ── Center Content ── */
+.hero-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: #1a1a1a;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 2px;
+}
+
+h1 {
+  font-size: clamp(32px, 5vw, 58px);
+  font-weight: 500;
+  color: #111111;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+}
+
+.byline {
+  font-size: clamp(13px, 1.4vw, 17px);
+  font-weight: 400;
+  color: #1a1a1a;
+  letter-spacing: 0.01em;
+}
