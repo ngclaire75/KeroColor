@@ -165,11 +165,11 @@
   }
 
   .hero-script {
-    font-size: clamp(2rem, 9vw, 2.8rem);
+    font-size: clamp(2rem, calc(58px - 6vw), 2.4rem);
   }
 
   .you-clip {
-    padding-right: 0.5em;
+    padding-right: 0.3em;
   }
 
   .hero-body {
