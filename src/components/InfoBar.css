@@ -9,6 +9,8 @@
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
   font-size: 0.85rem;
   color: #5a2030;
+  position: relative;
+  overflow: visible;
 }
 
 .newsletter-link {
@@ -27,6 +29,42 @@
   align-items: center;
   gap: 0.6rem;
   font-size: 0.82rem;
+}
+
+.today-date-wrap {
+  position: relative;
+}
+
+@keyframes float-down {
+  0%, 100% { transform: translateX(-50%) translateY(0);    }
+  50%       { transform: translateX(-50%) translateY(5px);  }
+}
+
+.today-date-float {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  animation: float-down 2s ease-in-out infinite;
+}
+
+.today-date-hint {
+  white-space: nowrap;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: #5a2030;
+}
+
+.today-date-arrow {
+  width: 10px;
+  height: 26px;
+  color: #5a2030;
 }
 
 .today-date {
