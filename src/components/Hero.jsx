@@ -1,5 +1,5 @@
 import './Hero.css'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, forwardRef } from 'react'
 import cakeImg   from '../../images/cake.png'
 import drinkImg  from '../../images/drink.png'
 import starImg   from '../../images/star.png'
@@ -37,9 +37,14 @@ function hslToRgb(h, s, l) {
   return [Math.round(hue(h + 1/3) * 255), Math.round(hue(h) * 255), Math.round(hue(h - 1/3) * 255)]
 }
 
-// Replaces only red-hued pixels with crimson #7c1a2e, preserving original lightness
-function SonnyCanvas() {
+const SonnyCanvas = forwardRef(function SonnyCanvas(props, ref) {
   const canvasRef = useRef(null)
+
+  const setRef = (el) => {
+    canvasRef.current = el
+    if (typeof ref === 'function') ref(el)
+    else if (ref) ref.current = el
+  }
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -56,13 +61,10 @@ function SonnyCanvas() {
       const { data } = imageData
 
       for (let i = 0; i < data.length; i += 4) {
-        if (data[i + 3] < 10) continue // skip transparent
+        if (data[i + 3] < 10) continue
         const [h, s, l] = rgbToHsl(data[i], data[i + 1], data[i + 2])
-        // Red hue: 0–20° or 340–360°, high saturation, mid-dark lightness only
-        // Excludes skin tones (lower sat, higher lightness) and near-black/white
         const isRed = (h <= 20 || h >= 340) && s > 0.55 && l > 0.08 && l < 0.60
         if (isRed) {
-          // Scale lightness toward text colour's L≈0.29 so result stays dark crimson
           const adjustedL = Math.max(0.10, Math.min(0.42, l * 0.78))
           const [nr, ng, nb] = hslToRgb(348, 0.65, adjustedL)
           data[i] = nr; data[i + 1] = ng; data[i + 2] = nb
@@ -72,29 +74,55 @@ function SonnyCanvas() {
     }
   }, [])
 
-  return <canvas ref={canvasRef} className="sonny" aria-hidden="true" />
-}
+  return <canvas ref={setRef} className="sonny" aria-hidden="true" />
+})
 
 export default function Hero() {
+  const sonnyRef  = useRef(null)
+  const movesRef  = useRef(null)
+  const centerRef = useRef(null)
+
+  useEffect(() => {
+    const align = () => {
+      if (!sonnyRef.current || !movesRef.current || !centerRef.current) return
+      if (window.innerWidth > 640) {
+        sonnyRef.current.style.top = ''  // let CSS handle desktop
+        return
+      }
+      const cRect = centerRef.current.getBoundingClientRect()
+      const mRect = movesRef.current.getBoundingClientRect()
+      const sH    = sonnyRef.current.offsetHeight
+      const lineCenter = mRect.top + mRect.height / 2 - cRect.top
+      sonnyRef.current.style.top = `${lineCenter - sH / 2}px`
+    }
+
+    align()
+    const ro = new ResizeObserver(align)
+    ro.observe(document.body)
+    return () => ro.disconnect()
+  }, [])
+
   return (
     <section className="hero">
-      {/* Left image column */}
       <div className="hero-img">
         <img src={cakeImg} alt="Cake" />
       </div>
 
-      {/* Center content */}
-      <div className="hero-center">
-        {/* Decorative stars */}
-        <img src={starImg}   alt="" className="star star-tl"      aria-hidden="true" />
-        <img src={starImg}   alt="" className="star star-tr"      aria-hidden="true" />
-        <img src={starImg}   alt="" className="star star-mid"     aria-hidden="true" />
-        <img src={starImg}   alt="" className="star star-bl"      aria-hidden="true" />
-        <img src={starImg}   alt="" className="star star-br"      aria-hidden="true" />
-        <img src={ribbonImg} alt="" className="ribbon ribbon-cl"  aria-hidden="true" />
-        <img src={ribbonImg} alt="" className="ribbon ribbon-cr"  aria-hidden="true" />
-        <SonnyCanvas />
-        <p className="hero-script">color that<br />moves <span className="you-clip"><span className="animate-you">you</span></span></p>
+      <div className="hero-center" ref={centerRef}>
+        <img src={starImg}   alt="" className="star star-tl"     aria-hidden="true" />
+        <img src={starImg}   alt="" className="star star-tr"     aria-hidden="true" />
+        <img src={starImg}   alt="" className="star star-mid"    aria-hidden="true" />
+        <img src={starImg}   alt="" className="star star-bl"     aria-hidden="true" />
+        <img src={starImg}   alt="" className="star star-br"     aria-hidden="true" />
+        <img src={ribbonImg} alt="" className="ribbon ribbon-cl" aria-hidden="true" />
+        <img src={ribbonImg} alt="" className="ribbon ribbon-cr" aria-hidden="true" />
+
+        <SonnyCanvas ref={sonnyRef} />
+
+        <p className="hero-script">
+          color that<br />
+          <span ref={movesRef}>moves </span><span className="you-clip"><span className="animate-you">you</span></span>
+        </p>
         <p className="hero-body">
           If you love bold palettes, expressive art, and colors with a story
           to tell — you're in the right place and we're happy to deliver.
@@ -102,7 +130,6 @@ export default function Hero() {
         <a href="#" className="hero-btn">analyze colors now!</a>
       </div>
 
-      {/* Right image column */}
       <div className="hero-img">
         <img src={drinkImg} alt="Drink" />
       </div>
