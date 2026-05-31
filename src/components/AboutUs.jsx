@@ -1,7 +1,6 @@
 import './AboutUs.css'
 import laceImg    from '../../images/lace.png'
 import bettyImg   from '../../images/bettyboop.png'
-import cloudImg   from '../../images/cloud.png'
 
 export default function AboutUs() {
   return (
@@ -30,7 +29,6 @@ export default function AboutUs() {
         </div>
         <div className="au-img-wrap">
           <img src={bettyImg} alt="Betty Boop" className="au-betty" />
-          <img src={cloudImg} alt="" aria-hidden="true" className="au-cloud" />
         </div>
       </div>
     </section>
