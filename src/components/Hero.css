@@ -178,9 +178,11 @@
   }
 
   .sonny {
+      position: absolute;
     width: 21vw;
-    top: 6%;
+    top: 9%;
     left: 9%;
+      object-fit: contain;
   }
 
   .star-tl  { width: 6vw;  }
