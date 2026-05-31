@@ -151,13 +151,13 @@
 
 .cm-redbook {
   position: absolute;
-  top: 9%;
-  left: 11%;
-  width: 78%;
-  height: 82%;
+  top: 11%;
+  left: 13%;
+  width: 74%;
+  height: 78%;
   object-fit: cover;
   object-position: center;
-  clip-path: ellipse(50% 50% at 50% 50%);
+  clip-path: ellipse(48% 48% at 50% 50%);
   z-index: 1;
 }
 
