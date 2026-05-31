@@ -158,14 +158,14 @@
     z-index: 0;
   }
 
-  /* arriving: top of gap → through circle (excess hidden by circle overflow:hidden) */
+  /* arriving: spans exactly the gap, ends flush at the circle's top edge */
   .hww-step:not(:first-child)::before {
     content: '';
     position: absolute;
     left: 9.3vw;
     transform: translateX(-50%);
-    top: -2.5rem;                      /* start at top of gap above this step */
-    height: calc(2.5rem + 18.6vw);    /* gap + full circle = guaranteed to touch */
+    top: -2.5rem;    /* start at bottom of previous step */
+    height: 2.5rem;  /* cover only the gap — stops right at circle top, never inside */
     width: 1px;
     background: #c4b8ac;
     z-index: 0;
