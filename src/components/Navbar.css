@@ -25,13 +25,14 @@
 
 @media (max-width: 640px) {
   .navbar {
-    flex-wrap: wrap;
-    gap: 0.5rem 1.1rem;
-    padding: 0.7rem 1.2rem;
+    flex-wrap: nowrap;
+    gap: 0.4rem;
+    padding: 0.7rem 0.5rem;
     justify-content: center;
+    overflow-x: hidden;
   }
 
   .nav-link {
-    font-size: 0.68rem;
+    font-size: clamp(0.5rem, 1.55vw, 0.62rem);
   }
 }
