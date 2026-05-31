@@ -168,6 +168,10 @@
     font-size: clamp(2rem, 9vw, 2.8rem);
   }
 
+  .you-clip {
+    padding-right: 0.35em;
+  }
+
   .hero-body {
     font-size: 0.92rem;
     max-width: 90%;
