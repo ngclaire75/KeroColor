@@ -140,14 +140,26 @@
     gap: 2.5rem 0;
   }
 
-  /* vertical line through the circle centres */
+  /* hide the single absolute line — replaced by per-step connectors */
   .hww-line {
-    top: 9.3vw;
-    bottom: 9.3vw;
+    display: none;
+  }
+
+  /* each non-last step draws its own connector to the next circle's centre */
+  .hww-step {
+    position: relative;
+  }
+
+  .hww-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
     left: 9.3vw;
-    right: auto;
+    transform: translateX(-50%);
+    top: 18.6vw;                        /* bottom edge of this circle */
+    bottom: calc(-2.5rem - 9.3vw);      /* centre of next circle (gap + half-circle) */
     width: 1px;
-    height: auto;
+    background: #c4b8ac;
+    z-index: 0;
   }
 
   /* hide timeline-level decos on mobile */
