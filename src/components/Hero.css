@@ -65,11 +65,6 @@
 .ribbon-cl { width: 38px; top: 55%; left: 6%;  animation-delay: -2.2s; transform: rotate(-8deg);  }
 .ribbon-cr { width: 32px; top: 28%; right: 7%; animation-delay: -0.4s; transform: rotate(15deg); }
 
-/* desktop: wrapper is invisible to layout so Sonny stays absolutely positioned */
-.hero-title-row {
-  display: contents;
-}
-
 /* ── Center content ── */
 .hero-center {
   position: relative;
@@ -182,20 +177,10 @@
     max-width: 90%;
   }
 
-  /* flex row: Sonny sits in flow, bottom-aligned with the text block */
-  .hero-title-row {
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    gap: 2vw;
-  }
-
   .sonny {
-    position: relative;
-    top: auto;
-    left: auto;
     width: 21vw;
-    flex-shrink: 0;
+    top: 6%;
+    left: 9%;
   }
 
   .star-tl  { width: 6vw;  }
