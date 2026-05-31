@@ -127,7 +127,7 @@
 
 @media (max-width: 640px) {
   .hww {
-    padding: 3.5rem 3.5vw 4rem;
+    padding: 3.5rem 15px 4rem;
   }
 
   .hww-heading {
@@ -140,46 +140,45 @@
     gap: 2.5rem 0;
   }
 
-  /* hide the single absolute line — replaced by split connectors */
   .hww-line { display: none; }
 
   .hww-step { position: relative; }
 
-  /* departing: circle bottom → bottom of THIS step (stays inside step bounds) */
+  /* departing: circle bottom → bottom of THIS step */
   .hww-step:not(:last-child)::after {
     content: '';
     position: absolute;
-    left: 9.3vw;
+    left: 40px;
     transform: translateX(-50%);
-    top: 18.6vw;                  /* bottom edge of circle, not inside it */
-    height: calc(100% - 5.6vw); /* reaches step's own bottom edge, never beyond */
+    top: 80px;
+    height: calc(100% - 80px);
     width: 1px;
     background: #c4b8ac;
     z-index: 0;
   }
 
-  /* arriving: spans exactly the gap, ends flush at the circle's top edge */
+  /* arriving: spans exactly the gap, stops flush at circle top */
   .hww-step:not(:first-child)::before {
     content: '';
     position: absolute;
-    left: 9.3vw;
+    left: 40px;
     transform: translateX(-50%);
+    top: -2.5rem;
+    height: 2.5rem;
     width: 1px;
     background: #c4b8ac;
     z-index: 0;
   }
 
-  /* hide timeline-level decos on mobile */
   .hww-deco { display: none; }
 
-  /* per-step deco: anchored from step top so it always tracks the circle */
   .hww-step-deco {
     display: block;
     position: absolute;
-    left: 9.3vw;
-    top: calc(18.6vw + 2.5rem);
+    left: 40px;
+    top: calc(80px + 2.5rem);
     transform: translate(-50%, -50%);
-    width: 8.4vw;
+    width: 36px;
     pointer-events: none;
     z-index: 2;
   }
@@ -187,12 +186,12 @@
   .hww-step {
     flex-direction: row;
     align-items: flex-start;
-    gap: 2.8vw;
+    gap: 12px;
   }
 
   .hww-node {
-    width: 18.6vw;
-    height: 18.6vw;
+    width: 80px;
+    height: 80px;
     flex-shrink: 0;
     margin-bottom: 0;
   }

@@ -160,7 +160,7 @@
   }
 
   .hero-center {
-    padding: 3.5rem 4.7vw 4rem;
+    padding: 3.5rem 20px 4rem;
     gap: 1.1rem;
   }
 
@@ -178,19 +178,19 @@
   }
 
   .sonny {
-      position: absolute;
-    width: 21vw;
+    position: absolute;
+    width: 90px;
     top: 9%;
     left: 9%;
-      object-fit: contain;
+    object-fit: contain;
   }
 
-  .star-tl  { width: 6vw;  }
-  .star-tr  { width: 4.7vw; }
-  .star-mid { width: 3.7vw; }
-  .star-bl  { width: 5.1vw; }
-  .star-br  { width: 4.2vw; }
+  .star-tl  { width: 26px; }
+  .star-tr  { width: 20px; }
+  .star-mid { width: 16px; }
+  .star-bl  { width: 22px; }
+  .star-br  { width: 18px; }
 
-  .ribbon-cl { width: 6.5vw; top: 58%; }
-  .ribbon-cr { width: 5.6vw; }
+  .ribbon-cl { width: 28px; top: 58%; }
+  .ribbon-cr { width: 24px; }
 }
