@@ -88,13 +88,13 @@
 /* Clips the word so it vanishes when translated out */
 .you-clip {
   display: inline-block;
-  overflow: visible;
-  clip-path: inset(0 -0.25em);
+  overflow: hidden;
   vertical-align: bottom;
 }
 
 .animate-you {
   display: inline-block;
+  padding-right: 0.35em; /* gives italic u room before the clip boundary */
   animation: slide-down-loop 5s ease-in-out infinite;
 }
 
