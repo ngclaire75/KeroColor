@@ -88,9 +88,9 @@
 /* Clips the word so it vanishes when translated out */
 .you-clip {
   display: inline-block;
-  overflow: hidden;
+  overflow: visible;
+  clip-path: inset(0 -0.25em);
   vertical-align: bottom;
-  padding-right: 0.15em;
 }
 
 .animate-you {
@@ -168,9 +168,6 @@
     font-size: clamp(2rem, calc(58px - 6vw), 2.4rem);
   }
 
-  .you-clip {
-    padding-right: 0.55em;
-  }
 
   .hero-body {
     font-size: 0.92rem;
