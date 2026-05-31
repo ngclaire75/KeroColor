@@ -166,6 +166,7 @@
 
   .hero-script {
     font-size: clamp(2rem, calc(58px - 6vw), 2.4rem);
+    width: 100%;
   }
 
 
