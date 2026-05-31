@@ -1,0 +1,136 @@
+.ak {
+  background: #fff;
+  padding: 3.5rem clamp(2rem, 6vw, 5rem) 3.5rem;
+}
+
+/* ── Header ── */
+.ak-header {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 1.5rem 4rem;
+  align-items: start;
+  margin-bottom: 2.8rem;
+}
+
+.ak-heading {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(2.4rem, 5.5vw, 5rem);
+  font-weight: 900;
+  color: #111;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.ak-accent {
+  color: #7c1a2e;
+}
+
+.ak-desc {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(0.85rem, 1vw, 0.95rem);
+  color: #1a1a1a;
+  line-height: 1.75;
+  margin: 0;
+  padding-top: 0.3rem;
+  font-weight: 400;
+}
+
+/* ── Cards ── */
+.ak-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  align-items: center;
+}
+
+.ak-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1.1rem 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  background: #fff;
+}
+
+/* Featured card — dark crimson, taller */
+.ak-card--featured {
+  background: #7c1a2e;
+  border-color: #7c1a2e;
+  border-radius: 10px;
+  margin-top: -1.4rem;
+  margin-bottom: -1.4rem;
+  padding: 1.3rem 1rem 1.4rem;
+}
+
+.ak-card-title {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(0.7rem, 0.9vw, 0.82rem);
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #111;
+  margin: 0;
+}
+
+.ak-card--featured .ak-card-title {
+  color: #fff;
+}
+
+.ak-card-img-wrap {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.ak-card--featured .ak-card-img-wrap {
+  outline: 3px solid rgba(255,255,255,0.3);
+  outline-offset: -4px;
+  border-radius: 4px;
+}
+
+.ak-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.ak-card-body {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(0.88rem, 1vw, 1rem);
+  color: #333;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.ak-card--featured .ak-card-body {
+  color: #f0d0d0;
+}
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+  .ak {
+    padding: 3rem 5vw 3.5rem;
+  }
+
+  .ak-header {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .ak-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+  }
+
+  .ak-card--featured {
+    margin-top: -0.8rem;
+    margin-bottom: -0.8rem;
+  }
+}

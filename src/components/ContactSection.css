@@ -1,0 +1,133 @@
+.ct {
+  background: #f2e8d9;
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  gap: 2rem 6rem;
+  padding: 5rem clamp(2rem, 8vw, 7rem) 5rem;
+  align-items: start;
+}
+
+/* ── Form ── */
+.ct-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.ct-input,
+.ct-textarea {
+  width: 100%;
+  background: transparent;
+  border: 1px solid #7c1a2e;
+  border-bottom: none;
+  padding: 1rem 1.2rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: #7c1a2e;
+  outline: none;
+  resize: none;
+}
+
+.ct-input::placeholder,
+.ct-textarea::placeholder {
+  color: #7c1a2e;
+  opacity: 0.7;
+}
+
+.ct-textarea {
+  border-bottom: 1px solid #7c1a2e;
+}
+
+.ct-btn {
+  margin-top: 1.8rem;
+  width: clamp(160px, 25%, 260px);
+  padding: 1rem;
+  background: #3a0a14;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.ct-btn:hover {
+  background: #5e1222;
+}
+
+.ct-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ct-feedback {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  margin-top: 0.8rem;
+}
+
+.ct-feedback--ok  { color: #b22222; }
+.ct-feedback--err { color: #c0392b; }
+
+/* ── Info sidebar ── */
+.ct-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding-top: 0.2rem;
+}
+
+.ct-info-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #3a1a22;
+  margin: 0 0 0.4rem;
+}
+
+.ct-info-value {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: #7c1a2e;
+  line-height: 1.8;
+  margin: 0;
+}
+
+.ct-socials {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 0.3rem;
+}
+
+.ct-socials a {
+  color: #3a1a22;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.ct-socials a:hover {
+  color: #7c1a2e;
+}
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+  .ct {
+    grid-template-columns: 1fr;
+    padding: 3.5rem 5vw;
+    gap: 3rem;
+  }
+
+  .ct-btn {
+    width: 100%;
+  }
+}

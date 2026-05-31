@@ -1,0 +1,20 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Cormorant Garamond', serif;
+  background: #f2e8d9;
+  overflow-x: hidden;
+}
+
+/* Prevent iOS Safari auto-zoom on input focus (triggers below 16px) */
+input, textarea, select {
+  font-size: max(16px, 1em);
+}

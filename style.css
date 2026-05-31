@@ -21,34 +21,87 @@ body {
   overflow: hidden;
 }
 
-/* ── Blobs ── */
-.blob {
+/* ── Cow spots ── */
+.spots {
   position: absolute;
-  width: 52vw;
-  height: 52vw;
-  background: #0a0a0a;
-  border-radius: 50%;
-  filter: blur(48px);
+  inset: 0;
+  overflow: hidden;
+  filter: blur(5px);
 }
 
-.blob-tl {
-  top: -26vw;
-  left: -26vw;
+.spot {
+  position: absolute;
+  background: #111;
 }
 
-.blob-tr {
-  top: -26vw;
-  right: -26vw;
+/* Large — partially off-screen at corners */
+.s1 {
+  width: 38vw; height: 30vh;
+  border-radius: 42% 58% 66% 34% / 48% 44% 56% 52%;
+  top: -5vh; left: -5vw;
+  animation: drift-a 9s ease-in-out infinite;
+}
+.s7 {
+  width: 40vw; height: 32vh;
+  border-radius: 36% 64% 52% 48% / 54% 46% 54% 46%;
+  bottom: -6vh; right: -5vw;
+  animation: drift-b 11s ease-in-out infinite;
+  animation-delay: -4s;
+}
+.s6 {
+  width: 32vw; height: 26vh;
+  border-radius: 52% 48% 38% 62% / 44% 56% 44% 56%;
+  bottom: -4vh; left: 4vw;
+  animation: drift-a 13s ease-in-out infinite;
+  animation-delay: -6s;
 }
 
-.blob-bl {
-  bottom: -26vw;
-  left: -26vw;
+/* Medium — hugging edges */
+.s2 {
+  width: 24vw; height: 20vh;
+  border-radius: 58% 42% 36% 64% / 52% 60% 40% 48%;
+  top: 4vh; right: 1vw;
+  animation: drift-b 10s ease-in-out infinite;
+  animation-delay: -2s;
+}
+.s3 {
+  width: 26vw; height: 28vh;
+  border-radius: 44% 56% 50% 50% / 60% 40% 60% 40%;
+  top: 28vh; left: -3vw;
+  animation: drift-a 12s ease-in-out infinite;
+  animation-delay: -8s;
+}
+.s8 {
+  width: 22vw; height: 18vh;
+  border-radius: 55% 45% 62% 38% / 46% 54% 46% 54%;
+  bottom: 6vh; right: 14vw;
+  animation: drift-b 9s ease-in-out infinite;
+  animation-delay: -3s;
 }
 
-.blob-br {
-  bottom: -26vw;
-  right: -26vw;
+/* Small — scattered accents */
+.s4 {
+  width: 13vw; height: 9vh;
+  border-radius: 55% 45% 62% 38% / 42% 58% 42% 58%;
+  top: 5vh; left: 36vw;
+  animation: drift-a 8s ease-in-out infinite;
+  animation-delay: -1s;
+}
+.s5 {
+  width: 11vw; height: 15vh;
+  border-radius: 48% 52% 44% 56% / 56% 44% 56% 44%;
+  top: 46vh; right: 4vw;
+  animation: drift-b 10s ease-in-out infinite;
+  animation-delay: -5s;
+}
+
+@keyframes drift-a {
+  0%, 100% { transform: translate(0,    0);      }
+  50%       { transform: translate(10px, -12px); }
+}
+@keyframes drift-b {
+  0%, 100% { transform: translate(0,     0);    }
+  50%       { transform: translate(-12px, 10px); }
 }
 
 /* ── Center Content ── */

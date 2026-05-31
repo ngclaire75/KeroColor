@@ -1,0 +1,203 @@
+.cm {
+  display: grid;
+  grid-template-columns: 0.55fr 1.15fr;
+  align-items: center;
+  background: #f8f2ea;
+  padding-left: clamp(2rem, 6vw, 5rem);
+}
+
+/* ══════════════════════════════════
+   LEFT PANEL — texture + concave corners
+══════════════════════════════════ */
+.cm-left {
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2.5rem clamp(2rem, 5vw, 4rem);
+  gap: 1.2rem;
+  position: relative;
+  align-self: center;
+  height: 640px;
+
+  /* Concave corner mask — radial cutouts at every corner */
+  -webkit-mask:
+    radial-gradient(circle at top    left,  transparent 32px, #000 33px) top    left  / 51% 51%,
+    radial-gradient(circle at top    right, transparent 32px, #000 33px) top    right / 51% 51%,
+    radial-gradient(circle at bottom left,  transparent 32px, #000 33px) bottom left  / 51% 51%,
+    radial-gradient(circle at bottom right, transparent 32px, #000 33px) bottom right / 51% 51%;
+  -webkit-mask-repeat: no-repeat;
+  mask:
+    radial-gradient(circle at top    left,  transparent 32px, #000 33px) top    left  / 51% 51%,
+    radial-gradient(circle at top    right, transparent 32px, #000 33px) top    right / 51% 51%,
+    radial-gradient(circle at bottom left,  transparent 32px, #000 33px) bottom left  / 51% 51%,
+    radial-gradient(circle at bottom right, transparent 32px, #000 33px) bottom right / 51% 51%;
+  mask-repeat: no-repeat;
+}
+
+.cm-script {
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(2.8rem, 5vw, 4.2rem);
+  color: #f5c8c8;
+  line-height: 1;
+  margin: 0;
+}
+
+.cm-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.8rem, 3.2vw, 2.8rem);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.cm-body {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+  color: #f0d0d0;
+  line-height: 1.8;
+  max-width: 420px;
+  margin: 0;
+}
+
+.cm-cta {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #f5c8c8;
+  text-decoration: underline;
+  text-decoration-color: #f5c8c8;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  align-self: flex-start;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.cm-cta:hover {
+  color: #fff;
+  text-decoration-color: #fff;
+}
+
+/* ══════════════════════════════════
+   RIGHT PANEL
+══════════════════════════════════ */
+.cm-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3rem clamp(1.5rem, 4vw, 3.5rem);
+  gap: 1rem;
+}
+
+/* ── Feature rows ── */
+.cm-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0 1.5rem;
+  width: 100%;
+}
+
+.cm-feat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.4rem;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.cm-feat--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cm-diamond {
+  width: 18px;
+  height: auto;
+  display: block;
+}
+
+.cm-feat p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1rem, 1.2vw, 1.15rem);
+  color: #9b2335;
+  line-height: 1.65;
+  margin: 0;
+  max-width: 8em;
+}
+
+/* ── Oval frame ── */
+.cm-frame-wrap {
+  position: relative;
+  width: clamp(200px, 24vw, 320px);
+  flex-shrink: 0;
+}
+
+.cm-frame {
+  width: 100%;
+  height: auto;
+  display: block;
+  position: relative;
+  z-index: 2;
+}
+
+.cm-redbook {
+  position: absolute;
+  top: 9%;
+  left: 11%;
+  width: 78%;
+  height: 82%;
+  object-fit: cover;
+  object-position: center;
+  clip-path: ellipse(50% 50% at 50% 50%);
+  z-index: 1;
+}
+
+/* ══════════════════════════════════
+   MOBILE
+══════════════════════════════════ */
+@media (max-width: 640px) {
+  .cm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-left: 0;
+    gap: 2rem;
+    padding: 2.5rem 0 3rem;
+  }
+
+  .cm-left {
+    width: 82vw;
+    height: auto;
+    min-height: 88vw;
+    align-self: center;
+    padding: 2rem 6.7vw;
+    gap: 0.9rem;
+  }
+
+  .cm-right {
+    width: 100%;
+    padding: 0 4.4vw;
+    gap: 1.2rem;
+  }
+
+  .cm-frame-wrap {
+    width: 50vw;
+  }
+
+  .cm-feat p {
+    font-size: 0.82rem;
+  }
+
+  .cm-cta {
+    line-height: 2;
+  }
+}
