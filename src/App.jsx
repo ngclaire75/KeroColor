@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Navbar     from './components/Navbar'
 import SiteHeader from './components/SiteHeader'
 import InfoBar    from './components/InfoBar'
@@ -16,6 +16,24 @@ import './App.css'
 
 export default function App() {
   const [calOpen, setCalOpen] = useState(false)
+
+  useEffect(() => {
+    const b = document.body
+    if (calOpen) {
+      b.style.overflow = 'hidden'
+      b.style.position = 'fixed'
+      b.style.width    = '100%'
+    } else {
+      b.style.overflow = ''
+      b.style.position = ''
+      b.style.width    = ''
+    }
+    return () => {
+      b.style.overflow = ''
+      b.style.position = ''
+      b.style.width    = ''
+    }
+  }, [calOpen])
 
   return (
     <div className="site">
