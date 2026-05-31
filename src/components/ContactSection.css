@@ -131,4 +131,8 @@
     width: 100%;
   }
 
+  .ct-input,
+  .ct-textarea {
+    font-size: max(16px, 1em);
+  }
 }
