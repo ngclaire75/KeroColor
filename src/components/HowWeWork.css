@@ -140,23 +140,32 @@
     gap: 2.5rem 0;
   }
 
-  /* hide the single absolute line — replaced by per-step connectors */
-  .hww-line {
-    display: none;
-  }
+  /* hide the single absolute line — replaced by split connectors */
+  .hww-line { display: none; }
 
-  /* each non-last step draws its own connector to the next circle's centre */
-  .hww-step {
-    position: relative;
-  }
+  .hww-step { position: relative; }
 
+  /* departing: circle centre → bottom of THIS step (stays inside step bounds) */
   .hww-step:not(:last-child)::after {
     content: '';
     position: absolute;
     left: 9.3vw;
     transform: translateX(-50%);
-    top: 18.6vw;                        /* bottom edge of this circle */
-    bottom: calc(-2.5rem - 9.3vw);      /* centre of next circle (gap + half-circle) */
+    top: 9.3vw;                  /* circle centre */
+    height: calc(100% - 9.3vw); /* reaches step's own bottom edge, never beyond */
+    width: 1px;
+    background: #c4b8ac;
+    z-index: 0;
+  }
+
+  /* arriving: top of gap → NEXT circle centre (fixed values, no content dependency) */
+  .hww-step:not(:first-child)::before {
+    content: '';
+    position: absolute;
+    left: 9.3vw;
+    transform: translateX(-50%);
+    top: -2.5rem;                      /* start at top of gap above this step */
+    height: calc(2.5rem + 9.3vw);     /* gap + half-circle = land on circle centre */
     width: 1px;
     background: #c4b8ac;
     z-index: 0;
