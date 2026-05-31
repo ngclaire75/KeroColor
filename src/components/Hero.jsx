@@ -93,9 +93,10 @@ export default function Hero() {
         <img src={starImg}   alt="" className="star star-br"      aria-hidden="true" />
         <img src={ribbonImg} alt="" className="ribbon ribbon-cl"  aria-hidden="true" />
         <img src={ribbonImg} alt="" className="ribbon ribbon-cr"  aria-hidden="true" />
-        <SonnyCanvas />
-
-        <p className="hero-script">color that<br />moves <span className="you-clip"><span className="animate-you">you</span></span></p>
+        <div className="hero-title-row">
+          <SonnyCanvas />
+          <p className="hero-script">color that<br />moves <span className="you-clip"><span className="animate-you">you</span></span></p>
+        </div>
         <p className="hero-body">
           If you love bold palettes, expressive art, and colors with a story
           to tell — you're in the right place and we're happy to deliver.
