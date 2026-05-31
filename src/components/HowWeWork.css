@@ -152,7 +152,7 @@
     left: 9.3vw;
     transform: translateX(-50%);
     top: 18.6vw;                  /* bottom edge of circle, not inside it */
-    height: calc(100% - 10.6vw); /* reaches step's own bottom edge, never beyond */
+    height: calc(100% - 5.6vw); /* reaches step's own bottom edge, never beyond */
     width: 1px;
     background: #c4b8ac;
     z-index: 0;
