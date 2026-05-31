@@ -131,9 +131,23 @@
     width: 100%;
   }
 
+  .ct-form {
+    overflow: hidden;
+  }
+
   .ct-input,
   .ct-textarea {
     font-size: 16px;
-    zoom: 0.6875;
+    transform: scale(0.6875);
+    transform-origin: top left;
+    width: calc(100% / 0.6875);
+  }
+
+  .ct-input {
+    margin-bottom: -16px;
+  }
+
+  .ct-textarea {
+    margin-bottom: -47px;
   }
 }
