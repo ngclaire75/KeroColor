@@ -131,4 +131,20 @@
     width: 100%;
   }
 
+  /* iOS 16+ ignores viewport meta tricks — only reliable fix is font-size ≥ 16px.
+     zoom: 0.65 on the container scales everything visually back to original size,
+     so inputs carry font-size:16px (no zoom) but appear at ~10.4px as designed. */
+  .ct-form {
+    zoom: 0.65;
+    width: calc(100% / 0.65);
+  }
+
+  .ct-input,
+  .ct-textarea {
+    font-size: 16px;
+  }
+
+  .ct-btn {
+    font-size: calc(0.7rem / 0.65);
+  }
 }
