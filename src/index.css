@@ -18,3 +18,11 @@ body {
 input, textarea, select {
   font-size: max(16px, 1em);
 }
+
+/* Scale base font size with viewport so rem-based text proportionally
+   matches iPhone 14 Pro Max (430px) on all smaller iPhone screens */
+@media (max-width: 640px) {
+  html {
+    font-size: clamp(14px, calc(0.36px + 3.64vw), 16px);
+  }
+}
