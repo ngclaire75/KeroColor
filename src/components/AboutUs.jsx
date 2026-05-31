@@ -12,7 +12,7 @@ export default function AboutUs() {
       </div>
       <div className="au-content">
         <div className="au-text">
-          <h2 className="au-heading">meet claire.</h2>
+          <h2 className="au-heading">meet our designer.</h2>
           <p className="au-role">Designer &amp; Programmer — Kero Group</p>
           <p className="au-desc">
             Hi, I'm Claire. I'm the designer behind KeroColor, the color
