@@ -43,7 +43,7 @@
   position: absolute;
   top: 22%;
   left: 5%;
-  width: clamp(85px, 16%, 120px);
+  width: clamp(95px, 20%, 145px);
   pointer-events: none;
   object-fit: contain;
 }
