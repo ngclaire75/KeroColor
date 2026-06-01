@@ -178,6 +178,7 @@
   .sonny {
     position: absolute;
     width: 90px;
+    height: 160px;
     top: 5%;
     left: 9%;
     object-fit: contain;

@@ -37,7 +37,7 @@ function hslToRgb(h, s, l) {
   return [Math.round(hue(h + 1/3) * 255), Math.round(hue(h) * 255), Math.round(hue(h - 1/3) * 255)]
 }
 
-const SonnyCanvas = forwardRef(function SonnyCanvas(props, ref) {
+const SonnyCanvas = forwardRef(function SonnyCanvas({ onReady }, ref) {
   const canvasRef = useRef(null)
 
   const setRef = (el) => {
@@ -71,8 +71,9 @@ const SonnyCanvas = forwardRef(function SonnyCanvas(props, ref) {
         }
       }
       ctx.putImageData(imageData, 0, 0)
+      onReady?.()
     }
-  }, [])
+  }, [onReady])
 
   return <canvas ref={setRef} className="sonny" aria-hidden="true" />
 })
@@ -81,6 +82,7 @@ export default function Hero() {
   const sonnyRef  = useRef(null)
   const movesRef  = useRef(null)
   const centerRef = useRef(null)
+  const alignRef  = useRef(null)
 
   useEffect(() => {
     const align = () => {
@@ -96,9 +98,11 @@ export default function Hero() {
       sonnyRef.current.style.top = `${lineCenter - sH / 2}px`
     }
 
+    alignRef.current = align
     align()
     const ro = new ResizeObserver(align)
     ro.observe(document.body)
+    if (sonnyRef.current) ro.observe(sonnyRef.current)
     return () => ro.disconnect()
   }, [])
 
@@ -117,7 +121,7 @@ export default function Hero() {
         <img src={ribbonImg} alt="" className="ribbon ribbon-cl" aria-hidden="true" />
         <img src={ribbonImg} alt="" className="ribbon ribbon-cr" aria-hidden="true" />
 
-        <SonnyCanvas ref={sonnyRef} />
+        <SonnyCanvas ref={sonnyRef} onReady={() => alignRef.current?.()} />
 
         <p className="hero-script">
           color that<br />
