@@ -1,0 +1,38 @@
+.navbar {
+  background: #7c1a2e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(1rem, 2.4vw, 3.2rem);
+  padding: 0.9rem clamp(1rem, 2vw, 2rem);
+}
+
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: lowercase;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+
+.nav-link:hover {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+@media (max-width: 640px) {
+  .navbar {
+    flex-wrap: nowrap;
+    gap: 1.1rem;
+    padding: 0.7rem 0.5rem;
+    justify-content: center;
+    overflow-x: hidden;
+  }
+
+  .nav-link {
+    font-size: clamp(0.55rem, 1.7vw, 0.68rem);
+  }
+}

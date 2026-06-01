@@ -1,0 +1,28 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Cormorant Garamond', serif;
+  background: #f2e8d9;
+  overflow-x: hidden;
+}
+
+/* Prevent iOS Safari auto-zoom on input focus (triggers below 16px) */
+input, textarea, select {
+  font-size: max(16px, 1em);
+}
+
+/* Scale base font size with viewport so rem-based text proportionally
+   matches iPhone 14 Pro Max (430px) on all smaller iPhone screens */
+@media (max-width: 640px) {
+  html {
+    font-size: clamp(14px, calc(0.36px + 3.64vw), 16px);
+  }
+}

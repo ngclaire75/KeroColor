@@ -1,0 +1,92 @@
+.au {
+  background: #3d0a08;
+  position: relative;
+  overflow: visible;
+}
+
+/* ── Lace — img row with negative margin to close gaps ── */
+.au-lace {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+}
+
+.au-lace-img {
+  height: 70px;
+  width: auto;
+  flex-shrink: 0;
+  margin-right: -11px;
+}
+
+.au-content {
+  padding: 2rem clamp(2rem, 8vw, 7rem) 2.5rem;
+}
+
+.au-img-wrap {
+  position: absolute;
+  right: 0;
+  top: -80px;
+  pointer-events: none;
+}
+
+.au-betty {
+  display: block;
+  height: clamp(160px, 20vw, 250px);
+  width: auto;
+  transform: scaleX(-1);
+}
+
+
+.au-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  max-width: 640px;
+}
+
+.au-heading {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  font-style: italic;
+  color: #f5ede6;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.au-role {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(0.85rem, 1.3vw, 1rem);
+  font-style: italic;
+  color: rgba(245, 237, 230, 0.55);
+  letter-spacing: 0.06em;
+  margin: 0;
+}
+
+.au-desc {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(0.95rem, 1.2vw, 1.08rem);
+  color: rgba(245, 237, 230, 0.72);
+  line-height: 1.8;
+  margin: 0;
+}
+
+.au-script {
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  color: #f5ede6;
+  margin: 0.2rem 0 0;
+  line-height: 1;
+}
+
+@media (max-width: 640px) {
+  .au-content {
+    padding: 1.5rem 5vw 2rem;
+  }
+
+  .au-betty {
+    height: clamp(150px, 38vw, 220px);
+  }
+
+}

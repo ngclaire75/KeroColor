@@ -1,0 +1,25 @@
+.ticker {
+  background: #7c1a2e;
+  overflow: hidden;
+  padding: 0.65rem 0;
+}
+
+.ticker-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: ticker-scroll 18s linear infinite;
+}
+
+.ticker-track span {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  color: #fff;
+}
+
+/* Scroll all the way left by exactly one copy width (50% of the two-copy track) */
+@keyframes ticker-scroll {
+  from { transform: translateX(0%);   }
+  to   { transform: translateX(-50%); }
+}

@@ -1,0 +1,95 @@
+.info-bar {
+  background: #f2e8d9;
+  border-top: 1px solid #d9cfc4;
+  border-bottom: 1px solid #d9cfc4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.55rem 1.6rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  font-size: 0.85rem;
+  color: #5a2030;
+  position: relative;
+  overflow: visible;
+}
+
+.newsletter-link {
+  color: #5a2030;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-style: italic;
+}
+
+.newsletter-link:hover { text-decoration: underline; }
+
+.social-group {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.82rem;
+}
+
+.today-date-wrap {
+  position: relative;
+}
+
+@keyframes float-down {
+  0%, 100% { transform: translateX(-50%) translateY(0);    }
+  50%       { transform: translateX(-50%) translateY(5px);  }
+}
+
+.today-date-float {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  animation: float-down 2s ease-in-out infinite;
+}
+
+.today-date-hint {
+  white-space: nowrap;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: #5a2030;
+}
+
+.today-date-arrow {
+  width: 10px;
+  height: 26px;
+  color: #5a2030;
+}
+
+.today-date {
+  font-style: italic;
+  color: #5a2030;
+}
+
+.today-date--btn {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.today-date--btn:hover { opacity: 0.65; }
+
+@media (max-width: 640px) {
+  .info-bar {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0;
+    padding: 0.7rem 1.4rem;
+    font-size: 0.75rem;
+  }
+}

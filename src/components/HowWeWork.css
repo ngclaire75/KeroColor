@@ -1,0 +1,203 @@
+.hww {
+  background: #f2e8d9;
+  padding: 6rem 8vw 7rem;
+  text-align: center;
+}
+
+.hww-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #7c1a2e;
+  margin-bottom: 1.4rem;
+}
+
+.hww-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+  font-weight: 600;
+  color: #1a0508;
+  line-height: 1.2;
+  margin-bottom: 5rem;
+}
+
+/* ── Timeline ── */
+.hww-timeline {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.hww-line {
+  position: absolute;
+  top: clamp(35px, 4.75vw, 55px); /* half of circle height */
+  left: calc(100% / 6);           /* centre of first column */
+  right: calc(100% / 6);          /* centre of third column */
+  height: 1px;
+  background: #c4b8ac;
+  z-index: 0;
+}
+
+.hww-step-deco { display: none; }
+
+/* deco ornaments sit on the line, midway between circles */
+.hww-deco {
+  position: absolute;
+  top: clamp(48px, 6.5vw, 72px);
+  width: clamp(36px, 4.5vw, 56px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* midpoint of gap between col-1-centre and col-2-centre = 33.33% */
+.hww-deco-1 { left: calc(100% / 3); transform: translate(-50%, -50%); }
+/* midpoint of gap between col-2-centre and col-3-centre = 66.66% */
+.hww-deco-2 { left: calc(100% * 2 / 3); transform: translate(-50%, -50%); }
+
+.hww-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;            /* centre the circle in its column */
+  position: relative;
+}
+
+.hww-step-text {
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  max-width: clamp(110px, 14vw, 185px);
+  text-align: left;
+  position: relative;
+  left: clamp(0.5rem, 3.5vw, 5rem);
+}
+
+.hww-node {
+  width: clamp(70px, 9.5vw, 110px);
+  height: clamp(70px, 9.5vw, 110px);
+  border-radius: 50%;
+  border: 1.5px solid #c4b8ac;
+  background: #f2e8d9;
+  margin-bottom: 1.6rem;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.hww-node-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  border-radius: 50%;
+}
+
+.hww-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: #3a1a22;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.02em;
+}
+
+.hww-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #7c1a2e;
+  margin-bottom: 1rem;
+}
+
+.hww-body {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #3a1a22;
+  line-height: 1.75;
+}
+
+@media (max-width: 640px) {
+  .hww {
+    padding: 3.5rem 15px 4rem;
+  }
+
+  .hww-heading {
+    font-size: clamp(1.8rem, 7vw, 2.4rem);
+    margin-bottom: 2.5rem;
+  }
+
+  .hww-timeline {
+    grid-template-columns: 1fr;
+    gap: 2.5rem 0;
+  }
+
+  .hww-line { display: none; }
+
+  .hww-step { position: relative; }
+
+  /* departing: circle bottom → bottom of THIS step */
+  .hww-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 40px;
+    transform: translateX(-50%);
+    top: 80px;
+    height: calc(100% - 30px);
+    width: 1px;
+    background: #c4b8ac;
+    z-index: 0;
+  }
+
+  /* arriving: spans exactly the gap, stops flush at circle top */
+  .hww-step:not(:first-child)::before {
+    content: '';
+    position: absolute;
+    left: 40px;
+    transform: translateX(-50%);
+    width: 1px;
+    background: #c4b8ac;
+    z-index: 0;
+  }
+
+  .hww-deco { display: none; }
+
+  .hww-step-deco {
+    display: block;
+    position: absolute;
+    left: 40px;
+    top: calc(80px + 2.5rem);
+    transform: translate(-50%, -50%);
+    width: 36px;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .hww-step {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .hww-node {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    margin-bottom: 0;
+  }
+
+  .hww-step-text {
+    position: static;
+    left: 0;
+    max-width: none;
+    flex: 1;
+  }
+}
