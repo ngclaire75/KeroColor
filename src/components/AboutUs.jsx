@@ -1,6 +1,6 @@
 import './AboutUs.css'
 import laceImg    from '../../images/lace.png'
-import bettyImg   from '../../images/bettyboop.png'
+import meetSonnyImg from '../../images/meetsonny.png'
 
 export default function AboutUs() {
   return (
@@ -28,7 +28,7 @@ export default function AboutUs() {
           </p>
         </div>
         <div className="au-img-wrap">
-          <img src={bettyImg} alt="Betty Boop" className="au-betty" />
+          <img src={meetSonnyImg} alt="Meet Sonny" className="au-betty" />
         </div>
       </div>
     </section>

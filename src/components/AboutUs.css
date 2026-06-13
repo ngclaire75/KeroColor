@@ -25,7 +25,7 @@
 .au-img-wrap {
   position: absolute;
   right: 0;
-  top: -80px;
+  top: 0;
   pointer-events: none;
 }
 
