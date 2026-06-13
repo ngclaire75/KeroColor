@@ -72,7 +72,7 @@
 /* ── Mobile ── */
 @media (max-width: 640px) {
   .faq {
-    padding: 3rem 5vw 13rem;
+    padding: 3rem 5vw 12rem;
   }
 
   .faq-q span:first-child {
