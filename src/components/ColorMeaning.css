@@ -75,7 +75,7 @@
   text-decoration-thickness: 1px;
   text-underline-offset: 4px;
   align-self: flex-start;
-  line-height: 2;
+  line-height: 2.4;
   transition: color 0.2s, border-color 0.2s;
 }
 
