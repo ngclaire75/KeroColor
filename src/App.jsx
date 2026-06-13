@@ -10,8 +10,8 @@ import AboutUs         from './components/AboutUs'
 import ContactSection  from './components/ContactSection'
 import FaqSection      from './components/FaqSection'
 import Calendar        from './components/Calendar'
-import cakeImg    from '../images/cake.png'
-import drinkImg   from '../images/drink.png'
+import cakeImg    from '../images/model2.jpeg'
+import drinkImg   from '../images/model1.jpeg'
 import './App.css'
 
 export default function App() {

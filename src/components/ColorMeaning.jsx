@@ -2,7 +2,7 @@ import './ColorMeaning.css'
 import { useEffect, useRef, useState } from 'react'
 import textureImg  from '../../images/texture.png'
 import frameImg    from '../../images/frame.png'
-import redbookImg  from '../../images/redbook.png'
+import redbookImg  from '../../images/model5.jpeg'
 import diamondImg  from '../../images/diamond.png'
 
 const featuresTop = [
