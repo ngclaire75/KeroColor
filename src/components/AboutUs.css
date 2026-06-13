@@ -1,30 +1,38 @@
 .au {
-  background: linear-gradient(
-    135deg,
-    #f7e7d6 0%,
-    #e8b0a8 20%,
-    #c5282a 45%,
-    #a82025 70%,
-    #f2c4b8 85%,
-    #c5282a 100%
-  );
-  background-size: 300% 300%;
-  animation: au-gradient 6s ease infinite;
   position: relative;
   overflow: visible;
 }
 
-@keyframes au-gradient {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+.au-inner {
+  position: relative;
+  overflow: hidden;
 }
+
+.au-bg {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-size: cover;
+  background-position: center;
+  filter: blur(6px);
+  transform: scale(1.06);
+  pointer-events: none;
+}
+
+.au-dim {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+
 
 /* ── Lace — img row with negative margin to close gaps ── */
 .au-lace {
   display: flex;
   overflow: hidden;
   width: 100%;
+  position: relative;
+  z-index: 1;
 }
 
 .au-lace-img {
@@ -36,6 +44,8 @@
 
 .au-content {
   padding: 2rem clamp(2rem, 8vw, 7rem) 2.5rem;
+  position: relative;
+  z-index: 1;
 }
 
 .au-img-wrap {
@@ -75,7 +85,7 @@
   font-family: 'Cormorant Garamond', serif;
   font-size: clamp(0.85rem, 1.3vw, 1rem);
   font-style: italic;
-  color: rgba(255, 235, 225, 0.75);
+  color: rgba(255, 255, 255, 0.75);
   letter-spacing: 0.06em;
   margin: 0;
 }
@@ -83,7 +93,7 @@
 .au-desc {
   font-family: 'Cormorant Garamond', serif;
   font-size: clamp(0.95rem, 1.2vw, 1.08rem);
-  color: rgba(255, 235, 225, 0.88);
+  color: rgba(255, 255, 255, 0.9);
   line-height: 1.8;
   margin: 0;
 }
@@ -91,7 +101,7 @@
 .au-script {
   font-family: 'Great Vibes', cursive;
   font-size: clamp(2rem, 3.5vw, 2.8rem);
-  color: #fde8e8;
+  color: #fff;
   margin: 0.2rem 0 0;
   line-height: 1;
 }
@@ -109,12 +119,12 @@
   50%       { transform: translateY(-7px) rotate(var(--r, 0deg)); }
 }
 
-.au-deco--s1 { width: 22px; right: 28%; top: 12%; --r: -14deg; animation-delay: 0s;    }
-.au-deco--h1 { width: 18px; right: 18%; top: 22%; --r:  10deg; animation-delay: -1.2s; }
-.au-deco--s2 { width: 16px; right: 32%; top: 42%; --r:  20deg; animation-delay: -0.6s; }
-.au-deco--h2 { width: 24px; right: 20%; top: 58%; --r:  -8deg; animation-delay: -2.0s; }
-.au-deco--s3 { width: 19px; right: 14%; top: 76%; --r:  15deg; animation-delay: -1.6s; }
-.au-deco--h3 { width: 14px; right: 35%; top: 82%; --r: -18deg; animation-delay: -0.9s; }
+.au-deco--s1 { width: 26px; right: 28%; top:  8%; --r: -14deg; animation-delay: 0s;    }
+.au-deco--s2 { width: 22px; right: 14%; top: 55%; --r:  18deg; animation-delay: -0.6s; }
+.au-deco--s3 { width: 24px; right: 36%; top: 70%; --r:  -6deg; animation-delay: -1.5s; }
+.au-deco--h1 { width: 20px; right: 18%; top: 22%; --r:  10deg; animation-delay: -1.2s; }
+.au-deco--h2 { width: 22px; right: 22%; top: 62%; --r:  -8deg; animation-delay: -2.0s; }
+.au-deco--h3 { width: 18px; right: 34%; top: 38%; --r: -16deg; animation-delay: -0.9s; }
 
 @media (max-width: 640px) {
   .au-content {

@@ -63,10 +63,10 @@ const SonnyCanvas = forwardRef(function SonnyCanvas({ onReady }, ref) {
       for (let i = 0; i < data.length; i += 4) {
         if (data[i + 3] < 10) continue
         const [h, s, l] = rgbToHsl(data[i], data[i + 1], data[i + 2])
-        const isRed = (h <= 20 || h >= 340) && s > 0.55 && l > 0.08 && l < 0.60
+        const isRed = (h <= 20 || h >= 340) && s > 0.45 && l > 0.08 && l < 0.65
         if (isRed) {
-          const adjustedL = Math.max(0.10, Math.min(0.42, l * 0.78))
-          const [nr, ng, nb] = hslToRgb(348, 0.65, adjustedL)
+          const darkerL = Math.max(0.06, l * 0.70)
+          const [nr, ng, nb] = hslToRgb(h, Math.min(1, s * 1.1), darkerL)
           data[i] = nr; data[i + 1] = ng; data[i + 2] = nb
         }
       }

@@ -1,6 +1,6 @@
 .faq {
   background: #f5f5f3;
-  padding: 4rem clamp(2rem, 8vw, 7rem) 20rem;
+  padding: 4rem clamp(2rem, 8vw, 7rem) 14rem;
 }
 
 .faq-heading {
