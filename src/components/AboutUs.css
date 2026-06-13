@@ -96,6 +96,26 @@
   line-height: 1;
 }
 
+/* ── Decorative stars & hearts ── */
+.au-deco {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.88;
+  animation: au-float 4s ease-in-out infinite;
+}
+
+@keyframes au-float {
+  0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
+  50%       { transform: translateY(-7px) rotate(var(--r, 0deg)); }
+}
+
+.au-deco--s1 { width: 22px; right: 28%; top: 12%; --r: -14deg; animation-delay: 0s;    }
+.au-deco--h1 { width: 18px; right: 18%; top: 22%; --r:  10deg; animation-delay: -1.2s; }
+.au-deco--s2 { width: 16px; right: 32%; top: 42%; --r:  20deg; animation-delay: -0.6s; }
+.au-deco--h2 { width: 24px; right: 20%; top: 58%; --r:  -8deg; animation-delay: -2.0s; }
+.au-deco--s3 { width: 19px; right: 14%; top: 76%; --r:  15deg; animation-delay: -1.6s; }
+.au-deco--h3 { width: 14px; right: 35%; top: 82%; --r: -18deg; animation-delay: -0.9s; }
+
 @media (max-width: 640px) {
   .au-content {
     padding: 1.5rem 5vw 2rem;
@@ -105,4 +125,5 @@
     height: clamp(150px, 38vw, 220px);
   }
 
+  .au-deco { display: none; }
 }

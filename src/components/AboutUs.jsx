@@ -1,6 +1,8 @@
 import './AboutUs.css'
-import laceImg    from '../../images/lace.png'
+import laceImg      from '../../images/lace.png'
 import meetSonnyImg from '../../images/meetsonny.png'
+import meetStarImg  from '../../images/meetstar.png'
+import meetHeartImg from '../../images/meetheart.png'
 
 export default function AboutUs() {
   return (
@@ -30,6 +32,14 @@ export default function AboutUs() {
         <div className="au-img-wrap">
           <img src={meetSonnyImg} alt="Meet Sonny" className="au-betty" />
         </div>
+
+        {/* Decorative stars and hearts */}
+        <img src={meetStarImg}  alt="" aria-hidden="true" className="au-deco au-deco--s1" />
+        <img src={meetHeartImg} alt="" aria-hidden="true" className="au-deco au-deco--h1" />
+        <img src={meetStarImg}  alt="" aria-hidden="true" className="au-deco au-deco--s2" />
+        <img src={meetHeartImg} alt="" aria-hidden="true" className="au-deco au-deco--h2" />
+        <img src={meetStarImg}  alt="" aria-hidden="true" className="au-deco au-deco--s3" />
+        <img src={meetHeartImg} alt="" aria-hidden="true" className="au-deco au-deco--h3" />
       </div>
     </section>
   )
