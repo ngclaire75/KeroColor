@@ -20,7 +20,10 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center center;
+    object-position: center top;
     display: block;
   }
+
+  .mobile-strip--model2 img { object-position: center 20%; }
+  .mobile-strip--model1 img { object-position: center 40%; }
 }
