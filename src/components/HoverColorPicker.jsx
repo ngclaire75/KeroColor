@@ -22,33 +22,20 @@ function getPos(clientX, clientY, offsetY = 0) {
 }
 
 export default function HoverColorPicker({ src, alt }) {
-  const canvasRef  = useRef(null)
-  const ctxRef     = useRef(null)
-  const tipRef     = useRef(null)   // direct DOM ref for smooth touch updates
-  const wrapRef    = useRef(null)
+  const canvasRef = useRef(null)
+  const ctxRef    = useRef(null)
+  const tipRef    = useRef(null)
+  const wrapRef   = useRef(null)
   const [tooltip, setTooltip] = useState(null)
 
+  // Hide on scroll
   useEffect(() => {
     const hide = () => setTooltip(null)
     window.addEventListener('scroll', hide, { passive: true })
     return () => window.removeEventListener('scroll', hide)
   }, [])
 
-  // Register touchmove as non-passive so e.preventDefault() can block scroll
-  useEffect(() => {
-    const el = wrapRef.current
-    if (!el) return
-    const onMove = (e) => {
-      if (e.touches.length !== 1) return
-      e.preventDefault()
-      const touch = e.touches[0]
-      const rect  = el.getBoundingClientRect()
-      updateTip(touch, rect)
-    }
-    el.addEventListener('touchmove', onMove, { passive: false })
-    return () => el.removeEventListener('touchmove', onMove)
-  }, [updateTip])
-
+  // Load image into hidden canvas for pixel sampling
   useEffect(() => {
     const canvas = canvasRef.current
     const ctx = canvas.getContext('2d', { willReadFrequently: true })
@@ -62,7 +49,38 @@ export default function HoverColorPicker({ src, alt }) {
     }
   }, [src])
 
-  /* ── Desktop: mousemove (state-based, already fast) ── */
+  // Imperatively update tooltip DOM — no React re-render on every touchmove frame
+  const updateTip = useCallback((touch, rect) => {
+    const sample = samplePixel(canvasRef.current, ctxRef.current, touch.clientX, touch.clientY, rect)
+    const tip    = tipRef.current
+    if (!tip) return
+    if (!sample) { tip.style.display = 'none'; return }
+
+    const { x, y } = getPos(touch.clientX, touch.clientY, -28)
+    tip.style.left    = x + 'px'
+    tip.style.top     = y + 'px'
+    tip.style.display = 'flex'
+
+    const swatch = tip.querySelector('.hcp-swatch')
+    const label  = tip.querySelector('.hcp-hex')
+    if (swatch) swatch.style.background = sample.color
+    if (label)  label.textContent       = sample.hex
+  }, [])
+
+  // Non-passive touchmove so e.preventDefault() can block page scroll
+  useEffect(() => {
+    const el = wrapRef.current
+    if (!el) return
+    const onMove = (e) => {
+      if (e.touches.length !== 1) return
+      e.preventDefault()
+      updateTip(e.touches[0], el.getBoundingClientRect())
+    }
+    el.addEventListener('touchmove', onMove, { passive: false })
+    return () => el.removeEventListener('touchmove', onMove)
+  }, [updateTip])
+
+  // Desktop — continuous mousemove
   const handleMouseMove = useCallback((e) => {
     const rect   = e.currentTarget.getBoundingClientRect()
     const sample = samplePixel(canvasRef.current, ctxRef.current, e.clientX, e.clientY, rect)
@@ -71,44 +89,17 @@ export default function HoverColorPicker({ src, alt }) {
     setTooltip({ ...sample, x, y })
   }, [])
 
-  /* ── Mobile: imperatively update DOM for zero-jank finger tracking ── */
-  const updateTip = useCallback((touch, rect) => {
-    const sample = samplePixel(canvasRef.current, ctxRef.current, touch.clientX, touch.clientY, rect)
-    const tip    = tipRef.current
-    if (!sample || !tip) return
-
-    const { x, y } = getPos(touch.clientX, touch.clientY, -28)
-    tip.style.left        = x + 'px'
-    tip.style.top         = y + 'px'
-    tip.style.display     = 'flex'
-    tip.style.animation   = 'none'
-
-    const swatch = tip.querySelector('.hcp-swatch')
-    const label  = tip.querySelector('.hcp-hex')
-    if (swatch) swatch.style.background = sample.color
-    if (label)  label.textContent       = sample.hex
-  }, [])
-
+  // Mobile — show tooltip on first touch
   const handleTouchStart = useCallback((e) => {
-    const touch = e.touches[0]
-    const rect  = wrapRef.current.getBoundingClientRect()
-    // Show tooltip via state once (mounts the DOM node)
+    const touch  = e.touches[0]
+    const rect   = wrapRef.current.getBoundingClientRect()
     const sample = samplePixel(canvasRef.current, ctxRef.current, touch.clientX, touch.clientY, rect)
     if (!sample) return
     const { x, y } = getPos(touch.clientX, touch.clientY, -28)
     setTooltip({ ...sample, x, y })
   }, [])
 
-  const handleTouchMove = useCallback((e) => {
-    e.preventDefault() // stop page scroll while finger is on image
-    const touch = e.touches[0]
-    const rect  = wrapRef.current.getBoundingClientRect()
-    updateTip(touch, rect)
-  }, [updateTip])
-
-  const handleTouchEnd = useCallback(() => {
-    setTooltip(null)
-  }, [])
+  const handleTouchEnd = useCallback(() => setTooltip(null), [])
 
   return (
     <div
