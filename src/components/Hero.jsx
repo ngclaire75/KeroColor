@@ -1,5 +1,6 @@
 import './Hero.css'
 import { useEffect, useRef, forwardRef } from 'react'
+import HoverColorPicker from './HoverColorPicker'
 import cakeImg   from '../../images/model2.jpeg'
 import drinkImg  from '../../images/model1.jpeg'
 import starImg   from '../../images/star.png'
@@ -109,7 +110,7 @@ export default function Hero() {
   return (
     <section className="hero">
       <div className="hero-img">
-        <img src={cakeImg} alt="Cake" />
+        <HoverColorPicker src={cakeImg} alt="Model" />
       </div>
 
       <div className="hero-center" ref={centerRef}>
@@ -135,7 +136,7 @@ export default function Hero() {
       </div>
 
       <div className="hero-img">
-        <img src={drinkImg} alt="Drink" />
+        <HoverColorPicker src={drinkImg} alt="Model" />
       </div>
     </section>
   )
