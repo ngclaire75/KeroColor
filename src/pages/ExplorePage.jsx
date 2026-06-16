@@ -1,72 +1,64 @@
+import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import Navbar from '../components/Navbar'
+import explore1 from '../../images/explore1.jpeg'
+import explore2 from '../../images/explore2.jpeg'
+import explore3 from '../../images/explore3.jpeg'
+import SkullPandaSection from '../components/SkullPandaSection'
+import GallerySection from '../components/GallerySection'
+import NextSection from '../components/NextSection'
 import './ExplorePage.css'
 
-const palettes = [
-  {
-    name: 'Rosewood Dusk',
-    colors: ['#7c1a2e', '#b85470', '#e8a0b0', '#f5d5dc', '#fdf0f2'],
-    mood: 'passionate · bold · feminine',
-  },
-  {
-    name: 'Sage & Linen',
-    colors: ['#4a5c4e', '#7a9e7e', '#b8d4b8', '#e8f0e8', '#f5f5f0'],
-    mood: 'calm · natural · grounded',
-  },
-  {
-    name: 'Midnight Gold',
-    colors: ['#1a1a2e', '#2d2d5e', '#7c6a2e', '#c8a84b', '#f5e8c0'],
-    mood: 'luxurious · mysterious · refined',
-  },
-  {
-    name: 'Terracotta Sun',
-    colors: ['#8b3a2a', '#c05c3a', '#e8956a', '#f5c4a0', '#fdf0e8'],
-    mood: 'warm · vibrant · earthy',
-  },
-  {
-    name: 'Lavender Mist',
-    colors: ['#4a3a6e', '#7a5ea0', '#b8a0d4', '#e0d4f0', '#f5f0fc'],
-    mood: 'dreamy · soft · elegant',
-  },
-  {
-    name: 'Ocean Slate',
-    colors: ['#1a3a4e', '#2d6080', '#5a9ab8', '#a0ccd8', '#e8f4f8'],
-    mood: 'serene · confident · clean',
-  },
-]
-
 export default function ExplorePage() {
+  const wonderlandRef = useRef(null)
+
+  useEffect(() => {
+    const fit = () => {
+      const el = wonderlandRef.current
+      if (!el) return
+      el.style.fontSize = '100px'
+      const ratio = window.innerWidth / el.scrollWidth
+      const finalSize = 205 * ratio
+      el.style.fontSize = finalSize + 'px'
+      document.documentElement.style.setProperty('--wonderland-size', finalSize + 'px')
+    }
+    fit()
+    window.addEventListener('resize', fit)
+    return () => window.removeEventListener('resize', fit)
+  }, [])
+
   return (
     <div className="explore-page">
-      <Navbar />
+      {/* First section — full screen WONDERLAND */}
       <div className="explore-hero">
-        <p className="explore-label">curated for your brand</p>
-        <h1 className="explore-heading">Explore Color Palettes</h1>
-        <p className="explore-sub">
-          Discover handcrafted color stories designed to elevate your brand identity.
-        </p>
-      </div>
-
-      <div className="explore-grid">
-        {palettes.map((p) => (
-          <div key={p.name} className="palette-card">
-            <div className="palette-swatches">
-              {p.colors.map((c) => (
-                <div key={c} className="swatch" style={{ background: c }} />
-              ))}
-            </div>
-            <div className="palette-info">
-              <h3 className="palette-name">{p.name}</h3>
-              <p className="palette-mood">{p.mood}</p>
-            </div>
+        <nav className="explore-nav">
+          <Link to="/" className="explore-nav-link">home</Link>
+          <a href="#" className="explore-nav-link">color palette</a>
+          <a href="#" className="explore-nav-link">color analyzer</a>
+        </nav>
+        <div className="explore-main">
+          <div className="explore-left-group">
+            <img src={explore2} alt="" className="explore-img--left" />
+            <span className="explore-embrace">EMBRACE</span>
           </div>
-        ))}
+          <img src={explore1} alt="" className="explore-img explore-img--center" />
+          <img src={explore3} alt="" className="explore-img explore-img--right" />
+          <div className="explore-labels">
+            <span>NEW IN</span>
+            <span>/PALETTE - 25/</span>
+            <span>WHEN COLOR SPEAKS</span>
+          </div>
+          <p ref={wonderlandRef} className="explore-wonderland">WONDERLAND</p>
+        </div>
       </div>
 
-      <div className="explore-cta">
-        <p>Want a palette made just for you?</p>
-        <Link to="/#contact" className="explore-btn">book a consultation</Link>
-      </div>
+      {/* Second section — skull panda 3D */}
+      <SkullPandaSection />
+
+      {/* Third section — gallery grid */}
+      <GallerySection />
+
+      {/* Fourth section — 3x3 card grid */}
+      <NextSection />
     </div>
   )
 }
