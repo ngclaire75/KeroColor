@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import { Routes, Route } from 'react-router-dom'
+import ExplorePage from './pages/ExplorePage'
 import Navbar     from './components/Navbar'
 import SiteHeader from './components/SiteHeader'
 import InfoBar    from './components/InfoBar'
@@ -36,7 +38,7 @@ export default function App() {
     }
   }, [calOpen])
 
-  return (
+  const homePage = (
     <div className="site">
       {calOpen && <Calendar onClose={() => setCalOpen(false)} />}
       <Navbar />
@@ -56,5 +58,12 @@ export default function App() {
       <FaqSection />
       <AboutUs />
     </div>
+  )
+
+  return (
+    <Routes>
+      <Route path="/" element={homePage} />
+      <Route path="/explore" element={<ExplorePage />} />
+    </Routes>
   )
 }

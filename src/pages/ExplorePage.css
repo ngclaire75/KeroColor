@@ -1,0 +1,135 @@
+.explore-page {
+  min-height: 100vh;
+  background: #fdf8f5;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.explore-hero {
+  text-align: center;
+  padding: 5rem 1.5rem 3rem;
+  background: #7c1a2e;
+  color: #fff;
+}
+
+.explore-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: lowercase;
+  opacity: 0.75;
+  margin: 0 0 0.8rem;
+}
+
+.explore-heading {
+  font-family: 'Georgia', serif;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-weight: 400;
+  margin: 0 0 1rem;
+  letter-spacing: -0.01em;
+}
+
+.explore-sub {
+  font-size: 0.92rem;
+  opacity: 0.8;
+  margin: 0;
+  max-width: 440px;
+  margin-inline: auto;
+  line-height: 1.6;
+}
+
+.explore-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  padding: 3rem clamp(1.5rem, 5vw, 5rem);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.palette-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(124, 26, 46, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.palette-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(124, 26, 46, 0.14);
+}
+
+.palette-swatches {
+  display: flex;
+  height: 110px;
+}
+
+.swatch {
+  flex: 1;
+  transition: flex 0.2s;
+}
+
+.palette-card:hover .swatch {
+  flex: 1;
+}
+
+.palette-info {
+  padding: 1rem 1.2rem 1.2rem;
+}
+
+.palette-name {
+  font-family: 'Georgia', serif;
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: #2a1a1e;
+  margin: 0 0 0.3rem;
+}
+
+.palette-mood {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: #7c1a2e;
+  margin: 0;
+  text-transform: lowercase;
+}
+
+.explore-cta {
+  text-align: center;
+  padding: 4rem 1.5rem 5rem;
+  color: #2a1a1e;
+}
+
+.explore-cta p {
+  font-family: 'Georgia', serif;
+  font-size: 1.2rem;
+  margin: 0 0 1.2rem;
+  color: #5a3a42;
+}
+
+.explore-btn {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  background: #7c1a2e;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 2px;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  transition: background 0.2s;
+}
+
+.explore-btn:hover {
+  background: #9e2240;
+}
+
+@media (max-width: 640px) {
+  .explore-grid {
+    grid-template-columns: 1fr;
+    padding: 2rem 1rem;
+    gap: 1rem;
+  }
+
+  .explore-hero {
+    padding: 3rem 1rem 2rem;
+  }
+}
