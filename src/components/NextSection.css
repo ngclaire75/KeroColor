@@ -1,7 +1,9 @@
 .next-section {
+  position: relative;
+  z-index: 2;
   width: 100%;
   background: #fff;
-  padding: 1.8rem 18rem;
+  padding: 8rem 18rem 1.8rem;
   box-sizing: border-box;
 }
 
@@ -9,6 +11,26 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
+}
+
+/* ── Buldak behind card 3 ── */
+.next-card-buldak-wrap {
+  position: relative;
+}
+
+.next-buldak-bg {
+  position: absolute;
+  z-index: 0;
+  width: 125%;
+  object-fit: contain;
+  top: -82%;
+  right: -35%;
+  pointer-events: none;
+}
+
+.next-card-buldak-wrap .next-card {
+  position: relative;
+  z-index: 1;
 }
 
 /* ── Card base ── */
@@ -93,7 +115,13 @@
 /* ── Mobile ── */
 @media (max-width: 640px) {
   .next-section {
-    padding: 0.8rem;
+    padding: 6rem 0.8rem 0.8rem;
+    margin-top: -1px;
+  }
+
+  .next-buldak-bg {
+    width: 160%;
+    top: -80%;
   }
 
   .next-grid {

@@ -50,26 +50,26 @@
   object-fit: cover;
 }
 
-/* wrapper anchors explore2 + EMBRACE together */
+/* wrapper anchors explore2 + EMBRACE together — fixed desktop position */
 .explore-left-group {
   position: absolute;
-  left: 1vw;
-  top: 3%;
+  left: 14px;
+  top: 26px;
   z-index: 3;
   display: flex;
   align-items: flex-start;
 }
 
 .explore-img--left {
-  width: 8vw;
-  height: 11vw;
+  width: 115px;
+  height: 158px;
   object-fit: cover;
   display: block;
   flex-shrink: 0;
 }
 
 .explore-embrace {
-  margin-left: 0.8vw;
+  margin-left: 10px;
   color: #fff;
   font-family: 'Inter', sans-serif;
   font-size: 0.95rem;
@@ -81,30 +81,30 @@
   padding-top: 0;
 }
 
-/* large center portrait */
+/* large center portrait — fixed desktop size */
 .explore-img--center {
   left: 50%;
   transform: translateX(-50%);
-  top: 13%;
-  width: 21vw;
-  height: 65%;
+  top: 90px;
+  width: 290px;
+  height: 510px;
   object-position: 20% center;
   z-index: 4;
 }
 
-/* right-side image — tall rectangle, no crop */
+/* right-side image — fixed desktop size */
 .explore-img--right {
   position: absolute;
-  right: 1%;
-  top: 20%;
-  width: 8vw;
-  height: 18%;
+  right: 14px;
+  top: 160px;
+  width: 115px;
+  height: 158px;
   object-fit: cover;
   object-position: center;
   z-index: 3;
 }
 
-/* ── Labels row — positioned just above WONDERLAND via CSS var ── */
+/* ── Labels row — positioned just above FLUORESCENT via CSS var ── */
 .explore-labels {
   position: absolute;
   bottom: calc(var(--wonderland-size, 200px) * 1.5 * 0.82 + 14px);
@@ -128,7 +128,12 @@
   margin-left: auto;
 }
 
-/* ── WONDERLAND — anchored to bottom, tall stretched letters, behind explore1 ── */
+/* ── FLUORESCENT — marquee on all screens ── */
+@keyframes explore-marquee {
+  0%   { transform: scaleY(1.65) translateX(120vw); }
+  100% { transform: scaleY(1.65) translateX(-220vw); }
+}
+
 .explore-wonderland {
   position: absolute;
   bottom: -0.18em;
@@ -143,22 +148,12 @@
   letter-spacing: -0.01em;
   white-space: nowrap;
   z-index: 2;
-  transform: scaleY(1.65);
   transform-origin: bottom center;
-  /* font-size set via JS at 160% of viewport width */
-}
-
-/* ── WONDERLAND marquee (mobile only) ── */
-@keyframes explore-marquee {
-  0%   { transform: scaleY(1.65) translateX(120vw); }
-  100% { transform: scaleY(1.65) translateX(-220vw); }
+  animation: explore-marquee 9s linear infinite;
 }
 
 /* ── Mobile ── */
 @media (max-width: 640px) {
-  .explore-wonderland {
-    animation: explore-marquee 9s linear infinite;
-  }
   /* left group: explore2 + EMBRACE */
   .explore-left-group {
     left: 2vw;

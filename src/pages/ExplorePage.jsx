@@ -47,7 +47,7 @@ export default function ExplorePage() {
             <span>/PALETTE - 25/</span>
             <span>WHEN COLOR SPEAKS</span>
           </div>
-          <p ref={wonderlandRef} className="explore-wonderland">WONDERLAND</p>
+          <p ref={wonderlandRef} className="explore-wonderland">FLUORESCENT</p>
         </div>
       </div>
 

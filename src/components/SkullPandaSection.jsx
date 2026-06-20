@@ -1,18 +1,22 @@
 import { Suspense, useRef, useState, useEffect } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useGLTF, Center } from '@react-three/drei'
 import './SkullPandaSection.css'
 
-function SkullModel({ scale, position }) {
+function SkullModel({ scale, fixedX }) {
   const { scene } = useGLTF('/skullpanda.glb')
+  const { viewport } = useThree()
   const ref = useRef()
+
+  // on mobile use fixedX; on desktop keep model at 22% left of visible width
+  const xPos = fixedX !== undefined ? fixedX : -viewport.width * 0.22
 
   useFrame((_, delta) => {
     if (ref.current) ref.current.rotation.y += delta * 0.7
   })
 
   return (
-    <group ref={ref} scale={scale} position={position}>
+    <group ref={ref} scale={scale} position={[xPos, 0, 0]}>
       <Center>
         <primitive object={scene} />
       </Center>
@@ -34,7 +38,7 @@ export default function SkullPandaSection() {
   }, [])
 
   const modelScale = isMobile ? 1.8 : 2.6
-  const modelPosition = isMobile ? [-0.4, 0, 0] : [-1.8, 0, 0]
+  const fixedX = isMobile ? -0.4 : undefined  // desktop uses viewport-relative calc
 
   return (
     <section className="skull-section">
@@ -46,7 +50,7 @@ export default function SkullPandaSection() {
         <directionalLight position={[4, 6, 4]} intensity={1.8} />
         <directionalLight position={[-3, 1, -2]} intensity={0.4} />
         <Suspense fallback={null}>
-          <SkullModel scale={modelScale} position={modelPosition} />
+          <SkullModel scale={modelScale} fixedX={fixedX} />
         </Suspense>
       </Canvas>
 
