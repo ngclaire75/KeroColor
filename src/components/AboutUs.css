@@ -74,7 +74,7 @@
 .au-heading {
   font-family: 'Inter', sans-serif;
   font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 800;
+  font-weight: 500;
   font-style: italic;
   color: #fff;
   line-height: 1;
