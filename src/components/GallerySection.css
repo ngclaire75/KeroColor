@@ -102,6 +102,46 @@
   object-position: 15% 20%;
 }
 
+/* ── Pagination ── */
+.gallery-pagination {
+  display: none;
+}
+
+.gallery-pagination--desktop {
+  display: flex;
+  gap: 4rem;
+  justify-content: center;
+  margin-top: -2.5rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 640px) {
+  .gallery-pagination {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+}
+
+.gallery-page-btn {
+  background: #fff;
+  border: 1px solid #111;
+  border-radius: 999px;
+  padding: 0.35rem 1.1rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: #111;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: opacity 0.2s ease;
+}
+
+.gallery-page-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
 /* ── Circle row ── */
 .gallery-circles {
   display: flex;

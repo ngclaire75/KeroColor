@@ -44,6 +44,51 @@ import pw6 from '../../images/pw6.jpeg'
 import pw7 from '../../images/pw7.jpeg'
 import pw8 from '../../images/pw8.jpeg'
 import pw9 from '../../images/pw9.jpeg'
+import ap1 from '../../images/ap1.jpeg'
+import ap2 from '../../images/ap2.jpeg'
+import ap3 from '../../images/ap3.jpeg'
+import ap4 from '../../images/ap4.jpeg'
+import ap5 from '../../images/ap5.jpeg'
+import ap6 from '../../images/ap6.jpeg'
+import ap7 from '../../images/ap7.jpeg'
+import ap8 from '../../images/ap8.jpeg'
+import ap9 from '../../images/ap9.jpeg'
+import tp1 from '../../images/tp1.jpeg'
+import tp2 from '../../images/tp2.jpeg'
+import tp3 from '../../images/tp3.jpeg'
+import tp4 from '../../images/tp4.jpeg'
+import tp5 from '../../images/tp5.jpeg'
+import tp6 from '../../images/tp6.jpeg'
+import tp7 from '../../images/tp7.jpeg'
+import tp8 from '../../images/tp8.jpeg'
+import tp9 from '../../images/tp9.jpeg'
+import nr1 from '../../images/nr1.jpeg'
+import nr2 from '../../images/nr2.jpeg'
+import nr3 from '../../images/nr3.jpeg'
+import nr4 from '../../images/nr4.jpeg'
+import nr5 from '../../images/nr5.jpeg'
+import nr6 from '../../images/nr6.jpeg'
+import nr7 from '../../images/nr7.jpeg'
+import nr8 from '../../images/nr8.jpeg'
+import nr9 from '../../images/nr9.jpeg'
+import wr1 from '../../images/wr1.jpeg'
+import wr2 from '../../images/wr2.jpeg'
+import wr3 from '../../images/wr3.jpeg'
+import wr4 from '../../images/wr4.jpeg'
+import wr5 from '../../images/wr5.jpeg'
+import wr6 from '../../images/wr6.jpeg'
+import wr7 from '../../images/wr7.jpeg'
+import wr8 from '../../images/wr8.jpeg'
+import wr9 from '../../images/wr9.jpeg'
+import r1 from '../../images/r1.jpeg'
+import r2 from '../../images/r2.jpeg'
+import r3 from '../../images/r3.jpeg'
+import r4 from '../../images/r4.jpeg'
+import r5 from '../../images/r5.jpeg'
+import r6 from '../../images/r6.jpeg'
+import r7 from '../../images/r7.jpeg'
+import r8 from '../../images/r8.jpeg'
+import r9 from '../../images/r9.jpeg'
 import buldak from '../../images/buldak.png'
 import './NextSection.css'
 
@@ -52,6 +97,11 @@ const wsImages   = [ws1,   ws2,   ws3,   ws4,   ws5,   ws6,   ws7,   ws8,   ws9]
 const npImages   = [np1,   np2,   np3,   np4,   np5,   np6,   np7,   np8,   np9]
 const tjImages   = [tj1,   tj2,   tj3,   tj4,   tj5,   tj6,   tj7,   tj8,   tj9]
 const pwImages   = [pw1,   pw2,   pw3,   pw4,   pw5,   pw6,   pw7,   pw8,   pw9]
+const apImages   = [ap1,   ap2,   ap3,   ap4,   ap5,   ap6,   ap7,   ap8,   ap9]
+const tpImages   = [tp1,   tp2,   tp3,   tp4,   tp5,   tp6,   tp7,   tp8,   tp9]
+const nrImages   = [nr1,   nr2,   nr3,   nr4,   nr5,   nr6,   nr7,   nr8,   nr9]
+const wrImages   = [wr1,   wr2,   wr3,   wr4,   wr5,   wr6,   wr7,   wr8,   wr9]
+const rImages    = [r1,    r2,    r3,    r4,    r5,    r6,    r7,    r8,    r9]
 
 function ArrowIcon() {
   return (
@@ -62,7 +112,7 @@ function ArrowIcon() {
   )
 }
 
-// cycle: next (7s) → ws (7s) → np (7s) → tj (7s) → pw (7s) → next → loop
+// cycle: next → ws → np → tj → pw → ap → tp → nr → wr → r → next (5s each)
 export default function NextSection() {
   const [phase, setPhase] = useState('next')
   const [progress, setProgress] = useState(0)
@@ -107,6 +157,51 @@ export default function NextSection() {
         setProgress(0)
       }
     } else if (phase === 'pw') {
+      t = setTimeout(() => { setPhase('to-ap'); setProgress(0) }, 5000)
+    } else if (phase === 'to-ap') {
+      if (progress < 9) {
+        t = setTimeout(() => setProgress(p => p + 1), 350)
+      } else {
+        setPhase('ap')
+        setProgress(0)
+      }
+    } else if (phase === 'ap') {
+      t = setTimeout(() => { setPhase('to-tp'); setProgress(0) }, 5000)
+    } else if (phase === 'to-tp') {
+      if (progress < 9) {
+        t = setTimeout(() => setProgress(p => p + 1), 350)
+      } else {
+        setPhase('tp')
+        setProgress(0)
+      }
+    } else if (phase === 'tp') {
+      t = setTimeout(() => { setPhase('to-nr'); setProgress(0) }, 5000)
+    } else if (phase === 'to-nr') {
+      if (progress < 9) {
+        t = setTimeout(() => setProgress(p => p + 1), 350)
+      } else {
+        setPhase('nr')
+        setProgress(0)
+      }
+    } else if (phase === 'nr') {
+      t = setTimeout(() => { setPhase('to-wr'); setProgress(0) }, 5000)
+    } else if (phase === 'to-wr') {
+      if (progress < 9) {
+        t = setTimeout(() => setProgress(p => p + 1), 350)
+      } else {
+        setPhase('wr')
+        setProgress(0)
+      }
+    } else if (phase === 'wr') {
+      t = setTimeout(() => { setPhase('to-r'); setProgress(0) }, 5000)
+    } else if (phase === 'to-r') {
+      if (progress < 9) {
+        t = setTimeout(() => setProgress(p => p + 1), 350)
+      } else {
+        setPhase('r')
+        setProgress(0)
+      }
+    } else if (phase === 'r') {
       t = setTimeout(() => { setPhase('to-next'); setProgress(0) }, 5000)
     } else if (phase === 'to-next') {
       if (progress < 9) {
@@ -126,18 +221,29 @@ export default function NextSection() {
     if (phase === 'np')   return npImages[i]
     if (phase === 'tj')   return tjImages[i]
     if (phase === 'pw')   return pwImages[i]
+    if (phase === 'ap')   return apImages[i]
+    if (phase === 'tp')   return tpImages[i]
+    if (phase === 'nr')   return nrImages[i]
+    if (phase === 'wr')   return wrImages[i]
+    if (phase === 'r')    return rImages[i]
 
     if (phase === 'to-ws')   return progress > i ? wsImages[i]   : nextImages[i]
     if (phase === 'to-np')   return progress > i ? npImages[i]   : wsImages[i]
     if (phase === 'to-tj')   return progress > i ? tjImages[i]   : npImages[i]
     if (phase === 'to-pw')   return progress > i ? pwImages[i]   : tjImages[i]
-    if (phase === 'to-next') return progress > i ? nextImages[i] : pwImages[i]
+    if (phase === 'to-ap')   return progress > i ? apImages[i]   : pwImages[i]
+    if (phase === 'to-tp')   return progress > i ? tpImages[i]   : apImages[i]
+    if (phase === 'to-nr')   return progress > i ? nrImages[i]   : tpImages[i]
+    if (phase === 'to-wr')   return progress > i ? wrImages[i]   : nrImages[i]
+    if (phase === 'to-r')    return progress > i ? rImages[i]    : wrImages[i]
+    if (phase === 'to-next') return progress > i ? nextImages[i] : rImages[i]
 
     return nextImages[i]
   }
 
   return (
     <section className="next-section">
+      <p className="next-gallery-label">gallery</p>
       <div className="next-grid">
         {nextImages.map((_, i) => {
           const card = (

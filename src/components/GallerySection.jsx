@@ -13,15 +13,17 @@ import skull11 from '../../images/skull11.jpeg'
 import skull12 from '../../images/skull12.jpeg'
 import './GallerySection.css'
 
-const mobileRects = [skull1, skull2, skull3, skull4, skull5]
-const desktopRects = [skull1, skull2, skull3, skull4, skull5, skull6, skull7, skull8, skull9, skull10, skull11, skull12]
+const allSkulls = [skull1, skull2, skull3, skull4, skull5, skull6, skull7, skull8, skull9, skull10, skull11, skull12]
+const mobileSkulls = allSkulls.slice(0, 10)
 const circleColors = ['#d7c3c2', '#aa7877', '#9f817f', '#941e1a', '#840f06']
+const PAGE_SIZE = 5
 
 export default function GallerySection() {
   const [activeIdx, setActiveIdx] = useState(0)
   const [isMobile, setIsMobile] = useState(
     typeof window !== 'undefined' && window.innerWidth <= 640
   )
+  const [mobilePage, setMobilePage] = useState(0)
   const [activeCircleIdx, setActiveCircleIdx] = useState(null)
   const [activeHex, setActiveHex] = useState('')
 
@@ -40,7 +42,14 @@ export default function GallerySection() {
     setActiveCircleIdx(i)
   }
 
-  const rects = isMobile ? mobileRects : desktopRects
+  function goToPage(page) {
+    setMobilePage(page)
+    setActiveIdx(0)
+  }
+
+  const totalPages = Math.ceil(mobileSkulls.length / PAGE_SIZE)
+  const mobileRects = mobileSkulls.slice(mobilePage * PAGE_SIZE, mobilePage * PAGE_SIZE + PAGE_SIZE)
+  const rects = isMobile ? mobileRects : allSkulls
 
   return (
     <section className="gallery-section">
@@ -48,7 +57,7 @@ export default function GallerySection() {
         <div className={`gallery-rects${!isMobile ? ' gallery-rects--desktop' : ''}`}>
           {rects.map((src, i) => (
             <div
-              key={i}
+              key={isMobile ? mobilePage * PAGE_SIZE + i : i}
               className={`gallery-rect${activeIdx === i ? ' gallery-rect--active' : ''}`}
               onClick={() => setActiveIdx(i)}
             >
@@ -56,6 +65,32 @@ export default function GallerySection() {
             </div>
           ))}
         </div>
+
+        {isMobile && (
+          <div className="gallery-pagination">
+            <button
+              className="gallery-page-btn"
+              onClick={() => goToPage(mobilePage - 1)}
+              disabled={mobilePage === 0}
+            >
+              previous
+            </button>
+            <button
+              className="gallery-page-btn"
+              onClick={() => goToPage(mobilePage + 1)}
+              disabled={mobilePage >= totalPages - 1}
+            >
+              next
+            </button>
+          </div>
+        )}
+
+        {!isMobile && (
+          <div className="gallery-pagination gallery-pagination--desktop">
+            <button className="gallery-page-btn">previous</button>
+            <button className="gallery-page-btn">next</button>
+          </div>
+        )}
 
         <div className="gallery-circles">
           {circleColors.map((color, i) => (

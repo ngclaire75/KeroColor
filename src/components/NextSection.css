@@ -3,8 +3,22 @@
   z-index: 2;
   width: 100%;
   background: #fff;
-  padding: 8rem 18rem 1.8rem;
+  padding: 8rem 18rem 5rem;
   box-sizing: border-box;
+}
+
+.next-gallery-label {
+  margin: 0 0 1.2rem 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(3.5rem, 8vw, 8rem);
+  font-weight: 800;
+  line-height: 1;
+  color: #fff;
+  -webkit-text-stroke: 3px #111;
+  paint-order: stroke fill;
+  text-transform: lowercase;
+  letter-spacing: -0.02em;
 }
 
 .next-grid {
@@ -23,7 +37,7 @@
   z-index: 0;
   width: 125%;
   object-fit: contain;
-  top: -82%;
+  top: -70%;
   right: -35%;
   pointer-events: none;
 }
@@ -121,7 +135,7 @@
 
   .next-buldak-bg {
     width: 160%;
-    top: -80%;
+    top: -88%;
   }
 
   .next-grid {
