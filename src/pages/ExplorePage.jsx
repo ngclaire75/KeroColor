@@ -6,6 +6,7 @@ import explore3 from '../../images/explore3.jpeg'
 import SkullPandaSection from '../components/SkullPandaSection'
 import GallerySection from '../components/GallerySection'
 import NextSection from '../components/NextSection'
+import Footer from '../components/Footer'
 import './ExplorePage.css'
 
 export default function ExplorePage() {
@@ -59,6 +60,7 @@ export default function ExplorePage() {
 
       {/* Fourth section — 3x3 card grid */}
       <NextSection />
+      <Footer />
     </div>
   )
 }
