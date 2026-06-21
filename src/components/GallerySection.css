@@ -83,11 +83,11 @@
 }
 
 .gallery-rects--desktop .gallery-rect:nth-child(11) img {
-  object-position: 80% center;
+  object-position: 5% center;
 }
 
 .gallery-rects--desktop .gallery-rect:nth-child(12) img {
-  object-position: 40% center;
+  object-position: 65% center;
   transform: scale(1.1);
 }
 

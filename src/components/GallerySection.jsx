@@ -13,7 +13,7 @@ import skull11 from '../../images/skull11.jpeg'
 import skull12 from '../../images/skull12.jpeg'
 import './GallerySection.css'
 
-const allSkulls = [skull1, skull2, skull3, skull4, skull5, skull6, skull7, skull8, skull9, skull10, skull11, skull12]
+const allSkulls = [skull1, skull2, skull3, skull4, skull5, skull6, skull11, skull8, skull9, skull10, skull12, skull7]
 const mobileSkulls = allSkulls.slice(0, 10)
 const circleColors = ['#d7c3c2', '#aa7877', '#9f817f', '#941e1a', '#840f06']
 const PAGE_SIZE = 5
