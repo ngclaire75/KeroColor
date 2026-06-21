@@ -38,7 +38,10 @@ export default function Calendar({ onClose }) {
   const today = new Date()
   const [year,    setYear]    = useState(today.getFullYear())
   const [month,   setMonth]   = useState(today.getMonth())
-  const [bgIndex, setBgIndex] = useState(2)
+  const [bgIndex, setBgIndex] = useState(() => {
+    const saved = localStorage.getItem('kc-bg')
+    return saved !== null ? Number(saved) : 2
+  })
   const [notes,   setNotes]   = useState(loadNotes)
   const [selected, setSelected] = useState(null)   // { day, month, year }
   const [noteText, setNoteText] = useState('')
@@ -156,7 +159,7 @@ export default function Calendar({ onClose }) {
             <button
               key={b.id}
               className={`cal-swatch${bgIndex === b.id ? ' cal-swatch--active' : ''}`}
-              onClick={() => setBgIndex(b.id)}
+              onClick={() => { setBgIndex(b.id); localStorage.setItem('kc-bg', b.id) }}
               aria-label={b.label}
               style={{ backgroundImage: `url(${b.img})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
             />
