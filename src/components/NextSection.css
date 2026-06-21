@@ -18,7 +18,13 @@
   -webkit-text-stroke: 3px #111;
   paint-order: stroke fill;
   text-transform: lowercase;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.01em;
+  cursor: default;
+  transition: color 0.45s ease;
+}
+
+.next-gallery-label:hover {
+  color: #840f06;
 }
 
 .next-grid {

@@ -89,6 +89,15 @@ import r6 from '../../images/r6.jpeg'
 import r7 from '../../images/r7.jpeg'
 import r8 from '../../images/r8.jpeg'
 import r9 from '../../images/r9.jpeg'
+import j1 from '../../images/j1.jpeg'
+import j2 from '../../images/j2.jpeg'
+import j3 from '../../images/j3.jpeg'
+import j4 from '../../images/j4.jpeg'
+import j5 from '../../images/j5.jpeg'
+import j6 from '../../images/j6.jpeg'
+import j7 from '../../images/j7.jpeg'
+import j8 from '../../images/j8.jpeg'
+import j9 from '../../images/j9.jpeg'
 import buldak from '../../images/buldak.png'
 import './NextSection.css'
 
@@ -102,6 +111,7 @@ const tpImages   = [tp1,   tp2,   tp3,   tp4,   tp5,   tp6,   tp7,   tp8,   tp9]
 const nrImages   = [nr1,   nr2,   nr3,   nr4,   nr5,   nr6,   nr7,   nr8,   nr9]
 const wrImages   = [wr1,   wr2,   wr3,   wr4,   wr5,   wr6,   wr7,   wr8,   wr9]
 const rImages    = [r1,    r2,    r3,    r4,    r5,    r6,    r7,    r8,    r9]
+const jImages    = [j1,    j2,    j3,    j4,    j5,    j6,    j7,    j8,    j9]
 
 function ArrowIcon() {
   return (
@@ -112,10 +122,18 @@ function ArrowIcon() {
   )
 }
 
-// cycle: next → ws → np → tj → pw → ap → tp → nr → wr → r → next (5s each)
+// cycle: next → ws → np → tj → pw → ap → tp → nr → wr → r → j → next (5s each)
 export default function NextSection() {
   const [phase, setPhase] = useState('next')
   const [progress, setProgress] = useState(0)
+
+  useEffect(() => {
+    const allImages = [
+      ...nextImages, ...wsImages, ...npImages, ...tjImages, ...pwImages,
+      ...apImages,  ...tpImages, ...nrImages, ...wrImages, ...rImages, ...jImages
+    ]
+    allImages.forEach(src => { const img = new window.Image(); img.src = src })
+  }, [])
 
   useEffect(() => {
     let t
@@ -202,6 +220,15 @@ export default function NextSection() {
         setProgress(0)
       }
     } else if (phase === 'r') {
+      t = setTimeout(() => { setPhase('to-j'); setProgress(0) }, 5000)
+    } else if (phase === 'to-j') {
+      if (progress < 9) {
+        t = setTimeout(() => setProgress(p => p + 1), 350)
+      } else {
+        setPhase('j')
+        setProgress(0)
+      }
+    } else if (phase === 'j') {
       t = setTimeout(() => { setPhase('to-next'); setProgress(0) }, 5000)
     } else if (phase === 'to-next') {
       if (progress < 9) {
@@ -226,6 +253,7 @@ export default function NextSection() {
     if (phase === 'nr')   return nrImages[i]
     if (phase === 'wr')   return wrImages[i]
     if (phase === 'r')    return rImages[i]
+    if (phase === 'j')    return jImages[i]
 
     if (phase === 'to-ws')   return progress > i ? wsImages[i]   : nextImages[i]
     if (phase === 'to-np')   return progress > i ? npImages[i]   : wsImages[i]
@@ -236,7 +264,8 @@ export default function NextSection() {
     if (phase === 'to-nr')   return progress > i ? nrImages[i]   : tpImages[i]
     if (phase === 'to-wr')   return progress > i ? wrImages[i]   : nrImages[i]
     if (phase === 'to-r')    return progress > i ? rImages[i]    : wrImages[i]
-    if (phase === 'to-next') return progress > i ? nextImages[i] : rImages[i]
+    if (phase === 'to-j')    return progress > i ? jImages[i]    : rImages[i]
+    if (phase === 'to-next') return progress > i ? nextImages[i] : jImages[i]
 
     return nextImages[i]
   }
