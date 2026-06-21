@@ -3,7 +3,7 @@
   z-index: 2;
   width: 100%;
   background: #fff;
-  padding: 8rem 18rem 5rem;
+  padding: 4rem 18rem 5rem;
   box-sizing: border-box;
 }
 
@@ -164,7 +164,7 @@
 /* ── Mobile ── */
 @media (max-width: 640px) {
   .next-section {
-    padding: 6rem 0.8rem 0.8rem;
+    padding: 3rem 0.8rem 0.8rem;
     margin-top: -1px;
   }
 
