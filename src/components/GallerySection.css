@@ -91,6 +91,10 @@
   transform: scale(1.1);
 }
 
+.gallery-rects--desktop .gallery-rect:nth-child(12).gallery-rect--active img {
+  object-position: 40% 20%;
+}
+
 .gallery-rect img {
   width: 100%;
   height: 100%;
