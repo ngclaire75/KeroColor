@@ -168,6 +168,14 @@
     margin-top: -1px;
   }
 
+  .next-gallery-label {
+    -webkit-text-stroke: 1.5px #111;
+  }
+
+  .next-gallery-label::after {
+    -webkit-text-stroke: 1.5px #111;
+  }
+
   .next-buldak-bg {
     width: 160%;
     top: -88%;
