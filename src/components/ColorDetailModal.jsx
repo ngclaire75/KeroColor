@@ -222,6 +222,7 @@ export default function ColorDetailModal({ imgSrc, batch, onClose }) {
 
           {/* Right — image */}
           <div className="cdm-right">
+            <span className="cdm-close-mobile" onClick={onClose}>Close Notebook</span>
             <div className="cdm-img-wrap">
               <img src={imgSrc} alt="" className="cdm-img" />
               <div className="cdm-caption">

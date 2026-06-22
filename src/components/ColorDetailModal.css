@@ -105,6 +105,10 @@
   white-space: nowrap;
 }
 
+.cdm-close-mobile {
+  display: none;
+}
+
 
 /* ── Main ── */
 .cdm-main {
@@ -288,10 +292,15 @@
     font-size: 0.52rem;
   }
 
+  /* Hide nav close on mobile */
+  .cdm-nav-right {
+    display: none;
+  }
+
   /* Main — image on top, text below */
   .cdm-main {
     flex-direction: column;
-    padding-top: 0;
+    padding-top: 1.8rem;
     overflow: visible;
   }
 
@@ -299,8 +308,20 @@
   .cdm-right {
     order: -1;
     width: 100%;
-    padding: 1.4rem 1.2rem 0;
+    padding: 0 1.2rem 0;
     overflow: visible;
+  }
+
+  /* Close Notebook above image on mobile */
+  .cdm-close-mobile {
+    display: block;
+    font-size: 0.72rem;
+    color: #1a1210;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+    letter-spacing: 0.01em;
+    margin-bottom: 1.5rem;
   }
 
   .cdm-img {
