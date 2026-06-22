@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import ColorDetailModal from './ColorDetailModal'
 import next1 from '../../images/next1.jpeg'
 import next2 from '../../images/next2.jpeg'
 import next3 from '../../images/next3.jpeg'
@@ -122,10 +123,37 @@ function ArrowIcon() {
   )
 }
 
+function getBatch(phase, progress, i) {
+  if (phase === 'next') return 'next'
+  if (phase === 'ws')   return 'ws'
+  if (phase === 'np')   return 'np'
+  if (phase === 'tj')   return 'tj'
+  if (phase === 'pw')   return 'pw'
+  if (phase === 'ap')   return 'ap'
+  if (phase === 'tp')   return 'tp'
+  if (phase === 'nr')   return 'nr'
+  if (phase === 'wr')   return 'wr'
+  if (phase === 'r')    return 'r'
+  if (phase === 'j')    return 'j'
+  if (phase === 'to-ws')   return progress > i ? 'ws'   : 'next'
+  if (phase === 'to-np')   return progress > i ? 'np'   : 'ws'
+  if (phase === 'to-tj')   return progress > i ? 'tj'   : 'np'
+  if (phase === 'to-pw')   return progress > i ? 'pw'   : 'tj'
+  if (phase === 'to-ap')   return progress > i ? 'ap'   : 'pw'
+  if (phase === 'to-tp')   return progress > i ? 'tp'   : 'ap'
+  if (phase === 'to-nr')   return progress > i ? 'nr'   : 'tp'
+  if (phase === 'to-wr')   return progress > i ? 'wr'   : 'nr'
+  if (phase === 'to-r')    return progress > i ? 'r'    : 'wr'
+  if (phase === 'to-j')    return progress > i ? 'j'    : 'r'
+  if (phase === 'to-next') return progress > i ? 'next' : 'j'
+  return 'next'
+}
+
 // cycle: next → ws → np → tj → pw → ap → tp → nr → wr → r → j → next (5s each)
 export default function NextSection() {
   const [phase, setPhase] = useState('next')
   const [progress, setProgress] = useState(0)
+  const [selectedCard, setSelectedCard] = useState(null)
 
   useEffect(() => {
     const allImages = [
@@ -271,33 +299,47 @@ export default function NextSection() {
   }
 
   return (
-    <section className="next-section">
-      <p className="next-gallery-label">gallery</p>
-      <div className="next-grid">
-        {nextImages.map((_, i) => {
-          const card = (
-            <div className="next-card next-card--image">
-              <img src={getImage(i)} alt="" className="next-card-img" />
-              <div className="next-card-header">
-                <span>KEROCOLOR</span>
-                <span>2026</span>
-              </div>
-              <ArrowIcon />
-            </div>
-          )
-
-          if (i === 2) {
-            return (
-              <div key={i} className="next-card-buldak-wrap">
-                <img src={buldak} alt="" className="next-buldak-bg" />
-                {card}
+    <>
+      <section className="next-section">
+        <p className="next-gallery-label">gallery</p>
+        <div className="next-grid">
+          {nextImages.map((_, i) => {
+            const card = (
+              <div
+                className="next-card next-card--image"
+                onClick={() => setSelectedCard({ imgSrc: getImage(i), batch: getBatch(phase, progress, i) })}
+                style={{ cursor: 'pointer' }}
+              >
+                <img src={getImage(i)} alt="" className="next-card-img" />
+                <div className="next-card-header">
+                  <span>KEROCOLOR</span>
+                  <span>2026</span>
+                </div>
+                <ArrowIcon />
               </div>
             )
-          }
 
-          return <div key={i}>{card}</div>
-        })}
-      </div>
-    </section>
+            if (i === 2) {
+              return (
+                <div key={i} className="next-card-buldak-wrap">
+                  <img src={buldak} alt="" className="next-buldak-bg" />
+                  {card}
+                </div>
+              )
+            }
+
+            return <div key={i}>{card}</div>
+          })}
+        </div>
+      </section>
+
+      {selectedCard && (
+        <ColorDetailModal
+          imgSrc={selectedCard.imgSrc}
+          batch={selectedCard.batch}
+          onClose={() => setSelectedCard(null)}
+        />
+      )}
+    </>
   )
 }
