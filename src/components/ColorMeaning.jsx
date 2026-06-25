@@ -1,8 +1,7 @@
 import './ColorMeaning.css'
 import { useEffect, useRef, useState } from 'react'
 import textureImg  from '../../images/texture.png'
-import frameImg    from '../../images/frame.png'
-import redbookImg  from '../../images/model5.jpeg'
+import dollImg     from '../../images/doll.png'
 import diamondImg  from '../../images/diamond.png'
 
 const featuresTop = [
@@ -62,10 +61,9 @@ export default function ColorMeaning() {
           ))}
         </div>
 
-        {/* Oval frame */}
+        {/* Doll */}
         <div className="cm-frame-wrap">
-          <img src={redbookImg} alt="" className="cm-redbook" />
-          <img src={frameImg}   alt="" className="cm-frame"   />
+          <img src={dollImg} alt="" className="cm-doll" />
         </div>
 
         {/* Bottom feature row */}

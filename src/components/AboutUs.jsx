@@ -1,26 +1,9 @@
 import './AboutUs.css'
-import laceImg      from '../../images/lace.png'
-import meetSonnyImg from '../../images/meetsonny.png'
-import meetBgImg    from '../../images/meetbg.jpeg'
 
 export default function AboutUs() {
   return (
     <section className="au" id="about">
-      {/* meetsonny sits above the section — outside au-inner so it isn't clipped */}
-      <div className="au-img-wrap">
-        <img src={meetSonnyImg} alt="Meet Sonny" className="au-betty" />
-      </div>
-
       <div className="au-inner">
-        <div className="au-bg" aria-hidden="true" style={{ backgroundImage: `url(${meetBgImg})` }} />
-        <div className="au-dim" aria-hidden="true" />
-
-        <div className="au-lace" aria-hidden="true">
-          {Array.from({ length: 40 }).map((_, i) => (
-            <img key={i} src={laceImg} alt="" className="au-lace-img" />
-          ))}
-        </div>
-
         <div className="au-content">
           <div className="au-text">
             <h2 className="au-heading">meet our designer.</h2>

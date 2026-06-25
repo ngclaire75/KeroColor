@@ -135,31 +135,18 @@
   max-width: 8em;
 }
 
-/* ── Oval frame ── */
+/* ── Doll ── */
 .cm-frame-wrap {
   position: relative;
-  width: clamp(200px, 24vw, 320px);
+  width: clamp(260px, 30vw, 420px);
   flex-shrink: 0;
 }
 
-.cm-frame {
+.cm-doll {
   width: 100%;
   height: auto;
   display: block;
-  position: relative;
-  z-index: 2;
-}
-
-.cm-redbook {
-  position: absolute;
-  top: 11%;
-  left: 13%;
-  width: 74%;
-  height: 78%;
-  object-fit: cover;
-  object-position: center;
-  clip-path: ellipse(48% 48% at 50% 50%);
-  z-index: 1;
+  object-fit: contain;
 }
 
 /* ══════════════════════════════════
@@ -191,7 +178,7 @@
   }
 
   .cm-frame-wrap {
-    width: 50vw;
+    width: 65vw;
   }
 
   .cm-feat p {
