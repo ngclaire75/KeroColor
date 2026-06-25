@@ -67,7 +67,7 @@
 .gallery-rect:nth-child(5)  img { object-position: 5% center; }
 .gallery-rect:nth-child(6)  img { object-position: 65% center; transform: scale(1.2); }
 .gallery-rect:nth-child(7)  img { object-position: 65% 20%; }
-.gallery-rect:nth-child(9)  img { transform: scale(1.2); }
+.gallery-rect:nth-child(9)  img { transform: scale(1.2); object-position: center 15%; }
 .gallery-rect:nth-child(10) img { object-position: center 10%; }
 .gallery-rect:nth-child(11) img { object-position: 5% center; }
 .gallery-rect:nth-child(12) img { object-position: 65% center; transform: scale(1.1); }
