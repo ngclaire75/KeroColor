@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import ColorDetailModal from './ColorDetailModal'
 import next1 from '../../images/next1.jpeg'
 import next2 from '../../images/next2.jpeg'
 import next3 from '../../images/next3.jpeg'
@@ -153,8 +152,6 @@ function getBatch(phase, progress, i) {
 export default function NextSection() {
   const [phase, setPhase] = useState('next')
   const [progress, setProgress] = useState(0)
-  const [selectedCard, setSelectedCard] = useState(null)
-
   useEffect(() => {
     const allImages = [
       ...nextImages, ...wsImages, ...npImages, ...tjImages, ...pwImages,
@@ -299,47 +296,33 @@ export default function NextSection() {
   }
 
   return (
-    <>
-      <section className="next-section">
-        <p className="next-gallery-label">gallery</p>
-        <div className="next-grid">
-          {nextImages.map((_, i) => {
-            const card = (
-              <div
-                className="next-card next-card--image"
-                onClick={() => setSelectedCard({ imgSrc: getImage(i), batch: getBatch(phase, progress, i) })}
-                style={{ cursor: 'pointer' }}
-              >
-                <img src={getImage(i)} alt="" className="next-card-img" />
-                <div className="next-card-header">
-                  <span>KEROCOLOR</span>
-                  <span>2026</span>
-                </div>
-                <ArrowIcon />
+    <section className="next-section">
+      <p className="next-gallery-label">gallery</p>
+      <div className="next-grid">
+        {nextImages.map((_, i) => {
+          const card = (
+            <div className="next-card next-card--image">
+              <img src={getImage(i)} alt="" className="next-card-img" />
+              <div className="next-card-header">
+                <span>KEROCOLOR</span>
+                <span>2026</span>
+              </div>
+              <ArrowIcon />
+            </div>
+          )
+
+          if (i === 2) {
+            return (
+              <div key={i} className="next-card-buldak-wrap">
+                <img src={buldak} alt="" className="next-buldak-bg" />
+                {card}
               </div>
             )
+          }
 
-            if (i === 2) {
-              return (
-                <div key={i} className="next-card-buldak-wrap">
-                  <img src={buldak} alt="" className="next-buldak-bg" />
-                  {card}
-                </div>
-              )
-            }
-
-            return <div key={i}>{card}</div>
-          })}
-        </div>
-      </section>
-
-      {selectedCard && (
-        <ColorDetailModal
-          imgSrc={selectedCard.imgSrc}
-          batch={selectedCard.batch}
-          onClose={() => setSelectedCard(null)}
-        />
-      )}
-    </>
+          return <div key={i}>{card}</div>
+        })}
+      </div>
+    </section>
   )
 }
