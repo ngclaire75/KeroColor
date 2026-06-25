@@ -166,8 +166,12 @@
   .gallery-rects {
     padding: 3rem 1.5rem 0;
     --gap: 8px;
-    --visible: 3;
+    --visible: 2;
     --h-pad: 1.5rem;
+  }
+
+  .gallery-rect {
+    aspect-ratio: 4 / 5;
   }
 
   .gallery-pagination {

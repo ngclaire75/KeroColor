@@ -17,7 +17,7 @@ const allSkulls    = [skull1, skull2, skull3, skull4, skull5, skull6, skull11, s
 const circleColors = ['#d7c3c2', '#aa7877', '#9f817f', '#941e1a', '#840f06']
 
 const VISIBLE_DESKTOP = 6
-const VISIBLE_MOBILE  = 3
+const VISIBLE_MOBILE  = 2
 const GAP_DESKTOP     = 18
 const GAP_MOBILE      = 8
 
