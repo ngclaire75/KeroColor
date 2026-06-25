@@ -18,81 +18,40 @@
   gap: 4rem;
 }
 
-/* ── Rectangle row ── */
+/* ── Viewport — clips the sliding track ── */
 .gallery-rects {
-  display: flex;
   width: 100%;
-  gap: 0.5rem;
+  overflow: hidden;
   padding: 11rem 4rem 0;
+  box-sizing: border-box;
+  --gap: 18px;
+  --visible: 6;
+  --h-pad: 4rem;
+  --item-w: calc((100vw - 2 * var(--h-pad) - (var(--visible) - 1) * var(--gap)) / var(--visible));
+}
+
+/* ── Track — slides left/right (transform set via JS inline style) ── */
+.gallery-rects-track {
+  display: flex;
+  gap: var(--gap);
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+  padding-bottom: 2px;
+}
+
+/* ── Each rect — fixed size, no expand ── */
+.gallery-rect {
+  flex: 0 0 var(--item-w);
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid #111;
   box-sizing: border-box;
 }
 
-.gallery-rect {
-  flex: 1;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-  outline: 1px solid #111;
-}
-
-/* ── Desktop accordion ── */
-.gallery-rects--desktop .gallery-rect {
-  flex: 1.5;
-  cursor: pointer;
-  transition: flex 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.gallery-rects--desktop .gallery-rect--active {
-  flex: 3;
-}
-
-.gallery-rects--desktop .gallery-rect img {
-  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.gallery-rects--desktop .gallery-rect--active img {
-  transform: scale(1.03);
-}
-
-.gallery-rects--desktop .gallery-rect:nth-child(4) img {
-  object-position: 20% center;
-}
-
-.gallery-rects--desktop .gallery-rect:nth-child(5) img {
-  object-position: 5% center;
-}
-
-.gallery-rects--desktop .gallery-rect:nth-child(6) img {
-  object-position: 65% center;
-  transform: scale(1.2);
-}
-
-.gallery-rects--desktop .gallery-rect:nth-child(7) img {
-  object-position: 65% 20%;
-}
-
-.gallery-rects--desktop .gallery-rect:nth-child(9) img {
-  transform: scale(1.2);
-}
-
-.gallery-rects--desktop .gallery-rect:nth-child(9).gallery-rect--active img {
-  object-position: center 20%;
-}
-
-.gallery-rects--desktop .gallery-rect:nth-child(10) img {
-  object-position: center 10%;
-}
-
-.gallery-rects--desktop .gallery-rect:nth-child(11) img {
-  object-position: 5% center;
-}
-
-.gallery-rects--desktop .gallery-rect:nth-child(12) img {
-  object-position: 65% center;
-  transform: scale(1.1);
-}
-
-.gallery-rects--desktop .gallery-rect:nth-child(12).gallery-rect--active img {
-  object-position: 40% 20%;
+@media (min-width: 641px) {
+  .gallery-rect {
+    aspect-ratio: 2 / 3;
+  }
 }
 
 .gallery-rect img {
@@ -102,29 +61,24 @@
   display: block;
 }
 
-.gallery-rect:nth-child(2) img {
-  object-position: 15% 20%;
-}
+/* ── Per-image crop positions ── */
+.gallery-rect:nth-child(2)  img { object-position: 15% 20%; }
+.gallery-rect:nth-child(4)  img { object-position: 20% center; }
+.gallery-rect:nth-child(5)  img { object-position: 5% center; }
+.gallery-rect:nth-child(6)  img { object-position: 65% center; transform: scale(1.2); }
+.gallery-rect:nth-child(7)  img { object-position: 65% 20%; }
+.gallery-rect:nth-child(9)  img { transform: scale(1.2); }
+.gallery-rect:nth-child(10) img { object-position: center 10%; }
+.gallery-rect:nth-child(11) img { object-position: 5% center; }
+.gallery-rect:nth-child(12) img { object-position: 65% center; transform: scale(1.1); }
 
 /* ── Pagination ── */
 .gallery-pagination {
-  display: none;
-}
-
-.gallery-pagination--desktop {
   display: flex;
   gap: 4rem;
   justify-content: center;
   margin-top: -2.5rem;
   margin-bottom: 2rem;
-}
-
-@media (max-width: 640px) {
-  .gallery-pagination {
-    display: flex;
-    gap: 0.75rem;
-    justify-content: center;
-  }
 }
 
 .gallery-page-btn {
@@ -172,25 +126,21 @@
   outline: 1px solid #111;
 }
 
-/* Pill appears below the circle on click */
 .gallery-circle-hex {
   position: absolute;
   top: calc(100% + 0.5rem);
   left: 50%;
   transform: translateX(-50%) translateY(-4px);
-
   white-space: nowrap;
   background: #fff;
   border: 1px solid #111;
   border-radius: 999px;
   padding: 0.3rem 0.75rem;
-
   font-family: 'Inter', sans-serif;
   font-size: 0.62rem;
   font-weight: 500;
   letter-spacing: 0.06em;
   color: #111;
-
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.25s ease, transform 0.25s ease;
@@ -215,18 +165,14 @@
 
   .gallery-rects {
     padding: 3rem 1.5rem 0;
+    --gap: 8px;
+    --visible: 3;
+    --h-pad: 1.5rem;
   }
 
-  .gallery-rect {
-    flex: 0.5;
-    aspect-ratio: unset;
-    height: 170px;
-    transition: flex 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
-  }
-
-  .gallery-rect--active {
-    flex: 3;
+  .gallery-pagination {
+    gap: 0.75rem;
+    margin-top: -2rem;
   }
 
   .gallery-circle {
