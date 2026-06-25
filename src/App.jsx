@@ -14,7 +14,6 @@ import FaqSection      from './components/FaqSection'
 import Calendar        from './components/Calendar'
 import cakeImg    from '../images/model2.jpeg'
 import drinkImg   from '../images/model1.jpeg'
-import HoverColorPicker from './components/HoverColorPicker'
 import './App.css'
 
 export default function App() {
@@ -45,11 +44,11 @@ export default function App() {
       <SiteHeader />
       <InfoBar onDateClick={() => setCalOpen(true)} />
       <div className="mobile-strip mobile-strip--model2">
-        <HoverColorPicker src={cakeImg} alt="Model" />
+        <img src={cakeImg} alt="Model" />
       </div>
       <Hero />
       <div className="mobile-strip mobile-strip--model1">
-        <HoverColorPicker src={drinkImg} alt="Model" />
+        <img src={drinkImg} alt="Model" />
       </div>
       <Ticker />
       <HowWeWork />
