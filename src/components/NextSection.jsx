@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import next1 from '../../images/next1.jpeg'
 import next2 from '../../images/next2.jpeg'
 import next3 from '../../images/next3.jpeg'
@@ -150,7 +151,9 @@ function getBatch(phase, progress, i) {
 
 // cycle: next → ws → np → tj → pw → ap → tp → nr → wr → r → j → next (5s each)
 export default function NextSection() {
-  const [phase, setPhase] = useState('next')
+  const navigate = useNavigate()
+  const { state } = useLocation()
+  const [phase, setPhase] = useState(state?.resumeBatch ?? 'next')
   const [progress, setProgress] = useState(0)
   useEffect(() => {
     const allImages = [
@@ -301,7 +304,11 @@ export default function NextSection() {
       <div className="next-grid">
         {nextImages.map((_, i) => {
           const card = (
-            <div className="next-card next-card--image">
+            <div
+              className="next-card next-card--image"
+              style={{ cursor: 'pointer' }}
+              onClick={() => navigate('/look', { state: { imgSrc: getImage(i), batch: getBatch(phase, progress, i), cardIndex: i } })}
+            >
               <img src={getImage(i)} alt="" className="next-card-img" />
               <div className="next-card-header">
                 <span>KEROCOLOR</span>

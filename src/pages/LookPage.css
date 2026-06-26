@@ -1,0 +1,367 @@
+.look-page {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #fff;
+}
+
+/* ── Left panel ── */
+.look-left {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  flex-shrink: 0;
+  padding: 0.5rem 0.3rem 0.5rem 1rem;
+  box-sizing: border-box;
+  background: #fff;
+}
+
+/* Fill the entire left panel */
+.look-img-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.look-img-frame {
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.look-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: blur(1.5px);
+}
+
+/* ── Glassy card wrapper — anchored to image bottom-left ── */
+.look-card-wrap {
+  position: absolute;
+  bottom: 1.4rem;
+  left: 1.4rem;
+  width: 230px;
+}
+
+/* Card body — true rounded corners (TL, BL, BR) + step notch with rounded inner edge at TR */
+.look-card {
+  background: #fff;
+  border: none;
+  padding: 1.6rem 1.4rem 2rem;
+  width: 230px;
+  height: 310px;
+  box-sizing: border-box;
+  /* path: rounded TL/BL/BR (r=16) + step notch TR with rounded outer+inner edges (r=16/r=12) */
+  clip-path: path("M 16 0 L 168 0 Q 184 0 184 16 L 184 34 Q 184 46 196 46 L 214 46 Q 230 46 230 62 L 230 294 Q 230 310 214 310 L 16 310 Q 0 310 0 294 L 0 16 Q 0 0 16 0 Z");
+}
+
+.look-card-brand {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #be2c37;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.35rem;
+  margin-top: -0.4rem;
+}
+
+.look-card-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600;
+  color: #be2c37;
+  margin: 0 0 1.1rem;
+  line-height: 1.45;
+}
+
+.look-card-thumb {
+  width: 100%;
+  height: 195px;
+  border-radius: 12px;
+  margin-top: 0.7rem;
+  overflow: hidden;
+}
+
+.look-card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(0.85);
+}
+
+
+
+/* ── Right panel ── */
+.look-right {
+  flex: 1;
+  background: #fff;
+  padding: 0.5rem 1rem 0.5rem 0.3rem;
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-start;
+}
+
+.look-right-panel {
+  width: 100%;
+  height: calc(100vh - 1rem);
+  border-radius: 14px;
+  background: linear-gradient(to bottom, #d42c3b 0%, #ffffff 80%);
+  position: relative;
+  overflow: hidden;
+}
+
+.look-right-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 45%;
+  background-image: radial-gradient(circle, #ffffff 2px, transparent 2px);
+  background-size: 20px 20px;
+  -webkit-mask-image: linear-gradient(to bottom, white 0%, transparent 100%);
+  mask-image: linear-gradient(to bottom, white 0%, transparent 100%);
+  border-radius: 14px 14px 0 0;
+  pointer-events: none;
+}
+
+.look-right-kbg {
+  position: absolute;
+  bottom: -35%;
+  left: 72%;
+  transform: translateX(-50%);
+  width: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.look-right-content {
+  position: absolute;
+  bottom: 2.8rem;
+  left: 2.4rem;
+  right: 2.4rem;
+  z-index: 1;
+}
+
+.look-palette {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.1rem;
+  margin-left: -0.35rem;
+}
+
+.look-palette-dot {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  margin-left: -9px;
+  flex-shrink: 0;
+}
+
+.look-palette-dot:first-child {
+  margin-left: 0;
+}
+
+.look-right-heading {
+  font-family: 'Inter', sans-serif;
+  font-size: 3.4rem;
+  font-weight: 800;
+  font-style: normal;
+  color: #be2c37;
+  line-height: 1.2;
+  margin: 0 0 0.9rem -0.35rem;
+  white-space: pre-line;
+}
+
+.look-right-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  color: #be2c37;
+  line-height: 1.6;
+  margin: 0 0 2rem;
+  max-width: 300px;
+}
+
+.look-right-buttons {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  width: fit-content;
+  margin-left: -0.2rem;
+}
+
+.look-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  padding: 0.6rem 0.6rem 0.6rem 1.2rem;
+  border-radius: 999px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.2s ease;
+  width: 220px;
+  box-sizing: border-box;
+}
+
+.look-btn:hover { opacity: 0.85; }
+
+.look-btn--outline {
+  background: #fff;
+  color: #be2c37;
+  border: 1px solid rgba(0,0,0,0.12);
+}
+
+.look-btn--filled {
+  background: #be2c37;
+  color: #fff;
+}
+
+.look-btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.look-btn-icon--circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  color: #fff;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.look-btn-icon--heart {
+  background: rgba(190, 44, 55, 0.12);
+  color: #be2c37;
+}
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+  .look-page {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+
+  .look-left {
+    width: 100%;
+    height: 55vh;
+    flex-shrink: 0;
+    padding: 0.75rem 0.75rem 0 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .look-img-container {
+    height: 100%;
+  }
+
+  .look-card-wrap {
+    bottom: 1rem;
+    left: 1rem;
+    width: 150px;
+  }
+
+  .look-card {
+    width: 150px;
+    height: 202px;
+    padding: 1rem 0.9rem 1.2rem;
+    clip-path: path("M 10 0 L 109 0 Q 120 0 120 10 L 120 22 Q 120 30 127 30 L 139 30 Q 150 30 150 40 L 150 191 Q 150 202 139 202 L 10 202 Q 0 202 0 191 L 0 10 Q 0 0 10 0 Z");
+  }
+
+  .look-card-brand {
+    font-size: 0.72rem;
+    margin-top: -0.2rem;
+  }
+
+  .look-card-label {
+    font-size: 0.68rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .look-card-thumb {
+    height: 120px;
+  }
+
+  .look-right {
+    display: flex;
+    width: 100%;
+    padding: 0 0.75rem 1.5rem 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .look-right-panel {
+    height: auto;
+    min-height: 50vh;
+    border-radius: 14px;
+    position: relative;
+  }
+
+  .look-right-content {
+    position: absolute;
+    bottom: 1.6rem;
+    left: 1.6rem;
+    right: 1.6rem;
+  }
+
+  .look-palette {
+    margin-bottom: 0.7rem;
+    margin-left: 0;
+  }
+
+  .look-palette-dot {
+    width: 26px;
+    height: 26px;
+  }
+
+  .look-right-heading {
+    font-size: 1.7rem;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .look-right-desc {
+    max-width: 100%;
+    font-size: 0.78rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+
+  .look-right-buttons {
+    flex-direction: column;
+    width: 88%;
+    margin-left: -0.2rem;
+    gap: 0.5rem;
+  }
+
+  .look-btn {
+    width: 100%;
+    font-size: 0.78rem;
+    padding: 0.4rem 0.4rem 0.4rem 0.9rem;
+  }
+
+  .look-btn-icon--circle {
+    width: 28px;
+    height: 28px;
+  }
+
+  .look-btn-icon--circle svg {
+    width: 16px;
+    height: 16px;
+  }
+}

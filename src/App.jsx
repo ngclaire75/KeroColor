@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import ExplorePage from './pages/ExplorePage'
+import LookPage    from './pages/LookPage'
 import Navbar     from './components/Navbar'
 import SiteHeader from './components/SiteHeader'
 import InfoBar    from './components/InfoBar'
@@ -63,6 +64,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={homePage} />
       <Route path="/explore" element={<ExplorePage />} />
+      <Route path="/look"    element={<LookPage />} />
     </Routes>
   )
 }
