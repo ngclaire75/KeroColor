@@ -29,6 +29,8 @@
   height: 100%;
   border-radius: 14px;
   overflow: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 .look-img {
@@ -37,6 +39,8 @@
   object-fit: cover;
   display: block;
   filter: blur(1.5px);
+  transform: scale(1.02);
+  -webkit-transform: scale(1.02);
 }
 
 /* ── Glassy card wrapper — anchored to image bottom-left ── */
@@ -266,10 +270,21 @@
     flex-shrink: 0;
     padding: 0.75rem;
     margin-bottom: 0;
+    border-radius: 14px;
+    overflow: hidden;
   }
 
   .look-img-container {
     height: 100%;
+  }
+
+  .look-img-frame {
+    clip-path: inset(0 round 14px);
+    -webkit-clip-path: inset(0 round 14px);
+  }
+
+  .look-img {
+    border-radius: 14px;
   }
 
   .look-card-wrap {
