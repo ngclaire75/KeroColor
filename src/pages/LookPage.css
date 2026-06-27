@@ -264,8 +264,8 @@
     width: 100%;
     height: 55vh;
     flex-shrink: 0;
-    padding: 0.75rem 0.75rem 0 0.75rem;
-    margin-bottom: 0.75rem;
+    padding: 0.75rem;
+    margin-bottom: 0;
   }
 
   .look-img-container {
@@ -302,7 +302,7 @@
   .look-right {
     display: flex;
     width: 100%;
-    padding: 0 0.75rem 1.5rem 0.75rem;
+    padding: 0.75rem 0.75rem 1.5rem 0.75rem;
     flex-shrink: 0;
   }
 
