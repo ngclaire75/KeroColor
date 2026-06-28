@@ -70,11 +70,12 @@
   font-weight: 700;
   color: #be2c37;
   letter-spacing: 0.1em;
-  margin-bottom: 0.35rem;
-  margin-top: -0.4rem;
+  margin-bottom: 0.5rem;
+  margin-top: -0.7rem;
 }
 
 .look-card-label {
+  display: none;
   font-family: 'Inter', sans-serif;
   font-size: 1rem;
   font-style: normal;
@@ -88,7 +89,7 @@
   width: 100%;
   height: 195px;
   border-radius: 12px;
-  margin-top: 0.7rem;
+  margin-top: 2.2rem;
   overflow: hidden;
 }
 
@@ -183,6 +184,7 @@
   line-height: 1.2;
   margin: 0 0 0.9rem -0.35rem;
   white-space: pre-line;
+  text-shadow: 0 0 18px rgba(255,255,255,0.6), 0 0 40px rgba(255,255,255,0.3);
 }
 
 .look-right-desc {
@@ -301,7 +303,7 @@
   }
 
   .look-card-brand {
-    font-size: 0.72rem;
+    font-size: 0.8rem;
     margin-top: -0.2rem;
   }
 
@@ -317,13 +319,13 @@
   .look-right {
     display: flex;
     width: 100%;
-    padding: 0.75rem 0.75rem 1.5rem 0.75rem;
+    padding: 0.3rem 0.75rem 1.5rem 0.75rem;
     flex-shrink: 0;
   }
 
   .look-right-panel {
     height: auto;
-    min-height: 50vh;
+    min-height: 65vh;
     border-radius: 14px;
     position: relative;
   }

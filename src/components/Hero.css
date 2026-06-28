@@ -62,8 +62,9 @@
   animation: tilt 3s ease-in-out infinite;
 }
 
-.ribbon-cl { width: 38px; top: 55%; left: 6%;  animation-delay: -2.2s; transform: rotate(-8deg);  }
-.ribbon-cr { width: 32px; top: 28%; right: 7%; animation-delay: -0.4s; transform: rotate(15deg); }
+.ribbon-cl  { width: 38px; top: 55%; left: 6%;  animation-delay: -2.2s; transform: rotate(-8deg);  }
+.ribbon-cl2 { width: 28px; top: 25%; left: 8%;  animation-delay: -1.1s; transform: rotate(12deg);  }
+.ribbon-cr  { width: 32px; top: 28%; right: 7%; animation-delay: -0.4s; transform: rotate(15deg); }
 
 /* ── Center content ── */
 .hero-center {
