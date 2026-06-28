@@ -1,65 +1,29 @@
-import { Suspense, useRef, useState, useEffect } from 'react'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { useGLTF, Center } from '@react-three/drei'
+import { useState } from 'react'
+import badImg from '../../images/bad.png.png'
+import SearchLoader from './SearchLoader'
 import './SkullPandaSection.css'
 
-function SkullModel({ scale, fixedX }) {
-  const { scene } = useGLTF('/skullpanda.glb')
-  const { viewport } = useThree()
-  const ref = useRef()
-
-  // on mobile use fixedX; on desktop keep model at 22% left of visible width
-  const xPos = fixedX !== undefined ? fixedX : -viewport.width * 0.22
-
-  useFrame((_, delta) => {
-    if (ref.current) ref.current.rotation.y += delta * 0.7
-  })
-
-  return (
-    <group ref={ref} scale={scale} position={[xPos, 0, 0]}>
-      <Center>
-        <primitive object={scene} />
-      </Center>
-    </group>
-  )
-}
-
-useGLTF.preload('/skullpanda.glb')
-
 export default function SkullPandaSection() {
-  const [isMobile, setIsMobile] = useState(
-    typeof window !== 'undefined' && window.innerWidth <= 640
-  )
+  const [isSearching, setIsSearching] = useState(false)
 
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth <= 640)
-    window.addEventListener('resize', check)
-    return () => window.removeEventListener('resize', check)
-  }, [])
-
-  const modelScale = isMobile ? 1.8 : 2.6
-  const fixedX = isMobile ? -0.4 : undefined  // desktop uses viewport-relative calc
+  function handleSearch(e) {
+    if (e.key === 'Enter' && e.target.value.trim()) {
+      setIsSearching(true)
+    }
+  }
 
   return (
+    <>
+    {isSearching && <SearchLoader />}
     <section className="skull-section">
-      <Canvas
-        camera={{ position: [0, 0, 4], fov: 42 }}
-        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '130%' }}
-      >
-        <ambientLight intensity={1.4} />
-        <directionalLight position={[4, 6, 4]} intensity={1.8} />
-        <directionalLight position={[-3, 1, -2]} intensity={0.4} />
-        <Suspense fallback={null}>
-          <SkullModel scale={modelScale} fixedX={fixedX} />
-        </Suspense>
-      </Canvas>
+      <img src={badImg} alt="" className="skull-model-img" />
 
       <div className="skull-search-wrap">
         <svg className="skull-search-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="11" cy="11" r="8" />
           <line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
-        <input className="skull-search-input" type="text" placeholder="search for a color" />
+        <input className="skull-search-input" type="text" placeholder="search for a color" onKeyDown={handleSearch} />
       </div>
 
       <p className="skull-tagline">
@@ -68,5 +32,6 @@ export default function SkullPandaSection() {
         <span>for more.</span>
       </p>
     </section>
+    </>
   )
 }

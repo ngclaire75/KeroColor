@@ -11,6 +11,15 @@
   justify-content: flex-end;
 }
 
+.skull-model-img {
+  position: absolute;
+  left: 0;
+  bottom: -8rem;
+  height: 120%;
+  width: auto;
+  object-fit: contain;
+}
+
 .skull-search-wrap {
   position: absolute;
   top: 3.5rem;
@@ -92,6 +101,12 @@
 @media (max-width: 640px) {
   .skull-section {
     height: 50vh;
+  }
+
+  .skull-model-img {
+    height: 75%;
+    left: -1rem;
+    bottom: -4rem;
   }
 
   .skull-search-wrap {

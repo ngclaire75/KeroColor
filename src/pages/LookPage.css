@@ -316,6 +316,10 @@
     height: 120px;
   }
 
+  .look-card-thumb img {
+    transform: scale(0.85) translateY(-2px);
+  }
+
   .look-right {
     display: flex;
     width: 100%;
