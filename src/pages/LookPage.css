@@ -137,16 +137,6 @@
   pointer-events: none;
 }
 
-.look-right-kbg {
-  position: absolute;
-  bottom: -35%;
-  left: 72%;
-  transform: translateX(-50%);
-  width: 100%;
-  z-index: 0;
-  pointer-events: none;
-}
-
 .look-right-content {
   position: absolute;
   bottom: 2.8rem;
@@ -255,6 +245,37 @@
 .look-btn-icon--heart {
   background: rgba(190, 44, 55, 0.12);
   color: #be2c37;
+}
+
+/* ── Pink theme ── */
+.look-page--pink .look-card-brand,
+.look-page--pink .look-card-label {
+  color: #d4687a;
+}
+
+.look-page--pink .look-right-panel {
+  background: linear-gradient(to bottom, #e8899a 0%, #ffffff 80%);
+}
+
+.look-page--pink .look-right-heading {
+  color: #d4687a;
+}
+
+.look-page--pink .look-right-desc {
+  color: #d4687a;
+}
+
+.look-page--pink .look-btn--outline {
+  color: #d4687a;
+}
+
+.look-page--pink .look-btn--filled {
+  background: #d4687a;
+}
+
+.look-page--pink .look-btn-icon--heart {
+  background: rgba(212, 104, 122, 0.12);
+  color: #d4687a;
 }
 
 /* ── Mobile ── */

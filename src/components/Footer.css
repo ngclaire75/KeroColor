@@ -50,6 +50,16 @@
   color: rgba(255, 255, 255, 0.6);
 }
 
+.theme-pink .footer {
+  background: #f4c6cf;
+}
+
+.theme-pink .footer-brand,
+.theme-pink .footer-copy,
+.theme-pink .footer-tag {
+  color: #111;
+}
+
 @media (max-width: 640px) {
   .footer {
     flex-direction: column;

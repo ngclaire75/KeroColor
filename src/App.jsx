@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
+import { SearchProvider } from './SearchContext'
 import ExplorePage from './pages/ExplorePage'
 import LookPage    from './pages/LookPage'
 import Navbar     from './components/Navbar'
@@ -61,10 +62,12 @@ export default function App() {
   )
 
   return (
+    <SearchProvider>
     <Routes>
       <Route path="/" element={homePage} />
       <Route path="/explore" element={<ExplorePage />} />
       <Route path="/look"    element={<LookPage />} />
     </Routes>
+    </SearchProvider>
   )
 }

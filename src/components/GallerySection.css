@@ -72,6 +72,9 @@
 .gallery-rect:nth-child(11) img { object-position: 5% center; }
 .gallery-rect:nth-child(12) img { object-position: 65% center; transform: scale(1.1); }
 
+/* ── Pink theme crop overrides ── */
+.theme-pink .gallery-rect:nth-child(7) img { object-position: 65% 55%; }
+
 /* ── Pagination ── */
 .gallery-pagination {
   display: flex;

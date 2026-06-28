@@ -11,17 +11,42 @@ import skull9  from '../../images/skull9.jpeg'
 import skull10 from '../../images/skull10.jpeg'
 import skull11 from '../../images/skull11.jpeg'
 import skull12 from '../../images/skull12.jpeg'
+import pink1   from '../../images/pink1.jpeg'
+import pink2   from '../../images/pink2.jpeg'
+import pink3   from '../../images/pink3.jpeg'
+import pink4   from '../../images/pink4.jpeg'
+import pink5   from '../../images/pink5.jpeg'
+import pink6   from '../../images/pink6.jpeg'
+import pink7   from '../../images/pink7.jpeg'
+import pink8   from '../../images/pink8.jpeg'
+import pink9   from '../../images/pink9.jpeg'
+import pink10  from '../../images/pink10.jpeg'
+import pink11  from '../../images/pink11.jpeg'
+import pink12  from '../../images/pink12.jpeg'
 import './GallerySection.css'
 
-const allSkulls    = [skull1, skull2, skull3, skull4, skull5, skull6, skull11, skull8, skull9, skull10, skull12, skull7]
-const circleColors = ['#d7c3c2', '#aa7877', '#9f817f', '#941e1a', '#840f06']
+const allSkulls = [skull1, skull2, skull3, skull4, skull5, skull6, skull11, skull8, skull9, skull10, skull12, skull7]
+const allPinks  = [pink1, pink2, pink3, pink4, pink5, pink6, pink7, pink8, pink9, pink10, pink11, pink12]
+
+const DEFAULT_COLORS = ['#d7c3c2', '#aa7877', '#9f817f', '#941e1a', '#840f06']
+const PINK_COLORS    = ['#feeff5', '#e5d7dd', '#cbbfc4', '#b2a7ac', '#988f93']
+
+function getCircleColors(searchResult) {
+  if (searchResult?.colorFamily === 'pink') return PINK_COLORS
+  return DEFAULT_COLORS
+}
+
+function getGridImages(searchResult) {
+  if (searchResult?.colorFamily === 'pink') return allPinks
+  return allSkulls
+}
 
 const VISIBLE_DESKTOP = 6
 const VISIBLE_MOBILE  = 2
 const GAP_DESKTOP     = 18
 const GAP_MOBILE      = 8
 
-export default function GallerySection() {
+export default function GallerySection({ searchResult }) {
   const [slideIndex, setSlideIndex] = useState(0)
   const [isMobile, setIsMobile] = useState(
     typeof window !== 'undefined' && window.innerWidth <= 640
@@ -31,10 +56,12 @@ export default function GallerySection() {
 
   const [activeCircleIdx, setActiveCircleIdx] = useState(null)
   const [activeHex, setActiveHex] = useState('')
+  const circleColors = getCircleColors(searchResult)
+  const gridImages   = getGridImages(searchResult)
 
   const GAP      = isMobile ? GAP_MOBILE : GAP_DESKTOP
   const VISIBLE  = isMobile ? VISIBLE_MOBILE : VISIBLE_DESKTOP
-  const maxSlide = allSkulls.length - VISIBLE
+  const maxSlide = gridImages.length - VISIBLE
 
   // Compute item width from actual rendered rect
   useEffect(() => {
@@ -78,7 +105,7 @@ export default function GallerySection() {
             className="gallery-rects-track"
             style={{ transform: `translateX(${translateX}px)` }}
           >
-            {allSkulls.map((src, i) => (
+            {gridImages.map((src, i) => (
               <div key={i} className="gallery-rect">
                 <img src={src} alt="" />
               </div>

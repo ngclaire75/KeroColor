@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useSearch } from '../SearchContext'
 import kImg from '../../images/k.png'
-import kbgImg from '../../images/kbg.png'
 import './LookPage.css'
 
 const BATCH_META = {
@@ -199,9 +199,78 @@ function extractRedHex(imgSrc) {
   })
 }
 
+// Pink pixel: high R and B, lower G, R dominates or matches B
+function isPinkPixel(pr, pg, pb) {
+  return pr > 130 && pb > 100 && pr > pg * 1.05 && pb > pg && pr >= pb * 0.9
+}
+
+function extractPinkPalette(imgSrc) {
+  return new Promise((resolve) => {
+    const img = new Image()
+    img.crossOrigin = 'anonymous'
+    img.onload = () => {
+      const S = 60
+      const canvas = document.createElement('canvas')
+      canvas.width = S; canvas.height = S
+      const ctx = canvas.getContext('2d')
+      ctx.drawImage(img, 0, 0, S, S)
+      const { data } = ctx.getImageData(0, 0, S, S)
+      const zones = [
+        { x: 0,  y: 0,  w: 20, h: 20 },
+        { x: 40, y: 0,  w: 20, h: 20 },
+        { x: 20, y: 20, w: 20, h: 20 },
+        { x: 0,  y: 40, w: 20, h: 20 },
+        { x: 40, y: 40, w: 20, h: 20 },
+      ]
+      const colors = zones.map(({ x, y, w, h }) => {
+        let r = 0, g = 0, b = 0, count = 0
+        for (let py = y; py < y + h; py++) {
+          for (let px = x; px < x + w; px++) {
+            const i = (py * S + px) * 4
+            const pr = data[i], pg = data[i + 1], pb = data[i + 2]
+            if (isPinkPixel(pr, pg, pb)) { r += pr; g += pg; b += pb; count++ }
+          }
+        }
+        return count > 0
+          ? toHex(Math.round(r / count), Math.round(g / count), Math.round(b / count))
+          : '#f4c6cf'
+      })
+      resolve(colors)
+    }
+    img.onerror = () => resolve(['#feeff5', '#e5d7dd', '#f4c6cf', '#cbbfc4', '#b2a7ac'])
+    img.src = imgSrc
+  })
+}
+
+function extractPinkHex(imgSrc) {
+  return new Promise((resolve) => {
+    const img = new Image()
+    img.crossOrigin = 'anonymous'
+    img.onload = () => {
+      const canvas = document.createElement('canvas')
+      canvas.width = 40; canvas.height = 40
+      const ctx = canvas.getContext('2d')
+      ctx.drawImage(img, 0, 0, 40, 40)
+      const { data } = ctx.getImageData(0, 0, 40, 40)
+      let r = 0, g = 0, b = 0, count = 0
+      for (let i = 0; i < data.length; i += 4) {
+        const pr = data[i], pg = data[i + 1], pb = data[i + 2]
+        if (isPinkPixel(pr, pg, pb)) { r += pr; g += pg; b += pb; count++ }
+      }
+      resolve(count > 0
+        ? toHex(Math.round(r / count), Math.round(g / count), Math.round(b / count))
+        : '#d4687a')
+    }
+    img.onerror = () => resolve('#d4687a')
+    img.src = imgSrc
+  })
+}
+
 export default function LookPage() {
   const { state } = useLocation()
   const navigate  = useNavigate()
+  const { searchResult } = useSearch()
+  const isPink = searchResult?.colorFamily === 'pink'
   const { imgSrc, batch, cardIndex } = state || {}
   const meta = BATCH_META[batch] || BATCH_META.next
   const cardMeta = meta.cards[cardIndex ?? 0] || meta.cards[0]
@@ -210,11 +279,14 @@ export default function LookPage() {
 
   useEffect(() => {
     if (!imgSrc) navigate('/explore', { replace: true })
-    else {
+    else if (isPink) {
+      extractPinkHex(imgSrc).then(setThumbColor)
+      extractPinkPalette(imgSrc).then(setPalette)
+    } else {
       extractRedHex(imgSrc).then(setThumbColor)
       extractPalette(imgSrc).then(setPalette)
     }
-  }, [imgSrc, navigate])
+  }, [imgSrc, navigate, isPink])
 
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape') navigate('/explore', { state: { resumeBatch: batch } }) }
@@ -225,7 +297,7 @@ export default function LookPage() {
   if (!imgSrc) return null
 
   return (
-    <div className="look-page">
+    <div className={`look-page${isPink ? ' look-page--pink' : ''}`}>
 
       {/* ── Left panel — image + card ── */}
       <div className="look-left">
@@ -239,7 +311,11 @@ export default function LookPage() {
             <div className="look-card">
               <span className="look-card-brand">KEROCOLOR</span>
               <div className="look-card-thumb">
-                <img src={kImg} alt="" />
+                <img
+                  src={kImg}
+                  alt=""
+                  style={searchResult?.colorFamily === 'pink' ? { filter: 'hue-rotate(330deg) saturate(0.4) brightness(1.3)' } : undefined}
+                />
               </div>
             </div>
           </div>

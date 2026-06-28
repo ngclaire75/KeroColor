@@ -99,7 +99,15 @@ import j6 from '../../images/j6.jpeg'
 import j7 from '../../images/j7.jpeg'
 import j8 from '../../images/j8.jpeg'
 import j9 from '../../images/j9.jpeg'
-import buldak from '../../images/buldak.png'
+import galpink1 from '../../images/galpink1.jpeg'
+import galpink2 from '../../images/galpink2.jpeg'
+import galpink3 from '../../images/galpink3.jpeg'
+import galpink4 from '../../images/galpink4.jpeg'
+import galpink5 from '../../images/galpink5.jpeg'
+import galpink6 from '../../images/galpink6.jpeg'
+import galpink7 from '../../images/galpink7.jpeg'
+import galpink8 from '../../images/galpink8.jpeg'
+import galpink9 from '../../images/galpink9.jpeg'
 import './NextSection.css'
 
 const nextImages = [next1, next2, next3, next4, next5, next6, next7, next8, next9]
@@ -112,7 +120,8 @@ const tpImages   = [tp1,   tp2,   tp3,   tp4,   tp5,   tp6,   tp7,   tp8,   tp9]
 const nrImages   = [nr1,   nr2,   nr3,   nr4,   nr5,   nr6,   nr7,   nr8,   nr9]
 const wrImages   = [wr1,   wr2,   wr3,   wr4,   wr5,   wr6,   wr7,   wr8,   wr9]
 const rImages    = [r1,    r2,    r3,    r4,    r5,    r6,    r7,    r8,    r9]
-const jImages    = [j1,    j2,    j3,    j4,    j5,    j6,    j7,    j8,    j9]
+const jImages      = [j1,       j2,       j3,       j4,       j5,       j6,       j7,       j8,       j9]
+const galpinkImages = [galpink1, galpink2, galpink3, galpink4, galpink5, galpink6, galpink7, galpink8, galpink9]
 
 function ArrowIcon() {
   return (
@@ -150,7 +159,7 @@ function getBatch(phase, progress, i) {
 }
 
 // cycle: next → ws → np → tj → pw → ap → tp → nr → wr → r → j → next (5s each)
-export default function NextSection() {
+export default function NextSection({ searchResult }) {
   const navigate = useNavigate()
   const { state } = useLocation()
   const [phase, setPhase] = useState(state?.resumeBatch ?? 'next')
@@ -303,13 +312,15 @@ export default function NextSection() {
       <p className="next-gallery-label">gallery</p>
       <div className="next-grid">
         {nextImages.map((_, i) => {
+          const isPink = searchResult?.colorFamily === 'pink'
+          const src    = isPink ? galpinkImages[i] : getImage(i)
           const card = (
             <div
               className="next-card next-card--image"
               style={{ cursor: 'pointer' }}
-              onClick={() => navigate('/look', { state: { imgSrc: getImage(i), batch: getBatch(phase, progress, i), cardIndex: i } })}
+              onClick={() => navigate('/look', { state: { imgSrc: src, batch: getBatch(phase, progress, i), cardIndex: i } })}
             >
-              <img src={getImage(i)} alt="" className="next-card-img" />
+              <img src={src} alt="" className="next-card-img" />
               <div className="next-card-header">
                 <span>KEROCOLOR</span>
                 <span>2026</span>
@@ -321,7 +332,6 @@ export default function NextSection() {
           if (i === 2) {
             return (
               <div key={i} className="next-card-buldak-wrap">
-                <img src={buldak} alt="" className="next-buldak-bg" />
                 {card}
               </div>
             )

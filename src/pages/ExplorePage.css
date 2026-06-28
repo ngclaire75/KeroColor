@@ -153,6 +153,36 @@
   animation: explore-marquee 9s linear infinite;
 }
 
+/* ── Pink search theme ── */
+.theme-pink .explore-nav {
+  background: #000;
+  transition: background 0.4s ease;
+}
+
+.theme-pink .explore-nav-link {
+  color: #fff;
+}
+
+.theme-pink .explore-nav-link:hover {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.theme-pink .explore-hero {
+  background: #ffeff5;
+}
+
+.theme-pink .explore-wonderland {
+  color: #111;
+}
+
+.theme-pink .explore-embrace {
+  color: #111;
+}
+
+.theme-pink .explore-labels {
+  color: #111;
+}
+
 /* ── Mobile ── */
 @media (max-width: 640px) {
   /* left group: explore2 + EMBRACE */

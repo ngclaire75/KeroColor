@@ -62,25 +62,6 @@
   gap: 10px;
 }
 
-/* ── Buldak behind card 3 ── */
-.next-card-buldak-wrap {
-  position: relative;
-}
-
-.next-buldak-bg {
-  position: absolute;
-  z-index: 0;
-  width: 125%;
-  object-fit: contain;
-  top: -70%;
-  right: -35%;
-  pointer-events: none;
-}
-
-.next-card-buldak-wrap .next-card {
-  position: relative;
-  z-index: 1;
-}
 
 /* ── Card base ── */
 .next-card {
