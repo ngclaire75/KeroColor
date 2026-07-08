@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import badImg from '../../images/bad.png.png'
 import SearchLoader from './SearchLoader'
+import { useSearch } from '../SearchContext'
 import './SkullPandaSection.css'
 
 // Only these basic names are accepted as color name searches
@@ -28,14 +29,18 @@ function processSearch(raw) {
 }
 
 export default function SkullPandaSection({ onSearch }) {
+  const { searchResult } = useSearch()
   const [isSearching, setIsSearching] = useState(false)
-  const [result, setResult] = useState(null)
+  const [result, setResult] = useState(
+    searchResult ? { query: searchResult.query, valid: searchResult.valid } : null
+  )
 
   function handleSearch(e) {
     if (e.key !== 'Enter') return
     const raw = e.target.value.trim()
     if (!raw) return
 
+    e.target.blur()
     setIsSearching(true)
     onSearch?.(null)
 
