@@ -278,6 +278,37 @@
   color: #d4687a;
 }
 
+/* ── Blue theme ── */
+.look-page--blue .look-card-brand,
+.look-page--blue .look-card-label {
+  color: #445471;
+}
+
+.look-page--blue .look-right-panel {
+  background: linear-gradient(to bottom, #5b6982 0%, #ffffff 80%);
+}
+
+.look-page--blue .look-right-heading {
+  color: #445471;
+}
+
+.look-page--blue .look-right-desc {
+  color: #5b6982;
+}
+
+.look-page--blue .look-btn--outline {
+  color: #445471;
+}
+
+.look-page--blue .look-btn--filled {
+  background: #445471;
+}
+
+.look-page--blue .look-btn-icon--heart {
+  background: rgba(68, 84, 113, 0.12);
+  color: #445471;
+}
+
 /* ── Mobile ── */
 @media (max-width: 640px) {
   .look-page {

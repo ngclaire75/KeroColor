@@ -135,6 +135,15 @@ import p6 from '../../images/p6.jpeg'
 import p7 from '../../images/p7.jpeg'
 import p8 from '../../images/p8.jpeg'
 import p9 from '../../images/p9.jpeg'
+import b1 from '../../images/b1.jpeg'
+import b2 from '../../images/b2.jpeg'
+import b3 from '../../images/b3.jpeg'
+import b4 from '../../images/b4.jpeg'
+import b5 from '../../images/b5.jpeg'
+import b6 from '../../images/b6.jpeg'
+import b7 from '../../images/b7.jpeg'
+import b8 from '../../images/b8.jpeg'
+import b9 from '../../images/b9.jpeg'
 import './NextSection.css'
 
 const nextImages = [next1, next2, next3, next4, next5, next6, next7, next8, next9]
@@ -152,6 +161,7 @@ const galpinkImages = [galpink1, galpink2, galpink3, galpink4, galpink5, galpink
 const pImages       = [pi1, pi2, pi3, pi4, pi5, pi6, pi7, pi8, pi9]
 const pinImages     = [pin1, pin2, pin3, pin4, pin5, pin6, pin7, pin8, pin9]
 const p1Images      = [p1,   p2,  p3,  p4,  p5,  p6,  p7,  p8,  p9]
+const bImages       = [b1,   b2,  b3,  b4,  b5,  b6,  b7,  b8,  b9]
 
 function ArrowIcon() {
   return (
@@ -387,12 +397,13 @@ export default function NextSection({ searchResult }) {
       <div className="next-grid">
         {nextImages.map((_, i) => {
           const isPink = searchResult?.colorFamily === 'pink'
-          const src    = isPink ? getPinkImage(i) : getImage(i)
+          const isBlue = searchResult?.colorFamily === 'blue'
+          const src    = isPink ? getPinkImage(i) : isBlue ? bImages[i] : getImage(i)
           const card = (
             <div
               className="next-card next-card--image"
               style={{ cursor: 'pointer' }}
-              onClick={() => navigate('/look', { state: { imgSrc: src, batch: isPink ? 'p' : getBatch(phase, progress, i), cardIndex: i } })}
+              onClick={() => navigate('/look', { state: { imgSrc: src, batch: isPink ? 'p' : isBlue ? 'b' : getBatch(phase, progress, i), cardIndex: i } })}
             >
               <img src={src} alt="" className="next-card-img" />
               <div className="next-card-header">

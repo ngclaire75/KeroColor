@@ -7,6 +7,9 @@ import explore3 from '../../images/explore3.jpeg'
 import explorepink1 from '../../images/explorepink1.jpeg'
 import explorepink2 from '../../images/explorepink2.jpeg'
 import explorepink3 from '../../images/explorepink3.jpeg'
+import exploreblue1 from '../../images/exploreblue1.jpeg'
+import exploreblue2 from '../../images/exploreblue2.jpeg'
+import exploreblue3 from '../../images/exploreblue3.jpeg'
 import SkullPandaSection from '../components/SkullPandaSection'
 import GallerySection from '../components/GallerySection'
 import NextSection from '../components/NextSection'
@@ -15,12 +18,14 @@ import './ExplorePage.css'
 
 function getExploreImages(searchResult) {
   if (searchResult?.colorFamily === 'pink') return [explorepink2, explorepink1, explorepink3]
+  if (searchResult?.colorFamily === 'blue') return [exploreblue1, exploreblue2, exploreblue3]
   return [explore1, explore2, explore3]
 }
 
 function getThemeClass(searchResult) {
   if (!searchResult?.colorFamily) return ''
   if (searchResult.colorFamily === 'pink') return 'theme-pink'
+  if (searchResult.colorFamily === 'blue') return 'theme-blue'
   return ''
 }
 

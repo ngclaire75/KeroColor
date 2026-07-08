@@ -60,6 +60,19 @@
   color: #111;
 }
 
+.theme-blue .footer {
+  background: #15294d;
+}
+
+.theme-blue .footer-brand,
+.theme-blue .footer-tag {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.theme-blue .footer-copy {
+  color: #8a94a6;
+}
+
 @media (max-width: 640px) {
   .footer {
     flex-direction: column;

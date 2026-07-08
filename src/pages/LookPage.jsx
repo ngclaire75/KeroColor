@@ -104,6 +104,17 @@ const BATCH_META = {
     { heading: 'Velvet Rose —\nsoft luxury',             desc: 'A velvet-textured rose palette that feels luxurious and impossibly soft.' },
     { heading: 'Wine Bloom —\ndark and romantic',        desc: 'Blooming shades of dark wine and rose — romantic, deep, and timeless.' },
   ]},
+  b: { label: 'Blue', cards: [
+    { heading: 'Blue —\ncalm & composed',                  desc: 'A palette of deep navy and soft slate — cool tones that settle into the skin with quiet authority.' },
+    { heading: 'Navy —\nthe classic depth',                 desc: 'Saturated navy pulled from shadow and sea — a foundational blue that builds gravitas without effort.' },
+    { heading: 'Steel Blue —\nmodern cool',                 desc: 'Pale steel and cool grey-blue tones that sit close to the skin — minimal, precise, and refined.' },
+    { heading: 'Midnight —\ndark and still',                desc: 'Near-black blues extracted from the deepest part of the image — dense, still, and commanding.' },
+    { heading: 'Ocean —\nwaves of depth',                   desc: 'Layered blues from horizon to depth — a palette that shifts from bright aqua to dark teal as the look deepens.' },
+    { heading: 'Slate —\nmuted and refined',                desc: 'Dusty blue-greys drawn from the cooler edges of the frame — understated tones with a polished finish.' },
+    { heading: 'Indigo —\nrich and moody',                  desc: 'Blue pushed toward violet — a pigment-rich indigo palette that reads complex and deeply saturated.' },
+    { heading: 'Denim —\ncasual and cool',                  desc: 'Washed-out, faded blues with warm undertones — a palette as lived-in and comfortable as raw denim.' },
+    { heading: 'Cobalt —\nbold and vivid',                  desc: 'Pure, high-chroma blue at its most electric — a palette extracted from the brightest zones of the image.' },
+  ]},
   r: { label: 'Red', cards: [
     { heading: 'Red —\npure & unapologetic',             desc: 'A vivid, saturated red with nothing to hide — intense, iconic, bold.' },
     { heading: 'True Red —\nthe original statement',     desc: 'The original power color. True red needs no explanation and takes no prisoners.' },
@@ -210,6 +221,73 @@ function extractRedHex(imgSrc) {
   })
 }
 
+// Blue pixel: B dominates, significantly above R and G
+function isBluePixel(pr, pg, pb) {
+  return pb > 80 && pb > pr * 1.3 && pb > pg * 1.1
+}
+
+function extractBluePalette(imgSrc) {
+  return new Promise((resolve) => {
+    const img = new Image()
+    img.crossOrigin = 'anonymous'
+    img.onload = () => {
+      const S = 60
+      const canvas = document.createElement('canvas')
+      canvas.width = S; canvas.height = S
+      const ctx = canvas.getContext('2d')
+      ctx.drawImage(img, 0, 0, S, S)
+      const { data } = ctx.getImageData(0, 0, S, S)
+      const zones = [
+        { x: 0,  y: 0,  w: 20, h: 20 },
+        { x: 40, y: 0,  w: 20, h: 20 },
+        { x: 20, y: 20, w: 20, h: 20 },
+        { x: 0,  y: 40, w: 20, h: 20 },
+        { x: 40, y: 40, w: 20, h: 20 },
+      ]
+      const colors = zones.map(({ x, y, w, h }) => {
+        let r = 0, g = 0, b = 0, count = 0
+        for (let py = y; py < y + h; py++) {
+          for (let px = x; px < x + w; px++) {
+            const i = (py * S + px) * 4
+            const pr = data[i], pg = data[i + 1], pb = data[i + 2]
+            if (isBluePixel(pr, pg, pb)) { r += pr; g += pg; b += pb; count++ }
+          }
+        }
+        return count > 0
+          ? toHex(Math.round(r / count), Math.round(g / count), Math.round(b / count))
+          : '#445471'
+      })
+      resolve(colors)
+    }
+    img.onerror = () => resolve(['#15294d', '#2c3e5f', '#445471', '#5b6982', '#737f94'])
+    img.src = imgSrc
+  })
+}
+
+function extractBlueHex(imgSrc) {
+  return new Promise((resolve) => {
+    const img = new Image()
+    img.crossOrigin = 'anonymous'
+    img.onload = () => {
+      const canvas = document.createElement('canvas')
+      canvas.width = 40; canvas.height = 40
+      const ctx = canvas.getContext('2d')
+      ctx.drawImage(img, 0, 0, 40, 40)
+      const { data } = ctx.getImageData(0, 0, 40, 40)
+      let r = 0, g = 0, b = 0, count = 0
+      for (let i = 0; i < data.length; i += 4) {
+        const pr = data[i], pg = data[i + 1], pb = data[i + 2]
+        if (isBluePixel(pr, pg, pb)) { r += pr; g += pg; b += pb; count++ }
+      }
+      resolve(count > 0
+        ? toHex(Math.round(r / count), Math.round(g / count), Math.round(b / count))
+        : '#445471')
+    }
+    img.onerror = () => resolve('#445471')
+    img.src = imgSrc
+  })
+}
+
 // Pink pixel: high R and B, lower G, R dominates or matches B
 function isPinkPixel(pr, pg, pb) {
   return pr > 130 && pb > 100 && pr > pg * 1.05 && pb > pg && pr >= pb * 0.9
@@ -282,6 +360,7 @@ export default function LookPage() {
   const navigate  = useNavigate()
   const { searchResult } = useSearch()
   const isPink = searchResult?.colorFamily === 'pink'
+  const isBlue = searchResult?.colorFamily === 'blue'
   const { imgSrc, batch, cardIndex } = state || {}
   const meta = BATCH_META[batch] || BATCH_META.next
   const cardMeta = meta.cards[cardIndex ?? 0] || meta.cards[0]
@@ -293,11 +372,14 @@ export default function LookPage() {
     else if (isPink) {
       extractPinkHex(imgSrc).then(setThumbColor)
       extractPinkPalette(imgSrc).then(setPalette)
+    } else if (isBlue) {
+      extractBlueHex(imgSrc).then(setThumbColor)
+      extractBluePalette(imgSrc).then(setPalette)
     } else {
       extractRedHex(imgSrc).then(setThumbColor)
       extractPalette(imgSrc).then(setPalette)
     }
-  }, [imgSrc, navigate, isPink])
+  }, [imgSrc, navigate, isPink, isBlue])
 
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape') navigate('/explore', { state: { resumeBatch: batch } }) }
@@ -308,7 +390,7 @@ export default function LookPage() {
   if (!imgSrc) return null
 
   return (
-    <div className={`look-page${isPink ? ' look-page--pink' : ''}`}>
+    <div className={`look-page${isPink ? ' look-page--pink' : isBlue ? ' look-page--blue' : ''}`}>
 
       {/* ── Left panel — image + card ── */}
       <div className="look-left">
@@ -325,7 +407,11 @@ export default function LookPage() {
                 <img
                   src={kImg}
                   alt=""
-                  style={searchResult?.colorFamily === 'pink' ? { filter: 'hue-rotate(330deg) saturate(0.4) brightness(1.3)' } : undefined}
+                  style={
+                    isPink ? { filter: 'hue-rotate(336deg) saturate(0.55)' } :
+                    isBlue ? { filter: 'hue-rotate(213deg) saturate(0.5) brightness(0.6)' } :
+                    undefined
+                  }
                 />
               </div>
             </div>

@@ -183,6 +183,36 @@
   color: #111;
 }
 
+/* ── Blue search theme ── */
+.theme-blue .explore-nav {
+  background: #15294d;
+  transition: background 0.4s ease;
+}
+
+.theme-blue .explore-nav-link {
+  color: #fff;
+}
+
+.theme-blue .explore-nav-link:hover {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.theme-blue .explore-hero {
+  background: #8a94a6;
+}
+
+.theme-blue .explore-wonderland {
+  color: #fff;
+}
+
+.theme-blue .explore-embrace {
+  color: #fff;
+}
+
+.theme-blue .explore-labels {
+  color: #fff;
+}
+
 /* ── Mobile ── */
 @media (max-width: 640px) {
   /* left group: explore2 + EMBRACE */
