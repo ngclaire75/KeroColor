@@ -115,6 +115,17 @@ const BATCH_META = {
     { heading: 'Cherry Red —\nplayful power',            desc: 'A cherry-bright red that balances playfulness with the full force of color.' },
     { heading: 'Scarlet —\nthe classic power red',       desc: 'Scarlet has been the color of power since the beginning. Nothing has changed.' },
   ]},
+  p: { label: 'Pink', cards: [
+    { heading: 'Pink —\nsoft & playful',                desc: 'Blush tones and candy pinks come together in a look that is light and effortless.' },
+    { heading: 'Baby Pink —\ngentle and sweet',         desc: 'Soft, powdery pink that keeps the look airy, innocent, and quietly charming.' },
+    { heading: 'Bubblegum —\nbold sweetness',           desc: 'A vivid, saturated pink that is bright, fun, and completely unapologetic.' },
+    { heading: 'Rose Petal —\ndelicate bloom',          desc: 'Fresh rose petal tones that bring a natural flush and effortless femininity.' },
+    { heading: 'Candy Pink —\nplayful energy',          desc: 'Sweet, electric candy pink that radiates joy and youthful confidence.' },
+    { heading: 'Flamingo —\nbold and warm',             desc: 'A warm, vivid pink inspired by flamingos — striking, tropical, and full of life.' },
+    { heading: 'Dusty Rose —\nmuted romance',           desc: 'A softened, muted rose that leans romantic and refined without trying too hard.' },
+    { heading: 'Hot Pink —\nmaximum impact',            desc: 'Bright, fearless, and fully committed — hot pink that demands attention.' },
+    { heading: 'Soft Blush —\nbare and luminous',       desc: 'A barely-there blush that enhances skin naturally, glowing from within.' },
+  ]},
   j: { label: 'Jade', cards: [
     { heading: 'Jade —\nmystery in deep red',            desc: 'Dark garnet and raspberry tones give this look a cool, jewel-like allure.' },
     { heading: 'Garnet Tone —\nprecious and deep',       desc: 'Deep garnet — a gemstone color that adds precious, jewel-like intensity to the look.' },

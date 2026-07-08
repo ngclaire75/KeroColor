@@ -108,6 +108,33 @@ import galpink6 from '../../images/galpink6.jpeg'
 import galpink7 from '../../images/galpink7.jpeg'
 import galpink8 from '../../images/galpink8.jpeg'
 import galpink9 from '../../images/galpink9.jpeg'
+import pi1 from '../../images/pi1.jpeg'
+import pi2 from '../../images/pi2.jpeg'
+import pi3 from '../../images/pi3.jpeg'
+import pi4 from '../../images/pi4.jpeg'
+import pi5 from '../../images/pi5.jpeg'
+import pi6 from '../../images/pi6.jpeg'
+import pi7 from '../../images/pi7.jpeg'
+import pi8 from '../../images/pi8.jpeg'
+import pi9 from '../../images/pi9.jpeg'
+import pin1 from '../../images/pin1.jpeg'
+import pin2 from '../../images/pin2.jpeg'
+import pin3 from '../../images/pin3.jpeg'
+import pin4 from '../../images/pin4.jpeg'
+import pin5 from '../../images/pin5.jpeg'
+import pin6 from '../../images/pin6.jpeg'
+import pin7 from '../../images/pin7.jpeg'
+import pin8 from '../../images/pin8.jpeg'
+import pin9 from '../../images/pin9.jpeg'
+import p1 from '../../images/p1.jpeg'
+import p2 from '../../images/p2.jpeg'
+import p3 from '../../images/p3.jpeg'
+import p4 from '../../images/p4.jpeg'
+import p5 from '../../images/p5.jpeg'
+import p6 from '../../images/p6.jpeg'
+import p7 from '../../images/p7.jpeg'
+import p8 from '../../images/p8.jpeg'
+import p9 from '../../images/p9.jpeg'
 import './NextSection.css'
 
 const nextImages = [next1, next2, next3, next4, next5, next6, next7, next8, next9]
@@ -122,6 +149,9 @@ const wrImages   = [wr1,   wr2,   wr3,   wr4,   wr5,   wr6,   wr7,   wr8,   wr9]
 const rImages    = [r1,    r2,    r3,    r4,    r5,    r6,    r7,    r8,    r9]
 const jImages      = [j1,       j2,       j3,       j4,       j5,       j6,       j7,       j8,       j9]
 const galpinkImages = [galpink1, galpink2, galpink3, galpink4, galpink5, galpink6, galpink7, galpink8, galpink9]
+const pImages       = [pi1, pi2, pi3, pi4, pi5, pi6, pi7, pi8, pi9]
+const pinImages     = [pin1, pin2, pin3, pin4, pin5, pin6, pin7, pin8, pin9]
+const p1Images      = [p1,   p2,  p3,  p4,  p5,  p6,  p7,  p8,  p9]
 
 function ArrowIcon() {
   return (
@@ -164,6 +194,50 @@ export default function NextSection({ searchResult }) {
   const { state } = useLocation()
   const [phase, setPhase] = useState(state?.resumeBatch ?? 'next')
   const [progress, setProgress] = useState(0)
+  const [pinkPhase, setPinkPhase] = useState('pi')
+  const [pinkProgress, setPinkProgress] = useState(0)
+
+  useEffect(() => {
+    if (searchResult?.colorFamily !== 'pink') return
+    let t
+    if (pinkPhase === 'pi') {
+      t = setTimeout(() => { setPinkPhase('to-pin'); setPinkProgress(0) }, 5000)
+    } else if (pinkPhase === 'to-pin') {
+      if (pinkProgress < 9) {
+        t = setTimeout(() => setPinkProgress(p => p + 1), 350)
+      } else {
+        setPinkPhase('pin'); setPinkProgress(0)
+      }
+    } else if (pinkPhase === 'pin') {
+      t = setTimeout(() => { setPinkPhase('to-p'); setPinkProgress(0) }, 5000)
+    } else if (pinkPhase === 'to-p') {
+      if (pinkProgress < 9) {
+        t = setTimeout(() => setPinkProgress(p => p + 1), 350)
+      } else {
+        setPinkPhase('p'); setPinkProgress(0)
+      }
+    } else if (pinkPhase === 'p') {
+      t = setTimeout(() => { setPinkPhase('to-pi'); setPinkProgress(0) }, 5000)
+    } else if (pinkPhase === 'to-pi') {
+      if (pinkProgress < 9) {
+        t = setTimeout(() => setPinkProgress(p => p + 1), 350)
+      } else {
+        setPinkPhase('pi'); setPinkProgress(0)
+      }
+    }
+    return () => clearTimeout(t)
+  }, [searchResult, pinkPhase, pinkProgress])
+
+  function getPinkImage(i) {
+    if (pinkPhase === 'pi')     return pImages[i]
+    if (pinkPhase === 'pin')    return pinImages[i]
+    if (pinkPhase === 'p')      return p1Images[i]
+    if (pinkPhase === 'to-pin') return pinkProgress > i ? pinImages[i] : pImages[i]
+    if (pinkPhase === 'to-p')   return pinkProgress > i ? p1Images[i]  : pinImages[i]
+    if (pinkPhase === 'to-pi')  return pinkProgress > i ? pImages[i]   : p1Images[i]
+    return pImages[i]
+  }
+
   useEffect(() => {
     const allImages = [
       ...nextImages, ...wsImages, ...npImages, ...tjImages, ...pwImages,
@@ -313,12 +387,12 @@ export default function NextSection({ searchResult }) {
       <div className="next-grid">
         {nextImages.map((_, i) => {
           const isPink = searchResult?.colorFamily === 'pink'
-          const src    = isPink ? galpinkImages[i] : getImage(i)
+          const src    = isPink ? getPinkImage(i) : getImage(i)
           const card = (
             <div
               className="next-card next-card--image"
               style={{ cursor: 'pointer' }}
-              onClick={() => navigate('/look', { state: { imgSrc: src, batch: getBatch(phase, progress, i), cardIndex: i } })}
+              onClick={() => navigate('/look', { state: { imgSrc: src, batch: isPink ? 'p' : getBatch(phase, progress, i), cardIndex: i } })}
             >
               <img src={src} alt="" className="next-card-img" />
               <div className="next-card-header">
