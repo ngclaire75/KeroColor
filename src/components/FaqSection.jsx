@@ -1,5 +1,6 @@
 import './FaqSection.css'
 import { useState } from 'react'
+import faqberryImg from '../../images/faqberry.png'
 
 const faqs = [
   {
@@ -31,7 +32,12 @@ export default function FaqSection() {
 
   return (
     <section className="faq" id="faq">
-<h2 className="faq-heading">FAQs</h2>
+      <img src={faqberryImg} alt="" className="faq-berry faq-berry--l1" aria-hidden="true" />
+      <img src={faqberryImg} alt="" className="faq-berry faq-berry--l2" aria-hidden="true" />
+      <img src={faqberryImg} alt="" className="faq-berry faq-berry--l3" aria-hidden="true" />
+      <img src={faqberryImg} alt="" className="faq-berry faq-berry--r1" aria-hidden="true" />
+      <img src={faqberryImg} alt="" className="faq-berry faq-berry--r2" aria-hidden="true" />
+      <h2 className="faq-heading">FAQs</h2>
 
       <div className="faq-list">
         {faqs.map((item, i) => (
