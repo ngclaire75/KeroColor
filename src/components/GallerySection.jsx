@@ -61,7 +61,9 @@ const VISIBLE_MOBILE  = 2
 const GAP_DESKTOP     = 18
 const GAP_MOBILE      = 8
 
-export default function GallerySection({ searchResult }) {
+const COLOR_FAMILIES = ['red', 'pink', 'blue']
+
+export default function GallerySection({ searchResult, onColorChange }) {
   const [slideIndex, setSlideIndex] = useState(0)
   const [isMobile, setIsMobile] = useState(
     typeof window !== 'undefined' && window.innerWidth <= 640
@@ -71,6 +73,15 @@ export default function GallerySection({ searchResult }) {
 
   const [activeCircleIdx, setActiveCircleIdx] = useState(null)
   const [activeHex, setActiveHex] = useState('')
+
+  const currentFamily = searchResult?.colorFamily || 'red'
+  const familyIdx = COLOR_FAMILIES.indexOf(currentFamily)
+
+  function cycleColor(dir) {
+    const next = COLOR_FAMILIES[familyIdx + dir]
+    if (next) onColorChange?.(next)
+  }
+
   const circleColors = getCircleColors(searchResult)
   const gridImages   = getGridImages(searchResult)
 
@@ -137,17 +148,41 @@ export default function GallerySection({ searchResult }) {
           </button>
         </div>
 
-        <div className="gallery-circles">
-          {circleColors.map((color, i) => (
-            <div
-              key={i}
-              className={`gallery-circle-wrap${activeCircleIdx === i ? ' gallery-circle-wrap--active' : ''}`}
-              onClick={() => handleCircleClick(i)}
-            >
-              <div className="gallery-circle" style={{ background: color }} />
-              <span className="gallery-circle-hex">{activeHex}</span>
-            </div>
-          ))}
+        <div className="gallery-circles-row">
+          <button
+            className="gallery-color-arrow"
+            onClick={() => cycleColor(-1)}
+            disabled={familyIdx <= 0}
+            aria-label="Previous color"
+          >
+            <svg width="23" height="23" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" role="presentation">
+              <path fillRule="evenodd" clipRule="evenodd" d="M12 0L4.73232 6.45304C4.28525 6.81984 4 7.37663 4 8C4 8.62336 4.28524 9.18015 4.73232 9.54696L12 16L8 8L12 0Z" />
+            </svg>
+          </button>
+
+          <div className="gallery-circles">
+            {circleColors.map((color, i) => (
+              <div
+                key={i}
+                className={`gallery-circle-wrap${activeCircleIdx === i ? ' gallery-circle-wrap--active' : ''}`}
+                onClick={() => handleCircleClick(i)}
+              >
+                <div className="gallery-circle" style={{ background: color }} />
+                <span className="gallery-circle-hex">{activeHex}</span>
+              </div>
+            ))}
+          </div>
+
+          <button
+            className="gallery-color-arrow"
+            onClick={() => cycleColor(1)}
+            disabled={familyIdx >= COLOR_FAMILIES.length - 1}
+            aria-label="Next color"
+          >
+            <svg width="23" height="23" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" role="presentation" style={{ transform: 'rotate(180deg)' }}>
+              <path fillRule="evenodd" clipRule="evenodd" d="M12 0L4.73232 6.45304C4.28525 6.81984 4 7.37663 4 8C4 8.62336 4.28524 9.18015 4.73232 9.54696L12 16L8 8L12 0Z" />
+            </svg>
+          </button>
         </div>
 
       </div>

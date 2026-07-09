@@ -6,7 +6,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 3.5rem 0 2.5rem;
+  padding: 1rem 0 2.5rem;
   min-height: 60vh;
 }
 
@@ -22,7 +22,7 @@
 .gallery-rects {
   width: 100%;
   overflow: hidden;
-  padding: 11rem 4rem 0;
+  padding: 5rem 4rem 0;
   box-sizing: border-box;
   --gap: 18px;
   --visible: 6;
@@ -103,13 +103,36 @@
   cursor: default;
 }
 
-/* ── Circle row ── */
+/* ── Circle row with arrows ── */
+.gallery-circles-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding-bottom: 1rem;
+}
+
+.gallery-color-arrow {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  flex-shrink: 0;
+}
+
+.gallery-color-arrow:disabled { opacity: 0.2; cursor: default; }
+
+.gallery-color-arrow svg { fill: #000; display: block; }
+
 .gallery-circles {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1.2rem;
-  padding-bottom: 1rem;
 }
 
 .gallery-circle-wrap {

@@ -10,7 +10,6 @@ import explorepink3 from '../../images/explorepink3.jpeg'
 import exploreblue1 from '../../images/exploreblue1.jpeg'
 import exploreblue2 from '../../images/exploreblue2.jpeg'
 import exploreblue3 from '../../images/exploreblue3.jpeg'
-import SkullPandaSection from '../components/SkullPandaSection'
 import GallerySection from '../components/GallerySection'
 import NextSection from '../components/NextSection'
 import Footer from '../components/Footer'
@@ -76,11 +75,11 @@ export default function ExplorePage() {
         </div>
       </div>
 
-      {/* Second section — search */}
-      <SkullPandaSection onSearch={setSearchResult} />
-
       {/* Third section — gallery grid */}
-      <GallerySection searchResult={searchResult} />
+      <GallerySection
+        searchResult={searchResult}
+        onColorChange={(family) => setSearchResult({ query: family, valid: true, colorFamily: family })}
+      />
 
       {/* Fourth section — 3x3 card grid */}
       <NextSection searchResult={searchResult} />
