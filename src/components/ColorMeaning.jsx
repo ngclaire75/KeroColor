@@ -1,7 +1,9 @@
 import './ColorMeaning.css'
 import { useEffect, useRef, useState } from 'react'
 import textureImg  from '../../images/texture.png'
-import dollImg     from '../../images/doll.png'
+import vo1 from '../../images/vo1.jpeg'
+import vo2 from '../../images/vo2.jpeg'
+import vo3 from '../../images/vo3.jpeg'
 import diamondImg  from '../../images/diamond.png'
 
 const featuresTop = [
@@ -61,9 +63,11 @@ export default function ColorMeaning() {
           ))}
         </div>
 
-        {/* Doll */}
+        {/* Images */}
         <div className="cm-frame-wrap">
-          <img src={dollImg} alt="" className="cm-doll" />
+          <img src={vo1} alt="" className={`cm-vo cm-vo--1${visible ? ' cm-vo--visible' : ''}`} />
+          <img src={vo2} alt="" className={`cm-vo cm-vo--2${visible ? ' cm-vo--visible' : ''}`} />
+          <img src={vo3} alt="" className={`cm-vo cm-vo--3${visible ? ' cm-vo--visible' : ''}`} />
         </div>
 
         {/* Bottom feature row */}

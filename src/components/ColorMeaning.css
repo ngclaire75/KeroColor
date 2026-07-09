@@ -135,19 +135,26 @@
   max-width: 8em;
 }
 
-/* ── Doll ── */
+/* ── Images ── */
 .cm-frame-wrap {
-  position: relative;
-  width: clamp(260px, 30vw, 420px);
-  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0 1.5rem;
+  width: 100%;
 }
 
-.cm-doll {
+.cm-vo {
   width: 100%;
-  height: auto;
+  height: clamp(270px, 32vw, 440px);
+  object-fit: cover;
   display: block;
-  object-fit: contain;
+  transition: clip-path 1s cubic-bezier(0.77, 0, 0.18, 1);
 }
+
+.cm-vo--1 { clip-path: inset(100% 0 0 0); transition-delay: 0s; }
+.cm-vo--2 { clip-path: inset(0 0 100% 0); transition-delay: 0.15s; }
+.cm-vo--3 { clip-path: inset(100% 0 0 0); transition-delay: 0.3s; }
+.cm-vo--visible { clip-path: inset(0 0 0 0); }
 
 /* ══════════════════════════════════
    MOBILE
@@ -177,9 +184,10 @@
     gap: 1.2rem;
   }
 
-  .cm-frame-wrap {
-    width: 65vw;
+  .cm-vo {
+    height: clamp(100px, 28vw, 180px);
   }
+
 
   .cm-feat p {
     font-size: 0.82rem;
