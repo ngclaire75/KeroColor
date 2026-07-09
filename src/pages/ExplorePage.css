@@ -213,6 +213,36 @@
   color: #fff;
 }
 
+/* ── Green search theme ── */
+.theme-green .explore-nav {
+  background: #25302b;
+  transition: background 0.4s ease;
+}
+
+.theme-green .explore-nav-link {
+  color: #fff;
+}
+
+.theme-green .explore-nav-link:hover {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.theme-green .explore-hero {
+  background: #35443d;
+}
+
+.theme-green .explore-wonderland {
+  color: #fff;
+}
+
+.theme-green .explore-embrace {
+  color: #fff;
+}
+
+.theme-green .explore-labels {
+  color: #fff;
+}
+
 /* ── Mobile ── */
 @media (max-width: 640px) {
   /* left group: explore2 + EMBRACE */

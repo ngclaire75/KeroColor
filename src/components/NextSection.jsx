@@ -144,6 +144,15 @@ import b6 from '../../images/b6.jpeg'
 import b7 from '../../images/b7.jpeg'
 import b8 from '../../images/b8.jpeg'
 import b9 from '../../images/b9.jpeg'
+import gr1 from '../../images/gr1.jpeg'
+import gr2 from '../../images/gr2.jpeg'
+import gr3 from '../../images/gr3.jpeg'
+import gr4 from '../../images/gr4.jpeg'
+import gr5 from '../../images/gr5.jpeg'
+import gr6 from '../../images/gr6.jpeg'
+import gr7 from '../../images/gr7.jpeg'
+import gr8 from '../../images/gr8.jpeg'
+import gr9 from '../../images/gr9.jpeg'
 import './NextSection.css'
 
 const nextImages = [next1, next2, next3, next4, next5, next6, next7, next8, next9]
@@ -162,6 +171,7 @@ const pImages       = [pi1, pi2, pi3, pi4, pi5, pi6, pi7, pi8, pi9]
 const pinImages     = [pin1, pin2, pin3, pin4, pin5, pin6, pin7, pin8, pin9]
 const p1Images      = [p1,   p2,  p3,  p4,  p5,  p6,  p7,  p8,  p9]
 const bImages       = [b1,   b2,  b3,  b4,  b5,  b6,  b7,  b8,  b9]
+const grImages      = [gr1,  gr2, gr3, gr4, gr5, gr6, gr7, gr8, gr9]
 
 function ArrowIcon() {
   return (
@@ -396,14 +406,15 @@ export default function NextSection({ searchResult }) {
       <p className="next-gallery-label">gallery</p>
       <div className="next-grid">
         {nextImages.map((_, i) => {
-          const isPink = searchResult?.colorFamily === 'pink'
-          const isBlue = searchResult?.colorFamily === 'blue'
-          const src    = isPink ? getPinkImage(i) : isBlue ? bImages[i] : getImage(i)
+          const isPink  = searchResult?.colorFamily === 'pink'
+          const isBlue  = searchResult?.colorFamily === 'blue'
+          const isGreen = searchResult?.colorFamily === 'green'
+          const src     = isPink ? getPinkImage(i) : isBlue ? bImages[i] : isGreen ? grImages[i] : getImage(i)
           const card = (
             <div
               className="next-card next-card--image"
               style={{ cursor: 'pointer' }}
-              onClick={() => navigate('/look', { state: { imgSrc: src, batch: isPink ? 'p' : isBlue ? 'b' : getBatch(phase, progress, i), cardIndex: i } })}
+              onClick={() => navigate('/look', { state: { imgSrc: src, batch: isPink ? 'p' : isBlue ? 'b' : isGreen ? 'g' : getBatch(phase, progress, i), cardIndex: i } })}
             >
               <img src={src} alt="" className="next-card-img" />
               <div className="next-card-header">

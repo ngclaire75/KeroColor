@@ -1,14 +1,14 @@
 import badImg from '../../images/bad.png.png'
 import './SearchLoader.css'
 
-export default function SearchLoader() {
+export default function SearchLoader({ fading }) {
   return (
-    <div className="search-loader-overlay">
+    <div className={`search-loader-overlay${fading ? ' search-loader-overlay--fading' : ''}`}>
       <div className="search-loader-center">
         <img src={badImg} alt="" className="search-loader-img" />
       </div>
       <p className="search-loader-text">
-        finding your color
+        loading
         <span className="search-loader-dot">.</span>
         <span className="search-loader-dot">.</span>
         <span className="search-loader-dot">.</span>

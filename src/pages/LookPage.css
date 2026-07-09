@@ -1,3 +1,15 @@
+/* ── Content reveal ── */
+.look-page--hidden {
+  filter: blur(14px);
+  opacity: 0;
+}
+
+.look-page--revealed {
+  filter: blur(0);
+  opacity: 1;
+  transition: filter 0.85s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.65s ease;
+}
+
 .look-page {
   display: flex;
   width: 100vw;
@@ -307,6 +319,37 @@
 .look-page--blue .look-btn-icon--heart {
   background: rgba(68, 84, 113, 0.12);
   color: #445471;
+}
+
+/* ── Green theme ── */
+.look-page--green .look-card-brand,
+.look-page--green .look-card-label {
+  color: #35443d;
+}
+
+.look-page--green .look-right-panel {
+  background: linear-gradient(to bottom, #495750 0%, #ffffff 80%);
+}
+
+.look-page--green .look-right-heading {
+  color: #35443d;
+}
+
+.look-page--green .look-right-desc {
+  color: #495750;
+}
+
+.look-page--green .look-btn--outline {
+  color: #35443d;
+}
+
+.look-page--green .look-btn--filled {
+  background: #35443d;
+}
+
+.look-page--green .look-btn-icon--heart {
+  background: rgba(134, 143, 139, 0.18);
+  color: #35443d;
 }
 
 /* ── Mobile ── */

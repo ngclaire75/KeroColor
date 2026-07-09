@@ -73,6 +73,19 @@
   color: #8a94a6;
 }
 
+.theme-green .footer {
+  background: #35443d;
+}
+
+.theme-green .footer-brand,
+.theme-green .footer-tag {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.theme-green .footer-copy {
+  color: #868f8b;
+}
+
 @media (max-width: 640px) {
   .footer {
     flex-direction: column;

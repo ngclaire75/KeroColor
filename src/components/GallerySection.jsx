@@ -22,6 +22,18 @@ import ep9  from '../../images/ep9.jpeg'
 import ep10 from '../../images/ep10.jpeg'
 import ep11 from '../../images/ep11.jpeg'
 import ep12 from '../../images/ep12.jpeg'
+import g1  from '../../images/g1.jpeg'
+import g2  from '../../images/g2.jpeg'
+import g3  from '../../images/g3.jpeg'
+import g4  from '../../images/g4.jpeg'
+import g5  from '../../images/g5.jpeg'
+import g6  from '../../images/g6.jpeg'
+import g7  from '../../images/g7.jpeg'
+import g8  from '../../images/g8.jpeg'
+import g9  from '../../images/g9.jpeg'
+import g10 from '../../images/g10.jpeg'
+import g11 from '../../images/g11.jpeg'
+import g12 from '../../images/g12.jpeg'
 import pink1   from '../../images/pink1.jpeg'
 import pink2   from '../../images/pink2.jpeg'
 import pink3   from '../../images/pink3.jpeg'
@@ -36,23 +48,27 @@ import pink11  from '../../images/pink11.jpeg'
 import pink12  from '../../images/pink12.jpeg'
 import './GallerySection.css'
 
-const allSkulls = [skull1, skull2, skull3, skull4, skull5, skull6, skull11, skull8, skull9, skull10, skull12, skull7]
-const allPinks  = [pink1, pink2, pink3, pink4, pink5, pink6, pink7, pink8, pink9, pink10, pink11, pink12]
-const allBlues  = [ep1, ep2, ep3, ep4, ep6, ep7, ep8, ep9, ep10, ep11, ep12]
+const allSkulls  = [skull1, skull2, skull3, skull4, skull5, skull6, skull11, skull8, skull9, skull10, skull12, skull7]
+const allPinks   = [pink1, pink2, pink3, pink4, pink5, pink6, pink7, pink8, pink9, pink10, pink11, pink12]
+const allBlues   = [ep1, ep2, ep3, ep4, ep6, ep7, ep8, ep9, ep10, ep11, ep12]
+const allGreens  = [g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11, g12]
 
 const DEFAULT_COLORS = ['#d7c3c2', '#aa7877', '#9f817f', '#941e1a', '#840f06']
 const PINK_COLORS    = ['#feeff5', '#e5d7dd', '#cbbfc4', '#b2a7ac', '#988f93']
 const BLUE_COLORS    = ['#15294d', '#2c3e5f', '#445471', '#5b6982', '#737f94']
+const GREEN_COLORS   = ['#35443d', '#495750', '#5d6964', '#727c77', '#868f8b']
 
 function getCircleColors(searchResult) {
-  if (searchResult?.colorFamily === 'pink') return PINK_COLORS
-  if (searchResult?.colorFamily === 'blue') return BLUE_COLORS
+  if (searchResult?.colorFamily === 'pink')  return PINK_COLORS
+  if (searchResult?.colorFamily === 'blue')  return BLUE_COLORS
+  if (searchResult?.colorFamily === 'green') return GREEN_COLORS
   return DEFAULT_COLORS
 }
 
 function getGridImages(searchResult) {
-  if (searchResult?.colorFamily === 'pink') return allPinks
-  if (searchResult?.colorFamily === 'blue') return allBlues
+  if (searchResult?.colorFamily === 'pink')  return allPinks
+  if (searchResult?.colorFamily === 'blue')  return allBlues
+  if (searchResult?.colorFamily === 'green') return allGreens
   return allSkulls
 }
 
@@ -61,7 +77,7 @@ const VISIBLE_MOBILE  = 2
 const GAP_DESKTOP     = 18
 const GAP_MOBILE      = 8
 
-const COLOR_FAMILIES = ['red', 'pink', 'blue']
+const COLOR_FAMILIES = ['red', 'pink', 'blue', 'green']
 
 export default function GallerySection({ searchResult, onColorChange }) {
   const [slideIndex, setSlideIndex] = useState(0)

@@ -10,21 +10,26 @@ import explorepink3 from '../../images/explorepink3.jpeg'
 import exploreblue1 from '../../images/exploreblue1.jpeg'
 import exploreblue2 from '../../images/exploreblue2.jpeg'
 import exploreblue3 from '../../images/exploreblue3.jpeg'
+import mod1 from '../../images/mod1.jpeg'
+import mod2 from '../../images/mod2.jpeg'
+import mod3 from '../../images/mod3.jpeg'
 import GallerySection from '../components/GallerySection'
 import NextSection from '../components/NextSection'
 import Footer from '../components/Footer'
 import './ExplorePage.css'
 
 function getExploreImages(searchResult) {
-  if (searchResult?.colorFamily === 'pink') return [explorepink2, explorepink1, explorepink3]
-  if (searchResult?.colorFamily === 'blue') return [exploreblue1, exploreblue2, exploreblue3]
+  if (searchResult?.colorFamily === 'pink')  return [explorepink2, explorepink1, explorepink3]
+  if (searchResult?.colorFamily === 'blue')  return [exploreblue1, exploreblue2, exploreblue3]
+  if (searchResult?.colorFamily === 'green') return [mod1, mod2, mod3]
   return [explore1, explore2, explore3]
 }
 
 function getThemeClass(searchResult) {
   if (!searchResult?.colorFamily) return ''
-  if (searchResult.colorFamily === 'pink') return 'theme-pink'
-  if (searchResult.colorFamily === 'blue') return 'theme-blue'
+  if (searchResult.colorFamily === 'pink')  return 'theme-pink'
+  if (searchResult.colorFamily === 'blue')  return 'theme-blue'
+  if (searchResult.colorFamily === 'green') return 'theme-green'
   return ''
 }
 

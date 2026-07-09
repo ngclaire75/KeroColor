@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useSearch } from '../SearchContext'
 import kImg from '../../images/k.png'
+import SearchLoader from '../components/SearchLoader'
 import './LookPage.css'
 
 const BATCH_META = {
@@ -147,6 +148,17 @@ const BATCH_META = {
     { heading: 'Jewel Red —\nprecious intensity',        desc: 'A jewel-toned red that catches the light like a carefully set precious stone.' },
     { heading: 'Cranberry —\ntart and refined',          desc: 'The tart, refined shade of cranberry — sharp enough to be interesting, deep enough to last.' },
     { heading: 'Dark Jade —\ncool mystique',             desc: 'A cool, shadowed red-to-garnet palette that carries an air of composed mystique.' },
+  ]},
+  g: { label: 'Green', cards: [
+    { heading: 'Forest Green —\nnature\'s depth',        desc: 'Deep forest tones drawn from leaf and bark — grounded, organic, and endlessly calm.' },
+    { heading: 'Sage —\nsoft and earthy',                desc: 'Muted sage green with grey undertones — a quiet, refined palette for understated beauty.' },
+    { heading: 'Moss Green —\ntextured & raw',           desc: 'The living texture of forest moss — dense, damp, and rich with natural color.' },
+    { heading: 'Olive Depth —\nwarm and grounded',       desc: 'Warm olive tones with earthy undertones that anchor any look with natural confidence.' },
+    { heading: 'Hunter Green —\nbold & composed',        desc: 'A classic hunter green — deep, decisive, and quietly commanding in every setting.' },
+    { heading: 'Fern —\nfresh and alive',                desc: 'The vivid, living green of young ferns — bright, energetic, and full of growth.' },
+    { heading: 'Juniper —\ncool and still',              desc: 'Cool juniper tones that carry the stillness of pine forests and winter mornings.' },
+    { heading: 'Eucalyptus —\nsoft muted calm',          desc: 'Dusty eucalyptus greens that are soft, cool, and effortlessly sophisticated.' },
+    { heading: 'Deep Verdant —\nlush and rich',          desc: 'A lush, saturated verdant green that speaks of abundance, vitality, and raw beauty.' },
   ]},
 }
 
@@ -355,17 +367,93 @@ function extractPinkHex(imgSrc) {
   })
 }
 
+function isGreenPixel(pr, pg, pb) {
+  return pg > 60 && pg > pr * 1.2 && pg > pb * 1.1
+}
+
+function extractGreenPalette(imgSrc) {
+  return new Promise((resolve) => {
+    const img = new Image()
+    img.crossOrigin = 'anonymous'
+    img.onload = () => {
+      const S = 60
+      const canvas = document.createElement('canvas')
+      canvas.width = S; canvas.height = S
+      const ctx = canvas.getContext('2d')
+      ctx.drawImage(img, 0, 0, S, S)
+      const { data } = ctx.getImageData(0, 0, S, S)
+      const zones = [
+        { x: 0,  y: 0,  w: 20, h: 20 },
+        { x: 40, y: 0,  w: 20, h: 20 },
+        { x: 20, y: 20, w: 20, h: 20 },
+        { x: 0,  y: 40, w: 20, h: 20 },
+        { x: 40, y: 40, w: 20, h: 20 },
+      ]
+      const colors = zones.map(({ x, y, w, h }) => {
+        let r = 0, g = 0, b = 0, count = 0
+        for (let py = y; py < y + h; py++) {
+          for (let px = x; px < x + w; px++) {
+            const i = (py * S + px) * 4
+            const pr = data[i], pg = data[i + 1], pb = data[i + 2]
+            if (isGreenPixel(pr, pg, pb)) { r += pr; g += pg; b += pb; count++ }
+          }
+        }
+        return count > 0
+          ? toHex(Math.round(r / count), Math.round(g / count), Math.round(b / count))
+          : '#495750'
+      })
+      resolve(colors)
+    }
+    img.onerror = () => resolve(['#35443d', '#495750', '#5d6964', '#727c77', '#868f8b'])
+    img.src = imgSrc
+  })
+}
+
+function extractGreenHex(imgSrc) {
+  return new Promise((resolve) => {
+    const img = new Image()
+    img.crossOrigin = 'anonymous'
+    img.onload = () => {
+      const canvas = document.createElement('canvas')
+      canvas.width = 40; canvas.height = 40
+      const ctx = canvas.getContext('2d')
+      ctx.drawImage(img, 0, 0, 40, 40)
+      const { data } = ctx.getImageData(0, 0, 40, 40)
+      let r = 0, g = 0, b = 0, count = 0
+      for (let i = 0; i < data.length; i += 4) {
+        const pr = data[i], pg = data[i + 1], pb = data[i + 2]
+        if (isGreenPixel(pr, pg, pb)) { r += pr; g += pg; b += pb; count++ }
+      }
+      resolve(count > 0
+        ? toHex(Math.round(r / count), Math.round(g / count), Math.round(b / count))
+        : '#35443d')
+    }
+    img.onerror = () => resolve('#35443d')
+    img.src = imgSrc
+  })
+}
+
 export default function LookPage() {
   const { state } = useLocation()
   const navigate  = useNavigate()
   const { searchResult } = useSearch()
-  const isPink = searchResult?.colorFamily === 'pink'
-  const isBlue = searchResult?.colorFamily === 'blue'
+  const isPink  = searchResult?.colorFamily === 'pink'
+  const isBlue  = searchResult?.colorFamily === 'blue'
+  const isGreen = searchResult?.colorFamily === 'green'
   const { imgSrc, batch, cardIndex } = state || {}
   const meta = BATCH_META[batch] || BATCH_META.next
   const cardMeta = meta.cards[cardIndex ?? 0] || meta.cards[0]
   const [thumbColor, setThumbColor] = useState('#8b1a1a')
   const [palette, setPalette] = useState([])
+  const [overlayFading, setOverlayFading] = useState(false)
+  const [overlayGone, setOverlayGone] = useState(false)
+  const [contentReady, setContentReady] = useState(false)
+
+  useEffect(() => {
+    const t1 = setTimeout(() => { setOverlayFading(true); setContentReady(true) }, 1700)
+    const t2 = setTimeout(() => setOverlayGone(true), 2500)
+    return () => { clearTimeout(t1); clearTimeout(t2) }
+  }, [])
 
   useEffect(() => {
     if (!imgSrc) navigate('/explore', { replace: true })
@@ -375,11 +463,14 @@ export default function LookPage() {
     } else if (isBlue) {
       extractBlueHex(imgSrc).then(setThumbColor)
       extractBluePalette(imgSrc).then(setPalette)
+    } else if (isGreen) {
+      extractGreenHex(imgSrc).then(setThumbColor)
+      extractGreenPalette(imgSrc).then(setPalette)
     } else {
       extractRedHex(imgSrc).then(setThumbColor)
       extractPalette(imgSrc).then(setPalette)
     }
-  }, [imgSrc, navigate, isPink, isBlue])
+  }, [imgSrc, navigate, isPink, isBlue, isGreen])
 
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape') navigate('/explore', { state: { resumeBatch: batch } }) }
@@ -390,7 +481,9 @@ export default function LookPage() {
   if (!imgSrc) return null
 
   return (
-    <div className={`look-page${isPink ? ' look-page--pink' : isBlue ? ' look-page--blue' : ''}`}>
+    <>
+    {!overlayGone && <SearchLoader fading={overlayFading} />}
+    <div className={`look-page${isPink ? ' look-page--pink' : isBlue ? ' look-page--blue' : isGreen ? ' look-page--green' : ''}${contentReady ? ' look-page--revealed' : ' look-page--hidden'}`}>
 
       {/* ── Left panel — image + card ── */}
       <div className="look-left">
@@ -408,8 +501,9 @@ export default function LookPage() {
                   src={kImg}
                   alt=""
                   style={
-                    isPink ? { filter: 'hue-rotate(336deg) saturate(0.55)' } :
-                    isBlue ? { filter: 'hue-rotate(213deg) saturate(0.5) brightness(0.6)' } :
+                    isPink  ? { filter: 'hue-rotate(336deg) saturate(0.55)' } :
+                    isBlue  ? { filter: 'hue-rotate(213deg) saturate(0.5) brightness(0.6)' } :
+                    isGreen ? { filter: 'hue-rotate(130deg) saturate(0.4) brightness(0.55)' } :
                     undefined
                   }
                 />
@@ -457,5 +551,6 @@ export default function LookPage() {
       </div>
 
     </div>
+    </>
   )
 }
