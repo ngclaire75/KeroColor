@@ -34,7 +34,6 @@ export default function FaqSection() {
     <section className="faq" id="faq">
       <img src={faqberryImg} alt="" className="faq-berry faq-berry--l1" aria-hidden="true" />
       <img src={faqberryImg} alt="" className="faq-berry faq-berry--l2" aria-hidden="true" />
-      <img src={faqberryImg} alt="" className="faq-berry faq-berry--l3" aria-hidden="true" />
       <img src={faqberryImg} alt="" className="faq-berry faq-berry--r1" aria-hidden="true" />
       <img src={faqberryImg} alt="" className="faq-berry faq-berry--r2" aria-hidden="true" />
       <h2 className="faq-heading">FAQs</h2>
