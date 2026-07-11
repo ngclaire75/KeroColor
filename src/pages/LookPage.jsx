@@ -490,7 +490,7 @@ export default function LookPage() {
 
         <div className="look-img-container">
           <div className="look-img-frame">
-            <img src={imgSrc} alt="" className="look-img" />
+            <img src={imgSrc} alt="" className="look-img" style={isGreen && cardIndex === 6 ? { objectPosition: 'center 90%' } : undefined} />
           </div>
 
           <div className="look-card-wrap">
