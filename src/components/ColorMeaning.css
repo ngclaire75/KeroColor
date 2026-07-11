@@ -185,7 +185,7 @@
   }
 
   .cm-vo {
-    height: clamp(140px, 38vw, 240px);
+    height: clamp(180px, 48vw, 290px);
   }
 
 
