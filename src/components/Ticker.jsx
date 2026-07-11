@@ -1,6 +1,6 @@
 import './Ticker.css'
 
-const unit = 'shop now ♥ get your free color guide ♥ analyze colors now ♥ explore palettes ♥ '
+const unit = 'start now ♥ get your free color guide ♥ analyze colors now ♥ explore palettes ♥ '
 const copy = unit.repeat(6)
 
 export default function Ticker() {
