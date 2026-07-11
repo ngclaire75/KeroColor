@@ -27,7 +27,7 @@ export default function Hero() {
         </p>
         <p className="hero-body">
           If you love bold palettes, expressive art, and colors with a story
-          to tell — you're in the right place and we're happy to deliver.
+          to tell. You're in the right place and we're happy to deliver.
         </p>
         <a href="#" className="hero-btn">analyze palette now!</a>
       </div>

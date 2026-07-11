@@ -16,14 +16,14 @@ const steps = [
     num: '02',
     title: 'Curate',
     img: endorse2,
-    body: 'We handpick harmonious palettes built around your story — from bold hero hues to subtle neutrals that hold everything together.',
+    body: 'We handpick harmonious palettes built around your story, from bold hero hues to subtle neutrals that hold everything together.',
     deco: true,
   },
   {
     num: '03',
     title: 'Deliver',
     img: endorse3,
-    body: 'Your custom color system arrives ready to use — across digital, print, packaging, and every touchpoint your brand lives on.',
+    body: 'Your custom color system arrives ready to use across digital, print, packaging, and every touchpoint your brand lives on.',
   },
 ]
 

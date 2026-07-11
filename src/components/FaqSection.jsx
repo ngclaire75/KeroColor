@@ -9,7 +9,7 @@ const faqs = [
   },
   {
     q: 'What is a color palette analysis?',
-    a: 'A color palette analysis breaks down your chosen or detected colors into a cohesive system — including primary, secondary, and accent tones — helping you understand how each hue works together.',
+    a: 'A color palette analysis breaks down your chosen or detected colors into a cohesive system, including primary, secondary, and accent tones, helping you understand how each hue works together.',
   },
   {
     q: 'How do I find my signature color?',
@@ -17,11 +17,11 @@ const faqs = [
   },
   {
     q: 'Can I save and export my palettes?',
-    a: 'Yes — all generated palettes can be saved to your KeroColor profile and exported in multiple formats including HEX, RGB, and PNG swatches for use across design tools.',
+    a: 'Yes, all generated palettes can be saved to your KeroColor profile and exported in multiple formats including HEX, RGB, and PNG swatches for use across design tools.',
   },
   {
     q: 'Is KeroColor free to use?',
-    a: 'KeroColor is completely free to use. Explore our color analyzer, build palettes, and discover your signature colors — all at no cost.',
+    a: 'KeroColor is completely free to use. Explore our color analyzer, build palettes, and discover your signature colors, all at no cost.',
   },
 ]
 

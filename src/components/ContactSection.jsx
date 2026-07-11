@@ -35,7 +35,7 @@ export default function ContactSection() {
           <input  type="text"  name="subject" placeholder="SUBJECT"        className="ct-input"    required />
           <textarea            name="message" placeholder="MESSAGE"        className="ct-textarea" rows={6} required />
           <button type="submit" className="ct-btn">SEND</button>
-          {sent && <p className="ct-feedback ct-feedback--ok">Your email client has opened — just hit send!</p>}
+          {sent && <p className="ct-feedback ct-feedback--ok">Your email client has opened. Just hit send!</p>}
         </form>
       </div>
 

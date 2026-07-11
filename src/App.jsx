@@ -14,6 +14,7 @@ import AboutUs         from './components/AboutUs'
 import ContactSection  from './components/ContactSection'
 import FaqSection      from './components/FaqSection'
 import Calendar        from './components/Calendar'
+import Footer          from './components/Footer'
 import cakeImg    from '../images/model2.jpeg'
 import drinkImg   from '../images/model1.jpeg'
 import './App.css'
@@ -58,6 +59,7 @@ export default function App() {
       <ContactSection />
       <FaqSection />
       <AboutUs />
+      <Footer />
     </div>
   )
 

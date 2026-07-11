@@ -11,7 +11,7 @@ export default function AboutUs() {
             <p className="au-desc">
               Hi, I'm Claire. I'm the designer behind KeroColor, the color
               consultancy arm of Kero Group. I believe that color is one of the
-              most quietly powerful decisions a brand can make — and I've built
+              most quietly powerful decisions a brand can make, and I've built
               my practice around helping people make it with intention.
             </p>
             <p className="au-desc">
