@@ -61,7 +61,7 @@ export default function ExplorePage() {
       <div className="explore-hero">
         <nav className="explore-nav">
           <Link to="/" className="explore-nav-link">home</Link>
-          <a href="#" className="explore-nav-link">color palette</a>
+          <Link to="/palette" className="explore-nav-link">color palette</Link>
           <a href="#" className="explore-nav-link">color analyzer</a>
         </nav>
         <div className="explore-main">
