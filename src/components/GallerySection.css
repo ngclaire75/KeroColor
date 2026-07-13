@@ -182,7 +182,7 @@
 /* ── Mobile ── */
 @media (max-width: 640px) {
   .gallery-section {
-    padding: 2rem 0;
+    padding: 2rem 0 1.5rem;
     min-height: auto;
   }
 
@@ -209,6 +209,10 @@
   .gallery-circle {
     width: clamp(32px, 10vw, 52px);
     height: clamp(32px, 10vw, 52px);
+  }
+
+  .gallery-circles-row {
+    padding-bottom: 0.5rem;
   }
 
   .gallery-circles {
