@@ -278,6 +278,10 @@
 /* ── Menu dropdown (mobile only — hidden on desktop) ── */
 .pp-menu-dropdown {
   display: none;
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  background: #ffffff;
 }
 
 .pp-menu-toggle {
@@ -290,7 +294,7 @@
   border-top: 1px solid #e5e5e5;
   border-bottom: 1px solid #e5e5e5;
   cursor: pointer;
-  padding: 1.1rem 1.25rem;
+  padding: 1.5rem 1.25rem 1.5rem 1.75rem;
   font-family: 'Inter', sans-serif;
   font-size: 1.15rem;
   font-weight: 400;
@@ -319,28 +323,22 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: 1.1rem 1.25rem 1.1rem 2.75rem;
+  padding: 1.5rem 1.25rem 1.5rem 1.75rem;
   font-family: 'Inter', sans-serif;
   font-size: 1.05rem;
   font-weight: 400;
   color: #111;
 }
 
-/* Inset divider — same gap on both sides, matching the text indent */
+/* Full-width divider, matching the Menu toggle's */
 .pp-menu-item::after {
   content: '';
   position: absolute;
-  left: 1rem;
-  right: 1rem;
+  left: 0;
+  right: 0;
   bottom: 0;
   height: 1px;
   background: #e5e5e5;
-}
-
-/* Last item's divider spans the full width, like the Menu toggle's */
-.pp-menu-item:last-child::after {
-  left: 0;
-  right: 0;
 }
 
 .pp-menu-item--active {
