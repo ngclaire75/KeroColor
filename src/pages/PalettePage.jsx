@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import heroImg from '../../images/modena.jpeg'
 import leoImg from '../../images/leo.png'
 import skyImg from '../../images/sky.png'
+import bearImg from '../../images/bear.png'
 import './PalettePage.css'
 
 const TABS = ['All', 'Seasonal Palettes', 'Editorial', 'Color Theory', 'Inspiration', 'Archive']
@@ -26,7 +27,39 @@ export default function PalettePage() {
   const [activeTab, setActiveTab] = useState('All')
   const [activeFilter, setActiveFilter] = useState('All')
   const [barOpen, setBarOpen] = useState(true)
+  const [menuOpen, setMenuOpen] = useState(false)
   const [animPaused, setAnimPaused] = useState(false)
+  const [brandSplit, setBrandSplit] = useState(50)
+  const brandTextRef = useRef(null)
+  const brandBgRef = useRef(null)
+
+  useEffect(() => {
+    function computeBrandSplit() {
+      const textEl = brandTextRef.current
+      const bgEl = brandBgRef.current
+      if (!textEl || !bgEl) return
+      // Measure the real line-box height from font-size × line-height instead of
+      // textEl.offsetHeight — the raised <sup>© stretches the inline box taller
+      // than the "kerocolor" letters actually are, which threw the split off
+      // (and by a different amount at every viewport, since the sup doesn't
+      // scale in lockstep with the main text).
+      const fontSize = parseFloat(getComputedStyle(textEl).fontSize)
+      const textHeight = fontSize * 0.9
+      const bgHeight = bgEl.offsetHeight
+      if (textHeight === 0) return
+      const pct = ((textHeight - bgHeight) / textHeight) * 100
+      setBrandSplit(Math.max(0, Math.min(100, pct)))
+    }
+    computeBrandSplit()
+    const ro = new ResizeObserver(computeBrandSplit)
+    if (brandTextRef.current) ro.observe(brandTextRef.current)
+    if (brandBgRef.current) ro.observe(brandBgRef.current)
+    window.addEventListener('resize', computeBrandSplit)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', computeBrandSplit)
+    }
+  }, [])
 
   return (
     <div className="pp-page">
@@ -47,7 +80,7 @@ export default function PalettePage() {
           </button>
           <div className={`pp-bar-texts${animPaused ? ' pp-bar-texts--paused' : ''}`}>
             <span className="pp-bar-text pp-bar-text--1">Discover the new <span className="pp-bar-underline">Kerocolor Chromatic Series.</span></span>
-            <span className="pp-bar-text pp-bar-text--2">Have a Look at Our <span className="pp-bar-underline">Color Analyzer</span> to Unlock Your True Colors</span>
+            <span className="pp-bar-text pp-bar-text--2">Have a Look at Our <span className="pp-bar-underline">Color Analyzer</span><span className="pp-bar-text-tail"> to Unlock Your True Colors</span></span>
           </div>
           <button className="pp-bar-close" onClick={() => setBarOpen(false)} aria-label="Close">
             <svg width="13" height="13" viewBox="0 0 11 11" fill="none">
@@ -78,7 +111,10 @@ export default function PalettePage() {
         </div>
 
         <div className="pp-nav-center">
-          <Link to="/" className="pp-nav-brand">KEROCOLOR</Link>
+          <Link to="/" className="pp-nav-brand">
+            <span className="pp-nav-brand-text">KEROCOLOR</span>
+            <img src={bearImg} alt="KeroColor" className="pp-nav-brand-img" />
+          </Link>
         </div>
 
         <div className="pp-nav-right">
@@ -96,7 +132,7 @@ export default function PalettePage() {
         <h1 className="pp-hero-title">Color Palettes</h1>
       </header>
 
-      {/* ── Tabs ── */}
+      {/* ── Tabs (desktop) ── */}
       <div className="pp-tabs-wrap">
         <div className="pp-tabs">
           {TABS.map(tab => (
@@ -109,6 +145,32 @@ export default function PalettePage() {
             </button>
           ))}
         </div>
+      </div>
+
+      {/* ── Menu dropdown (mobile) ── */}
+      <div className="pp-menu-dropdown">
+        <button className="pp-menu-toggle" onClick={() => setMenuOpen(o => !o)}>
+          <span>Menu</span>
+          <svg
+            className={`pp-menu-chevron${menuOpen ? ' pp-menu-chevron--open' : ''}`}
+            fill="none" viewBox="0 0 24 24" focusable="false" aria-hidden="true"
+          >
+            <path fill="#000" d="m11.558 16.505.496.495 7.949-8.01v-.987L19.999 8h-.985l-6.967 7.017L4.992 8H4v.987z"></path>
+          </svg>
+        </button>
+        {menuOpen && (
+          <div className="pp-menu-list">
+            {TABS.map(tab => (
+              <button
+                key={tab}
+                className={`pp-menu-item${activeTab === tab ? ' pp-menu-item--active' : ''}`}
+                onClick={() => { setActiveTab(tab); setMenuOpen(false) }}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* ── Feature image ── */}
@@ -143,9 +205,11 @@ export default function PalettePage() {
         {PALETTE_ITEMS.map((item) => (
           <div key={item.color} className="pp-palette-item">
             <div className="pp-palette-swatch" style={{ background: item.color }} />
-            <p className="pp-palette-desc">{item.desc}</p>
-            <h3 className="pp-palette-name">{item.name}</h3>
-            <p className="pp-palette-hex">{item.color}</p>
+            <div className="pp-palette-text">
+              <p className="pp-palette-desc">{item.desc}</p>
+              <h3 className="pp-palette-name">{item.name}</h3>
+              <p className="pp-palette-hex">{item.color}</p>
+            </div>
           </div>
         ))}
       </div>
@@ -158,11 +222,13 @@ export default function PalettePage() {
             <div className="pp-duo-swatch">
               <img src={item.img} alt={item.name} className="pp-duo-img" />
             </div>
-            <p className="pp-palette-desc">{item.desc}</p>
-            <h3 className="pp-palette-name">{item.name}</h3>
-            {item.hexes && item.hexes.map(hex => (
-              <p key={hex} className="pp-palette-hex">{hex}</p>
-            ))}
+            <div className="pp-duo-text">
+              <p className="pp-palette-desc">{item.desc}</p>
+              <h3 className="pp-palette-name">{item.name}</h3>
+              {item.hexes && item.hexes.map(hex => (
+                <p key={hex} className="pp-palette-hex">{hex}</p>
+              ))}
+            </div>
           </div>
         ))}
       </div>
@@ -170,6 +236,20 @@ export default function PalettePage() {
       {/* ── Discover more button ── */}
       <div className="pp-discover-wrap">
         <button className="pp-discover-btn">Discover more Palettes</button>
+      </div>
+
+      {/* ── Brand outro — text auto-detects the black background and switches to white ── */}
+      <div className="pp-brand-outro">
+        <div className="pp-brand-outro-bg" ref={brandBgRef} />
+        <div className="pp-brand-outro-wrap">
+          <span
+            className="pp-brand-outro-text"
+            ref={brandTextRef}
+            style={{ '--split': `${brandSplit}%` }}
+          >
+            kerocolor<sup className="pp-brand-outro-copyright">&copy;</sup>
+          </span>
+        </div>
       </div>
 
     </div>

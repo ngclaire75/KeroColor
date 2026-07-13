@@ -1,10 +1,12 @@
 .pp-page {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
+  min-height: 100dvh;
   background: #ffffff;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   color: #111;
   overflow-x: clip;
-  padding-bottom: 4rem;
 }
 
 /* ── Announcement bar ── */
@@ -99,6 +101,8 @@
 
 /* ── Navigation ── */
 .pp-nav {
+  position: relative;
+  z-index: 50;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -123,11 +127,15 @@
 .pp-nav-center {
   position: absolute;
   left: 50%;
-  transform: translateX(-50%);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
   pointer-events: none;
 }
 
 .pp-nav-brand {
+  display: flex;
+  align-items: center;
   font-family: 'Inter', sans-serif;
   font-size: 2.4rem;
   font-weight: 500;
@@ -137,6 +145,10 @@
   text-transform: uppercase;
   pointer-events: all;
   transition: opacity 0.2s;
+}
+
+.pp-nav-brand-img {
+  display: none;
 }
 
 
@@ -261,6 +273,78 @@
 .pp-tab--active span::after {
   transform: scaleX(1);
   transition: none;
+}
+
+/* ── Menu dropdown (mobile only — hidden on desktop) ── */
+.pp-menu-dropdown {
+  display: none;
+}
+
+.pp-menu-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+  cursor: pointer;
+  padding: 1.1rem 1.25rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: #111;
+}
+
+.pp-menu-chevron {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.25s ease;
+}
+
+.pp-menu-chevron--open {
+  transform: rotate(180deg);
+}
+
+.pp-menu-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.pp-menu-item {
+  position: relative;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 1.1rem 1.25rem 1.1rem 2.75rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: #111;
+}
+
+/* Inset divider — same gap on both sides, matching the text indent */
+.pp-menu-item::after {
+  content: '';
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 0;
+  height: 1px;
+  background: #e5e5e5;
+}
+
+/* Last item's divider spans the full width, like the Menu toggle's */
+.pp-menu-item:last-child::after {
+  left: 0;
+  right: 0;
+}
+
+.pp-menu-item--active {
+  font-weight: 700;
 }
 
 /* ── Feature image ── */
@@ -437,7 +521,7 @@
 .pp-discover-wrap {
   display: flex;
   justify-content: center;
-  padding: 0.8rem 1rem 5rem;
+  padding: 0.8rem 1rem calc(1rem + 3px);
 }
 
 .pp-discover-btn {
@@ -459,29 +543,178 @@
   padding: calc(1rem - 1px) calc(2.8rem - 1px);
 }
 
+/* ── Brand outro — pinned to the bottom of the page, with a solid fixed gap above it ── */
+.pp-brand-outro {
+  position: relative;
+  margin-top: auto;
+  padding-top: 14rem;
+  height: 9rem;
+}
+
+/* Independent background layer — resize its height freely, the text sits above it untouched */
+.pp-brand-outro-bg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3.5rem;
+  background: #000;
+  z-index: 1;
+}
+
+/* Text layer — pinned to the very bottom of the page, gap from the left is a fixed rem value so it stays consistent across viewports */
+.pp-brand-outro-wrap {
+  position: absolute;
+  left: 1rem;
+  bottom: 0;
+  z-index: 2;
+  display: inline-block;
+}
+
+/* Color split is computed in JS as --split (% down the text where the black bg begins) so it lines up at every viewport */
+.pp-brand-outro-text {
+  display: block;
+  text-align: left;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(4rem, 11vw, 10rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 0.9;
+  color: transparent;
+  background-image: linear-gradient(to bottom, #111 var(--split, 50%), #fff var(--split, 50%));
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.pp-brand-outro-copyright {
+  font-size: 0.32em;
+  vertical-align: super;
+}
+
 /* ── Mobile ── */
 @media (max-width: 640px) {
+  /* Grid keeps the center column mathematically centered no matter how
+     wide the left/right icon clusters are, unlike an absolute overlay
+     tied to the bar's 50% point. */
   .pp-nav {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     padding: 0 1rem;
     height: 90px;
+    border-bottom: none;
   }
 
   .pp-nav-left,
-  .pp-nav-right { min-width: unset; gap: 1rem; }
+  .pp-nav-right { min-width: unset; gap: 0.5rem; }
+
+  .pp-nav-left { justify-self: start; }
+  .pp-nav-right { justify-self: end; }
+
+  .pp-nav-center {
+    position: static;
+    grid-column: 2;
+    justify-self: center;
+    transform: none;
+  }
+
+  .pp-nav-left .pp-nav-action:last-child { margin-left: 0.5rem; }
 
   .pp-nav-action span { display: none; }
 
   .pp-nav-brand { font-size: 1.1rem; letter-spacing: 0.16em; }
 
+  .pp-nav-brand-text { display: none; }
+  .pp-nav-brand-img {
+    display: block;
+    position: relative;
+    z-index: 20;
+    height: 72px;
+    width: auto;
+    filter: brightness(0) saturate(100%);
+  }
+
+  .pp-nav-action svg { width: 15px; height: 11px; }
+  .pp-nav-left .pp-nav-action:last-child svg { width: 15px; height: 15px; }
+  .pp-nav-icon-only svg { width: 17px; height: 15px; }
+
   .pp-hero { padding: 2rem 1rem 1.6rem; }
+
+  .pp-tabs-wrap { display: none; }
+  .pp-menu-dropdown { display: block; }
 
   .pp-tab { padding: 0.75rem 0.85rem; font-size: 0.78rem; }
 
   .pp-feature {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    margin: 0 auto 2.5rem;
+  }
+
+  .pp-filters { justify-content: flex-start; padding-bottom: 1.5rem; }
+
+  .pp-featured-label { font-size: 0.95rem; }
+  .pp-featured-title { font-size: 1.7rem; }
+  .pp-featured-date { font-size: 1.1rem; }
+
+  /* Palette grid — one row per item, swatch left / text right */
+  .pp-palette-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 90%;
+    margin: 2rem auto 4rem;
+  }
+
+  .pp-palette-grid .pp-palette-item {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+  }
+
+  .pp-palette-grid .pp-palette-swatch {
+    width: 42%;
+    max-width: 160px;
+    flex-shrink: 0;
+    margin-bottom: 0;
+  }
+
+  /* desc, name, hex stack as 3 lines beside the swatch */
+  .pp-palette-grid .pp-palette-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pp-palette-grid .pp-palette-desc {
+    margin-top: 0;
+  }
+
+  /* Duo grid — one column, bigger centered image, text sharing the image's left edge */
+  .pp-duo-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    width: 100%;
+  }
+
+  .pp-duo-swatch,
+  .pp-duo-text {
     width: 88%;
-    margin: 1.5rem auto 2.5rem;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .pp-bar { padding: 0.55rem 2.8rem; }
-  .pp-bar-text { font-size: 0.6rem; letter-spacing: 0.04em; }
+  .pp-bar-text { font-size: 0.68rem; letter-spacing: 0.04em; white-space: nowrap; }
+
+  .pp-bar-playpause { left: 0.7rem; }
+  .pp-bar-close { right: 0.7rem; }
+  .pp-bar-playpause svg { width: 14px; height: 14px; }
+  .pp-bar-close svg { width: 11px; height: 11px; }
+
+  .pp-bar-text-tail { display: none; }
+
+  .pp-brand-outro-text { font-size: 17vw; }
+  .pp-brand-outro { padding-top: 5rem; }
+  .pp-brand-outro-bg { height: 2rem; }
+
+  .pp-discover-wrap { padding: 0.5rem 1rem 0.75rem; }
 }
