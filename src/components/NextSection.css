@@ -145,7 +145,7 @@
 /* ── Mobile ── */
 @media (max-width: 640px) {
   .next-section {
-    padding: 2rem 0.8rem 2.5rem;
+    padding: 2rem 0.8rem 3.5rem;
     margin-top: -1px;
   }
 
