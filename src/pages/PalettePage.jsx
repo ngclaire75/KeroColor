@@ -181,7 +181,7 @@ export default function PalettePage() {
       {/* ── Featured content ── */}
       <div className="pp-featured">
         <p className="pp-featured-label">- Showcase</p>
-        <h2 className="pp-featured-title">The Language of Natural Color</h2>
+        <h2 className="pp-featured-title">The Language of<br className="pp-featured-title-break" /> Natural Color</h2>
         <p className="pp-featured-date">{new Date().getFullYear()}</p>
       </div>
 
