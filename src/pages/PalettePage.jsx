@@ -1,26 +1,26 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import heroImg from '../../images/modena.jpeg'
-import leoImg from '../../images/leo.png'
-import skyImg from '../../images/sky.png'
+import lipstickImg from '../../images/lipstick.png'
+import vogueImg from '../../images/vogue.png'
 import bearImg from '../../images/bear.png'
 import './PalettePage.css'
 
 const TABS = ['All', 'Seasonal Palettes', 'Editorial', 'Color Theory', 'Inspiration', 'Archive']
-const FILTER_TABS = ['All', 'Earth Tones', 'Botanical', 'Jewel Tones', 'Neutrals', 'Dusty Rose']
+const FILTER_TABS = ['All', 'Nude Illusion', 'Ethereal & Serene', 'Muted & Elegant', 'Mauve Mood', 'Strawberry Matcha']
 
 const DUO_ITEMS = [
-  { img: leoImg, name: 'Gilded Amber Wild Grace', desc: 'Sun-drenched wild warmth', hexes: ['#784420'] },
-  { img: skyImg, name: 'Golden Hour in the City Canyon', desc: 'Open horizon serenity', hexes: ['#2d1505'] },
+  { img: lipstickImg, name: 'Velvet Wine Lipstick', desc: 'Deep sultry red warmth', hexes: ['#742833'] },
+  { img: vogueImg, name: 'Vogue Editorial Noir', desc: 'Bold statement glamour', hexes: ['#491319'] },
 ]
 
 const PALETTE_ITEMS = [
   { color: '#371a16', category: 'Earth Tones', name: 'Deep Mahogany', desc: 'Warm earthy dark tone' },
   { color: '#e9d9ca', category: 'Neutrals',    name: 'Linen Blush',   desc: 'Soft creamy neutral hue' },
   { color: '#221616', category: 'Earth Tones', name: 'Espresso Dark', desc: 'Rich deep brown shade' },
-  { color: '#77835d', category: 'Botanical',   name: 'Sage Olive',    desc: 'Muted earthy green tone' },
-  { color: '#fbf6f0', category: 'Neutrals',    name: 'Ivory Mist',    desc: 'Delicate airy light tone' },
-  { color: '#37321c', category: 'Earth Tones', name: 'Dark Moss',     desc: 'Deep moody olive hue' },
+  { color: '#1e100f', category: 'Earth Tones', name: 'Night Rider',   desc: 'Near-black warm charcoal tone' },
+  { color: '#30050e', category: 'Jewel Tones', name: 'Aubergine',     desc: 'Deep plum-wine richness' },
+  { color: '#4d0c12', category: 'Jewel Tones', name: 'Maroon Oak',    desc: 'Rich brownish red depth' },
 ]
 
 export default function PalettePage() {
@@ -70,11 +70,11 @@ export default function PalettePage() {
           <button className="pp-bar-playpause" onClick={() => setAnimPaused(p => !p)} aria-label={animPaused ? 'Play' : 'Pause'}>
             {animPaused ? (
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
-                <path fill="#000" d="M4 3.857c0-1.48 1.66-2.364 2.898-1.542l12.273 8.142a1.85 1.85 0 0 1 0 3.086L6.898 21.686C5.659 22.507 4 21.623 4 20.142z"/>
+                <path fill="#fff" d="M4 3.857c0-1.48 1.66-2.364 2.898-1.542l12.273 8.142a1.85 1.85 0 0 1 0 3.086L6.898 21.686C5.659 22.507 4 21.623 4 20.142z"/>
               </svg>
             ) : (
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
-                <path fill="#000" d="M8 3a1.5 1.5 0 0 1 1.5 1.5v15a1.5 1.5 0 0 1-3 0v-15A1.5 1.5 0 0 1 8 3m8 0a1.5 1.5 0 0 1 1.5 1.5v15a1.5 1.5 0 0 1-3 0v-15A1.5 1.5 0 0 1 16 3"/>
+                <path fill="#fff" d="M8 3a1.5 1.5 0 0 1 1.5 1.5v15a1.5 1.5 0 0 1-3 0v-15A1.5 1.5 0 0 1 8 3m8 0a1.5 1.5 0 0 1 1.5 1.5v15a1.5 1.5 0 0 1-3 0v-15A1.5 1.5 0 0 1 16 3"/>
               </svg>
             )}
           </button>
@@ -235,7 +235,7 @@ export default function PalettePage() {
 
       {/* ── Discover more button ── */}
       <div className="pp-discover-wrap">
-        <button className="pp-discover-btn">Discover more Palettes</button>
+        <button className="pp-discover-btn">Discover More Palettes</button>
       </div>
 
       {/* ── Brand outro — text auto-detects the black background and switches to white ── */}
