@@ -528,7 +528,7 @@ export default function LookPage() {
             <h2 className="look-right-heading">{cardMeta.heading}</h2>
             <p className="look-right-desc">{cardMeta.desc}</p>
             <div className="look-right-buttons">
-              <button className="look-btn look-btn--outline">
+              <button className="look-btn look-btn--outline" onClick={() => navigate('/palette')}>
                 Visit Our Archives
                 <span className="look-btn-icon look-btn-icon--circle look-btn-icon--heart">
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
