@@ -79,6 +79,10 @@
   transition: color 0.2s, border-color 0.2s;
 }
 
+.cm-cta-line {
+  white-space: nowrap;
+}
+
 .cm-cta:hover {
   color: #fff;
   text-decoration-color: #fff;
@@ -170,11 +174,10 @@
   }
 
   .cm-left {
-    width: 82vw;
+    width: 88vw;
     height: auto;
-    min-height: 88vw;
     align-self: center;
-    padding: 2rem 6.7vw;
+    padding: 3.4rem 6.7vw;
     gap: 0.9rem;
   }
 
@@ -188,6 +191,18 @@
     height: clamp(180px, 48vw, 290px);
   }
 
+
+  .cm-script,
+  .cm-heading,
+  .cm-body,
+  .cm-cta {
+    margin-left: 1.4rem;
+  }
+
+  .cm-heading,
+  .cm-body {
+    max-width: 210px;
+  }
 
   .cm-feat p {
     font-size: 0.82rem;
