@@ -705,7 +705,7 @@
 
   .pp-bar-playpause { left: 0.7rem; }
   .pp-bar-close { right: 0.7rem; }
-  .pp-bar-playpause svg { width: 14px; height: 14px; }
+  .pp-bar-playpause svg { width: 16px; height: 16px; }
   .pp-bar-close svg { width: 11px; height: 11px; }
 
   .pp-bar-text-tail { display: none; }
@@ -714,5 +714,5 @@
   .pp-brand-outro { margin-top: 0; padding-top: 1.25rem; height: 8rem; }
   .pp-brand-outro-bg { height: 1.9rem; }
 
-  .pp-discover-wrap { padding: 0.5rem 1rem 0.75rem; }
+  .pp-discover-wrap { padding: 0.375rem 1rem 0.75rem; }
 }
