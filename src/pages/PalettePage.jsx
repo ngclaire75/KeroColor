@@ -7,7 +7,6 @@ import bearImg from '../../images/bear.png'
 import './PalettePage.css'
 
 const TABS = ['All', 'Seasonal Palettes', 'Editorial', 'Color Theory', 'Inspiration', 'Archive']
-const FILTER_TABS = ['All', 'Nude Illusion', 'Ethereal & Serene', 'Muted & Elegant', 'Mauve Mood', 'Strawberry Matcha']
 
 const DUO_ITEMS = [
   { img: lipstickImg, name: 'Velvet Wine Lipstick', desc: 'Deep sultry red warmth', hexes: ['#742833'] },
@@ -25,7 +24,6 @@ const PALETTE_ITEMS = [
 
 export default function PalettePage() {
   const [activeTab, setActiveTab] = useState('All')
-  const [activeFilter, setActiveFilter] = useState('All')
   const [barOpen, setBarOpen] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
   const [animPaused, setAnimPaused] = useState(false)
@@ -185,19 +183,10 @@ export default function PalettePage() {
         <p className="pp-featured-date">{new Date().getFullYear()}</p>
       </div>
 
-      <div className="pp-separator" />
-
-      {/* ── Filter tabs ── */}
-      <div className="pp-filters">
-        {FILTER_TABS.map(tab => (
-          <button
-            key={tab}
-            className={`pp-filter${activeFilter === tab ? ' pp-filter--active' : ''}`}
-            onClick={() => setActiveFilter(tab)}
-          >
-            {tab}
-          </button>
-        ))}
+      {/* ── Oxblood promo ── */}
+      <div className="pp-oxblood">
+        <h2 className="pp-oxblood-title">Our Oxblood Picks</h2>
+        <p className="pp-oxblood-desc">Meet our Oxblood color palette - a curated collection of deep, velvety shades that redefine classic elegance.</p>
       </div>
 
       {/* ── Palette grid ── */}

@@ -401,48 +401,32 @@
   letter-spacing: 0.05em;
 }
 
-/* ── Separator ── */
-.pp-separator {
+/* ── Oxblood promo ── */
+.pp-oxblood {
   width: 90%;
   max-width: 2000px;
-  height: 0.5px;
-  background: #d0d0d0;
-  margin: 2.5rem auto;
+  margin: 0 auto;
+  padding: 6.2rem 0 1.2rem;
+  text-align: left;
 }
 
-/* ── Filter tabs ── */
-.pp-filters {
+.pp-oxblood-title {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  padding: 5px 1rem 4rem;
-}
-
-.pp-filter {
-  background: none;
-  cursor: pointer;
+  align-items: flex-end;
   font-family: 'Inter', sans-serif;
-  font-size: 0.82rem;
+  font-size: 3.5rem;
   font-weight: 300;
-  letter-spacing: 0.04em;
   color: #111;
-  padding: 0.9rem 1.2rem;
-  background: #f8f8f8;
-  border-radius: 4px;
-  border: 1px solid transparent;
-  border-right-width: 1.5px;
-  border-bottom-width: 1.5px;
-  transition: border-color 0.2s;
-  white-space: nowrap;
+  margin: 0 0 0.8rem -0.06em;
+  letter-spacing: -0.01em;
 }
 
-.pp-filter:hover,
-.pp-filter--active {
-  border: 1px solid #111;
-  border-right: 1.5px solid #111;
-  border-bottom: 1.5px solid #111;
+.pp-oxblood-desc {
+  font-size: 1rem;
+  font-weight: 300;
+  color: #727272;
+  max-width: 40rem;
+  margin: 0;
 }
 
 /* ── Palette grid ── */
@@ -654,7 +638,9 @@
     margin: 0 auto 2.5rem;
   }
 
-  .pp-filters { justify-content: flex-start; padding-bottom: 1.5rem; padding-left: 6%; }
+  .pp-oxblood { padding: 5px 0 1.75rem; }
+  .pp-oxblood-title { font-size: 1.9rem; }
+  .pp-oxblood-desc { font-size: 0.9rem; }
 
   .pp-featured-label { font-size: 0.95rem; }
   .pp-featured-title { font-size: 1.7rem; }
