@@ -362,6 +362,7 @@
   object-position: center 34%;
   display: block;
   transform: scale(1);
+  filter: saturate(0.85) contrast(1.1);
 }
 
 /* ── Featured content ── */
