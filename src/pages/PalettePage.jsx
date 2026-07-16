@@ -6,7 +6,7 @@ import vogueImg from '../../images/vogue.png'
 import bearImg from '../../images/bear.png'
 import './PalettePage.css'
 
-const TABS = ['All', 'Seasonal Palettes', 'Editorial', 'Color Theory', 'Inspiration', 'Archive']
+const TABS = ['All', 'Seasonal Edition', 'Editorial', 'Color Theory', 'Inspiration', 'Archive']
 
 const DUO_ITEMS = [
   { img: lipstickImg, name: 'Velvet Wine Lipstick', desc: 'Deep sultry red warmth', hexes: ['#742833'] },
@@ -77,7 +77,7 @@ export default function PalettePage() {
             )}
           </button>
           <div className={`pp-bar-texts${animPaused ? ' pp-bar-texts--paused' : ''}`}>
-            <span className="pp-bar-text pp-bar-text--1">Discover the new <span className="pp-bar-underline">Kerocolor Chromatic Series.</span></span>
+            <span className="pp-bar-text pp-bar-text--1">Discover the new <span className="pp-bar-underline">Kerocolor Nude Series.</span></span>
             <span className="pp-bar-text pp-bar-text--2">Have a Look at Our <span className="pp-bar-underline">Color Analyzer</span><span className="pp-bar-text-tail"> to Unlock Your True Colors</span></span>
           </div>
           <button className="pp-bar-close" onClick={() => setBarOpen(false)} aria-label="Close">
