@@ -30,7 +30,7 @@
 @media (max-width: 640px) {
   .navbar {
     flex-wrap: nowrap;
-    gap: 0.9rem;
+    gap: clamp(1.5rem, 3vw, 4rem);
     padding: 0.7rem 0.5rem;
     justify-content: center;
   }
