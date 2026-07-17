@@ -75,3 +75,15 @@
   30%, 80% { opacity: 1; transform: translateY(0);   }
   95%, 100%{ opacity: 0; transform: translateY(2px); }
 }
+
+@media (max-width: 640px) {
+  .search-loader-center {
+    width: 160px;
+    height: 160px;
+  }
+
+  .search-loader-img {
+    width: 200px;
+    height: 200px;
+  }
+}
