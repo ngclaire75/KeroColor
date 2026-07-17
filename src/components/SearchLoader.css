@@ -1,7 +1,7 @@
 .search-loader-overlay {
   position: fixed;
   inset: 0;
-  background: #6B4002;
+  background: #000;
   display: flex;
   flex-direction: column;
   align-items: center;
