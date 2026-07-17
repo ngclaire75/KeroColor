@@ -3,7 +3,7 @@
   flex-direction: column;
   min-height: 100vh;
   min-height: 100dvh;
-  background: #ffffff;
+  background: #f5f0ea;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   color: #111;
   overflow-x: clip;
@@ -109,7 +109,7 @@
   padding: 0 2rem;
   height: 104px;
   border-bottom: 1px solid #e8e8e8;
-  background: #fff;
+  background: #f5f0ea;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
 }
 
@@ -204,7 +204,7 @@
   position: sticky;
   top: 0;
   z-index: 90;
-  background: #ffffff;
+  background: #f5f0ea;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -282,7 +282,7 @@
   position: sticky;
   top: 0;
   z-index: 90;
-  background: #ffffff;
+  background: #f5f0ea;
 }
 
 .pp-menu-toggle {
@@ -526,7 +526,7 @@
 }
 
 .pp-discover-btn:hover {
-  background: #fff;
+  background: #f5f0ea;
   color: #111;
 }
 
@@ -568,7 +568,7 @@
   letter-spacing: -0.01em;
   line-height: 0.9;
   color: transparent;
-  background-image: linear-gradient(to bottom, #111 var(--split, 50%), #fff var(--split, 50%));
+  background-image: linear-gradient(to bottom, #111 var(--split, 50%), #f5f0ea var(--split, 50%));
   -webkit-background-clip: text;
   background-clip: text;
 }
