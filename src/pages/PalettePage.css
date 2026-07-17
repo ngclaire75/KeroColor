@@ -110,7 +110,7 @@
   height: 104px;
   border-bottom: 1px solid #e8e8e8;
   background: #f5f0ea;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.06);
 }
 
 .pp-nav-left,
@@ -141,7 +141,7 @@
   font-size: 2.4rem;
   font-weight: 500;
   letter-spacing: 0.08em;
-  color: #111;
+  color: #7c1a2e;
   text-decoration: none;
   text-transform: uppercase;
   pointer-events: all;
@@ -162,9 +162,9 @@
   cursor: pointer;
   font-family: 'Inter', sans-serif;
   font-size: 0.8rem;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: 0.04em;
-  color: #111;
+  color: #7c1a2e;
   padding: 0;
   transition: opacity 0.2s;
 }
