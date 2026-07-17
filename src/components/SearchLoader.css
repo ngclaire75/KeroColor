@@ -1,7 +1,7 @@
 .search-loader-overlay {
   position: fixed;
   inset: 0;
-  background: #000;
+  background: #6B4002;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -36,15 +36,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 220px;
-  height: 220px;
+  width: 260px;
+  height: 260px;
   z-index: 1;
 }
 
 .search-loader-img {
   position: relative;
-  width: 260px;
-  height: 260px;
+  width: 320px;
+  height: 320px;
   object-fit: cover;
   border-radius: 50%;
   z-index: 1;
