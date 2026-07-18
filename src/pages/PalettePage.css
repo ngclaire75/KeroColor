@@ -349,8 +349,28 @@
   background: #e5e5e5;
 }
 
-.pp-menu-item--active {
-  font-weight: 700;
+/* Span wraps text — underline scoped to text width, same as desktop tabs */
+.pp-menu-item span {
+  position: relative;
+  display: inline-block;
+}
+
+.pp-menu-item span::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #111;
+  border-radius: 1px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pp-menu-item--active span::after {
+  transform: scaleX(1);
 }
 
 /* ── Feature image ── */

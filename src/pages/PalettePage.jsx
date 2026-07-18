@@ -164,7 +164,7 @@ export default function PalettePage() {
                 className={`pp-menu-item${activeTab === tab ? ' pp-menu-item--active' : ''}`}
                 onClick={() => { setActiveTab(tab); setMenuOpen(false) }}
               >
-                {tab}
+                <span>{tab}</span>
               </button>
             ))}
           </div>
@@ -178,7 +178,7 @@ export default function PalettePage() {
 
       {/* ── Featured content ── */}
       <div className="pp-featured">
-        <p className="pp-featured-label">- Showcase</p>
+        <p className="pp-featured-label">- Rouge de Rêve</p>
         <h2 className="pp-featured-title">The Language of<br className="pp-featured-title-break" /> Natural Color</h2>
         <p className="pp-featured-date">{new Date().getFullYear()}</p>
       </div>
