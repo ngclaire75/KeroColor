@@ -298,14 +298,37 @@
   justify-content: space-between;
   background: none;
   border: none;
-  border-top: 0.5px solid #7c1a2e;
-  border-bottom: 0.5px solid #7c1a2e;
+  position: relative;
   cursor: pointer;
   padding: 1.5rem 1.25rem 1.5rem 1.75rem;
   font-family: 'Inter', sans-serif;
   font-size: 1.15rem;
   font-weight: 400;
   color: #111;
+}
+
+/* Fixed hairline via transform instead of a 0.5px border — border-width
+   gets rounded to a full device pixel by some browsers once the sticky
+   dropdown is repositioned during scroll, thickening the line. */
+.pp-menu-toggle::before,
+.pp-menu-toggle::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #7c1a2e;
+  transform: scaleY(0.5);
+}
+
+.pp-menu-toggle::before {
+  top: 0;
+  transform-origin: top;
+}
+
+.pp-menu-toggle::after {
+  bottom: 0;
+  transform-origin: bottom;
 }
 
 .pp-menu-chevron {
@@ -344,8 +367,10 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: 0.5px;
+  height: 1px;
   background: #7c1a2e;
+  transform: scaleY(0.5);
+  transform-origin: bottom;
 }
 
 /* Span wraps text — underline scoped to text width, same as desktop tabs */
