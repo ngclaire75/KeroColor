@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import heroImg from '../../images/modena.jpeg'
 import lipstickImg from '../../images/lipstick.png'
@@ -11,6 +11,19 @@ const TABS = ['All', 'Seasonal Edition', 'Editorial', 'Color Theory', 'Inspirati
 const DUO_ITEMS = [
   { img: lipstickImg, name: 'Velvet Wine Lipstick', desc: 'Deep sultry red warmth', hexes: ['#742833'] },
   { img: vogueImg, name: 'Vogue Editorial Noir', desc: 'Bold statement glamour', hexes: ['#491319'] },
+]
+
+const FOOTER_PAGES_LEFT = [
+  { label: 'Home',           href: '/',        type: 'link'   },
+  { label: 'About Us',       href: '#about',   type: 'anchor' },
+  { label: 'Color Palette',  href: '/palette', type: 'link'   },
+  { label: 'Explore',        href: '/explore', type: 'link'   },
+]
+
+const FOOTER_PAGES_RIGHT = [
+  { label: 'Color Analyzer', href: '#',        type: 'anchor' },
+  { label: 'FAQ',            href: '#faq',     type: 'anchor' },
+  { label: 'Contact',        href: '#contact', type: 'anchor' },
 ]
 
 const PALETTE_ITEMS = [
@@ -27,37 +40,6 @@ export default function PalettePage() {
   const [barOpen, setBarOpen] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
   const [animPaused, setAnimPaused] = useState(false)
-  const [brandSplit, setBrandSplit] = useState(50)
-  const brandTextRef = useRef(null)
-  const brandBgRef = useRef(null)
-
-  useEffect(() => {
-    function computeBrandSplit() {
-      const textEl = brandTextRef.current
-      const bgEl = brandBgRef.current
-      if (!textEl || !bgEl) return
-      // Measure the real line-box height from font-size × line-height instead of
-      // textEl.offsetHeight — the raised <sup>© stretches the inline box taller
-      // than the "kerocolor" letters actually are, which threw the split off
-      // (and by a different amount at every viewport, since the sup doesn't
-      // scale in lockstep with the main text).
-      const fontSize = parseFloat(getComputedStyle(textEl).fontSize)
-      const textHeight = fontSize * 0.9
-      const bgHeight = bgEl.offsetHeight
-      if (textHeight === 0) return
-      const pct = ((textHeight - bgHeight) / textHeight) * 100
-      setBrandSplit(Math.max(0, Math.min(100, pct)))
-    }
-    computeBrandSplit()
-    const ro = new ResizeObserver(computeBrandSplit)
-    if (brandTextRef.current) ro.observe(brandTextRef.current)
-    if (brandBgRef.current) ro.observe(brandBgRef.current)
-    window.addEventListener('resize', computeBrandSplit)
-    return () => {
-      ro.disconnect()
-      window.removeEventListener('resize', computeBrandSplit)
-    }
-  }, [])
 
   return (
     <div className="pp-page">
@@ -93,16 +75,16 @@ export default function PalettePage() {
         <div className="pp-nav-left">
           <button className="pp-nav-action">
             <svg width="17" height="12" viewBox="0 0 17 12" fill="none">
-              <rect width="17" height="1.6" rx="0.8" fill="#7c1a2e"/>
-              <rect y="5.2" width="17" height="1.6" rx="0.8" fill="#7c1a2e"/>
-              <rect y="10.4" width="17" height="1.6" rx="0.8" fill="#7c1a2e"/>
+              <rect width="17" height="1.6" rx="0.8" fill="#371a16"/>
+              <rect y="5.2" width="17" height="1.6" rx="0.8" fill="#371a16"/>
+              <rect y="10.4" width="17" height="1.6" rx="0.8" fill="#371a16"/>
             </svg>
             <span>Menu</span>
           </button>
           <button className="pp-nav-action">
             <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-              <circle cx="6.5" cy="6.5" r="5.5" stroke="#7c1a2e" strokeWidth="1.3"/>
-              <path d="M10.5 10.5L13.5 13.5" stroke="#7c1a2e" strokeWidth="1.3" strokeLinecap="round"/>
+              <circle cx="6.5" cy="6.5" r="5.5" stroke="#371a16" strokeWidth="1.3"/>
+              <path d="M10.5 10.5L13.5 13.5" stroke="#371a16" strokeWidth="1.3" strokeLinecap="round"/>
             </svg>
             <span>Search</span>
           </button>
@@ -118,7 +100,7 @@ export default function PalettePage() {
         <div className="pp-nav-right">
           <button className="pp-nav-action pp-nav-icon-only">
             <svg width="19" height="17" viewBox="0 0 24 22" fill="none">
-              <path d="M12 20.5C12 20.5 2 13.2 2 7.5C2 4.46 4.46 2 7.5 2C9.28 2 10.91 2.84 12 4.17C13.09 2.84 14.72 2 16.5 2C19.54 2 22 4.46 22 7.5C22 13.2 12 20.5 12 20.5Z" stroke="#7c1a2e" strokeWidth="1.8"/>
+              <path d="M12 20.5C12 20.5 2 13.2 2 7.5C2 4.46 4.46 2 7.5 2C9.28 2 10.91 2.84 12 4.17C13.09 2.84 14.72 2 16.5 2C19.54 2 22 4.46 22 7.5C22 13.2 12 20.5 12 20.5Z" stroke="#371a16" strokeWidth="1.8"/>
             </svg>
           </button>
         </div>
@@ -227,19 +209,28 @@ export default function PalettePage() {
         <button className="pp-discover-btn">Discover More Palettes</button>
       </div>
 
-      {/* ── Brand outro — text auto-detects the black background and switches to white ── */}
-      <div className="pp-brand-outro">
-        <div className="pp-brand-outro-bg" ref={brandBgRef} />
-        <div className="pp-brand-outro-wrap">
-          <span
-            className="pp-brand-outro-text"
-            ref={brandTextRef}
-            style={{ '--split': `${brandSplit}%` }}
-          >
-            kerocolor<sup className="pp-brand-outro-copyright">&copy;</sup>
-          </span>
+      {/* ── Footer ── */}
+      <footer className="pp-footer">
+        <div className="pp-footer-top">
+          <nav className="pp-footer-nav">
+            {FOOTER_PAGES_LEFT.map(p =>
+              p.type === 'link'
+                ? <Link key={p.label} to={p.href} className="pp-footer-nav-link">{p.label}</Link>
+                : <a key={p.label} href={p.href} className="pp-footer-nav-link">{p.label}</a>
+            )}
+          </nav>
+          <nav className="pp-footer-nav pp-footer-nav--right">
+            {FOOTER_PAGES_RIGHT.map(p =>
+              p.type === 'link'
+                ? <Link key={p.label} to={p.href} className="pp-footer-nav-link">{p.label}</Link>
+                : <a key={p.label} href={p.href} className="pp-footer-nav-link">{p.label}</a>
+            )}
+          </nav>
         </div>
-      </div>
+        <div className="pp-footer-giant-wrap">
+          <span className="pp-footer-giant-text">kero</span>
+        </div>
+      </footer>
 
     </div>
   )

@@ -3,7 +3,7 @@
   flex-direction: column;
   min-height: 100vh;
   min-height: 100dvh;
-  background: #f5f0ea;
+  background: #f2e8d9;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   color: #111;
   overflow-x: clip;
@@ -108,9 +108,8 @@
   justify-content: space-between;
   padding: 0 2rem;
   height: 104px;
-  border-bottom: 1px solid #e8e8e8;
-  background: #f5f0ea;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.06);
+  border-bottom: 0.5px solid #7c1a2e;
+  background: #f2e8d9;
 }
 
 .pp-nav-left,
@@ -155,7 +154,7 @@
 
 .pp-nav-brand-img {
   display: block;
-  height: 100px;
+  height: 110px;
   width: auto;
 }
 
@@ -171,7 +170,7 @@
   font-size: 0.8rem;
   font-weight: 400;
   letter-spacing: 0.04em;
-  color: #7c1a2e;
+  color: #371a16;
   padding: 0;
   transition: opacity 0.2s;
 }
@@ -211,7 +210,7 @@
   position: sticky;
   top: 0;
   z-index: 90;
-  background: #f5f0ea;
+  background: #f2e8d9;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -289,7 +288,7 @@
   position: sticky;
   top: 0;
   z-index: 90;
-  background: #f5f0ea;
+  background: #f2e8d9;
 }
 
 .pp-menu-toggle {
@@ -299,8 +298,8 @@
   justify-content: space-between;
   background: none;
   border: none;
-  border-top: 1px solid #e5e5e5;
-  border-bottom: 1px solid #e5e5e5;
+  border-top: 0.5px solid #7c1a2e;
+  border-bottom: 0.5px solid #7c1a2e;
   cursor: pointer;
   padding: 1.5rem 1.25rem 1.5rem 1.75rem;
   font-family: 'Inter', sans-serif;
@@ -345,8 +344,8 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: 1px;
-  background: #e5e5e5;
+  height: 0.5px;
+  background: #7c1a2e;
 }
 
 /* Span wraps text — underline scoped to text width, same as desktop tabs */
@@ -386,7 +385,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 34%;
+  object-position: center 40%;
   display: block;
   filter: saturate(1.15);
 }
@@ -539,8 +538,8 @@
 }
 
 .pp-discover-btn {
-  background: #111;
-  border: 1px solid #111;
+  background: #221616;
+  border: 1px solid #221616;
   border-radius: 999px;
   padding: 1rem 2.8rem;
   font-family: 'Inter', sans-serif;
@@ -553,56 +552,103 @@
 }
 
 .pp-discover-btn:hover {
-  background: #f5f0ea;
+  background: #f2e8d9;
   color: #111;
 }
 
-/* ── Brand outro — pinned to the bottom of the page, with a solid fixed gap above it ── */
-.pp-brand-outro {
+/* ── Footer ── */
+.pp-footer {
   position: relative;
-  margin-top: auto;
-  padding-top: 14rem;
-  height: 9rem;
+  margin: 5.5rem 1.5rem 1.5rem;
+  border-radius: 28px;
+  overflow: hidden;
+  /* Stops are spaced by perceived lightness drop, not by even thirds — c7b7a3 and
+     6d2932 are far apart in lightness, so packing that jump into a third of the
+     height (like even 0/33/66/100 spacing does) reads as a hard edge. Stretching
+     it across most of the gradient spreads the falloff and removes the line. */
+  background: linear-gradient(to bottom, #e8d8c4 0%, #c7b7a3 20%, #6d2932 85%, #561c24 100%);
+  padding: 2.75rem 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 540px;
+  box-sizing: border-box;
 }
 
-/* Independent background layer — resize its height freely, the text sits above it untouched */
-.pp-brand-outro-bg {
+/* Dithers the gradient with a hair of noise so the color bands (visible
+   8-bit banding across a slow 4-stop gradient) break up instead of
+   showing as hard lines. */
+.pp-footer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+}
+
+.pp-footer-top {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.pp-footer-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+.pp-footer-nav--right {
+  align-items: flex-end;
+}
+
+.pp-footer-nav-link {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: #30050e;
+  text-decoration: none;
+  width: fit-content;
+  transition: opacity 0.2s ease;
+}
+
+.pp-footer-nav-link:hover {
+  opacity: 0.7;
+}
+
+/* Sits bottom-aligned then is pushed down so the container's overflow: hidden
+   crops off the bottom portion — only part of the word peeks up from the edge. */
+.pp-footer-giant-wrap {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
-  height: 3.5rem;
-  background: #000;
   z-index: 1;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
 }
 
-/* Text layer — pinned to the very bottom of the page, gap from the left is a fixed rem value so it stays consistent across viewports */
-.pp-brand-outro-wrap {
-  position: absolute;
-  left: 1rem;
-  bottom: 0;
-  z-index: 2;
+.pp-footer-giant-text {
   display: inline-block;
-}
-
-/* Color split is computed in JS as --split (% down the text where the black bg begins) so it lines up at every viewport */
-.pp-brand-outro-text {
-  display: block;
-  text-align: left;
-  font-family: 'Inter', sans-serif;
-  font-size: clamp(4rem, 11vw, 10rem);
+  font-family: 'Cinzel', serif;
+  font-size: clamp(8rem, 25vw, 20rem);
   font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: 0.9;
-  color: transparent;
-  background-image: linear-gradient(to bottom, #111 var(--split, 50%), #f5f0ea var(--split, 50%));
-  -webkit-background-clip: text;
-  background-clip: text;
-}
-
-.pp-brand-outro-copyright {
-  font-size: 0.32em;
-  vertical-align: super;
+  line-height: 1;
+  letter-spacing: 1rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+  /* letter-spacing pads a phantom gap after the last character, which the
+     flex centering above counts as content width — trim it so the visible
+     glyphs (not the invisible trailing gap) sit centered. */
+  margin-right: -1rem;
+  transform: translateY(20%);
+  color: rgba(48, 5, 14, 0.18);
 }
 
 /* ── Mobile ── */
@@ -615,7 +661,6 @@
     grid-template-columns: 1fr auto 1fr;
     padding: 0 1rem;
     height: 90px;
-    border-bottom: none;
   }
 
   .pp-nav-left,
@@ -728,9 +773,28 @@
 
   .pp-bar-text-tail { display: none; }
 
-  .pp-brand-outro-text { font-size: 17vw; }
-  .pp-brand-outro { margin-top: 0; padding-top: 1.25rem; height: 8rem; }
-  .pp-brand-outro-bg { height: 1.6rem; }
+  .pp-footer {
+    margin: 5.5rem 0 0;
+    padding: 2.25rem 1.75rem 2rem;
+    min-height: 360px;
+    border-radius: 0;
+  }
+
+  .pp-footer-nav-link { font-size: 0.95rem; }
+  .pp-footer-nav { gap: 1.5rem; }
+
+  .pp-footer-giant-wrap {
+    justify-content: flex-end;
+    padding-right: 1.25rem;
+  }
+
+  .pp-footer-giant-text {
+    font-size: 5.8rem;
+    letter-spacing: 0.6rem;
+    margin-right: -0.6rem;
+    transform: translateY(0%);
+    color: #30050e;
+  }
 
   .pp-discover-wrap { padding: 0.375rem 1rem 1.5rem; }
 }
