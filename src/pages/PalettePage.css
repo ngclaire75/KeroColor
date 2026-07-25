@@ -150,13 +150,13 @@
 }
 
 .pp-nav-brand-text {
-  display: block;
-  line-height: 1;
-  transform: translateY(3.5px);
+  display: none;
 }
 
 .pp-nav-brand-img {
-  display: none;
+  display: block;
+  height: 100px;
+  width: auto;
 }
 
 
