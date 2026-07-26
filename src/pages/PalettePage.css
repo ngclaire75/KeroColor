@@ -804,7 +804,7 @@
 
   .pp-bar-playpause { left: 0.7rem; }
   .pp-bar-close { right: 0.7rem; }
-  .pp-bar-playpause svg { width: 16px; height: 16px; }
+  .pp-bar-playpause svg { width: 15px; height: 15px; }
   .pp-bar-close svg { width: 11px; height: 11px; }
 
   .pp-bar-text-tail { display: none; }
