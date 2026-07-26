@@ -7,6 +7,7 @@
 html {
   scroll-behavior: smooth;
   background: #000000;
+  overflow-x: hidden;
   overflow-y: scroll;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE/legacy Edge */
@@ -16,16 +17,13 @@ html::-webkit-scrollbar {
   display: none; /* Chrome, Safari, modern Edge */
 }
 
+/* No overflow set here on purpose: body having its own overflow value
+   (even just overflow-x) stops it inheriting the viewport's scrollport
+   and makes it a scroll container in its own right, which breaks
+   position: sticky for descendants (e.g. the palette page's sticky nav). */
 body {
   font-family: 'Cormorant Garamond', serif;
   background: #000000;
-  overflow-x: hidden;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE/legacy Edge */
-}
-
-body::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, modern Edge */
 }
 
 /* Prevent iOS Safari auto-zoom on input focus (triggers below 16px) */
