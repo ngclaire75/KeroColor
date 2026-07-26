@@ -678,6 +678,10 @@
   color: rgba(48, 5, 14, 0.18);
 }
 
+.pp-footer-giant-dot {
+  display: none;
+}
+
 /* ── Mobile ── */
 @media (max-width: 640px) {
   /* Grid keeps the center column mathematically centered no matter how
@@ -804,7 +808,7 @@
   .pp-footer {
     margin: 5.5rem 0 0;
     padding: 2.25rem 1.75rem 2rem;
-    min-height: 410px;
+    min-height: 440px;
     border-radius: 0;
   }
 
@@ -817,12 +821,15 @@
   }
 
   .pp-footer-giant-text {
-    font-size: clamp(5rem, 24vw, 9rem);
-    letter-spacing: 0.4rem;
-    margin-right: -0.6rem;
+    font-size: clamp(5.3rem, 25vw, 9.5rem);
+    letter-spacing: 0.25rem;
+    margin-right: -0.4rem;
     transform: translateY(0%);
     color: #30050e;
   }
 
   .pp-discover-wrap { padding: 0.375rem 1rem 1.5rem; }
+
+  .pp-footer-giant-text-e { font-style: italic; }
+  .pp-footer-giant-dot { display: inline; }
 }

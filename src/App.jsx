@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import { SearchProvider } from './SearchContext'
 import ExplorePage  from './pages/ExplorePage'
 import LookPage     from './pages/LookPage'
@@ -19,6 +19,18 @@ import Footer          from './components/Footer'
 import cakeImg    from '../images/model2.jpeg'
 import drinkImg   from '../images/model1.jpeg'
 import './App.css'
+
+function ScrollToHash() {
+  const location = useLocation()
+
+  useEffect(() => {
+    if (!location.hash) return
+    const el = document.querySelector(location.hash)
+    if (el) requestAnimationFrame(() => el.scrollIntoView({ behavior: 'smooth' }))
+  }, [location])
+
+  return null
+}
 
 export default function App() {
   const [calOpen, setCalOpen] = useState(false)
@@ -66,6 +78,7 @@ export default function App() {
 
   return (
     <SearchProvider>
+    <ScrollToHash />
     <Routes>
       <Route path="/" element={homePage} />
       <Route path="/explore"  element={<ExplorePage />} />

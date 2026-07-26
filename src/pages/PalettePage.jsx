@@ -15,15 +15,15 @@ const DUO_ITEMS = [
 
 const FOOTER_PAGES_LEFT = [
   { label: 'Home',           href: '/',        type: 'link'   },
-  { label: 'About Us',       href: '#about',   type: 'anchor' },
+  { label: 'About Us',       href: '/#about',  type: 'link'   },
   { label: 'Color Palette',  href: '/palette', type: 'link'   },
   { label: 'Explore',        href: '/explore', type: 'link'   },
 ]
 
 const FOOTER_PAGES_RIGHT = [
   { label: 'Color Analyzer', href: '#',        type: 'anchor' },
-  { label: 'FAQ',            href: '#faq',     type: 'anchor' },
-  { label: 'Contact',        href: '#contact', type: 'anchor' },
+  { label: 'FAQ',            href: '/#faq',    type: 'link'   },
+  { label: 'Contact',        href: '/#contact', type: 'link'  },
 ]
 
 const PALETTE_ITEMS = [
@@ -228,7 +228,7 @@ export default function PalettePage() {
           </nav>
         </div>
         <div className="pp-footer-giant-wrap">
-          <span className="pp-footer-giant-text">kero</span>
+          <span className="pp-footer-giant-text">k<span className="pp-footer-giant-text-e">e</span><span className="pp-footer-giant-text-e">r</span>o<span className="pp-footer-giant-dot">.</span></span>
         </div>
       </footer>
 
