@@ -804,7 +804,7 @@
   .pp-footer {
     margin: 5.5rem 0 0;
     padding: 2.25rem 1.75rem 2rem;
-    min-height: 430px;
+    min-height: 410px;
     border-radius: 0;
   }
 
@@ -817,7 +817,7 @@
   }
 
   .pp-footer-giant-text {
-    font-size: 7rem;
+    font-size: clamp(5rem, 24vw, 9rem);
     letter-spacing: 0.4rem;
     margin-right: -0.6rem;
     transform: translateY(0%);
