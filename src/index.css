@@ -7,12 +7,25 @@
 html {
   scroll-behavior: smooth;
   background: #000000;
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/legacy Edge */
+}
+
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, modern Edge */
 }
 
 body {
   font-family: 'Cormorant Garamond', serif;
   background: #000000;
   overflow-x: hidden;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/legacy Edge */
+}
+
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, modern Edge */
 }
 
 /* Prevent iOS Safari auto-zoom on input focus (triggers below 16px) */
