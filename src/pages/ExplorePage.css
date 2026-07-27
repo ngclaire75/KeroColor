@@ -265,6 +265,7 @@
 
   /* center hero image */
   .explore-img--center {
+    left: 49.5%;
     width: 46vw;
     height: 46%;
     top: 21%;
@@ -276,7 +277,7 @@
 
   /* right image */
   .explore-img--right {
-    width: 16vw;
+    width: 19vw;
     height: 18%;
     right: 2%;
     top: 14%;
