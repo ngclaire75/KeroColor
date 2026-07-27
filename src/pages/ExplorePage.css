@@ -19,14 +19,15 @@
   justify-content: center;
   align-items: center;
   gap: clamp(1.5rem, 3vw, 4rem);
-  padding: 0.9rem clamp(1rem, 2vw, 2rem);
+  padding: 1.1rem clamp(1rem, 2vw, 2rem);
+  min-height: 48px;
 }
 
 .explore-nav-link {
   color: #2a1a1e;
   text-decoration: none;
   font-family: 'Inter', sans-serif;
-  font-size: 0.72rem;
+  font-size: 0.82rem;
   font-weight: 400;
   letter-spacing: 0.02em;
   text-transform: lowercase;
@@ -270,7 +271,7 @@
   }
 
   .explore-nav-link {
-    font-size: 0.52rem;
+    font-size: clamp(0.68rem, 2.2vw, 0.84rem);
   }
 
   /* right image */
