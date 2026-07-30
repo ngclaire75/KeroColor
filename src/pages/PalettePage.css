@@ -695,7 +695,7 @@
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     padding: 0 1rem;
-    height: 90px;
+    height: 110px;
     border-bottom: none;
   }
 
@@ -723,7 +723,7 @@
     display: block;
     position: relative;
     z-index: 20;
-    height: 72px;
+    height: 100px;
     width: auto;
   }
 

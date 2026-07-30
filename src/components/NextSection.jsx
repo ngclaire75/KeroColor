@@ -1,14 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import next1 from '../../images/next1.jpeg'
-import next2 from '../../images/next2.jpeg'
-import next3 from '../../images/next3.jpeg'
-import next4 from '../../images/next4.jpeg'
-import next5 from '../../images/next5.jpeg'
-import next6 from '../../images/next6.jpeg'
-import next7 from '../../images/next7.jpeg'
-import next8 from '../../images/next8.jpeg'
-import next9 from '../../images/next9.jpeg'
 import ws1 from '../../images/ws1.jpeg'
 import ws2 from '../../images/ws2.jpeg'
 import ws3 from '../../images/ws3.jpeg'
@@ -155,7 +146,6 @@ import gr8 from '../../images/gr8.jpeg'
 import gr9 from '../../images/gr9.jpeg'
 import './NextSection.css'
 
-const nextImages = [next1, next2, next3, next4, next5, next6, next7, next8, next9]
 const wsImages   = [ws1,   ws2,   ws3,   ws4,   ws5,   ws6,   ws7,   ws8,   ws9]
 const npImages   = [np1,   np2,   np3,   np4,   np5,   np6,   np7,   np8,   np9]
 const tjImages   = [tj1,   tj2,   tj3,   tj4,   tj5,   tj6,   tj7,   tj8,   tj9]
@@ -183,7 +173,6 @@ function ArrowIcon() {
 }
 
 function getBatch(phase, progress, i) {
-  if (phase === 'next') return 'next'
   if (phase === 'ws')   return 'ws'
   if (phase === 'np')   return 'np'
   if (phase === 'tj')   return 'tj'
@@ -194,7 +183,6 @@ function getBatch(phase, progress, i) {
   if (phase === 'wr')   return 'wr'
   if (phase === 'r')    return 'r'
   if (phase === 'j')    return 'j'
-  if (phase === 'to-ws')   return progress > i ? 'ws'   : 'next'
   if (phase === 'to-np')   return progress > i ? 'np'   : 'ws'
   if (phase === 'to-tj')   return progress > i ? 'tj'   : 'np'
   if (phase === 'to-pw')   return progress > i ? 'pw'   : 'tj'
@@ -204,15 +192,15 @@ function getBatch(phase, progress, i) {
   if (phase === 'to-wr')   return progress > i ? 'wr'   : 'nr'
   if (phase === 'to-r')    return progress > i ? 'r'    : 'wr'
   if (phase === 'to-j')    return progress > i ? 'j'    : 'r'
-  if (phase === 'to-next') return progress > i ? 'next' : 'j'
-  return 'next'
+  if (phase === 'to-ws')   return progress > i ? 'ws'   : 'j'
+  return 'ws'
 }
 
-// cycle: next → ws → np → tj → pw → ap → tp → nr → wr → r → j → next (5s each)
+// cycle: ws → np → tj → pw → ap → tp → nr → wr → r → j → ws (5s each)
 export default function NextSection({ searchResult }) {
   const navigate = useNavigate()
   const { state } = useLocation()
-  const [phase, setPhase] = useState(state?.resumeBatch ?? 'next')
+  const [phase, setPhase] = useState(state?.resumeBatch ?? 'ws')
   const [progress, setProgress] = useState(0)
   const [pinkPhase, setPinkPhase] = useState('pi')
   const [pinkProgress, setPinkProgress] = useState(0)
@@ -260,7 +248,7 @@ export default function NextSection({ searchResult }) {
 
   useEffect(() => {
     const allImages = [
-      ...nextImages, ...wsImages, ...npImages, ...tjImages, ...pwImages,
+      ...wsImages, ...npImages, ...tjImages, ...pwImages,
       ...apImages,  ...tpImages, ...nrImages, ...wrImages, ...rImages, ...jImages
     ]
     allImages.forEach(src => { const img = new window.Image(); img.src = src })
@@ -269,16 +257,7 @@ export default function NextSection({ searchResult }) {
   useEffect(() => {
     let t
 
-    if (phase === 'next') {
-      t = setTimeout(() => { setPhase('to-ws'); setProgress(0) }, 5000)
-    } else if (phase === 'to-ws') {
-      if (progress < 9) {
-        t = setTimeout(() => setProgress(p => p + 1), 350)
-      } else {
-        setPhase('ws')
-        setProgress(0)
-      }
-    } else if (phase === 'ws') {
+    if (phase === 'ws') {
       t = setTimeout(() => { setPhase('to-np'); setProgress(0) }, 5000)
     } else if (phase === 'to-np') {
       if (progress < 9) {
@@ -360,12 +339,12 @@ export default function NextSection({ searchResult }) {
         setProgress(0)
       }
     } else if (phase === 'j') {
-      t = setTimeout(() => { setPhase('to-next'); setProgress(0) }, 5000)
-    } else if (phase === 'to-next') {
+      t = setTimeout(() => { setPhase('to-ws'); setProgress(0) }, 5000)
+    } else if (phase === 'to-ws') {
       if (progress < 9) {
         t = setTimeout(() => setProgress(p => p + 1), 350)
       } else {
-        setPhase('next')
+        setPhase('ws')
         setProgress(0)
       }
     }
@@ -374,7 +353,6 @@ export default function NextSection({ searchResult }) {
   }, [phase, progress])
 
   function getImage(i) {
-    if (phase === 'next') return nextImages[i]
     if (phase === 'ws')   return wsImages[i]
     if (phase === 'np')   return npImages[i]
     if (phase === 'tj')   return tjImages[i]
@@ -386,7 +364,6 @@ export default function NextSection({ searchResult }) {
     if (phase === 'r')    return rImages[i]
     if (phase === 'j')    return jImages[i]
 
-    if (phase === 'to-ws')   return progress > i ? wsImages[i]   : nextImages[i]
     if (phase === 'to-np')   return progress > i ? npImages[i]   : wsImages[i]
     if (phase === 'to-tj')   return progress > i ? tjImages[i]   : npImages[i]
     if (phase === 'to-pw')   return progress > i ? pwImages[i]   : tjImages[i]
@@ -396,16 +373,16 @@ export default function NextSection({ searchResult }) {
     if (phase === 'to-wr')   return progress > i ? wrImages[i]   : nrImages[i]
     if (phase === 'to-r')    return progress > i ? rImages[i]    : wrImages[i]
     if (phase === 'to-j')    return progress > i ? jImages[i]    : rImages[i]
-    if (phase === 'to-next') return progress > i ? nextImages[i] : jImages[i]
+    if (phase === 'to-ws')   return progress > i ? wsImages[i]   : jImages[i]
 
-    return nextImages[i]
+    return wsImages[i]
   }
 
   return (
     <section className="next-section">
       <p className="next-gallery-label">gallery</p>
       <div className="next-grid">
-        {nextImages.map((_, i) => {
+        {wsImages.map((_, i) => {
           const isPink  = searchResult?.colorFamily === 'pink'
           const isBlue  = searchResult?.colorFamily === 'blue'
           const isGreen = searchResult?.colorFamily === 'green'
