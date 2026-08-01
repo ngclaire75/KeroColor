@@ -71,34 +71,11 @@
   border-top: 1px solid #b8a89e;
 }
 
-/* ── Berry decorations ── */
-@keyframes faq-float {
-  0%, 100% { transform: translateY(0px)   rotate(var(--r, 0deg)); }
-  50%       { transform: translateY(-8px) rotate(var(--r, 0deg)); }
-}
-
-.faq-berry {
-  position: absolute;
-  width: clamp(28px, 2.8vw, 44px);
-  pointer-events: none;
-  opacity: 0.9;
-  animation: faq-float 4s ease-in-out infinite;
-}
-
-.faq-berry--l1 { left: 4.5vw; top: 12%; --r: -18deg; animation-delay: 0s;    }
-.faq-berry--l2 { left: 5.5vw; top: 40%; --r:  12deg; animation-delay: -1.4s; }
-.faq-berry--l3 { left: 3.8vw; top: 66%; --r: -30deg; animation-delay: -2.6s; }
-
-.faq-berry--r1 { right: 4.2vw; top: 22%; --r:  20deg; animation-delay: -0.7s; }
-.faq-berry--r2 { right: 5.8vw; top: 52%; --r: -14deg; animation-delay: -2.0s; }
-
 /* ── Mobile ── */
 @media (max-width: 640px) {
   .faq {
     padding: 3rem 5vw 5rem;
   }
-
-  .faq-berry { display: none; }
 
   .faq-q span:first-child {
     font-size: 0.62rem;

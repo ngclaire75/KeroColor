@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import heroImg from '../../images/modena.jpeg'
+import heroImg from '../../images/choco.jpeg'
 import lipstickImg from '../../images/lipstick.png'
 import vogueImg from '../../images/vogue.png'
 import bearImg from '../../images/bear.png'
@@ -10,7 +10,7 @@ const TABS = ['All', 'Seasonal Edition', 'Editorial', 'Color Theory', 'Inspirati
 
 const DUO_ITEMS = [
   { img: lipstickImg, name: 'Velvet Wine Lipstick', desc: 'Deep sultry red warmth', hexes: ['#742833'] },
-  { img: vogueImg, name: 'Vogue Editorial Noir', desc: 'Bold statement glamour', hexes: ['#491319'] },
+  { img: vogueImg, name: 'Portrait of a Maestro', desc: 'Fine art classics', hexes: ['#491319'] },
 ]
 
 const FOOTER_PAGES_LEFT = [
