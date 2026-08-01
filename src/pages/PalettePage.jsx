@@ -1,8 +1,12 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import SearchLoader from '../components/SearchLoader'
 import heroImg from '../../images/choco.jpeg'
+import springImg from '../../images/spring.jpeg'
 import lipstickImg from '../../images/girlofmydreams.png'
 import vogueImg from '../../images/vogue.png'
+import deerImg from '../../images/deer.png'
+import petalImg from '../../images/petal.png'
 import bearImg from '../../images/bear.png'
 import './PalettePage.css'
 
@@ -12,6 +16,40 @@ const DUO_ITEMS = [
   { img: lipstickImg, name: 'Musical Daydream', desc: 'She blooms with every chorus', hexes: ['#742833'] },
   { img: vogueImg, name: 'Portrait of a Maestro', desc: 'A pocketful of cuddles', hexes: ['#491319'] },
 ]
+
+const SEASONAL_DUO_ITEMS = [
+  { img: deerImg, name: 'Woodland Fawn', desc: 'Gentle spirit of spring', hexes: ['#A9805E'] },
+  { img: petalImg, name: 'Floral Nocturne', desc: 'Verdant dreams in blooming', hexes: ['#E7B8C2'] },
+]
+
+const SEASONAL_PALETTE_ITEMS = [
+  { color: '#484537', category: 'Spring Blossom', name: 'Forest Umber', desc: 'Deep mossy woodland shadow' },
+  { color: '#908A6E', category: 'Spring Blossom', name: 'Sage Khaki',   desc: 'Muted olive garden green' },
+  { color: '#C4B5A6', category: 'Spring Blossom', name: 'Warm Taupe',  desc: 'Soft sunlit meadow beige' },
+  { color: '#B78989', category: 'Spring Blossom', name: 'Dusty Rose',  desc: 'Faded blossom petal pink' },
+  { color: '#CFADAB', category: 'Spring Blossom', name: 'Blush Petal', desc: 'Delicate pale cherry blossom' },
+  { color: '#B89F9F', category: 'Spring Blossom', name: 'Rosy Mauve',  desc: 'Gentle dusky spring bloom' },
+]
+
+const SEASONAL_CONTENT = {
+  heroImg: springImg,
+  featuredLabel: '- Blossom Reverie',
+  featuredTitle: <>Petal Symphony<br className="pp-featured-title-break" /> Secret Sonata</>,
+  oxbloodTitle: 'Our Spring Blossom Picks',
+  oxbloodDesc: 'A delicate blend of rosy pinks and leafy greens that captures the beauty of spring blossoms and new beginnings.',
+  paletteItems: SEASONAL_PALETTE_ITEMS,
+  duoItems: SEASONAL_DUO_ITEMS,
+}
+
+const DEFAULT_CONTENT = {
+  heroImg,
+  featuredLabel: '- Rouge de Rêve',
+  featuredTitle: <>The Language of<br className="pp-featured-title-break" /> Natural Color</>,
+  oxbloodTitle: 'Our Oxblood Picks',
+  oxbloodDesc: 'Meet our Oxblood color palette - a curated collection of deep, velvety shades that redefine classic elegance.',
+  paletteItems: null,
+  duoItems: DUO_ITEMS,
+}
 
 const FOOTER_PAGES_LEFT = [
   { label: 'Home',           href: '/',        type: 'link'   },
@@ -40,9 +78,30 @@ export default function PalettePage() {
   const [barOpen, setBarOpen] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
   const [animPaused, setAnimPaused] = useState(false)
+  const [tabLoading, setTabLoading] = useState(false)
+  const [tabLoaderFading, setTabLoaderFading] = useState(false)
+  const tabTimeoutsRef = useRef([])
+
+  const content = activeTab === 'Seasonal Edition' ? SEASONAL_CONTENT : DEFAULT_CONTENT
+  const paletteItems = content.paletteItems || PALETTE_ITEMS
+  const duoItems = content.duoItems
+
+  const handleTabClick = (tab) => {
+    if (tab === activeTab) return
+    tabTimeoutsRef.current.forEach(clearTimeout)
+    setTabLoaderFading(false)
+    setTabLoading(true)
+    const t1 = setTimeout(() => {
+      setActiveTab(tab)
+      setTabLoaderFading(true)
+    }, 900)
+    const t2 = setTimeout(() => setTabLoading(false), 1600)
+    tabTimeoutsRef.current = [t1, t2]
+  }
 
   return (
     <div className="pp-page">
+      {tabLoading && <SearchLoader fading={tabLoaderFading} />}
 
       {/* ── Announcement bar ── */}
       {barOpen && (
@@ -119,7 +178,7 @@ export default function PalettePage() {
             <button
               key={tab}
               className={`pp-tab${activeTab === tab ? ' pp-tab--active' : ''}`}
-              onClick={() => setActiveTab(tab)}
+              onClick={() => handleTabClick(tab)}
             >
               <span>{tab}</span>
             </button>
@@ -144,7 +203,7 @@ export default function PalettePage() {
               <button
                 key={tab}
                 className={`pp-menu-item${activeTab === tab ? ' pp-menu-item--active' : ''}`}
-                onClick={() => { setActiveTab(tab); setMenuOpen(false) }}
+                onClick={() => { handleTabClick(tab); setMenuOpen(false) }}
               >
                 <span>{tab}</span>
               </button>
@@ -155,25 +214,25 @@ export default function PalettePage() {
 
       {/* ── Feature image ── */}
       <div className="pp-feature">
-        <img src={heroImg} alt="" className="pp-feature-img" />
+        <img src={content.heroImg} alt="" className={`pp-feature-img${activeTab === 'Seasonal Edition' ? ' pp-feature-img--spring' : ''}`} />
       </div>
 
       {/* ── Featured content ── */}
       <div className="pp-featured">
-        <p className="pp-featured-label">- Rouge de Rêve</p>
-        <h2 className="pp-featured-title">The Language of<br className="pp-featured-title-break" /> Natural Color</h2>
+        <p className="pp-featured-label">{content.featuredLabel}</p>
+        <h2 className="pp-featured-title">{content.featuredTitle}</h2>
         <p className="pp-featured-date">{new Date().getFullYear()}</p>
       </div>
 
       {/* ── Oxblood promo ── */}
       <div className="pp-oxblood">
-        <h2 className="pp-oxblood-title">Our Oxblood Picks</h2>
-        <p className="pp-oxblood-desc">Meet our Oxblood color palette - a curated collection of deep, velvety shades that redefine classic elegance.</p>
+        <h2 className="pp-oxblood-title">{content.oxbloodTitle}</h2>
+        <p className="pp-oxblood-desc">{content.oxbloodDesc}</p>
       </div>
 
       {/* ── Palette grid ── */}
       <div className="pp-palette-grid">
-        {PALETTE_ITEMS.map((item) => (
+        {paletteItems.map((item) => (
           <div key={item.color} className="pp-palette-item">
             <div className="pp-palette-swatch" style={{ background: item.color }} />
             <div className="pp-palette-text">
@@ -188,7 +247,7 @@ export default function PalettePage() {
       {/* ── Duo grid ── */}
       <div className="pp-duo-grid">
 
-        {DUO_ITEMS.map((item) => (
+        {duoItems.map((item) => (
           <div key={item.name} className="pp-palette-item">
             <div className="pp-duo-swatch">
               <img src={item.img} alt={item.name} className={`pp-duo-img${item.name === 'Musical Daydream' ? ' pp-duo-img-desat' : ''}`} />
@@ -205,9 +264,11 @@ export default function PalettePage() {
       </div>
 
       {/* ── Discover more button ── */}
-      <div className="pp-discover-wrap">
-        <button className="pp-discover-btn">Discover More Palettes</button>
-      </div>
+      {activeTab !== 'Seasonal Edition' && (
+        <div className="pp-discover-wrap">
+          <button className="pp-discover-btn">Discover More Palettes</button>
+        </div>
+      )}
 
       {/* ── Footer ── */}
       <footer className="pp-footer">

@@ -417,6 +417,10 @@
   filter: saturate(1.15);
 }
 
+.pp-feature-img--spring {
+  object-position: center 45%;
+}
+
 /* ── Featured content ── */
 .pp-featured {
   text-align: center;
@@ -814,7 +818,7 @@
   .pp-bar-text-tail { display: none; }
 
   .pp-footer {
-    margin: 5.5rem 0 0;
+    margin: 2.5rem 0 0;
     padding: 2.25rem 1.75rem 2rem;
     min-height: 440px;
     border-radius: 0;
@@ -839,4 +843,9 @@
   .pp-discover-wrap { padding: 0.375rem 1rem 1.5rem; }
 
   .pp-footer-giant-dot { display: inline; }
+}
+
+/* ── Tab-switch loading screen ── */
+.pp-page .search-loader-overlay::before {
+  background: #f2e8d9;
 }
