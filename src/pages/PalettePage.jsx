@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import heroImg from '../../images/choco.jpeg'
-import lipstickImg from '../../images/lipstick.png'
+import lipstickImg from '../../images/girlofmydreams.png'
 import vogueImg from '../../images/vogue.png'
 import bearImg from '../../images/bear.png'
 import './PalettePage.css'
@@ -9,8 +9,8 @@ import './PalettePage.css'
 const TABS = ['All', 'Seasonal Edition', 'Editorial', 'Color Theory', 'Inspiration', 'Archive']
 
 const DUO_ITEMS = [
-  { img: lipstickImg, name: 'Velvet Wine Lipstick', desc: 'Deep sultry red warmth', hexes: ['#742833'] },
-  { img: vogueImg, name: 'Portrait of a Maestro', desc: 'Fine art classics', hexes: ['#491319'] },
+  { img: lipstickImg, name: 'Musical Daydream', desc: 'She blooms with every chorus', hexes: ['#742833'] },
+  { img: vogueImg, name: 'Portrait of a Maestro', desc: 'A pocketful of cuddles', hexes: ['#491319'] },
 ]
 
 const FOOTER_PAGES_LEFT = [
@@ -191,7 +191,7 @@ export default function PalettePage() {
         {DUO_ITEMS.map((item) => (
           <div key={item.name} className="pp-palette-item">
             <div className="pp-duo-swatch">
-              <img src={item.img} alt={item.name} className="pp-duo-img" />
+              <img src={item.img} alt={item.name} className={`pp-duo-img${item.name === 'Musical Daydream' ? ' pp-duo-img-desat' : ''}`} />
             </div>
             <div className="pp-duo-text">
               <p className="pp-palette-desc">{item.desc}</p>

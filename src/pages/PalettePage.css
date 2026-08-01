@@ -557,6 +557,10 @@
   display: block;
 }
 
+.pp-duo-img-desat {
+  filter: saturate(0.65) contrast(1.05);
+}
+
 /* ── Discover more button ── */
 .pp-discover-wrap {
   display: flex;
