@@ -698,8 +698,8 @@
 /* ── Desktop: smaller Oxblood picks text + grids ── */
 @media (min-width: 641px) {
   .pp-oxblood { width: 78%; max-width: 1700px; }
-  .pp-oxblood-title { font-size: 2.6rem; }
-  .pp-oxblood-desc { font-size: 0.85rem; }
+  .pp-oxblood-title { font-size: 2.75rem; }
+  .pp-oxblood-desc { font-size: 0.92rem; }
 
   .pp-palette-grid {
     gap: 3rem 1.5rem;
