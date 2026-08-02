@@ -10,7 +10,7 @@ import petalImg from '../../images/petal.png'
 import bearImg from '../../images/bear.png'
 import './PalettePage.css'
 
-const TABS = ['All', 'Seasonal Edition', 'Editorial', 'Color Theory', 'Inspiration', 'Archive']
+const TABS = ['All', 'Seasonal Edition', 'Editorial', 'Color Theory', 'Inspiration']
 
 const DUO_ITEMS = [
   { img: lipstickImg, name: 'Musical Daydream', desc: 'She blooms with every chorus', hexes: ['#742833'] },
