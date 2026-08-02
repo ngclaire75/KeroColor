@@ -695,34 +695,34 @@
   display: none;
 }
 
-/* ── Desktop: smaller Oxblood picks text + grids ── */
+/* ── Desktop: Oxblood picks text + grids ── */
 @media (min-width: 641px) {
-  .pp-oxblood { width: 78%; max-width: 1700px; }
-  .pp-oxblood-title { font-size: 2.75rem; }
-  .pp-oxblood-desc { font-size: 0.92rem; }
+  .pp-oxblood { width: 82%; max-width: 1800px; }
+  .pp-oxblood-title { font-size: 3rem; }
+  .pp-oxblood-desc { font-size: 1rem; }
 
   .pp-palette-grid {
-    gap: 3rem 1.5rem;
-    width: 78%;
-    max-width: 1700px;
+    gap: 3rem 1.7rem;
+    width: 82%;
+    max-width: 1800px;
   }
 
-  .pp-palette-category { font-size: 0.78rem; }
-  .pp-palette-desc { font-size: 0.78rem; margin: 1.5rem 0 0.5rem; }
-  .pp-palette-name { font-size: 1.35rem; margin: 0 0 0.6rem; }
-  .pp-palette-hex { font-size: 0.75rem; }
+  .pp-palette-category { font-size: 0.85rem; }
+  .pp-palette-desc { font-size: 0.85rem; margin: 1.5rem 0 0.5rem; }
+  .pp-palette-name { font-size: 1.5rem; margin: 0 0 0.6rem; }
+  .pp-palette-hex { font-size: 0.82rem; }
 
   .pp-duo-grid {
-    gap: 3rem 1.5rem;
-    width: 78%;
-    max-width: 1700px;
+    gap: 3rem 1.7rem;
+    width: 82%;
+    max-width: 1800px;
   }
 
-  .pp-duo-grid .pp-palette-name { font-size: 1.7rem; }
-  .pp-duo-grid .pp-palette-desc { font-size: 0.9rem; }
-  .pp-duo-grid .pp-palette-hex { font-size: 0.92rem; }
+  .pp-duo-grid .pp-palette-name { font-size: 1.85rem; }
+  .pp-duo-grid .pp-palette-desc { font-size: 0.96rem; }
+  .pp-duo-grid .pp-palette-hex { font-size: 0.98rem; }
 
-  .pp-discover-btn { font-size: calc(0.78rem + 1px); }
+  .pp-discover-btn { font-size: calc(0.82rem + 1px); }
 }
 
 /* ── Mobile ── */
