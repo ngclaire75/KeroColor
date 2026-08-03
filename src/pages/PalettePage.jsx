@@ -1,8 +1,8 @@
 import { useState, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import SearchLoader from '../components/SearchLoader'
 import heroImg from '../../images/choco.png'
-import springImg from '../../images/dior.png'
+import springImg from '../../images/spr.png'
 import lipstickImg from '../../images/girlofmydreams.png'
 import vogueImg from '../../images/vogue.png'
 import deerImg from '../../images/deer.png'
@@ -74,7 +74,9 @@ const PALETTE_ITEMS = [
 ]
 
 export default function PalettePage() {
-  const [activeTab, setActiveTab] = useState('All')
+  const navigate = useNavigate()
+  const location = useLocation()
+  const [activeTab, setActiveTab] = useState(location.state?.tab || 'All')
   const [barOpen, setBarOpen] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
   const [animPaused, setAnimPaused] = useState(false)
@@ -87,6 +89,7 @@ export default function PalettePage() {
   const duoItems = content.duoItems
 
   const handleTabClick = (tab) => {
+    if (tab === 'Editorial') { navigate('/editorial'); return }
     if (tab === activeTab) return
     tabTimeoutsRef.current.forEach(clearTimeout)
     setTabLoaderFading(false)
@@ -245,7 +248,7 @@ export default function PalettePage() {
       </div>
 
       {/* ── Duo grid ── */}
-      <div className="pp-duo-grid">
+      <div className={`pp-duo-grid${activeTab === 'Seasonal Edition' ? ' pp-duo-grid--seasonal' : ''}`}>
 
         {duoItems.map((item) => (
           <div key={item.name} className="pp-palette-item">

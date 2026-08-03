@@ -4,6 +4,7 @@ import { SearchProvider } from './SearchContext'
 import ExplorePage  from './pages/ExplorePage'
 import LookPage     from './pages/LookPage'
 import PalettePage  from './pages/PalettePage'
+import EditorialPage from './pages/EditorialPage'
 import Navbar     from './components/Navbar'
 import SiteHeader from './components/SiteHeader'
 import InfoBar    from './components/InfoBar'
@@ -84,6 +85,7 @@ export default function App() {
       <Route path="/explore"  element={<ExplorePage />} />
       <Route path="/look"     element={<LookPage />} />
       <Route path="/palette"  element={<PalettePage />} />
+      <Route path="/editorial" element={<EditorialPage />} />
     </Routes>
     </SearchProvider>
   )
