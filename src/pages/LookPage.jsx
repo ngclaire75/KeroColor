@@ -476,7 +476,7 @@ export default function LookPage() {
     const onKey = (e) => { if (e.key === 'Escape') navigate('/explore', { state: { resumeBatch: batch } }) }
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
-  }, [navigate])
+  }, [navigate, batch])
 
   if (!imgSrc) return null
 

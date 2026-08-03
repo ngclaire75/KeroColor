@@ -201,6 +201,16 @@ export default function NextSection({ searchResult }) {
   const navigate = useNavigate()
   const { state } = useLocation()
   const [phase, setPhase] = useState(state?.resumeBatch ?? 'ws')
+
+  useEffect(() => {
+    if (!state?.resumeBatch) return
+    const saved = sessionStorage.getItem('explore-scroll-y')
+    if (!saved) return
+    sessionStorage.removeItem('explore-scroll-y')
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => window.scrollTo(0, parseInt(saved, 10)))
+    })
+  }, [])
   const [progress, setProgress] = useState(0)
   const [pinkPhase, setPinkPhase] = useState('pi')
   const [pinkProgress, setPinkProgress] = useState(0)
@@ -391,7 +401,10 @@ export default function NextSection({ searchResult }) {
             <div
               className="next-card next-card--image"
               style={{ cursor: 'pointer' }}
-              onClick={() => navigate('/look', { state: { imgSrc: src, batch: isPink ? 'p' : isBlue ? 'b' : isGreen ? 'g' : getBatch(phase, progress, i), cardIndex: i } })}
+              onClick={() => {
+                sessionStorage.setItem('explore-scroll-y', String(window.scrollY))
+                navigate('/look', { state: { imgSrc: src, batch: isPink ? 'p' : isBlue ? 'b' : isGreen ? 'g' : getBatch(phase, progress, i), cardIndex: i } })
+              }}
             >
               <img src={src} alt="" className="next-card-img" style={isGreen && i === 6 ? { objectPosition: 'center 90%' } : undefined} />
               <div className="next-card-header">
