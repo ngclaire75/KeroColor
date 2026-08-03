@@ -15,7 +15,7 @@
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background: #fff;
+  background: #f5f5f3;
 }
 
 /* ── Left panel ── */
@@ -26,7 +26,7 @@
   flex-shrink: 0;
   padding: 0.5rem 0.3rem 0.5rem 1rem;
   box-sizing: border-box;
-  background: #fff;
+  background: #f5f5f3;
 }
 
 /* Fill the entire left panel */
@@ -65,7 +65,7 @@
 
 /* Card body — true rounded corners (TL, BL, BR) + step notch with rounded inner edge at TR */
 .look-card {
-  background: #fff;
+  background: #f5f5f3;
   border: none;
   padding: 1.6rem 1.4rem 2rem;
   width: 230px;
@@ -118,7 +118,7 @@
 /* ── Right panel ── */
 .look-right {
   flex: 1;
-  background: #fff;
+  background: #f5f5f3;
   padding: 0.5rem 1rem 0.5rem 0.3rem;
   box-sizing: border-box;
   display: flex;
@@ -129,7 +129,7 @@
   width: 100%;
   height: calc(100vh - 1rem);
   border-radius: 14px;
-  background: linear-gradient(to bottom, #d42c3b 0%, #ffffff 80%);
+  background: linear-gradient(to bottom, #d42c3b 0%, #f5f5f3 80%);
   position: relative;
   overflow: hidden;
 }
@@ -141,7 +141,7 @@
   left: 0;
   right: 0;
   height: 45%;
-  background-image: radial-gradient(circle, #ffffff 2px, transparent 2px);
+  background-image: radial-gradient(circle, #f5f5f3 2px, transparent 2px);
   background-size: 20px 20px;
   -webkit-mask-image: linear-gradient(to bottom, white 0%, transparent 100%);
   mask-image: linear-gradient(to bottom, white 0%, transparent 100%);
@@ -168,7 +168,7 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  border: 1px solid #fff;
+  border: 1px solid #f5f5f3;
   margin-left: -9px;
   flex-shrink: 0;
 }
@@ -226,14 +226,14 @@
 .look-btn:hover { opacity: 0.85; }
 
 .look-btn--outline {
-  background: #fff;
+  background: #f5f5f3;
   color: #be2c37;
   border: 1px solid rgba(0,0,0,0.12);
 }
 
 .look-btn--filled {
   background: #be2c37;
-  color: #fff;
+  color: #f5f5f3;
 }
 
 .look-btn-icon {
@@ -247,7 +247,7 @@
   height: 36px;
   border-radius: 50%;
   background: rgba(255,255,255,0.25);
-  color: #fff;
+  color: #f5f5f3;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -266,7 +266,7 @@
 }
 
 .look-page--pink .look-right-panel {
-  background: linear-gradient(to bottom, #e8899a 0%, #ffffff 80%);
+  background: linear-gradient(to bottom, #e8899a 0%, #f5f5f3 80%);
 }
 
 .look-page--pink .look-right-heading {
@@ -297,7 +297,7 @@
 }
 
 .look-page--blue .look-right-panel {
-  background: linear-gradient(to bottom, #5b6982 0%, #ffffff 80%);
+  background: linear-gradient(to bottom, #5b6982 0%, #f5f5f3 80%);
 }
 
 .look-page--blue .look-right-heading {
@@ -328,7 +328,7 @@
 }
 
 .look-page--green .look-right-panel {
-  background: linear-gradient(to bottom, #495750 0%, #ffffff 80%);
+  background: linear-gradient(to bottom, #495750 0%, #f5f5f3 80%);
 }
 
 .look-page--green .look-right-heading {
