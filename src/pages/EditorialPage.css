@@ -256,7 +256,6 @@
 @media (max-width: 640px) {
   .ed-nav {
     position: relative;
-    height: 110px;
     padding: 0.62rem 1.25rem 0.62rem 1.25rem;
     gap: 1.75rem;
     overflow-x: auto;
