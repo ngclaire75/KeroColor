@@ -22,9 +22,8 @@ export default function EditorialPage() {
   }, [])
 
   const handleNavScroll = () => {
-    if (!navSwiped && navRef.current && navRef.current.scrollLeft > 8) {
-      setNavSwiped(true)
-    }
+    if (!navRef.current) return
+    setNavSwiped(navRef.current.scrollLeft > 8)
   }
 
   const handleNavClick = (item) => {
