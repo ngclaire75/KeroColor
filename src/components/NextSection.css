@@ -2,7 +2,7 @@
   position: relative;
   z-index: 2;
   width: 100%;
-  background: #f5f5f3;
+  background: #f8f2ea;
   padding: 4rem 18rem 5rem;
   box-sizing: border-box;
 }
@@ -15,7 +15,7 @@
   font-size: clamp(3.5rem, 8vw, 8rem);
   font-weight: 800;
   line-height: 1;
-  color: #f5f5f3;
+  color: #f8f2ea;
   -webkit-text-stroke: 3px #111;
   paint-order: stroke fill;
   text-transform: lowercase;
