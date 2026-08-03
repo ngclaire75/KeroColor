@@ -26,10 +26,11 @@ export default function EditorialPage() {
   }, [])
 
   useEffect(() => {
+    if (!overlayGone) return
     setNavReady(false)
     const t = setTimeout(() => setNavReady(true), 2000)
     return () => clearTimeout(t)
-  }, [])
+  }, [overlayGone])
 
   const handleNavScroll = () => {
     if (!navRef.current) return
@@ -50,7 +51,7 @@ export default function EditorialPage() {
         className={`ed-nav${navReady ? ' ed-nav--ready' : ''}${navSwiped ? ' ed-nav--swiped' : ''}`}
         onScroll={handleNavScroll}
       >
-        <span className={`ed-nav-hint${navReady || navSwiped ? ' ed-nav-hint--hidden' : ''}`}>Swipe Left for More!</span>
+        <span className={`ed-nav-hint${navReady || navSwiped ? ' ed-nav-hint--hidden' : overlayGone ? ' ed-nav-hint--playing' : ''}`}>Swipe Left for More!</span>
         {NAV_ITEMS.map(item => (
           <button
             key={item}
