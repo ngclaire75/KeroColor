@@ -317,7 +317,7 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: #7c1a2e;
+  background: #000;
   opacity: 0.4;
   transform: scaleY(0.5);
 }
@@ -369,7 +369,7 @@
   right: 0;
   bottom: 0;
   height: 1px;
-  background: #7c1a2e;
+  background: #000;
   opacity: 0.4;
   transform: scaleY(0.5);
   transform-origin: bottom;
