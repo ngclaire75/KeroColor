@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import edt1 from '../../images/edt1.png'
 import edt2 from '../../images/edt2.png'
@@ -12,7 +12,14 @@ const NAV_ITEMS = ['All', 'Seasonal Edition', 'Editorial', 'Color Theory', 'Insp
 export default function EditorialPage() {
   const navigate = useNavigate()
   const navRef = useRef(null)
+  const [navReady, setNavReady] = useState(false)
   const [navSwiped, setNavSwiped] = useState(false)
+
+  useEffect(() => {
+    setNavReady(false)
+    const t = setTimeout(() => setNavReady(true), 2000)
+    return () => clearTimeout(t)
+  }, [])
 
   const handleNavScroll = () => {
     if (!navSwiped && navRef.current && navRef.current.scrollLeft > 8) {
@@ -29,10 +36,10 @@ export default function EditorialPage() {
     <div className="ed-page">
       <nav
         ref={navRef}
-        className={`ed-nav${navSwiped ? ' ed-nav--ready' : ''}`}
+        className={`ed-nav${navReady ? ' ed-nav--ready' : ''}${navSwiped ? ' ed-nav--swiped' : ''}`}
         onScroll={handleNavScroll}
       >
-        <span className={`ed-nav-hint${navSwiped ? ' ed-nav-hint--hidden' : ''}`}>Swipe Left for More!</span>
+        <span className={`ed-nav-hint${navReady || navSwiped ? ' ed-nav-hint--hidden' : ''}`}>Swipe Left for More!</span>
         {NAV_ITEMS.map(item => (
           <button
             key={item}
