@@ -419,7 +419,8 @@
 }
 
 .pp-feature-img--spring {
-  object-position: center 24%;
+  object-position: center 33%;
+  transform: scale(1.3);
 }
 
 /* ── Featured content ── */
