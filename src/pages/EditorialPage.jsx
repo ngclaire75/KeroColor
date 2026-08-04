@@ -74,6 +74,7 @@ export default function EditorialPage() {
               <h3 className="ed-intro-label">The Fact</h3>
               <p className="ed-intro-item">Color analysis is intended as a personal styling guide, not a strict rulebook.</p>
               <p className="ed-intro-item">Wearing colors outside your recommended palette will not necessarily look bad.</p>
+              <p className="ed-intro-item">The overall effect depends on many factors, such as the garment's fit, fabric, makeup, hairstyle, and lighting.</p>
             </div>
             <div className="ed-intro-column">
               <h3 className="ed-intro-label">Why?</h3>

@@ -22,6 +22,7 @@
   justify-content: flex-start;
   padding: 0.62rem 3.5rem 0.62rem 3rem;
   gap: 3rem;
+  margin-bottom: 0.5rem;
 }
 
 .ed-nav-item {
@@ -259,6 +260,7 @@
     position: relative;
     padding: 0.62rem 1.25rem 0.62rem 1.25rem;
     gap: 1.75rem;
+    margin-bottom: 0;
     overflow-x: auto;
     scrollbar-width: none;
   }
@@ -325,7 +327,7 @@
   .ed-intro-text {
     flex: none;
     width: 100%;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
   }
 
   .ed-intro-columns {
