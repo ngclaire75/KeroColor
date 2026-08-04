@@ -318,20 +318,20 @@
   .ed-intro {
     flex-direction: column;
     gap: 0;
-    padding: 3.25rem 1.25rem 2.75rem;
+    padding: 2.75rem 1.25rem 3.25rem;
   }
 
   .ed-intro-text {
     flex: none;
     width: 100%;
-    margin-bottom: 2.9rem;
+    margin-bottom: 1rem;
   }
 
   .ed-intro-heading { font-size: 1.4rem; }
 
   .ed-intro-footer {
     position: static;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
   }
 
   .ed-intro-media {
