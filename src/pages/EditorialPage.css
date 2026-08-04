@@ -334,6 +334,10 @@
     flex-direction: row;
   }
 
+  .ed-intro-column:nth-child(2) {
+    margin-top: -0.14rem;
+  }
+
   .ed-intro-heading { font-size: 1.4rem; }
 
   .ed-intro-footer {
