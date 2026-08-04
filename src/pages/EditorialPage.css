@@ -111,6 +111,7 @@
 
 .ed-intro-columns {
   display: flex;
+  flex-direction: column;
   gap: 1.75rem;
 }
 
@@ -325,6 +326,10 @@
     flex: none;
     width: 100%;
     margin-bottom: 1rem;
+  }
+
+  .ed-intro-columns {
+    flex-direction: row;
   }
 
   .ed-intro-heading { font-size: 1.4rem; }
