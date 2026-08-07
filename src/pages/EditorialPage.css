@@ -202,8 +202,12 @@
   min-width: 0;
   display: flex;
   gap: 2px;
-  background: #000;
+  background: #f8f2ea;
   overflow: hidden;
+}
+
+.ed-intro-grid-row--bottom {
+  background: #000;
 }
 
 .ed-intro-grid-row--images {
@@ -254,6 +258,7 @@
   font-family: 'Inter', sans-serif;
   font-size: 0.72rem;
   font-weight: 500;
+  line-height: 1.6;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: #fff;
@@ -264,7 +269,7 @@
 .ed-intro-phone-block {
   flex: 1;
   min-width: 0;
-  background: #000;
+  background: #f8f2ea;
   display: flex;
   align-items: center;
   justify-content: center;

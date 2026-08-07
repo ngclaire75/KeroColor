@@ -125,9 +125,9 @@ export default function EditorialPage() {
               </div>
               <img src={edp3} alt="" className="ed-intro-img--edp3" />
             </div>
-            <div className="ed-intro-grid-row">
+            <div className="ed-intro-grid-row ed-intro-grid-row--bottom">
               <div className="ed-intro-red-block">
-                <p>The Science Behind Color Analysis</p>
+                <p>The Science Behind<br />Color Analysis</p>
               </div>
               <div className="ed-intro-phone-block">
                 <img src={edt6} alt="" />
