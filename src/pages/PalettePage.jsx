@@ -13,13 +13,13 @@ import './PalettePage.css'
 const TABS = ['All', 'Seasonal Edition', 'Editorial', 'Color Theory', 'Inspiration']
 
 const DUO_ITEMS = [
-  { img: lipstickImg, name: 'Musical Daydream', desc: 'She blooms with every chorus', hexes: ['#742833'] },
-  { img: vogueImg, name: 'Portrait of a Maestro', desc: 'A pocketful of cuddles', hexes: ['#491319'] },
+  { img: lipstickImg, name: 'Velvet Keepsake', desc: 'A heart kept safe in ruby velvet', hexes: ['#742833'] },
+  { img: vogueImg, name: 'Neon Nocturne', desc: 'The city hums beneath amber light', hexes: ['#491319'] },
 ]
 
 const SEASONAL_DUO_ITEMS = [
-  { img: deerImg, name: 'Woodland Fawn', desc: 'Gentle spirit of spring', hexes: ['#A9805E'] },
-  { img: petalImg, name: 'Floral Nocturne', desc: 'Verdant dreams in blooming', hexes: ['#E7B8C2'] },
+  { img: deerImg, name: 'Matcha Daydream', desc: 'Sweetness steeped in a quiet afternoon', hexes: ['#A9805E'] },
+  { img: petalImg, name: 'Lace & Latte', desc: 'Soft indulgence, savored slow', hexes: ['#E7B8C2'] },
 ]
 
 const SEASONAL_PALETTE_ITEMS = [

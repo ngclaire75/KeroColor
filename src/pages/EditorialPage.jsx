@@ -1,18 +1,20 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SearchLoader from '../components/SearchLoader'
-import edt1 from '../../images/edt1.png'
-import edt2 from '../../images/edt2.png'
-import edt3 from '../../images/edt3.png'
+import edp1 from '../../images/edp1.png'
+import edp2 from '../../images/edp2.png'
+import edp3 from '../../images/edp3.png'
 import edt5 from '../../images/edt5.png'
 import edt6 from '../../images/edt6.png'
 import './EditorialPage.css'
 
-const NAV_ITEMS = ['All', 'Seasonal Edition', 'Editorial', 'Color Theory', 'Inspiration']
+const NAV_BATCH_1 = ['All', 'Seasonal Edition', 'Editorial']
+const NAV_BATCH_2 = ['Color Theory', 'Inspiration']
 
 export default function EditorialPage() {
   const navigate = useNavigate()
   const navRef = useRef(null)
+  const touchStartX = useRef(null)
   const [navReady, setNavReady] = useState(false)
   const [navSwiped, setNavSwiped] = useState(false)
   const [overlayFading, setOverlayFading] = useState(false)
@@ -32,9 +34,16 @@ export default function EditorialPage() {
     return () => clearTimeout(t)
   }, [overlayGone])
 
-  const handleNavScroll = () => {
-    if (!navRef.current) return
-    setNavSwiped(navRef.current.scrollLeft > 8)
+  const handleNavTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX
+  }
+
+  const handleNavTouchEnd = (e) => {
+    if (touchStartX.current === null) return
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current
+    if (deltaX < -40) setNavSwiped(true)
+    else if (deltaX > 40) setNavSwiped(false)
+    touchStartX.current = null
   }
 
   const handleNavClick = (item) => {
@@ -49,18 +58,32 @@ export default function EditorialPage() {
       <nav
         ref={navRef}
         className={`ed-nav${navReady ? ' ed-nav--ready' : ''}${navSwiped ? ' ed-nav--swiped' : ''}`}
-        onScroll={handleNavScroll}
+        onTouchStart={handleNavTouchStart}
+        onTouchEnd={handleNavTouchEnd}
       >
         <span className={`ed-nav-hint${navReady || navSwiped ? ' ed-nav-hint--hidden' : overlayGone ? ' ed-nav-hint--playing' : ''}`}>Swipe Left for More!</span>
-        {NAV_ITEMS.map(item => (
-          <button
-            key={item}
-            className={`ed-nav-item${item === 'Editorial' ? ' ed-nav-item--active' : ''}${item === 'Inspiration' ? ' ed-nav-item--inspiration' : ''}`}
-            onClick={() => handleNavClick(item)}
-          >
-            <span>{item}</span>
-          </button>
-        ))}
+        <div className="ed-nav-batch ed-nav-batch--1">
+          {NAV_BATCH_1.map(item => (
+            <button
+              key={item}
+              className={`ed-nav-item${item === 'Editorial' ? ' ed-nav-item--active' : ''}`}
+              onClick={() => handleNavClick(item)}
+            >
+              <span>{item}</span>
+            </button>
+          ))}
+        </div>
+        <div className="ed-nav-batch ed-nav-batch--2">
+          {NAV_BATCH_2.map(item => (
+            <button
+              key={item}
+              className="ed-nav-item"
+              onClick={() => handleNavClick(item)}
+            >
+              <span>{item}</span>
+            </button>
+          ))}
+        </div>
       </nav>
 
       {/* ── Intro section ── */}
@@ -96,9 +119,11 @@ export default function EditorialPage() {
 
           <div className="ed-intro-media-col">
             <div className="ed-intro-grid-row ed-intro-grid-row--images">
-              <img src={edt1} alt="" />
-              <img src={edt2} alt="" />
-              <img src={edt3} alt="" />
+              <img src={edp1} alt="" />
+              <div className="ed-intro-img-zoom">
+                <img src={edp2} alt="" />
+              </div>
+              <img src={edp3} alt="" className="ed-intro-img--edp3" />
             </div>
             <div className="ed-intro-grid-row">
               <div className="ed-intro-red-block">
