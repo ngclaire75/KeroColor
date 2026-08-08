@@ -239,6 +239,7 @@
   padding: 0.9rem 1.1rem;
   position: relative;
   white-space: nowrap;
+  text-transform: lowercase;
   transition: color 0.2s;
   line-height: 1;
 }
@@ -300,11 +301,12 @@
   border: none;
   position: relative;
   cursor: pointer;
-  padding: 1.5rem 1.25rem 1.5rem 1.75rem;
+  padding: 1.2rem 1.25rem 1.2rem 1.75rem;
   font-family: 'Inter', sans-serif;
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 400;
   color: #111;
+  text-transform: lowercase;
 }
 
 /* Fixed hairline via transform instead of a 0.5px border — border-width
@@ -343,8 +345,22 @@
 }
 
 .pp-menu-list {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.38s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.28s ease;
+}
+
+.pp-menu-list--open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.pp-menu-list-inner {
+  overflow: hidden;
   display: flex;
   flex-direction: column;
+  min-height: 0;
 }
 
 .pp-menu-item {
@@ -354,11 +370,12 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: 1.5rem 1.25rem 1.5rem 1.75rem;
+  padding: 1.2rem 1.25rem 1.2rem 1.75rem;
   font-family: 'Inter', sans-serif;
   font-size: 1rem;
   font-weight: 400;
   color: #111;
+  text-transform: lowercase;
 }
 
 /* Full-width divider, matching the Menu toggle's */

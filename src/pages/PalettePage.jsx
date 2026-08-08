@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import SearchLoader from '../components/SearchLoader'
 import heroImg from '../../images/choco.png'
@@ -87,6 +87,13 @@ export default function PalettePage() {
   const content = activeTab === 'Seasonal Edition' ? SEASONAL_CONTENT : DEFAULT_CONTENT
   const paletteItems = content.paletteItems || PALETTE_ITEMS
   const duoItems = content.duoItems
+
+  useEffect(() => {
+    if (!menuOpen) return
+    const closeOnScroll = () => setMenuOpen(false)
+    window.addEventListener('scroll', closeOnScroll, { passive: true })
+    return () => window.removeEventListener('scroll', closeOnScroll)
+  }, [menuOpen])
 
   const handleTabClick = (tab) => {
     if (tab === 'Editorial') { navigate('/editorial'); return }
@@ -200,8 +207,8 @@ export default function PalettePage() {
             <path fill="#000" d="m11.558 16.505.496.495 7.949-8.01v-.987L19.999 8h-.985l-6.967 7.017L4.992 8H4v.987z"></path>
           </svg>
         </button>
-        {menuOpen && (
-          <div className="pp-menu-list">
+        <div className={`pp-menu-list${menuOpen ? ' pp-menu-list--open' : ''}`}>
+          <div className="pp-menu-list-inner">
             {TABS.map(tab => (
               <button
                 key={tab}
@@ -212,7 +219,7 @@ export default function PalettePage() {
               </button>
             ))}
           </div>
-        )}
+        </div>
       </div>
 
       {/* ── Feature image ── */}
