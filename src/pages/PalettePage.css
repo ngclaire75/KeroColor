@@ -336,9 +336,12 @@
 }
 
 .pp-menu-chevron {
-  width: 18px;
-  height: 18px;
+  width: 14px;
+  height: 14px;
+  transform-origin: 50% 50%;
   transition: transform 0.25s ease;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .pp-menu-chevron--open {
