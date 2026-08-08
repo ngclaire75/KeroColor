@@ -53,6 +53,7 @@
   text-align: center;
   position: absolute;
   white-space: nowrap;
+  text-transform: lowercase;
 }
 
 .pp-bar-text--1 { animation: pp-text1 10s linear infinite; }
