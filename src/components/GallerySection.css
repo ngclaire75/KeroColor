@@ -207,6 +207,9 @@
 
   .gallery-rect {
     aspect-ratio: 4 / 5;
+    /* Cap image height at the iPhone 15 Pro Max proportions (430px viewport)
+       so the grid doesn't grow taller on wider phones */
+    max-height: 234px;
   }
 
   .gallery-pagination {
