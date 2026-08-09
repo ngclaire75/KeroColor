@@ -103,9 +103,14 @@ export default function GallerySection({ searchResult, onColorChange }) {
 
   const GAP      = isMobile ? GAP_MOBILE : GAP_DESKTOP
   const VISIBLE  = isMobile ? VISIBLE_MOBILE : VISIBLE_DESKTOP
-  const maxSlide = gridImages.length - VISIBLE
+  const maxSlide = Math.max(0, gridImages.length - VISIBLE)
 
-  // Compute item width from actual rendered rect
+  const indexedImages = gridImages.map((src, i) => ({ src, i }))
+  // Desktop: only the current 6-item batch is rendered (instant swap).
+  // Mobile: the full strip renders and slides one item at a time.
+  const displayImages = isMobile ? indexedImages : indexedImages.slice(slideIndex, slideIndex + VISIBLE)
+
+  // Compute item width from actual rendered rect (mobile slide distance)
   useEffect(() => {
     const compute = () => {
       if (!viewportRef.current) return
@@ -114,9 +119,7 @@ export default function GallerySection({ searchResult, onColorChange }) {
         setItemWidth(rect.offsetWidth)
       } else {
         const vw = viewportRef.current.clientWidth
-        const g  = isMobile ? GAP_MOBILE : GAP_DESKTOP
-        const v  = isMobile ? VISIBLE_MOBILE : VISIBLE_DESKTOP
-        setItemWidth((vw - (v - 1) * g) / v)
+        setItemWidth((vw - (VISIBLE - 1) * GAP) / VISIBLE)
       }
     }
     compute()
@@ -127,8 +130,8 @@ export default function GallerySection({ searchResult, onColorChange }) {
   // Reset slide on layout switch
   useEffect(() => { setSlideIndex(0) }, [isMobile])
 
-  const slideNext = () => setSlideIndex(i => Math.min(i + 1, maxSlide))
-  const slidePrev = () => setSlideIndex(i => Math.max(i - 1, 0))
+  const slideNext = () => setSlideIndex(i => Math.min(i + (isMobile ? 1 : VISIBLE), maxSlide))
+  const slidePrev = () => setSlideIndex(i => Math.max(i - (isMobile ? 1 : VISIBLE), 0))
 
   function handleCircleClick(i) {
     if (activeCircleIdx === i) { setActiveCircleIdx(null); return }
@@ -136,7 +139,7 @@ export default function GallerySection({ searchResult, onColorChange }) {
     setActiveCircleIdx(i)
   }
 
-  const translateX = -(slideIndex * (itemWidth + GAP))
+  const translateX = isMobile ? -(slideIndex * (itemWidth + GAP)) : 0
 
   return (
     <section className="gallery-section">
@@ -145,10 +148,10 @@ export default function GallerySection({ searchResult, onColorChange }) {
         <div className="gallery-rects" ref={viewportRef}>
           <div
             className="gallery-rects-track"
-            style={{ transform: `translateX(${translateX}px)` }}
+            style={isMobile ? { transform: `translateX(${translateX}px)` } : undefined}
           >
-            {gridImages.map((src, i) => (
-              <div key={i} className="gallery-rect">
+            {displayImages.map(({ src, i }) => (
+              <div key={i} className="gallery-rect" data-idx={i}>
                 <img src={src} alt="" />
               </div>
             ))}

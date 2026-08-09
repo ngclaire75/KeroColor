@@ -390,7 +390,6 @@ export default function NextSection({ searchResult }) {
 
   return (
     <section className="next-section">
-      <p className="next-gallery-label">gallery</p>
       <div className="next-grid">
         {wsImages.map((_, i) => {
           const isPink  = searchResult?.colorFamily === 'pink'

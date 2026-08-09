@@ -34,8 +34,6 @@
 .gallery-rects-track {
   display: flex;
   gap: var(--gap);
-  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform;
   padding-bottom: 2px;
 }
 
@@ -61,19 +59,19 @@
   display: block;
 }
 
-/* ── Per-image crop positions ── */
-.gallery-rect:nth-child(2)  img { object-position: 15% 20%; }
-.gallery-rect:nth-child(4)  img { object-position: 20% center; }
-.gallery-rect:nth-child(5)  img { object-position: 5% center; }
-.gallery-rect:nth-child(6)  img { object-position: 65% center; transform: scale(1.2); }
-.gallery-rect:nth-child(7)  img { object-position: 65% 20%; }
-.gallery-rect:nth-child(9)  img { transform: scale(1.2); object-position: center 15%; }
-.gallery-rect:nth-child(10) img { object-position: center 10%; }
-.gallery-rect:nth-child(11) img { object-position: 5% center; }
-.gallery-rect:nth-child(12) img { object-position: 65% center; transform: scale(1.1); }
+/* ── Per-image crop positions (data-idx is the 0-based index in the full set) ── */
+.gallery-rect[data-idx="1"]  img { object-position: 15% 20%; }
+.gallery-rect[data-idx="3"]  img { object-position: 20% center; }
+.gallery-rect[data-idx="4"]  img { object-position: 5% center; }
+.gallery-rect[data-idx="5"]  img { object-position: 65% center; transform: scale(1.2); }
+.gallery-rect[data-idx="6"]  img { object-position: 65% 20%; }
+.gallery-rect[data-idx="8"]  img { transform: scale(1.2); object-position: center 15%; }
+.gallery-rect[data-idx="9"]  img { object-position: center 10%; }
+.gallery-rect[data-idx="10"] img { object-position: 5% center; }
+.gallery-rect[data-idx="11"] img { object-position: 65% center; transform: scale(1.1); }
 
 /* ── Pink theme crop overrides ── */
-.theme-pink .gallery-rect:nth-child(7) img { object-position: 65% 55%; }
+.theme-pink .gallery-rect[data-idx="6"] img { object-position: 65% 55%; }
 
 /* ── Pink theme — black & white images ── */
 .theme-pink .gallery-rect img {
@@ -200,6 +198,11 @@
     --gap: 8px;
     --visible: 2;
     --h-pad: 1.5rem;
+  }
+
+  .gallery-rects-track {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
   }
 
   .gallery-rect {
