@@ -156,7 +156,7 @@
 
 /* ── Pink search theme ── */
 .theme-pink .explore-nav {
-  background: #000;
+  background: #de9eb6;
   transition: background 0.4s ease;
 }
 
@@ -169,19 +169,19 @@
 }
 
 .theme-pink .explore-hero {
-  background: #ffeff5;
+  background: #85787f;
 }
 
 .theme-pink .explore-wonderland {
-  color: #111;
+  color: #fff;
 }
 
 .theme-pink .explore-embrace {
-  color: #111;
+  color: #fff;
 }
 
 .theme-pink .explore-labels {
-  color: #111;
+  color: #fff;
 }
 
 /* ── Blue search theme ── */
