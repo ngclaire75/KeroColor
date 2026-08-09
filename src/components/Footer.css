@@ -57,17 +57,23 @@
 .theme-pink .footer::before {
   background-image: repeating-linear-gradient(
     90deg,
-    #fff 0px,
-    #fff 9px,
+    rgba(255, 255, 255, 0.85) 0px,
+    rgba(255, 255, 255, 0.85) 9px,
     transparent 9px,
     transparent 14px
   );
 }
 
-.theme-pink .footer-brand,
-.theme-pink .footer-copy,
+.theme-pink .footer-brand {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.theme-pink .footer-copy {
+  color: rgba(255, 255, 255, 0.7);
+}
+
 .theme-pink .footer-tag {
-  color: #fff;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .theme-blue .footer {
