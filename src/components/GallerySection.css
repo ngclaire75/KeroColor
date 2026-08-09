@@ -26,8 +26,12 @@
   box-sizing: border-box;
   --gap: 18px;
   --visible: 6;
-  --h-pad: 4rem;
-  --item-w: calc((100vw - 2 * var(--h-pad) - (var(--visible) - 1) * var(--gap)) / var(--visible));
+  /* Item width as a % of this container's own content box, not 100vw.
+     100vw ignores this element's actual rendered width (padding, any
+     ancestor overflow/scrollbar-gutter changes between route views), which
+     let the grid render narrower/shorter on return visits until a hard
+     refresh recomputed layout from scratch. */
+  --item-w: calc((100% - (var(--visible) - 1) * var(--gap)) / var(--visible));
 }
 
 /* ── Track — slides left/right (transform set via JS inline style) ── */
@@ -73,9 +77,20 @@
 /* ── Pink theme crop overrides ── */
 .theme-pink .gallery-rect[data-idx="6"] img { object-position: 65% 55%; }
 
-/* ── Pink theme — black & white images ── */
+/* ── Pink theme — black & white images, alternating with color ──
+   First batch (idx 0-5): 1st/3rd/5th in color, 2nd/4th/6th greyscale.
+   Second batch (idx 6-11): reverse alternation, left as-is. */
 .theme-pink .gallery-rect img {
   filter: grayscale(100%) contrast(1.2) brightness(0.9);
+}
+
+.theme-pink .gallery-rect[data-idx="0"] img,
+.theme-pink .gallery-rect[data-idx="2"] img,
+.theme-pink .gallery-rect[data-idx="4"] img,
+.theme-pink .gallery-rect[data-idx="7"] img,
+.theme-pink .gallery-rect[data-idx="9"] img,
+.theme-pink .gallery-rect[data-idx="11"] img {
+  filter: none;
 }
 
 /* ── Pagination ── */
@@ -113,6 +128,12 @@
   justify-content: center;
   gap: 1.5rem;
   padding-bottom: 1rem;
+}
+
+@media (min-width: 641px) {
+  .gallery-circles-row {
+    margin-top: 1.5rem;
+  }
 }
 
 .gallery-color-arrow {
@@ -197,12 +218,12 @@
     padding: 3rem 1.5rem 0;
     --gap: 8px;
     --visible: 2;
-    --h-pad: 1.5rem;
   }
 
   .gallery-rects-track {
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
     will-change: transform;
+    backface-visibility: hidden;
   }
 
   .gallery-rect {
@@ -224,6 +245,25 @@
 
   .gallery-circles-row {
     padding-bottom: 0.5rem;
+  }
+
+  /* Pink theme — mobile only: second batch follows the first batch's
+     alternation (color, grey, color, grey, color, grey) instead of reversing. */
+  .theme-pink .gallery-rect[data-idx="6"] img,
+  .theme-pink .gallery-rect[data-idx="8"] img,
+  .theme-pink .gallery-rect[data-idx="10"] img {
+    filter: none;
+  }
+
+  .theme-pink .gallery-rect[data-idx="7"] img,
+  .theme-pink .gallery-rect[data-idx="9"] img,
+  .theme-pink .gallery-rect[data-idx="11"] img {
+    filter: grayscale(100%) contrast(1.2) brightness(0.9);
+  }
+
+  .gallery-color-arrow svg {
+    width: 18px;
+    height: 18px;
   }
 
   .gallery-circles {

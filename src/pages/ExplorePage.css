@@ -3,6 +3,11 @@
   background: #f8f2ea;
 }
 
+/* Legal footer top gap — matches the gap above the 9-grid section */
+.explore-page .footer {
+  margin-top: 0.5rem;
+}
+
 /* First full-screen section */
 .explore-hero {
   display: flex;
@@ -294,5 +299,9 @@
   /* shorter first section on mobile */
   .explore-hero {
     height: 90vh;
+  }
+
+  .explore-page .footer {
+    margin-top: 1.5rem;
   }
 }

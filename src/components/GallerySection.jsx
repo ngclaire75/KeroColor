@@ -22,6 +22,7 @@ import ep9  from '../../images/ep9.jpeg'
 import ep10 from '../../images/ep10.jpeg'
 import ep11 from '../../images/ep11.jpeg'
 import ep12 from '../../images/ep12.jpeg'
+import bl1  from '../../images/bl1.png'
 import g1  from '../../images/g1.jpeg'
 import g2  from '../../images/g2.jpeg'
 import g3  from '../../images/g3.jpeg'
@@ -50,7 +51,7 @@ import './GallerySection.css'
 
 const allSkulls  = [skull1, skull2, skull3, skull4, skull5, skull6, skull11, skull8, skull9, skull10, skull12, skull7]
 const allPinks   = [pink1, pink2, pink3, pink4, pink5, pink6, pink7, pink8, pink9, pink10, pink11, pink12]
-const allBlues   = [ep1, ep2, ep3, ep4, ep6, ep7, ep8, ep9, ep10, ep11, ep12]
+const allBlues   = [ep1, ep2, ep3, ep4, ep6, ep7, ep8, ep9, ep10, ep11, ep12, bl1]
 const allGreens  = [g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11, g12]
 
 const DEFAULT_COLORS = ['#d7c3c2', '#aa7877', '#9f817f', '#941e1a', '#840f06']
@@ -148,7 +149,7 @@ export default function GallerySection({ searchResult, onColorChange }) {
         <div className="gallery-rects" ref={viewportRef}>
           <div
             className="gallery-rects-track"
-            style={isMobile ? { transform: `translateX(${translateX}px)` } : undefined}
+            style={isMobile ? { transform: `translate3d(${translateX}px, 0, 0)` } : undefined}
           >
             {displayImages.map(({ src, i }) => (
               <div key={i} className="gallery-rect" data-idx={i}>
