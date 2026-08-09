@@ -79,7 +79,7 @@
 
 /* ── Pink theme — black & white images, alternating with color ──
    First batch (idx 0-5): 1st/3rd/5th in color, 2nd/4th/6th greyscale.
-   Second batch (idx 6-11): reverse alternation, left as-is. */
+   Second batch (idx 6-11): follows the same alternation as the first batch. */
 .theme-pink .gallery-rect img {
   filter: grayscale(100%) contrast(1.2) brightness(0.9);
 }
@@ -87,9 +87,9 @@
 .theme-pink .gallery-rect[data-idx="0"] img,
 .theme-pink .gallery-rect[data-idx="2"] img,
 .theme-pink .gallery-rect[data-idx="4"] img,
-.theme-pink .gallery-rect[data-idx="7"] img,
-.theme-pink .gallery-rect[data-idx="9"] img,
-.theme-pink .gallery-rect[data-idx="11"] img {
+.theme-pink .gallery-rect[data-idx="6"] img,
+.theme-pink .gallery-rect[data-idx="8"] img,
+.theme-pink .gallery-rect[data-idx="10"] img {
   filter: none;
 }
 
@@ -245,20 +245,6 @@
 
   .gallery-circles-row {
     padding-bottom: 0.5rem;
-  }
-
-  /* Pink theme — mobile only: second batch follows the first batch's
-     alternation (color, grey, color, grey, color, grey) instead of reversing. */
-  .theme-pink .gallery-rect[data-idx="6"] img,
-  .theme-pink .gallery-rect[data-idx="8"] img,
-  .theme-pink .gallery-rect[data-idx="10"] img {
-    filter: none;
-  }
-
-  .theme-pink .gallery-rect[data-idx="7"] img,
-  .theme-pink .gallery-rect[data-idx="9"] img,
-  .theme-pink .gallery-rect[data-idx="11"] img {
-    filter: grayscale(100%) contrast(1.2) brightness(0.9);
   }
 
   .gallery-color-arrow svg {
