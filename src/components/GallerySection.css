@@ -75,6 +75,11 @@
 /* ── Pink theme crop overrides ── */
 .theme-pink .gallery-rect:nth-child(7) img { object-position: 65% 55%; }
 
+/* ── Pink theme — black & white images ── */
+.theme-pink .gallery-rect img {
+  filter: grayscale(100%) contrast(1.2) brightness(0.9);
+}
+
 /* ── Pagination ── */
 .gallery-pagination {
   display: flex;
