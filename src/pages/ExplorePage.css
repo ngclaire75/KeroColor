@@ -156,20 +156,20 @@
 
 /* ── Pink search theme ── */
 .theme-pink .explore-nav {
-  background: #de9eb6;
+  background: #f8d8e7;
   transition: background 0.4s ease;
 }
 
 .theme-pink .explore-nav-link {
-  color: #fff;
+  color: #181713;
 }
 
 .theme-pink .explore-nav-link:hover {
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(24, 23, 19, 0.55);
 }
 
 .theme-pink .explore-hero {
-  background: #85787f;
+  background: #000;
 }
 
 .theme-pink .explore-wonderland {

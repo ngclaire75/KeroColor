@@ -54,6 +54,16 @@
   background: #f4c6cf;
 }
 
+.theme-pink .footer::before {
+  background-image: repeating-linear-gradient(
+    90deg,
+    #191917 0px,
+    #191917 9px,
+    transparent 9px,
+    transparent 14px
+  );
+}
+
 .theme-pink .footer-brand,
 .theme-pink .footer-copy,
 .theme-pink .footer-tag {
