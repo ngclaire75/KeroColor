@@ -100,15 +100,23 @@
 }
 
 /* right-side image — fixed desktop size */
-.explore-img--right {
+.explore-img-right-wrap {
   position: absolute;
   right: 14px;
   top: 160px;
   width: 115px;
   height: 158px;
-  object-fit: cover;
-  object-position: center;
+  overflow: hidden;
   z-index: 3;
+}
+
+.explore-img--right {
+  position: static;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: -20% -60%;
+  transform: scale(1.35);
 }
 
 /* ── Labels row — positioned just above FLUORESCENT via CSS var ── */
@@ -281,7 +289,7 @@
   }
 
   /* right image */
-  .explore-img--right {
+  .explore-img-right-wrap {
     width: 19vw;
     height: 18%;
     right: 2%;
