@@ -118,7 +118,7 @@
   object-fit: cover;
   object-position: -20% -60%;
   transform: scale(1.35);
-  filter: saturate(0.9);
+  filter: saturate(1);
 }
 
 /* ── Labels row — positioned just above FLUORESCENT via CSS var ── */
