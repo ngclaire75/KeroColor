@@ -70,9 +70,7 @@ export default function ExplorePage() {
             <span className="explore-embrace">EMBRACE</span>
           </div>
           <img src={img1} alt="" className="explore-img explore-img--center" />
-          <div className="explore-img-right-wrap">
-            <img src={img3} alt="" className="explore-img explore-img--right" />
-          </div>
+          <img src={img3} alt="" className="explore-img explore-img--right" />
           <div className="explore-labels">
             <span>NEW IN</span>
             <span>/PALETTE - 25/</span>

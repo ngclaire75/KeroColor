@@ -73,6 +73,7 @@
   object-fit: cover;
   display: block;
   flex-shrink: 0;
+  filter: contrast(1.1);
 }
 
 .explore-embrace {
@@ -96,29 +97,21 @@
   width: 290px;
   height: 510px;
   object-position: 20% center;
-  filter: contrast(1.1);
+  filter: contrast(1.2);
   z-index: 4;
 }
 
 /* right-side image — fixed desktop size */
-.explore-img-right-wrap {
+.explore-img--right {
   position: absolute;
   right: 14px;
   top: 160px;
   width: 115px;
   height: 158px;
-  overflow: hidden;
-  z-index: 3;
-}
-
-.explore-img--right {
-  position: static;
-  width: 100%;
-  height: 100%;
   object-fit: cover;
-  object-position: -20% -60%;
-  transform: scale(1.35);
-  filter: saturate(1);
+  object-position: 30% center;
+  filter: saturate(0.8);
+  z-index: 3;
 }
 
 /* ── Labels row — positioned just above FLUORESCENT via CSS var ── */
@@ -291,7 +284,7 @@
   }
 
   /* right image */
-  .explore-img-right-wrap {
+  .explore-img--right {
     width: 19vw;
     height: 18%;
     right: 2%;
