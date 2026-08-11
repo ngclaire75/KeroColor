@@ -97,7 +97,7 @@
   width: 290px;
   height: 510px;
   object-position: 20% center;
-  filter: contrast(1.2);
+  filter: contrast(1.15);
   z-index: 4;
 }
 
