@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import SearchLoader from '../components/SearchLoader'
-import heroImg from '../../images/paledt.png'
+import heroImg from '../../images/fire.png'
 import springImg from '../../images/spr.png'
 import lipstickImg from '../../images/girlofmydreams.png'
 import vogueImg from '../../images/vogue.png'
