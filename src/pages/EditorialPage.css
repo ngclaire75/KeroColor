@@ -119,9 +119,9 @@
   max-width: 900px;
   text-align: center;
   font-family: 'Akzidenz Grotesk BQ', sans-serif;
-  font-size: 2.2rem;
+  font-size: 2.4rem;
   font-weight: 700;
-  line-height: 1.25;
+  line-height: 1;
   color: #fff;
   /* No bottom margin — the flex `gap` on .ed-intro already spaces it from
      the grid below, same as the grid-to-text-body gap. */
