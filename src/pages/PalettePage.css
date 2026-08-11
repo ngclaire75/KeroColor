@@ -640,10 +640,18 @@
   padding: 2.75rem 3rem 2.5rem;
   display: flex;
   flex-direction: column;
-  /* Fixed, not min — locked to this exact height across every desktop
-     viewport width so it can't grow taller (min-height only floors it). */
-  height: 600px;
+  min-height: 600px;
   box-sizing: border-box;
+}
+
+/* Locks the footer to this exact height on desktop only — scoped behind
+   a min-width query so it can never leak into the mobile rule below
+   (an unscoped `height` here would win over mobile's min-height, since
+   used height is max(height, min-height)). */
+@media (min-width: 641px) {
+  .pp-footer {
+    height: 600px;
+  }
 }
 
 /* Dithers the gradient with a hair of noise so the color bands (visible
