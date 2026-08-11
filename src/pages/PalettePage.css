@@ -291,10 +291,22 @@
   top: 0;
   z-index: 90;
   background: #f2e8d9;
+  /* Keep this on its own stable compositing layer so the browser doesn't
+     re-snap/re-round the toggle's hairlines each scroll frame as the
+     sticky position updates. */
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .pp-menu-toggle {
   width: 100%;
+  /* Explicit integer height instead of padding + line-height — the latter
+     resolves to a fractional CSS px (e.g. 57.6px), so the bottom hairline's
+     `bottom: 0` lands on a fractional device pixel and gets re-rounded
+     inconsistently as the sticky dropdown repositions during scroll,
+     making it look layered/thicker. `top: 0` on the top hairline is exact
+     regardless, which is why only the bottom one showed the artifact. */
+  height: 58px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -302,7 +314,7 @@
   border: none;
   position: relative;
   cursor: pointer;
-  padding: 1.2rem 1.25rem 1.2rem 1.75rem;
+  padding: 0 1.25rem 0 1.75rem;
   font-family: 'Inter', sans-serif;
   font-size: 1rem;
   font-weight: 400;
