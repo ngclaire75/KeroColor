@@ -172,6 +172,7 @@
   font-weight: 400;
   letter-spacing: 0.04em;
   color: #371a16;
+  text-transform: lowercase;
   padding: 0;
   transition: opacity 0.2s;
 }
