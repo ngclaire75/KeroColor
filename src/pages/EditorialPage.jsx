@@ -88,29 +88,7 @@ export default function EditorialPage() {
 
       {/* ── Intro section ── */}
       <section className="ed-intro">
-        <div className="ed-intro-text">
-          <h2 className="ed-intro-heading">A closer look at the facts, myths, and artistry of color analysis.</h2>
-          <p className="ed-intro-subheading"><em>Wearing colors outside your palette is wrong.</em></p>
-
-          <div className="ed-intro-columns">
-            <div className="ed-intro-column">
-              <h3 className="ed-intro-label">The Fact</h3>
-              <p className="ed-intro-item">Color analysis is intended as a personal styling guide, not a strict rulebook.</p>
-              <p className="ed-intro-item">Wearing colors outside your recommended palette will not necessarily look bad.</p>
-              <p className="ed-intro-item">The overall effect depends on many factors, such as the garment's fit, fabric, makeup, hairstyle, and lighting.</p>
-            </div>
-            <div className="ed-intro-column">
-              <h3 className="ed-intro-label">Why?</h3>
-              <p className="ed-intro-item">Your recommended palette simply contains shades that are more likely to:</p>
-              <ul className="ed-intro-list">
-                <li>brighten the complexion,</li>
-                <li>reduce the appearance of facial shadows,</li>
-                <li>emphasize eye color,</li>
-                <li>and create balanced facial contrast.</li>
-              </ul>
-            </div>
-          </div>
-        </div>
+        <h2 className="ed-intro-heading">A closer look at the facts, myths, and artistry of color analysis.</h2>
 
         <div className="ed-intro-media">
           <div className="ed-intro-media-big">
@@ -134,6 +112,11 @@ export default function EditorialPage() {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="ed-intro-text">
+          <p className="ed-intro-item">It is a common myth that wearing colors outside your palette will look wrong. In fact, color analysis is intended as a personal styling guide rather than a strict rulebook, and stepping outside your recommended shades will not automatically look unflattering. The overall effect depends on far more than color alone, including a garment's fit and fabric, your makeup, hairstyle, and the surrounding lighting.</p>
+          <p className="ed-intro-item">Your recommended palette simply contains shades that are more likely to brighten your complexion, soften facial shadows, accentuate your eye color, and create balanced contrast across your face.</p>
         </div>
 
         <p className="ed-intro-footer">Scroll to read more.</p>

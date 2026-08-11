@@ -86,93 +86,80 @@
   transition: none;
 }
 
-/* ── Intro section ── */
+/* ── Intro section ──
+   Desktop order (top to bottom): heading, media grid, text, footer —
+   set via DOM order below. Mobile restores its own order (text, media,
+   footer) via the `order` overrides in the mobile media query. */
 .ed-intro {
   position: relative;
   display: flex;
+  flex-direction: column;
   gap: 3rem;
   padding: 3.5rem 3rem;
   align-items: stretch;
 }
 
 .ed-intro-text {
-  flex: 0 0 360px;
+  order: 3;
+  flex: none;
+  width: 100%;
+  /* Narrower than .ed-intro-media (900px) but still auto-centered, so this
+     block sits centered below the grid while reading left-aligned inside. */
+  max-width: 640px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
 }
 
 .ed-intro-heading {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.7rem;
+  order: 1;
+  width: 100%;
+  max-width: 900px;
+  text-align: center;
+  font-family: 'Akzidenz Grotesk BQ', sans-serif;
+  font-size: 2.2rem;
   font-weight: 700;
   line-height: 1.25;
   color: #fff;
-  margin: 0 0 1.75rem;
+  /* No bottom margin — the flex `gap` on .ed-intro already spaces it from
+     the grid below, same as the grid-to-text-body gap. */
+  margin: 0 auto;
   text-transform: uppercase;
-}
-
-.ed-intro-subheading {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.8rem;
-  color: #fff;
-  margin: 0 0 2rem;
-}
-
-.ed-intro-columns {
-  display: flex;
-  flex-direction: column;
-  gap: 1.75rem;
-}
-
-.ed-intro-column {
-  flex: 1;
-}
-
-.ed-intro-label {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: #fff;
-  margin: 0 0 0.9rem;
+  transform: scaleX(1.15);
+  transform-origin: center;
 }
 
 .ed-intro-item {
   font-family: 'Inter', sans-serif;
-  font-size: 0.76rem;
-  line-height: 1.5;
+  font-size: 0.88rem;
+  line-height: 2.2;
   color: #fff;
   margin: 0 0 1rem;
-}
-
-.ed-intro-list {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.76rem;
-  line-height: 1.5;
-  color: #fff;
-  margin: 0 0 1rem;
-  padding-left: 1.1rem;
-}
-
-.ed-intro-list li {
-  margin: 0 0 0.4rem;
 }
 
 .ed-intro-footer {
-  position: absolute;
-  left: 3rem;
-  bottom: 3.5rem;
+  order: 4;
+  position: static;
+  width: 100%;
+  text-align: center;
   font-family: 'Inter', sans-serif;
   font-size: 0.7rem;
   color: #888;
-  margin: 0;
+  margin: 0.5rem 0 0;
 }
 
 .ed-intro-media {
-  flex: 1;
+  order: 2;
+  flex: none;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
   min-width: 0;
   display: flex;
   gap: 2px;
-  height: 720px;
+  height: 560px;
 }
 
 .ed-intro-media-big {
@@ -185,7 +172,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 25% center;
+  object-position: 15% center;
   display: block;
 }
 
@@ -247,7 +234,7 @@
 .ed-intro-red-block {
   flex: 0 0 52%;
   min-width: 0;
-  background: #74070d;
+  background: #4d0c12;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -362,27 +349,37 @@
   }
 
   .ed-intro-text {
+    order: 2;
     flex: none;
     width: 100%;
     margin-bottom: 1.5rem;
+    align-items: stretch;
+    text-align: left;
   }
 
-  .ed-intro-columns {
-    flex-direction: row;
+  /* Mobile keeps the heading left-aligned and unconstrained — the
+     centered/max-width treatment above is desktop-only. Uses its own
+     scaleX with transform-origin: left (not center, like desktop) so the
+     stretch grows rightward only — the left edge stays anchored and
+     matches the body text below, which has no transform. */
+  .ed-intro-heading {
+    font-size: 1.4rem;
+    line-height: 1.25;
+    text-align: left;
+    max-width: 82%;
+    align-self: flex-start;
+    margin: 0 0 1.75rem;
+    transform: scaleX(1.2);
+    transform-origin: left;
   }
-
-  .ed-intro-column:nth-child(2) {
-    margin-top: -0.14rem;
-  }
-
-  .ed-intro-heading { font-size: 1.4rem; line-height: 1.25; }
 
   .ed-intro-footer {
-    position: static;
+    text-align: left;
     margin-top: 0.5rem;
   }
 
   .ed-intro-media {
+    order: 3;
     flex-direction: column;
     height: auto;
   }
