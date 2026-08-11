@@ -640,7 +640,9 @@
   padding: 2.75rem 3rem 2.5rem;
   display: flex;
   flex-direction: column;
-  min-height: 600px;
+  /* Fixed, not min — locked to this exact height across every desktop
+     viewport width so it can't grow taller (min-height only floors it). */
+  height: 600px;
   box-sizing: border-box;
 }
 
