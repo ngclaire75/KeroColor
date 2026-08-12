@@ -15,6 +15,9 @@ export default function EditorialPage() {
   const navigate = useNavigate()
   const navRef = useRef(null)
   const touchStartX = useRef(null)
+  const mouseStartX = useRef(null)
+  const wheelDeltaX = useRef(0)
+  const wheelCooldown = useRef(false)
   const [navReady, setNavReady] = useState(false)
   const [navSwiped, setNavSwiped] = useState(false)
   const [overlayFading, setOverlayFading] = useState(false)
@@ -46,6 +49,39 @@ export default function EditorialPage() {
     touchStartX.current = null
   }
 
+  // Mouse-drag swipe (trackpad/mouse click-and-drag), same threshold as touch
+  const handleNavMouseDown = (e) => {
+    mouseStartX.current = e.clientX
+  }
+
+  const handleNavMouseUp = (e) => {
+    if (mouseStartX.current === null) return
+    const deltaX = e.clientX - mouseStartX.current
+    if (deltaX < -40) setNavSwiped(true)
+    else if (deltaX > 40) setNavSwiped(false)
+    mouseStartX.current = null
+  }
+
+  // Two-finger trackpad swipe surfaces as a wheel event with a horizontal
+  // deltaX. Accumulate it (a single gesture fires many small wheel events)
+  // and use a cooldown so one swipe doesn't flip the batch back and forth.
+  const handleNavWheel = (e) => {
+    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return
+    e.preventDefault()
+    if (wheelCooldown.current) return
+    wheelDeltaX.current += e.deltaX
+    if (wheelDeltaX.current > 40) {
+      setNavSwiped(true)
+    } else if (wheelDeltaX.current < -40) {
+      setNavSwiped(false)
+    } else {
+      return
+    }
+    wheelDeltaX.current = 0
+    wheelCooldown.current = true
+    setTimeout(() => { wheelCooldown.current = false }, 500)
+  }
+
   const handleNavClick = (item) => {
     if (item === 'Editorial') return
     navigate('/palette', { state: { tab: item } })
@@ -60,6 +96,9 @@ export default function EditorialPage() {
         className={`ed-nav${navReady ? ' ed-nav--ready' : ''}${navSwiped ? ' ed-nav--swiped' : ''}`}
         onTouchStart={handleNavTouchStart}
         onTouchEnd={handleNavTouchEnd}
+        onMouseDown={handleNavMouseDown}
+        onMouseUp={handleNavMouseUp}
+        onWheel={handleNavWheel}
       >
         <span className={`ed-nav-hint${navReady || navSwiped ? ' ed-nav-hint--hidden' : overlayGone ? ' ed-nav-hint--playing' : ''}`}>Swipe Left for More!</span>
         <div className="ed-nav-batch ed-nav-batch--1">
