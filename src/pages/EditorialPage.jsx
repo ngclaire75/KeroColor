@@ -117,6 +117,9 @@ export default function EditorialPage() {
   return (
     <>
     {!overlayGone && <SearchLoader fading={overlayFading} />}
+    <div className={`ed-scroll-hint${contentReady ? ' ed-scroll-hint--revealed' : ' ed-scroll-hint--hidden'}`}>
+      <span className="ed-scroll-hint-text">Keep<br />Readin'</span>
+    </div>
     <div className={`ed-page${contentReady ? ' ed-page--revealed' : ' ed-page--hidden'}`}>
       <nav
         ref={navRef}
