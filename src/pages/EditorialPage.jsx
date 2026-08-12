@@ -6,6 +6,8 @@ import edp2 from '../../images/edp2.png'
 import edp3 from '../../images/edp3.png'
 import edt5 from '../../images/edt5.png'
 import edt6 from '../../images/edt6.png'
+import z10 from '../../images/z10.png'
+import z10v2 from '../../images/z10v2.png'
 import './EditorialPage.css'
 
 const NAV_BATCH_1 = ['All', 'Seasonal Edition', 'Editorial']
@@ -18,11 +20,17 @@ export default function EditorialPage() {
   const mouseStartX = useRef(null)
   const wheelDeltaX = useRef(0)
   const wheelCooldown = useRef(false)
+  const moreRef = useRef(null)
+  const galaRef = useRef(null)
   const [navReady, setNavReady] = useState(false)
   const [navSwiped, setNavSwiped] = useState(false)
   const [overlayFading, setOverlayFading] = useState(false)
   const [overlayGone, setOverlayGone] = useState(false)
   const [contentReady, setContentReady] = useState(false)
+  const [moreVisible, setMoreVisible] = useState(false)
+  const [galaVisible, setGalaVisible] = useState(false)
+  const [hintDismissed, setHintDismissed] = useState(false)
+  const [hintReady, setHintReady] = useState(false)
 
   useEffect(() => {
     const t1 = setTimeout(() => { setOverlayFading(true); setContentReady(true) }, 1700)
@@ -36,6 +44,47 @@ export default function EditorialPage() {
     const t = setTimeout(() => setNavReady(true), 2000)
     return () => clearTimeout(t)
   }, [overlayGone])
+
+  // "Keep Readin'" half-circle: slides up a beat after the navbar's menu
+  // options have fully appeared (navReady), then toggles (slides down /
+  // slides back up) each time the user taps/clicks anywhere except the
+  // navbar (desktop + mobile).
+  useEffect(() => {
+    if (!navReady) { setHintReady(false); return }
+    const t = setTimeout(() => setHintReady(true), 600)
+    return () => clearTimeout(t)
+  }, [navReady])
+
+  useEffect(() => {
+    if (!hintReady) return
+    const handleDocClick = (e) => {
+      if (navRef.current && navRef.current.contains(e.target)) return
+      setHintDismissed(d => !d)
+    }
+    document.addEventListener('click', handleDocClick)
+    return () => document.removeEventListener('click', handleDocClick)
+  }, [hintReady])
+
+  // Fade in the "When the rules become a starting point" and Gala grid
+  // sections as batches every time they scroll into view (desktop +
+  // mobile) — and back out again on scroll-away, so it re-triggers on
+  // scrolling back up and back down, rather than only playing once.
+  useEffect(() => {
+    const setters = new Map([
+      [moreRef.current, setMoreVisible],
+      [galaRef.current, setGalaVisible],
+    ])
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          setters.get(entry.target)?.(entry.isIntersecting)
+        })
+      },
+      { threshold: 0.15 }
+    )
+    setters.forEach((_, el) => el && observer.observe(el))
+    return () => observer.disconnect()
+  }, [])
 
   const handleNavTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX
@@ -90,6 +139,9 @@ export default function EditorialPage() {
   return (
     <>
     {!overlayGone && <SearchLoader fading={overlayFading} />}
+    <div className={`ed-scroll-hint${hintReady && !hintDismissed ? ' ed-scroll-hint--shown' : ''}`}>
+      <span className="ed-scroll-hint-text">Keep<br />Readin'</span>
+    </div>
     <div className={`ed-page${contentReady ? ' ed-page--revealed' : ' ed-page--hidden'}`}>
       <nav
         ref={navRef}
@@ -159,6 +211,32 @@ export default function EditorialPage() {
         </div>
 
         <p className="ed-intro-footer">Scroll to read more.</p>
+      </section>
+
+      {/* ── "When the rules become a starting point" section ── */}
+      <section ref={moreRef} className={`ed-more${moreVisible ? ' ed-fade-in--visible' : ''}`}>
+        <h2 className="ed-intro-heading">When the rules<br className="ed-more-break" /> become a starting point</h2>
+        <div className="ed-intro-text">
+          <p className="ed-intro-item">If color analysis tells us which shades are most naturally harmonious, fashion asks a more interesting question: what happens when we deliberately step outside them? Zendaya offers an especially compelling case study. Her red-carpet wardrobe moves between warm metallics, vivid greens, icy whites, electric blues, silver, black, pink, and red, often within the same few years. Rather than proving that color analysis is useless, these looks demonstrate something more nuanced: a color can be visually successful for reasons that extend beyond whether it belongs to a predetermined seasonal palette.</p>
+          <p className="ed-intro-item">It is important to note that Zendaya does not have a scientifically established "official" seasonal classification. Some online color-analysis systems describe her as a Deep Autumn because of her perceived warm coloring and high contrast, but this should be treated as an interpretation rather than an objective fact. What can be observed directly, however, is how differently her appearance responds to color, texture, contrast, lighting, and styling.</p>
+          <p className="ed-intro-item">And that is where the artistry begins.</p>
+        </div>
+      </section>
+
+      {/* ── Gala case-study grid ── */}
+      <section ref={galaRef} className={`ed-gala${galaVisible ? ' ed-fade-in--visible' : ''}`}>
+        <div className="ed-gala-media">
+          <img src={z10v2} alt="" className="ed-gala-img" />
+        </div>
+        <div className="ed-gala-text">
+          <img src={z10} alt="" className="ed-gala-text-bg" />
+          <div className="ed-gala-text-overlay" />
+          <div className="ed-gala-text-content">
+            <h2 className="ed-intro-heading">The 2016 "Manus x Machina: Fashion in an Age of Technology" Gala</h2>
+            <p className="ed-gala-body">Zendaya wore a one-shoulder bronze sequined Michael Kors dress, accompanied by a sleek bob and brown-toned smoky eye. Vogue's beauty retrospective specifically notes the bronze dress and coordinated makeup.</p>
+            <p className="ed-gala-body">The effect is almost tonal. Bronze reflects light without creating an aggressive temperature contrast against the skin. The shiny surface also changes constantly as she moves, meaning the color is never visually flat.</p>
+          </div>
+        </div>
       </section>
     </div>
     </>

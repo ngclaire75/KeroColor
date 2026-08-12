@@ -3,6 +3,67 @@
   background: #000;
 }
 
+/* Persistent "Keep Readin'" bottom badge — pinned to the viewport
+   regardless of scroll. A true half-circle: the flat edge sits flush
+   against the bottom of the screen. Docked off-screen below by default;
+   slides up once everything has loaded (--shown), and slides back down
+   the moment the page is tapped/clicked anywhere outside the navbar. */
+.ed-scroll-hint {
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translate(calc(50vw - 50%), calc(100vh + 40px));
+  z-index: 500;
+  width: 170px;
+  height: 76px;
+  background: #000;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.18);
+  transition:
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.5s ease;
+}
+
+.ed-scroll-hint--shown {
+  transform: translate(calc(50vw - 50%), calc(100vh - 76px));
+}
+
+.ed-scroll-hint--shown:hover {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.ed-scroll-hint-text {
+  font-family: 'Akzidenz Grotesk BQ', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+  color: #fff;
+  font-size: 0.95rem;
+  margin-top: 0.55rem;
+}
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+  .ed-scroll-hint {
+    width: 150px;
+    height: 72px;
+  }
+
+  .ed-scroll-hint--shown {
+    transform: translate(calc(50vw - 50%), calc(100vh - 72px));
+  }
+
+  .ed-scroll-hint-text {
+    font-size: 1rem;
+  }
+}
+
 .ed-page--hidden {
   filter: blur(14px);
   opacity: 0;
@@ -273,6 +334,131 @@
   display: block;
 }
 
+/* ── "When the rules become a starting point" section — reuses
+   .ed-intro-heading and .ed-intro-text/.ed-intro-item as-is so the
+   heading and body copy match the intro section's format exactly. ── */
+.ed-more {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2.5rem;
+  padding: 5.5rem 3rem 2rem;
+}
+
+/* Scroll-triggered fade-in, applied per batch (.ed-more, .ed-gala) via
+   IntersectionObserver in the component. Slow-ish but not draggy, eased
+   out so the motion settles smoothly rather than snapping to a stop. */
+.ed-more,
+.ed-gala {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1), transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ed-more.ed-fade-in--visible,
+.ed-gala.ed-fade-in--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Forces "a starting point" onto its own line on desktop, regardless of
+   viewport width. Hidden on mobile (see media query) so wrapping there
+   stays natural. */
+.ed-more-break {
+  display: block;
+}
+
+/* ── Gala case-study grid — wide (horizontally long) two-panel row:
+   photo on the left, dark text panel on the right. ── */
+.ed-gala {
+  display: flex;
+  height: 480px;
+  margin: 0 0 4rem;
+  background: #f8f2ea;
+}
+
+.ed-gala-media {
+  flex: 0 0 60%;
+  min-width: 0;
+  overflow: hidden;
+  background: #4d0c12;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ed-gala-img {
+  width: 75%;
+  height: 75%;
+  object-fit: cover;
+  object-position: center 10%;
+  display: block;
+}
+
+/* Right panel: z10.png as a blurred, darkened background behind the text */
+.ed-gala-text {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  background: #0a0a0a;
+}
+
+.ed-gala-text-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  filter: blur(24px);
+  z-index: 0;
+}
+
+.ed-gala-text-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(17, 17, 17, 0.85);
+  z-index: 1;
+}
+
+.ed-gala-text-content {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 3rem;
+  box-sizing: border-box;
+}
+
+/* Neutralize .ed-intro-heading's flex `order` (needed in its home section)
+   so it doesn't reorder above/below the body paragraphs here. Also scale
+   it down to fit this narrower panel. */
+.ed-gala-text-content .ed-intro-heading {
+  order: 0;
+  max-width: 420px;
+  margin: 0 auto;
+  font-size: 1.5rem;
+  text-align: left;
+  /* Same scaleX as .ed-intro-heading, but anchored left (not center) so
+     it stretches rightward only, keeping the left edge aligned with the
+     body text below it. */
+  transform: scaleX(1.15);
+  transform-origin: left;
+}
+
+.ed-gala-body {
+  max-width: 420px;
+  margin: 0 auto;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: #fff;
+}
+
 /* ── Mobile ── */
 @media (max-width: 640px) {
   .ed-nav {
@@ -349,6 +535,52 @@
     padding: 2.75rem 1.25rem 3.25rem;
   }
 
+  .ed-more {
+    gap: 1.75rem;
+    padding: 3.5rem 1.25rem 0.25rem;
+  }
+
+  .ed-more-break {
+    display: none;
+  }
+
+  .ed-gala {
+    flex-direction: column;
+    height: auto;
+    margin: 0 1.25rem 3.25rem;
+  }
+
+  .ed-gala-media {
+    flex: none;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+  }
+
+  .ed-gala-img {
+    width: 95%;
+    height: 95%;
+  }
+
+  .ed-gala-text {
+    aspect-ratio: auto;
+    min-height: 400px;
+  }
+
+  .ed-gala-text-content {
+    padding: 2rem 1.5rem;
+    gap: 1.1rem;
+  }
+
+  .ed-gala-text-content .ed-intro-heading {
+    font-size: 1.4rem;
+    max-width: 85%;
+    margin: 0;
+  }
+
+  .ed-gala-body {
+    font-size: 0.85rem;
+  }
+
   .ed-intro-text {
     order: 2;
     flex: none;
@@ -372,6 +604,11 @@
     margin: 0 0 1.75rem;
     transform: scaleX(1.2);
     transform-origin: left;
+  }
+
+  /* Scoped separately from .ed-intro's heading gap above */
+  .ed-more .ed-intro-heading {
+    margin-bottom: 0.25rem;
   }
 
   .ed-intro-footer {

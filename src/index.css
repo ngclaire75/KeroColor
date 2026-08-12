@@ -9,6 +9,11 @@ html {
   background: #000000;
   overflow-x: hidden;
   overflow-y: scroll;
+  /* Elastic/rubber-band overscroll bounces the visual viewport past the
+     layout viewport's bounds, which can reveal a gap under position:fixed
+     elements pinned to the bottom (e.g. the editorial page's scroll hint)
+     during that bounce. Disabling it site-wide avoids that. */
+  overscroll-behavior-y: none;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE/legacy Edge */
 }
