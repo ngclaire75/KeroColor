@@ -3,67 +3,6 @@
   background: #000;
 }
 
-/* Persistent "Keep Readin'" bottom badge — pinned to the viewport
-   regardless of scroll. A true half-circle: the flat edge sits flush
-   against the bottom of the screen. Docked off-screen below by default;
-   slides up once everything has loaded (--shown), and slides back down
-   the moment the page is tapped/clicked anywhere outside the navbar. */
-.ed-scroll-hint {
-  position: fixed;
-  top: 0;
-  left: 0;
-  transform: translate(calc(50vw - 50%), calc(100vh + 40px));
-  z-index: 500;
-  width: 170px;
-  height: 76px;
-  background: #000;
-  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.18);
-  transition:
-    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-    background 0.5s ease;
-}
-
-.ed-scroll-hint--shown {
-  transform: translate(calc(50vw - 50%), calc(100vh - 76px));
-}
-
-.ed-scroll-hint--shown:hover {
-  background: rgba(0, 0, 0, 0.55);
-}
-
-.ed-scroll-hint-text {
-  font-family: 'Akzidenz Grotesk BQ', sans-serif;
-  font-weight: 700;
-  text-transform: uppercase;
-  text-align: center;
-  line-height: 1.25;
-  letter-spacing: 0.02em;
-  color: #fff;
-  font-size: 0.95rem;
-  margin-top: 0.55rem;
-}
-
-/* ── Mobile ── */
-@media (max-width: 640px) {
-  .ed-scroll-hint {
-    width: 150px;
-    height: 72px;
-  }
-
-  .ed-scroll-hint--shown {
-    transform: translate(calc(50vw - 50%), calc(100vh - 72px));
-  }
-
-  .ed-scroll-hint-text {
-    font-size: 1rem;
-  }
-}
-
 .ed-page--hidden {
   filter: blur(14px);
   opacity: 0;

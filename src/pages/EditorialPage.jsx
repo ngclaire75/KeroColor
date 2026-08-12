@@ -29,8 +29,6 @@ export default function EditorialPage() {
   const [contentReady, setContentReady] = useState(false)
   const [moreVisible, setMoreVisible] = useState(false)
   const [galaVisible, setGalaVisible] = useState(false)
-  const [hintDismissed, setHintDismissed] = useState(false)
-  const [hintReady, setHintReady] = useState(false)
 
   useEffect(() => {
     const t1 = setTimeout(() => { setOverlayFading(true); setContentReady(true) }, 1700)
@@ -45,30 +43,8 @@ export default function EditorialPage() {
     return () => clearTimeout(t)
   }, [overlayGone])
 
-  // "Keep Readin'" half-circle: slides up a beat after the navbar's menu
-  // options have fully appeared (navReady), then toggles (slides down /
-  // slides back up) each time the user taps/clicks anywhere except the
-  // navbar (desktop + mobile).
-  useEffect(() => {
-    if (!navReady) { setHintReady(false); return }
-    const t = setTimeout(() => setHintReady(true), 600)
-    return () => clearTimeout(t)
-  }, [navReady])
-
-  useEffect(() => {
-    if (!hintReady) return
-    const handleDocClick = (e) => {
-      if (navRef.current && navRef.current.contains(e.target)) return
-      setHintDismissed(d => !d)
-    }
-    document.addEventListener('click', handleDocClick)
-    return () => document.removeEventListener('click', handleDocClick)
-  }, [hintReady])
-
   // Fade in the "When the rules become a starting point" and Gala grid
-  // sections as batches every time they scroll into view (desktop +
-  // mobile) — and back out again on scroll-away, so it re-triggers on
-  // scrolling back up and back down, rather than only playing once.
+  // sections as batches once they scroll into view (desktop + mobile).
   useEffect(() => {
     const setters = new Map([
       [moreRef.current, setMoreVisible],
@@ -77,7 +53,9 @@ export default function EditorialPage() {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
-          setters.get(entry.target)?.(entry.isIntersecting)
+          if (!entry.isIntersecting) return
+          setters.get(entry.target)?.(true)
+          observer.unobserve(entry.target)
         })
       },
       { threshold: 0.15 }
@@ -139,9 +117,6 @@ export default function EditorialPage() {
   return (
     <>
     {!overlayGone && <SearchLoader fading={overlayFading} />}
-    <div className={`ed-scroll-hint${hintReady && !hintDismissed ? ' ed-scroll-hint--shown' : ''}`}>
-      <span className="ed-scroll-hint-text">Keep<br />Readin'</span>
-    </div>
     <div className={`ed-page${contentReady ? ' ed-page--revealed' : ' ed-page--hidden'}`}>
       <nav
         ref={navRef}
