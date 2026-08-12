@@ -5,12 +5,16 @@
 
 /* "Keep Readin'" bottom badge — desktop only. Pinned to the viewport
    regardless of scroll. A true half-circle: the flat edge sits flush
-   against the bottom of the screen. */
+   against the bottom of the screen. Docked off-screen below by default
+   (top/left always 0, position expressed via transform — avoids
+   transitioning to/from `auto`, which isn't reliably animatable);
+   slides up once the navbar's menu options have fully appeared, and
+   toggles (slides down/up) on click anywhere outside the navbar. */
 .ed-scroll-hint {
   position: fixed;
-  left: 50%;
-  bottom: 0;
-  transform: translateX(-50%);
+  top: 0;
+  left: 0;
+  transform: translate(calc(50vw - 50%), calc(100vh + 40px));
   z-index: 500;
   width: 170px;
   height: 76px;
@@ -20,24 +24,16 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.18);
   transition:
-    filter 0.85s cubic-bezier(0.4, 0, 0.2, 1),
-    opacity 0.65s ease,
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
     background 0.3s ease;
 }
 
-.ed-scroll-hint--hidden {
-  filter: blur(14px);
-  opacity: 0;
+.ed-scroll-hint--shown {
+  transform: translate(calc(50vw - 50%), calc(100vh - 76px));
 }
 
-.ed-scroll-hint--revealed {
-  filter: blur(0);
-  opacity: 1;
-}
-
-.ed-scroll-hint--revealed:hover {
+.ed-scroll-hint--shown:hover {
   background: rgba(0, 0, 0, 0.55);
 }
 
@@ -51,6 +47,14 @@
   color: #fff;
   font-size: 0.95rem;
   margin-top: 0.55rem;
+  filter: blur(5px);
+  /* Same duration/easing as the badge's slide, so the blur clears (or
+     sets back in) exactly in step with the slide up/down. */
+  transition: filter 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ed-scroll-hint--shown .ed-scroll-hint-text {
+  filter: blur(0);
 }
 
 /* Desktop-only this time — hidden entirely on mobile. */
