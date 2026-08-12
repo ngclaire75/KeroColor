@@ -557,7 +557,10 @@
   }
 
   .ed-gala-img {
-    width: 95%;
+    /* Media box is 16/10, so an equal % on both axes leaves a wider gap on
+       the sides than top/bottom. Width bumped up so the side gap matches
+       the top/bottom gap in actual px, not just in %. */
+    width: 96.875%;
     height: 95%;
   }
 
