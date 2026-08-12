@@ -38,3 +38,12 @@ input, textarea, select {
     font-size: clamp(14px, calc(0.36px + 3.64vw), 16px);
   }
 }
+
+/* Site-wide: images aren't selectable, draggable, or long-press-savable.
+   (Best-effort only — doesn't stop devtools/view-source access.) */
+img {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+}
