@@ -71,7 +71,7 @@
 .gallery-rect[data-idx="6"]  img { object-position: 65% 20%; }
 .gallery-rect[data-idx="8"]  img { transform: scale(1.2); object-position: center 15%; }
 .gallery-rect[data-idx="9"]  img { object-position: center 10%; }
-.gallery-rect[data-idx="10"] img { object-position: 5% center; }
+.gallery-rect[data-idx="10"] img { object-position: 50% center; }
 .gallery-rect[data-idx="11"] img { object-position: 65% center; transform: scale(1.1); }
 
 /* ── Pink theme crop overrides ── */
