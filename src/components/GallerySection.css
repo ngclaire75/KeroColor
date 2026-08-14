@@ -64,7 +64,7 @@
 }
 
 /* ── Per-image crop positions (data-idx is the 0-based index in the full set) ── */
-.gallery-rect[data-idx="1"]  img { object-position: 15% 20%; }
+.gallery-rect[data-idx="1"]  img { object-position: 25% 20%; }
 .gallery-rect[data-idx="3"]  img { object-position: 20% center; }
 .gallery-rect[data-idx="4"]  img { object-position: 5% center; }
 .gallery-rect[data-idx="5"]  img { object-position: 65% center; transform: scale(1.2); }
@@ -232,6 +232,14 @@
        so the grid doesn't grow taller on wider phones */
     max-height: 234px;
   }
+
+  /* pink5 — mobile only: crop nudged further left, zoomed in a bit more
+     than the desktop framing. */
+  .gallery-rect[data-idx="4"] img { object-position: -25% center; transform: scale(1.15); }
+
+  /* pink2 — keep original mobile framing; the rightward nudge above is
+     desktop-only. */
+  .gallery-rect[data-idx="1"] img { object-position: 15% 20%; }
 
   .gallery-pagination {
     gap: 0.75rem;
