@@ -50,7 +50,7 @@ import pink12  from '../../images/pink12.jpeg'
 import './GallerySection.css'
 
 const allSkulls  = [skull1, skull2, skull3, skull4, skull5, skull6, skull11, skull8, skull9, skull10, skull12, skull7]
-const allPinks   = [pink1, pink2, pink3, pink4, pink5, pink6, pink7, pink8, pink9, pink10, pink11, pink12]
+const allPinks   = [pink1, pink2, pink3, pink4, pink5, pink6, pink11, pink8, pink9, pink10, pink7, pink12]
 const allBlues   = [ep1, ep2, ep3, ep4, ep6, ep7, ep8, ep9, ep10, ep11, ep12, bl1]
 const allGreens  = [g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11, g12]
 

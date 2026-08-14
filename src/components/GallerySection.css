@@ -75,7 +75,7 @@
 .gallery-rect[data-idx="11"] img { object-position: 65% center; transform: scale(1.1); }
 
 /* ── Pink theme crop overrides ── */
-.theme-pink .gallery-rect[data-idx="6"] img { object-position: 65% 55%; }
+.theme-pink .gallery-rect[data-idx="6"] img { object-position: 80% 55%; }
 
 /* ── Pink theme — black & white images, alternating with color ──
    First batch (idx 0-5): 1st/3rd/5th in color, 2nd/4th/6th greyscale.
@@ -235,7 +235,7 @@
 
   /* pink5 — mobile only: crop nudged further left, zoomed in a bit more
      than the desktop framing. */
-  .gallery-rect[data-idx="4"] img { object-position: -25% center; transform: scale(1.15); }
+  .gallery-rect[data-idx="4"] img { object-position: -40% center; transform: scale(1.3); }
 
   /* pink2 — keep original mobile framing; the rightward nudge above is
      desktop-only. */
