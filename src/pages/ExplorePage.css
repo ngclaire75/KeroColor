@@ -96,8 +96,7 @@
   top: 130px;
   width: 290px;
   height: 510px;
-  object-position: 20% center;
-  filter: contrast(1.15);
+  object-position: 45% center;
   z-index: 4;
 }
 
@@ -110,7 +109,6 @@
   height: 158px;
   object-fit: cover;
   object-position: 45% center;
-  filter: saturate(0.9);
   z-index: 3;
 }
 
