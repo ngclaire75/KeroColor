@@ -36,6 +36,13 @@ export default function EditorialPage() {
   const [bndVisible, setBndVisible] = useState(false)
   const [bndSwapped, setBndSwapped] = useState(false)
 
+  // Land on this page at the top, regardless of scroll position on the
+  // tab navigated from (browsers preserve scroll across client-side route
+  // changes by default).
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   useEffect(() => {
     const t1 = setTimeout(() => { setOverlayFading(true); setContentReady(true) }, 1700)
     const t2 = setTimeout(() => setOverlayGone(true), 2500)
