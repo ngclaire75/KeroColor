@@ -3,6 +3,11 @@
   background: #000;
 }
 
+/* Legal footer — match the editorial navbar's background on this page. */
+.ed-page .footer {
+  background: #4d0c12;
+}
+
 .ed-page--hidden {
   filter: blur(14px);
   opacity: 0;
@@ -95,7 +100,7 @@
   display: flex;
   flex-direction: column;
   gap: 3rem;
-  padding: 3.5rem 3rem;
+  padding: 4.5rem 3rem 3.5rem;
   align-items: stretch;
 }
 
@@ -147,7 +152,7 @@
   font-family: 'Inter', sans-serif;
   font-size: 0.7rem;
   color: #888;
-  margin: 0.5rem 0 0;
+  margin: 0;
 }
 
 .ed-intro-media {
@@ -191,7 +196,7 @@
   min-width: 0;
   display: flex;
   gap: 2px;
-  background: #f8f2ea;
+  background: #fff;
   overflow: hidden;
 }
 
@@ -258,7 +263,7 @@
 .ed-intro-phone-block {
   flex: 1;
   min-width: 0;
-  background: #f8f2ea;
+  background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -281,21 +286,23 @@
   flex-direction: column;
   align-items: stretch;
   gap: 2.5rem;
-  padding: 5.5rem 3rem 2rem;
+  padding: 5.5rem 3rem 7rem;
 }
 
-/* Scroll-triggered fade-in, applied per batch (.ed-more, .ed-gala) via
-   IntersectionObserver in the component. Slow-ish but not draggy, eased
+/* Scroll-triggered fade-in, applied per batch (.ed-more, .ed-gala, .ed-bnd)
+   via IntersectionObserver in the component. Slow-ish but not draggy, eased
    out so the motion settles smoothly rather than snapping to a stop. */
 .ed-more,
-.ed-gala {
+.ed-gala,
+.ed-bnd {
   opacity: 0;
   transform: translateY(28px);
   transition: opacity 1.4s cubic-bezier(0.22, 1, 0.36, 1), transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .ed-more.ed-fade-in--visible,
-.ed-gala.ed-fade-in--visible {
+.ed-gala.ed-fade-in--visible,
+.ed-bnd.ed-fade-in--visible {
   opacity: 1;
   transform: translateY(0);
 }
@@ -320,15 +327,15 @@
   flex: 0 0 60%;
   min-width: 0;
   overflow: hidden;
-  background: #4d0c12;
+  background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .ed-gala-img {
-  width: 75%;
-  height: 75%;
+  width: 84%;
+  height: 84%;
   object-fit: cover;
   object-position: center 10%;
   display: block;
@@ -396,6 +403,105 @@
   font-size: 0.92rem;
   line-height: 1.65;
   color: #fff;
+}
+
+/* ── Closing image — centered, kept modestly sized ── */
+.ed-bnd {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5rem 3rem 4rem;
+}
+
+.ed-bnd-date {
+  width: 100%;
+  max-width: 470px;
+  margin: 0 0 0.75rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  text-align: left;
+}
+
+/* Reuses .ed-intro-heading's exact type scale — neutralize its flex
+   `order` (irrelevant here) and anchor left instead of center. */
+.ed-bnd-city {
+  order: 0;
+  width: 100%;
+  max-width: 470px;
+  margin: 0 0 1.5rem;
+  text-align: left;
+  transform-origin: left;
+}
+
+.ed-bnd-imgwrap {
+  position: relative;
+  width: 100%;
+  max-width: 470px;
+  cursor: pointer;
+}
+
+.ed-bnd-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.ed-bnd-img--base {
+  position: relative;
+  transition: opacity 0.5s ease;
+}
+
+.ed-bnd-img--alt {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+/* Desktop / true pointer devices — transient swap on hover. */
+@media (hover: hover) and (pointer: fine) {
+  .ed-bnd-imgwrap:hover .ed-bnd-img--base {
+    opacity: 0;
+  }
+
+  .ed-bnd-imgwrap:hover .ed-bnd-img--alt {
+    opacity: 1;
+  }
+}
+
+/* Touch devices — persistent swap on tap, toggled via React state. */
+@media (hover: none) {
+  .ed-bnd-imgwrap--swapped .ed-bnd-img--base {
+    opacity: 0;
+  }
+
+  .ed-bnd-imgwrap--swapped .ed-bnd-img--alt {
+    opacity: 1;
+  }
+}
+
+.ed-bnd-credit {
+  width: 100%;
+  max-width: 470px;
+  margin: 0.75rem 0 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  text-align: center;
+}
+
+.ed-bnd-text {
+  margin-top: 2.5rem;
 }
 
 /* ── Mobile ── */
@@ -471,12 +577,12 @@
   .ed-intro {
     flex-direction: column;
     gap: 0;
-    padding: 2.75rem 1.25rem 3.25rem;
+    padding: 3.25rem 1.25rem 3.25rem;
   }
 
   .ed-more {
     gap: 1.75rem;
-    padding: 3.5rem 1.25rem 0.25rem;
+    padding: 3rem 1.25rem 3rem;
   }
 
   .ed-more-break {
@@ -588,5 +694,29 @@
   .ed-intro-grid-row:not(.ed-intro-grid-row--images) {
     flex: none;
     height: 200px;
+  }
+
+  .ed-bnd {
+    align-items: flex-start;
+    padding: 3.5rem 1.25rem 1rem;
+  }
+
+  .ed-bnd-date {
+    max-width: 300px;
+  }
+
+  .ed-bnd-city {
+    max-width: 300px;
+    align-self: flex-start;
+    margin: 0 0 1.5rem;
+  }
+
+  .ed-bnd-imgwrap {
+    max-width: 100%;
+  }
+
+  .ed-bnd-credit {
+    align-self: center;
+    max-width: 300px;
   }
 }

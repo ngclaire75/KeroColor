@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SearchLoader from '../components/SearchLoader'
+import Footer from '../components/Footer'
+import bnd1 from '../../images/bnd1.png'
+import bnd2 from '../../images/bnd2.png'
 import edp1 from '../../images/edp1.png'
 import edp2 from '../../images/edp2.png'
 import edp3 from '../../images/edp3.png'
@@ -22,6 +25,7 @@ export default function EditorialPage() {
   const wheelCooldown = useRef(false)
   const moreRef = useRef(null)
   const galaRef = useRef(null)
+  const bndRef = useRef(null)
   const [navReady, setNavReady] = useState(false)
   const [navSwiped, setNavSwiped] = useState(false)
   const [overlayFading, setOverlayFading] = useState(false)
@@ -29,6 +33,8 @@ export default function EditorialPage() {
   const [contentReady, setContentReady] = useState(false)
   const [moreVisible, setMoreVisible] = useState(false)
   const [galaVisible, setGalaVisible] = useState(false)
+  const [bndVisible, setBndVisible] = useState(false)
+  const [bndSwapped, setBndSwapped] = useState(false)
 
   useEffect(() => {
     const t1 = setTimeout(() => { setOverlayFading(true); setContentReady(true) }, 1700)
@@ -43,12 +49,13 @@ export default function EditorialPage() {
     return () => clearTimeout(t)
   }, [overlayGone])
 
-  // Fade in the "When the rules become a starting point" and Gala grid
-  // sections as batches once they scroll into view (desktop + mobile).
+  // Fade in the "When the rules become a starting point", Gala grid, and
+  // closing image sections as batches once they scroll into view (desktop + mobile).
   useEffect(() => {
     const setters = new Map([
       [moreRef.current, setMoreVisible],
       [galaRef.current, setGalaVisible],
+      [bndRef.current, setBndVisible],
     ])
     const observer = new IntersectionObserver(
       (entries) => {
@@ -213,6 +220,27 @@ export default function EditorialPage() {
           </div>
         </div>
       </section>
+
+      {/* ── Closing image ── */}
+      <section ref={bndRef} className={`ed-bnd${bndVisible ? ' ed-fade-in--visible' : ''}`}>
+        <p className="ed-bnd-date">July 21, 2026</p>
+        <h2 className="ed-intro-heading ed-bnd-city">Mexico City</h2>
+        <div
+          className={`ed-bnd-imgwrap${bndSwapped ? ' ed-bnd-imgwrap--swapped' : ''}`}
+          onClick={() => setBndSwapped(v => !v)}
+        >
+          <img src={bnd1} alt="" className="ed-bnd-img ed-bnd-img--base" />
+          <img src={bnd2} alt="" className="ed-bnd-img ed-bnd-img--alt" />
+        </div>
+        <p className="ed-bnd-credit">Photography by Getty Images</p>
+
+        <div className="ed-intro-text ed-bnd-text">
+          <p className="ed-intro-item">The dress Zendaya wore at the Mexico City Spider Man: Brand New Day fan event is Look 26 from Ashi Studio's Spring/Summer 2026 Couture collection, titled "The Beginnings." The designer behind Ashi Studio is Mohammed Ashi, a Saudi couturier and the founder and creative director of the house. The collection was presented during Paris Haute Couture Week in January 2026.</p>
+          <p className="ed-intro-item">The Beginnings explores longing, devotion, loss and transformation, drawing heavily from Victorian mourning rituals and historical corsetry. Ashi Studio describes the collection as being concerned with the space between intimacy and dissolution, using distressed materials, unusual embroidery, corsetry and illusion to make clothing feel almost like something psychologically inhabited rather than simply worn.</p>
+          <p className="ed-intro-item">The web like detailing is what makes this particular couture look so perfect for Zendaya's Spider Man appearance. The dress incorporates delicate web like knit detailing, antique treated threads, glass tassels and extensive beaded fringe. The embroidery travels across the body and sleeve, while the fringe falls dramatically from the cuffs toward the floor. Fashion coverage specifically noted that the sleeve treatment resembles webs extending from Spider Man's hands, turning an existing couture design into an extremely natural piece of Spider Man method dressing.</p>
+        </div>
+      </section>
+      <Footer />
     </div>
     </>
   )
