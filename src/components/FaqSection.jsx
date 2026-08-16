@@ -44,9 +44,11 @@ export default function FaqSection() {
               <span>{item.q}</span>
               <span className="faq-icon">{open === i ? '−' : '+'}</span>
             </button>
-            {open === i && (
-              <p className="faq-a">{item.a}</p>
-            )}
+            <div className={`faq-a-wrap${open === i ? ' faq-a-wrap--open' : ''}`}>
+              <div className="faq-a-inner">
+                <p className="faq-a">{item.a}</p>
+              </div>
+            </div>
           </div>
         ))}
         <div className="faq-bottom-line" />

@@ -231,7 +231,7 @@ export default function EditorialPage() {
       {/* ── Closing image ── */}
       <section ref={bndRef} className={`ed-bnd${bndVisible ? ' ed-fade-in--visible' : ''}`}>
         <p className="ed-bnd-date">July 21, 2026</p>
-        <h2 className="ed-intro-heading ed-bnd-city">Mexico City</h2>
+        <h2 className="ed-intro-heading ed-bnd-city">Z's Mexico City Fan Event Outfit</h2>
         <div
           className={`ed-bnd-imgwrap${bndSwapped ? ' ed-bnd-imgwrap--swapped' : ''}`}
           onClick={() => setBndSwapped(v => !v)}
