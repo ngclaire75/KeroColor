@@ -439,6 +439,7 @@
 
 .ed-bnd-imgwrap {
   position: relative;
+  overflow: hidden;
   width: 100%;
   max-width: 470px;
   cursor: pointer;
@@ -465,6 +466,30 @@
   transition: opacity 0.5s ease;
 }
 
+/* Caption bar — full width, height hugs the text only (padding, no fixed
+   height). Slides up from below the image on reveal, back down on hover-out;
+   tied to the same trigger as the bnd1<->bnd2 swap so it stays visible
+   throughout, not just during the crossfade itself. */
+.ed-bnd-caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  box-sizing: border-box;
+  padding: 1.4rem 0.75rem 0.6rem;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.65) 55%, rgba(0, 0, 0, 0.65) 100%);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-align: center;
+  transform: translateY(100%);
+  transition: transform 0.5s ease;
+  pointer-events: none;
+}
+
 /* Desktop / true pointer devices — transient swap on hover. */
 @media (hover: hover) and (pointer: fine) {
   .ed-bnd-imgwrap:hover .ed-bnd-img--base {
@@ -473,6 +498,10 @@
 
   .ed-bnd-imgwrap:hover .ed-bnd-img--alt {
     opacity: 1;
+  }
+
+  .ed-bnd-imgwrap:hover .ed-bnd-caption {
+    transform: translateY(0);
   }
 }
 
@@ -485,6 +514,10 @@
   .ed-bnd-imgwrap--swapped .ed-bnd-img--alt {
     opacity: 1;
   }
+
+  .ed-bnd-imgwrap--swapped .ed-bnd-caption {
+    transform: translateY(0);
+  }
 }
 
 .ed-bnd-credit {
@@ -492,7 +525,7 @@
   max-width: 470px;
   margin: 0.75rem 0 0;
   font-family: 'Inter', sans-serif;
-  font-size: 0.7rem;
+  font-size: 0.5rem;
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;

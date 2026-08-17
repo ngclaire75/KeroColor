@@ -238,6 +238,7 @@ export default function EditorialPage() {
         >
           <img src={bnd1} alt="" className="ed-bnd-img ed-bnd-img--base" />
           <img src={bnd2} alt="" className="ed-bnd-img ed-bnd-img--alt" />
+          <span className="ed-bnd-caption">Close-Up of Z's Audrey Hepburn's Inspired Hairdo</span>
         </div>
         <p className="ed-bnd-credit">Photography by Getty Images</p>
 
