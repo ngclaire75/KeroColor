@@ -137,10 +137,10 @@ export default function ColorTheoryPage() {
           <div className="ct-hero-imgbox ct-hero-imgbox--mia">
             <img src={mia} alt="" />
           </div>
-          <h1 className="ct-hero-word ct-hero-word--wide">&amp; Theories</h1>
           <div className="ct-hero-imgbox ct-hero-imgbox--jia">
             <img src={jia} alt="" />
           </div>
+          <h1 className="ct-hero-word ct-hero-word--wide">&amp; Theories</h1>
         </div>
       </section>
     </div>

@@ -311,6 +311,8 @@
 
   .ct-hero-word--wide {
     margin-left: 0;
+    align-self: flex-end;
+    text-align: right;
   }
 
   .ct-hero-imgbox {
