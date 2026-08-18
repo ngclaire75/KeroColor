@@ -177,7 +177,7 @@
    per-character width math used for the &-under-O alignment; nudge if
    off once rendered. */
 .ct-hero-imgbox--mia {
-  --ct-mia-h: calc(var(--ct-font-size) * 0.693);
+  --ct-mia-h: calc(var(--ct-font-size) * 0.7);
   /* Vertically centered on the COLOR line, computed live from the shared
      line-height variable so it stays centered at every viewport width —
      not just wherever these two clamp()s happened to line up. */
@@ -196,7 +196,7 @@
   top: calc(var(--ct-font-size) * 0.9);
   left: calc(var(--ct-font-size) * 0.07);
   width: calc(var(--ct-font-size) * 1.7);
-  height: var(--ct-line-h);
+  height: calc(var(--ct-line-h) * 1.2);
 }
 
 /* Zoom the crop in without touching the box itself — the box (top/left/
