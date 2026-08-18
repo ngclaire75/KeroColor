@@ -106,6 +106,7 @@ export default function PalettePage() {
 
   const handleTabClick = (tab) => {
     if (tab === 'Editorial') { navigate('/editorial'); return }
+    if (tab === 'Color Theory') { navigate('/color-theory'); return }
     if (tab === activeTab) return
     tabTimeoutsRef.current.forEach(clearTimeout)
     setTabLoaderFading(false)

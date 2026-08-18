@@ -125,6 +125,7 @@ export default function EditorialPage() {
 
   const handleNavClick = (item) => {
     if (item === 'Editorial') return
+    if (item === 'Color Theory') { navigate('/color-theory'); return }
     navigate('/palette', { state: { tab: item } })
   }
 

@@ -5,6 +5,7 @@ import ExplorePage  from './pages/ExplorePage'
 import LookPage     from './pages/LookPage'
 import PalettePage  from './pages/PalettePage'
 import EditorialPage from './pages/EditorialPage'
+import ColorTheoryPage from './pages/ColorTheoryPage'
 import Navbar     from './components/Navbar'
 import SiteHeader from './components/SiteHeader'
 import InfoBar    from './components/InfoBar'
@@ -86,6 +87,7 @@ export default function App() {
       <Route path="/look"     element={<LookPage />} />
       <Route path="/palette"  element={<PalettePage />} />
       <Route path="/editorial" element={<EditorialPage />} />
+      <Route path="/color-theory" element={<ColorTheoryPage />} />
     </Routes>
     </SearchProvider>
   )
