@@ -131,11 +131,11 @@
 
 .ct-hero-word {
   margin: 0;
-  font-family: "haas", sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 900;
   /* Fallback sans-serif fonts often render 900 less heavily than a true
      black-weight cut would — a thin stroke fakes back some of that. */
-  -webkit-text-stroke: 3px #000;
+  -webkit-text-stroke: 1px #000;
   font-size: var(--ct-font-size);
   line-height: 0.82;
   letter-spacing: -0.01em;
@@ -210,7 +210,7 @@
    scales up, and the box's overflow:hidden clips the excess. */
 .ct-hero-imgbox--jia img {
   object-position: center 35%;
-  transform: scale(1.4);
+  transform: scale(1.5);
 }
 
 /* ── Mobile ── */
@@ -312,7 +312,7 @@
        around (see the note above .ct-hero). Simpler to just not use it. */
     transform: none;
     font-size: clamp(2.6rem, 13vw, 4rem);
-    -webkit-text-stroke: 1px #000;
+    -webkit-text-stroke: 0 #000;
   }
 
   .ct-hero-word--wide {
