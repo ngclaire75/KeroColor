@@ -107,7 +107,7 @@
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding-top: 4.5rem;
+  padding-top: 5.3rem;
   overflow: hidden;
 }
 
@@ -187,6 +187,12 @@
   height: var(--ct-mia-h);
 }
 
+/* Zoom the crop in a bit — box (top/left/width/height) above is untouched,
+   only the image inside it scales up, clipped by overflow:hidden. */
+.ct-hero-imgbox--mia img {
+  transform: scale(1.1);
+}
+
 /* jia.jpeg — sits below COLOR, flush left with the "C" (x = 0, same as
    COLOR's own left edge). Occupies exactly the same vertical band as the
    "& THEORIES" line below it (same top and same height, since that line
@@ -195,7 +201,7 @@
 .ct-hero-imgbox--jia {
   top: calc(var(--ct-font-size) * 0.9);
   left: calc(var(--ct-font-size) * 0.07);
-  width: calc(var(--ct-font-size) * 1.7);
+  width: calc(var(--ct-font-size) * 1.75);
   height: calc(var(--ct-line-h) * 1.2);
 }
 
