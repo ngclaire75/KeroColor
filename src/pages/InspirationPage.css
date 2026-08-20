@@ -220,7 +220,7 @@
   font-family: 'Akzidenz Grotesk BQ', sans-serif;
   font-size: 1.5rem;
   font-weight: 400;
-  line-height: 1.05;
+  line-height: 1;
   text-transform: lowercase;
   letter-spacing: 0.01em;
 }
@@ -233,7 +233,7 @@
   color: transparent;
   font-weight: 600;
   font-style: italic;
-  line-height: 1.05;
+  line-height: 1;
   padding: 0.15em 0.2em;
   margin: -0.15em -0.2em;
   display: inline-block;
