@@ -363,7 +363,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.2s ease;
   transform: translateZ(0);
   backface-visibility: hidden;
 }
@@ -373,17 +372,10 @@
   shape-rendering: geometricPrecision;
 }
 
-.in-studio-arrow:hover {
-  opacity: 0.55;
-}
-
 .in-studio-arrow:disabled {
-  opacity: 0.25;
+  border-color: #ccc;
+  color: #ccc;
   cursor: not-allowed;
-}
-
-.in-studio-arrow:disabled:hover {
-  opacity: 0.25;
 }
 
 .in-studio-hero {
