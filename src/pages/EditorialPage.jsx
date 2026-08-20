@@ -141,8 +141,7 @@ export default function EditorialPage() {
           <div className="ed-gala-text-overlay" />
           <div className="ed-gala-text-content">
             <h2 className="ed-intro-heading">The 2016 "Manus x Machina: Fashion in an Age of Technology" Gala</h2>
-            <p className="ed-gala-body">Zendaya wore a one-shoulder bronze sequined Michael Kors dress, accompanied by a sleek bob and brown-toned smoky eye. Vogue's beauty retrospective specifically notes the bronze dress and coordinated makeup.</p>
-            <p className="ed-gala-body">The effect is almost tonal. Bronze reflects light without creating an aggressive temperature contrast against the skin. The shiny surface also changes constantly as she moves, meaning the color is never visually flat.</p>
+            <p className="ed-gala-body">Zendaya wore a one-shoulder bronze sequined Michael Kors dress, accompanied by a sleek bob and brown-toned smoky eye. Vogue's beauty retrospective specifically notes the bronze dress and coordinated makeup. The shifting sheen brings warmth, movement, and dimension to the look.</p>
           </div>
         </div>
       </section>
@@ -164,7 +163,6 @@ export default function EditorialPage() {
         <div className="ed-intro-text ed-bnd-text">
           <p className="ed-intro-item">The dress Zendaya wore at the Mexico City Spider Man: Brand New Day fan event is Look 26 from Ashi Studio's Spring/Summer 2026 Couture collection, titled "The Beginnings." The designer behind Ashi Studio is Mohammed Ashi, a Saudi couturier and the founder and creative director of the house. The collection was presented during Paris Haute Couture Week in January 2026.</p>
           <p className="ed-intro-item">The Beginnings explores longing, devotion, loss and transformation, drawing heavily from Victorian mourning rituals and historical corsetry. Ashi Studio describes the collection as being concerned with the space between intimacy and dissolution, using distressed materials, unusual embroidery, corsetry and illusion to make clothing feel almost like something psychologically inhabited rather than simply worn.</p>
-          <p className="ed-intro-item">The web like detailing is what makes this particular couture look so perfect for Zendaya's Spider Man appearance. The dress incorporates delicate web like knit detailing, antique treated threads, glass tassels and extensive beaded fringe. The embroidery travels across the body and sleeve, while the fringe falls dramatically from the cuffs toward the floor. Fashion coverage specifically noted that the sleeve treatment resembles webs extending from Spider Man's hands, turning an existing couture design into an extremely natural piece of Spider Man method dressing.</p>
           <p className="ed-intro-item">The choice of black also does quiet work color-wise. Black does not compete with skin for attention, it recedes, which lets Zendaya's deep, warm complexion set the visual temperature of the whole look rather than the fabric doing it for her. It is the kind of pairing color analysis would predict: darker, high-contrast neutrals tend to flatter deeper skin tones by sharpening contrast rather than dulling it.</p>
         </div>
       </section>

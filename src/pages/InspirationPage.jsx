@@ -4,6 +4,8 @@ import SearchLoader from '../components/SearchLoader'
 import Footer from '../components/Footer'
 import heroVideo from '../../videos/inspiration-hero-blush-full.mp4'
 import heroPoster from '../../images/inspiration-hero-poster.jpg'
+import square1 from '../../images/square1.jpeg'
+import square2 from '../../images/square2.jpeg'
 import './InspirationPage.css'
 
 const NAV_ITEMS = ['All', 'Seasonal Edition', 'Editorial', 'Inspiration']
@@ -125,6 +127,20 @@ export default function InspirationPage() {
             choices, helping turn everyday beauty into a more personalized color experience.
           </span>
         </p>
+      </section>
+
+      {/* ── Square grid ── */}
+      <section className="in-squares">
+        <div className="in-square">
+          <img src={square1} alt="" />
+        </div>
+        <div className="in-squares-text">
+          <p className="in-squares-line">Figure out your favorite</p>
+          <p className="in-squares-line in-squares-line--highlight">makeup palette now!</p>
+        </div>
+        <div className="in-square">
+          <img src={square2} alt="" />
+        </div>
       </section>
 
       {/* Content coming later */}

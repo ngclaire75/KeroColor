@@ -3,9 +3,13 @@
   background: #000;
 }
 
-/* Legal footer — match the editorial navbar's background on this page. */
+/* Legal footer — same gradient/text color as the Inspiration page's footer. */
 .ed-page .footer {
-  background: #4d0c12;
+  background: linear-gradient(to right, #561c24 0%, #6d2932 55%, #c7b7a3 92%, #e8d8c4 100%);
+}
+
+.ed-page .footer-tag {
+  color: #561c24;
 }
 
 .ed-page--hidden {
@@ -310,7 +314,9 @@
 .ed-gala {
   display: flex;
   height: 480px;
-  margin: 0 0 4rem;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto 4rem;
   background: #f8f2ea;
 }
 
@@ -376,8 +382,8 @@
    it down to fit this narrower panel. */
 .ed-gala-text-content .ed-intro-heading {
   order: 0;
-  max-width: 420px;
-  margin: 0 auto;
+  max-width: 340px;
+  margin: 0;
   font-size: 1.5rem;
   text-align: left;
   /* Same scaleX as .ed-intro-heading, but anchored left (not center) so
@@ -389,7 +395,7 @@
 
 .ed-gala-body {
   max-width: 420px;
-  margin: 0 auto;
+  margin: 0;
   font-family: 'Inter', sans-serif;
   font-size: 0.92rem;
   line-height: 1.65;
@@ -560,6 +566,8 @@
   .ed-gala {
     flex-direction: column;
     height: auto;
+    width: auto;
+    max-width: none;
     margin: 0 1.25rem 3.25rem;
   }
 
@@ -579,7 +587,7 @@
 
   .ed-gala-text {
     aspect-ratio: auto;
-    min-height: 425px;
+    min-height: 340px;
   }
 
   .ed-gala-text-content {
@@ -594,6 +602,8 @@
   }
 
   .ed-gala-body {
+    max-width: 100%;
+    margin: 0 auto;
     font-size: 0.85rem;
   }
 
