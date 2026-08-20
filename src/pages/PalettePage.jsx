@@ -10,7 +10,7 @@ import petalImg from '../../images/petal.png'
 import bearImg from '../../images/bear.png'
 import './PalettePage.css'
 
-const TABS = ['All', 'Seasonal Edition', 'Editorial', 'Color Theory', 'Inspiration']
+const TABS = ['All', 'Seasonal Edition', 'Editorial', 'Inspiration']
 
 const DUO_ITEMS = [
   { img: lipstickImg, name: 'Velvet Keepsake', desc: 'A heart kept safe in ruby velvet', hexes: ['#742833'] },
@@ -106,7 +106,6 @@ export default function PalettePage() {
 
   const handleTabClick = (tab) => {
     if (tab === 'Editorial') { navigate('/editorial'); return }
-    if (tab === 'Color Theory') { navigate('/color-theory'); return }
     if (tab === activeTab) return
     tabTimeoutsRef.current.forEach(clearTimeout)
     setTabLoaderFading(false)

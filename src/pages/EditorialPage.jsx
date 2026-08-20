@@ -13,21 +13,13 @@ import z10 from '../../images/z10.png'
 import z10v2 from '../../images/z10v2.png'
 import './EditorialPage.css'
 
-const NAV_BATCH_1 = ['All', 'Seasonal Edition', 'Editorial']
-const NAV_BATCH_2 = ['Color Theory', 'Inspiration']
+const NAV_ITEMS = ['All', 'Seasonal Edition', 'Editorial', 'Inspiration']
 
 export default function EditorialPage() {
   const navigate = useNavigate()
-  const navRef = useRef(null)
-  const touchStartX = useRef(null)
-  const mouseStartX = useRef(null)
-  const wheelDeltaX = useRef(0)
-  const wheelCooldown = useRef(false)
   const moreRef = useRef(null)
   const galaRef = useRef(null)
   const bndRef = useRef(null)
-  const [navReady, setNavReady] = useState(false)
-  const [navSwiped, setNavSwiped] = useState(false)
   const [overlayFading, setOverlayFading] = useState(false)
   const [overlayGone, setOverlayGone] = useState(false)
   const [contentReady, setContentReady] = useState(false)
@@ -48,13 +40,6 @@ export default function EditorialPage() {
     const t2 = setTimeout(() => setOverlayGone(true), 2500)
     return () => { clearTimeout(t1); clearTimeout(t2) }
   }, [])
-
-  useEffect(() => {
-    if (!overlayGone) return
-    setNavReady(false)
-    const t = setTimeout(() => setNavReady(true), 2000)
-    return () => clearTimeout(t)
-  }, [overlayGone])
 
   // Fade in the "When the rules become a starting point", Gala grid, and
   // closing image sections as batches once they scroll into view (desktop + mobile).
@@ -78,54 +63,8 @@ export default function EditorialPage() {
     return () => observer.disconnect()
   }, [])
 
-  const handleNavTouchStart = (e) => {
-    touchStartX.current = e.touches[0].clientX
-  }
-
-  const handleNavTouchEnd = (e) => {
-    if (touchStartX.current === null) return
-    const deltaX = e.changedTouches[0].clientX - touchStartX.current
-    if (deltaX < -40) setNavSwiped(true)
-    else if (deltaX > 40) setNavSwiped(false)
-    touchStartX.current = null
-  }
-
-  // Mouse-drag swipe (trackpad/mouse click-and-drag), same threshold as touch
-  const handleNavMouseDown = (e) => {
-    mouseStartX.current = e.clientX
-  }
-
-  const handleNavMouseUp = (e) => {
-    if (mouseStartX.current === null) return
-    const deltaX = e.clientX - mouseStartX.current
-    if (deltaX < -40) setNavSwiped(true)
-    else if (deltaX > 40) setNavSwiped(false)
-    mouseStartX.current = null
-  }
-
-  // Two-finger trackpad swipe surfaces as a wheel event with a horizontal
-  // deltaX. Accumulate it (a single gesture fires many small wheel events)
-  // and use a cooldown so one swipe doesn't flip the batch back and forth.
-  const handleNavWheel = (e) => {
-    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return
-    e.preventDefault()
-    if (wheelCooldown.current) return
-    wheelDeltaX.current += e.deltaX
-    if (wheelDeltaX.current > 40) {
-      setNavSwiped(true)
-    } else if (wheelDeltaX.current < -40) {
-      setNavSwiped(false)
-    } else {
-      return
-    }
-    wheelDeltaX.current = 0
-    wheelCooldown.current = true
-    setTimeout(() => { wheelCooldown.current = false }, 500)
-  }
-
   const handleNavClick = (item) => {
     if (item === 'Editorial') return
-    if (item === 'Color Theory') { navigate('/color-theory'); return }
     navigate('/palette', { state: { tab: item } })
   }
 
@@ -133,38 +72,16 @@ export default function EditorialPage() {
     <>
     {!overlayGone && <SearchLoader fading={overlayFading} />}
     <div className={`ed-page${contentReady ? ' ed-page--revealed' : ' ed-page--hidden'}`}>
-      <nav
-        ref={navRef}
-        className={`ed-nav${navReady ? ' ed-nav--ready' : ''}${navSwiped ? ' ed-nav--swiped' : ''}`}
-        onTouchStart={handleNavTouchStart}
-        onTouchEnd={handleNavTouchEnd}
-        onMouseDown={handleNavMouseDown}
-        onMouseUp={handleNavMouseUp}
-        onWheel={handleNavWheel}
-      >
-        <span className={`ed-nav-hint${navReady || navSwiped ? ' ed-nav-hint--hidden' : overlayGone ? ' ed-nav-hint--playing' : ''}`}>Swipe Left for More!</span>
-        <div className="ed-nav-batch ed-nav-batch--1">
-          {NAV_BATCH_1.map(item => (
-            <button
-              key={item}
-              className={`ed-nav-item${item === 'Editorial' ? ' ed-nav-item--active' : ''}`}
-              onClick={() => handleNavClick(item)}
-            >
-              <span>{item}</span>
-            </button>
-          ))}
-        </div>
-        <div className="ed-nav-batch ed-nav-batch--2">
-          {NAV_BATCH_2.map(item => (
-            <button
-              key={item}
-              className="ed-nav-item"
-              onClick={() => handleNavClick(item)}
-            >
-              <span>{item}</span>
-            </button>
-          ))}
-        </div>
+      <nav className="ed-nav">
+        {NAV_ITEMS.map(item => (
+          <button
+            key={item}
+            className={`ed-nav-item${item === 'Editorial' ? ' ed-nav-item--active' : ''}`}
+            onClick={() => handleNavClick(item)}
+          >
+            <span>{item}</span>
+          </button>
+        ))}
       </nav>
 
       {/* ── Intro section ── */}
