@@ -97,7 +97,7 @@
   position: relative;
   width: 960px;
   height: 540px;
-  margin: 4.5rem auto 4.5rem;
+  margin: 4.5rem auto 0.5rem;
   border-radius: 8px;
   overflow: hidden;
 }
@@ -106,6 +106,7 @@
   position: absolute;
   inset: 0;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .in-hero-video {
@@ -114,6 +115,54 @@
   object-fit: cover;
   border: 0;
   display: block;
+}
+
+.in-hero-play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: #e8d8c4;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.35s ease;
+}
+
+.in-hero-play-btn--hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.in-hero-play-btn-inner {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #561c24;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.in-hero-credit {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto 4.5rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.5rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #561c24;
+  text-align: center;
 }
 
 /* ── Intro copy ── */
@@ -203,7 +252,12 @@
     width: calc(100% - 2.5rem);
     height: auto;
     aspect-ratio: 16 / 9;
-    margin: 3.25rem auto 3.25rem;
+    margin: 3.25rem auto 0.5rem;
+  }
+
+  .in-hero-credit {
+    max-width: calc(100% - 2.5rem);
+    margin: 0 auto 3.25rem;
   }
 
   .in-hero-line1 {
@@ -221,7 +275,23 @@
   }
 
   .in-intro-text {
-    font-size: 1.2rem;
+    max-width: 360px;
+    font-size: 1.05rem;
     line-height: 1.3;
+  }
+
+  .in-hero-play-btn {
+    width: 42px;
+    height: 42px;
+  }
+
+  .in-hero-play-btn-inner {
+    width: 28px;
+    height: 28px;
+  }
+
+  .in-hero-play-btn-inner svg {
+    width: 12px;
+    height: 12px;
   }
 }
