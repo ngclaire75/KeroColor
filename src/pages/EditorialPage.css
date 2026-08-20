@@ -373,7 +373,7 @@
   flex-direction: column;
   justify-content: center;
   gap: 1.5rem;
-  padding: 3rem;
+  padding: 3rem 3rem 3rem 3.75rem;
   box-sizing: border-box;
 }
 
@@ -384,7 +384,7 @@
   order: 0;
   max-width: 340px;
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   text-align: left;
   /* Same scaleX as .ed-intro-heading, but anchored left (not center) so
      it stretches rightward only, keeping the left edge aligned with the
