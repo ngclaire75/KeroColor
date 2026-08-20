@@ -321,6 +321,75 @@
   letter-spacing: 0.01em;
 }
 
+/* ── Video production studio ── */
+.in-studio {
+  width: 960px;
+  max-width: 960px;
+  margin: 0 auto 0;
+}
+
+.in-studio-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.in-studio-heading {
+  margin: 0;
+  color: #000;
+  font-family: 'Akzidenz Grotesk BQ', sans-serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.in-studio-arrows {
+  display: flex;
+  gap: 0.6rem;
+  flex-shrink: 0;
+}
+
+.in-studio-arrow {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1.5px solid #000;
+  border-radius: 50%;
+  background: none;
+  color: #000;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.in-studio-arrow svg {
+  display: block;
+  shape-rendering: geometricPrecision;
+}
+
+.in-studio-arrow:hover {
+  opacity: 0.55;
+}
+
+.in-studio-arrow:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+.in-studio-arrow:disabled:hover {
+  opacity: 0.25;
+}
+
+.in-studio-hero {
+  margin: 0 auto 0.5rem;
+}
+
 /* ── Mobile ── */
 @media (max-width: 640px) {
   .in-nav {
@@ -407,5 +476,36 @@
     width: 100%;
     font-size: 1.05rem;
     text-align: center;
+  }
+
+  .in-studio {
+    width: 100%;
+    max-width: calc(100% - 2.5rem);
+    margin: 0 auto 0;
+  }
+
+  .in-studio-header {
+    margin-bottom: 1rem;
+  }
+
+  .in-studio-heading {
+    font-size: 1.6rem;
+  }
+
+  .in-studio-arrows {
+    gap: 0.4rem;
+  }
+
+  .in-studio-arrow {
+    width: 26px;
+    height: 26px;
+    border-width: 1px;
+  }
+
+  .in-studio-hero {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    margin: 0 auto 0.5rem;
   }
 }
