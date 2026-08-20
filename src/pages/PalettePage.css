@@ -916,8 +916,6 @@
   .pp-duo-grid .pp-palette-desc { font-size: 0.9rem; }
   .pp-duo-grid .pp-palette-hex { font-size: 0.95rem; }
 
-  .pp-duo-grid--seasonal { margin-bottom: 2rem; }
-
   .pp-bar { padding: 0.55rem 2.8rem; }
   .pp-bar-text { font-size: clamp(0.68rem, 2.2vw, 0.84rem); letter-spacing: 0.04em; white-space: nowrap; }
 
