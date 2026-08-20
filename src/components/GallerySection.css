@@ -64,7 +64,8 @@
 }
 
 /* ── Per-image crop positions (data-idx is the 0-based index in the full set) ── */
-.gallery-rect[data-idx="1"]  img { object-position: 25% 20%; }
+.gallery-rect[data-idx="0"]  img { object-position: 30% center; }
+.gallery-rect[data-idx="1"]  img { object-position: 12% 20%; }
 .gallery-rect[data-idx="3"]  img { object-position: 20% center; }
 .gallery-rect[data-idx="4"]  img { object-position: 5% center; }
 .gallery-rect[data-idx="5"]  img { object-position: 65% center; transform: scale(1.2); }
