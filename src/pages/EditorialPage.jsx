@@ -65,6 +65,7 @@ export default function EditorialPage() {
 
   const handleNavClick = (item) => {
     if (item === 'Editorial') return
+    if (item === 'Inspiration') { navigate('/inspiration'); return }
     navigate('/palette', { state: { tab: item } })
   }
 
@@ -86,7 +87,7 @@ export default function EditorialPage() {
 
       {/* ── Intro section ── */}
       <section className="ed-intro">
-        <h2 className="ed-intro-heading">A closer look at the facts, myths, and artistry of color analysis.</h2>
+        <h2 className="ed-intro-heading">A closer look at the facts, myths, and artistry of color analysis</h2>
 
         <div className="ed-intro-media">
           <div className="ed-intro-media-big">

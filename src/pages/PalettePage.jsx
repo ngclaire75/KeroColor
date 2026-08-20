@@ -83,15 +83,26 @@ export default function PalettePage() {
   const [tabLoading, setTabLoading] = useState(false)
   const [tabLoaderFading, setTabLoaderFading] = useState(false)
   const tabTimeoutsRef = useRef([])
+  const giantTextRef = useRef(null)
 
   // Flashlight hover effect on the giant footer "kero." text — tracks the
   // cursor via CSS custom properties so the spotlight overlay's radial-gradient
   // mask can follow it without triggering a React re-render per mousemove.
-  function handleGiantTextSpotlight(e) {
-    const rect = e.currentTarget.getBoundingClientRect()
-    e.currentTarget.style.setProperty('--spot-x', `${e.clientX - rect.left}px`)
-    e.currentTarget.style.setProperty('--spot-y', `${e.clientY - rect.top}px`)
-  }
+  // Tracked globally (not just while the cursor is over the text) so the
+  // spotlight is already correctly positioned the moment the cursor enters
+  // the text, rather than snapping from a stale last-known position.
+  // Visibility itself still fades in/out purely via CSS :hover on the text.
+  useEffect(() => {
+    const handleMove = (e) => {
+      const el = giantTextRef.current
+      if (!el) return
+      const rect = el.getBoundingClientRect()
+      el.style.setProperty('--spot-x', `${e.clientX - rect.left}px`)
+      el.style.setProperty('--spot-y', `${e.clientY - rect.top}px`)
+    }
+    window.addEventListener('mousemove', handleMove)
+    return () => window.removeEventListener('mousemove', handleMove)
+  }, [])
 
   const content = activeTab === 'Seasonal Edition' ? SEASONAL_CONTENT : DEFAULT_CONTENT
   const paletteItems = content.paletteItems || PALETTE_ITEMS
@@ -106,6 +117,7 @@ export default function PalettePage() {
 
   const handleTabClick = (tab) => {
     if (tab === 'Editorial') { navigate('/editorial'); return }
+    if (tab === 'Inspiration') { navigate('/inspiration'); return }
     if (tab === activeTab) return
     tabTimeoutsRef.current.forEach(clearTimeout)
     setTabLoaderFading(false)
@@ -309,9 +321,8 @@ export default function PalettePage() {
         </div>
         <div className="pp-footer-giant-wrap">
           <div
+            ref={giantTextRef}
             className="pp-footer-giant-inner"
-            onMouseMove={handleGiantTextSpotlight}
-            onMouseEnter={handleGiantTextSpotlight}
           >
             <span className="pp-footer-giant-text">k<span className="pp-footer-giant-text-e">e</span><span className="pp-footer-giant-text-e">r</span>o<span className="pp-footer-giant-dot">.</span></span>
             <span className="pp-footer-giant-text pp-footer-giant-text--spotlight" aria-hidden="true">k<span className="pp-footer-giant-text-e">e</span><span className="pp-footer-giant-text-e">r</span>o<span className="pp-footer-giant-dot">.</span></span>

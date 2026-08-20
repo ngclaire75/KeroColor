@@ -1,0 +1,227 @@
+.in-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #fff;
+}
+
+/* Legal footer — same gradient as .pp-footer on the All/Seasonal Edition tabs. */
+.in-page .footer {
+  background: linear-gradient(to right, #561c24 0%, #6d2932 55%, #c7b7a3 92%, #e8d8c4 100%);
+  margin-top: auto;
+}
+
+.in-page .footer-tag {
+  color: #561c24;
+}
+
+.in-page--hidden {
+  filter: blur(14px);
+  opacity: 0;
+}
+
+.in-page--revealed {
+  filter: blur(0);
+  opacity: 1;
+  transition: filter 0.85s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.65s ease;
+}
+
+.in-nav {
+  background: #4d0c12;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.62rem 3.5rem 0.62rem 3rem;
+  gap: 3rem;
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+
+.in-nav-item {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  color: #fff;
+  padding: 0;
+  white-space: nowrap;
+  text-transform: lowercase;
+  transition: color 0.2s;
+}
+
+.in-nav-item:hover { color: #fff; }
+
+.in-nav-item--active {
+  font-weight: 400;
+}
+
+/* Span wraps text — underline scoped to text width */
+.in-nav-item span {
+  position: relative;
+  display: inline-block;
+}
+
+.in-nav-item span::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #fff;
+  border-radius: 1px;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.in-nav-item:not(.in-nav-item--active):hover span::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.in-nav-item--active span::after {
+  transform: scaleX(1);
+  transition: none;
+}
+
+/* ── Hero rectangle — seulgi.jpeg, bottom+center aligned within its own
+   box, two-line heading centered over it. ── */
+/* Fixed to the YouTube video's exact native size (1280x720), not a
+   responsive/aspect-ratio box. */
+.in-hero {
+  position: relative;
+  width: 960px;
+  height: 540px;
+  margin: 4.5rem auto 4.5rem;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.in-hero-video-wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.in-hero-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 0;
+  display: block;
+}
+
+/* ── Intro copy ── */
+.in-intro {
+  width: 960px;
+  max-width: 960px;
+  margin: 0 auto 4.5rem;
+  padding: 0;
+  text-align: left;
+}
+
+.in-intro-text {
+  max-width: 880px;
+  margin: 0;
+  color: #000;
+  font-family: 'Akzidenz Grotesk BQ', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+  text-transform: lowercase;
+}
+
+.in-intro-highlight {
+  background: linear-gradient(to right, #561c24, #6d2932, #c7b7a3, #e8d8c4, #c7b7a3, #6d2932, #561c24);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 600;
+  animation: in-intro-gradient-shift 6s ease-in-out infinite alternate;
+}
+
+@keyframes in-intro-gradient-shift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+.in-hero-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  text-align: center;
+  padding: 0 1.5rem 2rem;
+}
+
+.in-hero-line1,
+.in-hero-line2 {
+  margin: 0;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+.in-hero-line1 {
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.in-hero-line2 {
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+  .in-nav {
+    flex-wrap: wrap;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 0;
+    gap: 0.9rem 1.5rem;
+  }
+
+  .in-nav-item {
+    font-size: clamp(0.68rem, 2.2vw, 0.84rem);
+    letter-spacing: 0.03em;
+  }
+
+  .in-hero {
+    width: calc(100% - 2.5rem);
+    height: auto;
+    aspect-ratio: 16 / 9;
+    margin: 3.25rem auto 3.25rem;
+  }
+
+  .in-hero-line1 {
+    font-size: 2rem;
+  }
+
+  .in-hero-line2 {
+    font-size: 2rem;
+  }
+
+  .in-intro {
+    width: 100%;
+    margin: 0 auto 3.25rem;
+    padding: 0 1.25rem;
+  }
+
+  .in-intro-text {
+    font-size: 1.2rem;
+    line-height: 1.3;
+  }
+}
