@@ -97,6 +97,7 @@ export default function InspirationPage() {
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
           />
+          <div className={`in-hero-tint${isPlaying ? ' in-hero-tint--hidden' : ''}`} />
         </div>
         <button
           type="button"
