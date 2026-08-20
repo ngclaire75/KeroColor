@@ -295,11 +295,9 @@ export default function PalettePage() {
       </div>
 
       {/* ── Discover more button ── */}
-      {activeTab !== 'Seasonal Edition' && (
-        <div className="pp-discover-wrap">
-          <button className="pp-discover-btn">Discover More Palettes</button>
-        </div>
-      )}
+      <div className="pp-discover-wrap">
+        <button className="pp-discover-btn">Discover More Palettes</button>
+      </div>
 
       {/* ── Footer ── */}
       <footer className="pp-footer">
