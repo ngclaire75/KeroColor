@@ -2,11 +2,15 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SearchLoader from '../components/SearchLoader'
 import Footer from '../components/Footer'
-import heroVideo from '../../images/blush.mp4'
 import heroPoster from '../../images/inspiration-hero-poster.jpg'
 import square1 from '../../images/square1.jpeg'
 import square2 from '../../images/square2.jpeg'
 import './InspirationPage.css'
+
+// Hosted on Vercel Blob storage rather than bundled — the original file is
+// 333MB (1080p), well over both GitHub's and Vercel's 100MB per-file limits
+// for normal repo/deploy assets. This keeps full original quality.
+const HERO_VIDEO_URL = 'https://1thachn5rlbaos0z.public.blob.vercel-storage.com/inspiration-hero-blush-ktAiNTK6LuYWMhH6A2fSAeZzvot6lN.mp4'
 
 const NAV_ITEMS = ['All', 'Seasonal Edition', 'Editorial', 'Inspiration']
 
@@ -85,7 +89,7 @@ export default function InspirationPage() {
           <video
             ref={heroVideoRef}
             className="in-hero-video"
-            src={heroVideo}
+            src={HERO_VIDEO_URL}
             poster={heroPoster}
             preload="auto"
             loop
