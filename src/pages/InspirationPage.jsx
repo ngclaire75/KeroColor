@@ -55,7 +55,7 @@ export default function InspirationPage() {
   // yet) lives in HeroVideoContext, at the app root, so it keeps buffering
   // across page navigation instead of starting over each time this page
   // mounts. This page just claims a spot for it via a portal target div.
-  const { videoRef: heroVideoRef, videoEl: heroVideoEl, startedRef: heroStartedRef, setPortalTarget, offscreenRef } = useHeroVideo()
+  const { videoRef: heroVideoRef, startedRef: heroStartedRef, setPortalTarget, offscreenRef } = useHeroVideo()
   const heroContainerRef = useRef(null)
 
   useEffect(() => {
@@ -63,24 +63,18 @@ export default function InspirationPage() {
     return () => setPortalTarget(offscreenRef.current)
   }, [setPortalTarget, offscreenRef])
 
-  // heroFrameReady mirrors the video's real "loadeddata" event. Keyed on
-  // heroVideoEl (reactive state), not heroVideoRef (a ref object, whose
-  // identity never changes) — landing directly on this page, the video
-  // element doesn't exist yet (it's created up to ~2s later, once
-  // HeroVideoProvider's idle-triggered warm-up kicks in). An effect keyed
-  // on the ref would find it empty once on mount and never re-run once the
-  // video actually appeared, leaving heroFrameReady stuck false forever —
-  // which looked exactly like "stuck on the poster even though it's
-  // actually playing," since the overlay's hide condition never became
-  // true no matter what the user clicked.
+  // heroFrameReady mirrors the video's real "loadeddata" event — but that
+  // event may well have already fired before this page even mounted (the
+  // video's been buffering site-wide since HeroVideoProvider mounted), so
+  // check the current readyState immediately too, not just future events.
   useEffect(() => {
-    const video = heroVideoEl
+    const video = heroVideoRef.current
     if (!video) return
     if (video.readyState >= 2) setHeroFrameReady(true)
     const onLoadedData = () => setHeroFrameReady(true)
     video.addEventListener('loadeddata', onLoadedData)
     return () => video.removeEventListener('loadeddata', onLoadedData)
-  }, [heroVideoEl])
+  }, [heroVideoRef])
 
   const [isStudioPlaying, setIsStudioPlaying] = useState(false)
   const [studioBtnHidden, setStudioBtnHidden] = useState(false)
