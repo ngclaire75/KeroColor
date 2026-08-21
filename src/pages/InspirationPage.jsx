@@ -52,6 +52,24 @@ export default function InspirationPage() {
     setStudioIndex(index)
   }
 
+  // Retry a stalled/failed load a few times with backoff — covers
+  // transient DNS/connection hiccups on first contact with the R2 origin
+  // that a plain reload would otherwise be needed to recover from.
+  const retryLoad = (video, attempt = 1) => {
+    if (!video || attempt > 3) return
+    video.load()
+    const onCanPlay = () => {
+      video.removeEventListener('canplay', onCanPlay)
+      video.play()?.catch(() => {})
+    }
+    const onErr = () => {
+      video.removeEventListener('error', onErr)
+      setTimeout(() => retryLoad(video, attempt + 1), attempt * 1000)
+    }
+    video.addEventListener('canplay', onCanPlay, { once: true })
+    video.addEventListener('error', onErr, { once: true })
+  }
+
   const togglePlay = () => {
     const video = heroVideoRef.current
     if (!video) return
@@ -60,8 +78,11 @@ export default function InspirationPage() {
       // If an earlier load attempt failed/timed out (preload="metadata"
       // means the full video isn't fetched until now), reset the element
       // before retrying so a stale error state doesn't block playback.
-      if (video.error) video.load()
-      video.play()?.catch(() => {})
+      if (video.error) {
+        retryLoad(video)
+      } else {
+        video.play()?.catch(() => retryLoad(video))
+      }
       setIsPlaying(true)
     } else {
       video.pause()
@@ -74,8 +95,11 @@ export default function InspirationPage() {
     if (!video) return
     if (video.paused) {
       heroVideoRef.current?.pause()
-      if (video.error) video.load()
-      video.play()?.catch(() => {})
+      if (video.error) {
+        retryLoad(video)
+      } else {
+        video.play()?.catch(() => retryLoad(video))
+      }
       setIsStudioPlaying(true)
     } else {
       video.pause()
@@ -149,6 +173,7 @@ export default function InspirationPage() {
             src={HERO_VIDEO_URL}
             poster={heroPoster}
             preload="metadata"
+            crossOrigin="anonymous"
             loop
             playsInline
             onPlay={() => setIsPlaying(true)}
@@ -243,6 +268,7 @@ export default function InspirationPage() {
               src={STUDIO_VIDEOS[studioIndex].src}
               poster={STUDIO_VIDEOS[studioIndex].poster}
               preload="metadata"
+              crossOrigin="anonymous"
               loop
               playsInline
               onPlay={() => setIsStudioPlaying(true)}
