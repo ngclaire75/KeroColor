@@ -54,7 +54,7 @@ export default function InspirationPage() {
   // yet) lives in HeroVideoContext, at the app root, so it keeps buffering
   // across page navigation instead of starting over each time this page
   // mounts. This page just claims a spot for it via a portal target div.
-  const { videoRef: heroVideoRef, startedRef: heroStartedRef, setPortalTarget, offscreenRef } = useHeroVideo()
+  const { videoRef: heroVideoRef, videoEl: heroVideoEl, startedRef: heroStartedRef, setPortalTarget, offscreenRef } = useHeroVideo()
   const heroContainerRef = useRef(null)
 
   useEffect(() => {
@@ -62,18 +62,20 @@ export default function InspirationPage() {
     return () => setPortalTarget(offscreenRef.current)
   }, [setPortalTarget, offscreenRef])
 
-  // heroFrameReady mirrors the video's real "loadeddata" event — but that
-  // event may well have already fired before this page even mounted (the
-  // video's been buffering site-wide since HeroVideoProvider mounted), so
-  // check the current readyState immediately too, not just future events.
+  // heroFrameReady mirrors the video's real "loadeddata" event. Keyed on
+  // heroVideoEl (reactive state), not heroVideoRef (a ref object, whose
+  // identity never changes) — the video element doesn't exist yet on
+  // mount (it's created up to ~2s later, once HeroVideoProvider's
+  // idle-triggered warm-up kicks in), so an effect keyed on the ref would
+  // find it empty once and never re-run once the video actually appeared.
   useEffect(() => {
-    const video = heroVideoRef.current
+    const video = heroVideoEl
     if (!video) return
     if (video.readyState >= 2) setHeroFrameReady(true)
     const onLoadedData = () => setHeroFrameReady(true)
     video.addEventListener('loadeddata', onLoadedData)
     return () => video.removeEventListener('loadeddata', onLoadedData)
-  }, [heroVideoRef])
+  }, [heroVideoEl])
 
   const [isStudioPlaying, setIsStudioPlaying] = useState(false)
   const [studioBtnHidden, setStudioBtnHidden] = useState(false)
@@ -143,10 +145,22 @@ export default function InspirationPage() {
     video.addEventListener('error', onErr, { once: true })
   }
 
-  const togglePlay = () => {
-    const video = heroVideoRef.current
+  // Just flips the user-facing intent — the button's icon/visibility must
+  // respond instantly to a click even if the actual <video> doesn't exist
+  // yet (it's created asynchronously, up to ~2s after mount; see
+  // HeroVideoContext). Unlike the studio video below, whose <video> is
+  // always present immediately, gating this on heroVideoRef.current being
+  // non-null meant a click in that window silently did nothing at all —
+  // no icon flip, nothing — which is exactly what "no pause button shows
+  // up for blush.mp4" looked like. The actual play/pause mechanics run in
+  // the effect below instead, whenever isPlaying or the video's own
+  // availability changes.
+  const togglePlay = () => setIsPlaying((prev) => !prev)
+
+  useEffect(() => {
+    const video = heroVideoEl
     if (!video) return
-    if (!isPlaying) {
+    if (isPlaying) {
       studioVideoRef.current?.pause()
       if (!heroStartedRef.current) {
         // First real press: the video has already been playing silently
@@ -164,12 +178,13 @@ export default function InspirationPage() {
         if (video.error) retryLoad(video)
         else video.play()?.catch(() => retryLoad(video))
       }
-      setIsPlaying(true)
-    } else {
+    } else if (heroStartedRef.current) {
+      // Only pause if the user actually pressed play before — otherwise
+      // this is just the silent background warm-up autoplay, which should
+      // keep running untouched until the user's first real press.
       video.pause()
-      setIsPlaying(false)
     }
-  }
+  }, [isPlaying, heroVideoEl])
 
   const toggleStudioPlay = () => {
     const video = studioVideoRef.current

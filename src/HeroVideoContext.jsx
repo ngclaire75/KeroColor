@@ -23,6 +23,14 @@ export const HERO_VIDEO_URL = '/api/media/blush.mp4'
 export function HeroVideoProvider({ children }) {
   const offscreenRef = useRef(null)
   const videoRef = useRef(null)
+  // A reactive mirror of videoRef.current. The actual <video> doesn't exist
+  // until shouldLoad flips true (up to ~2s after mount, see below) — a
+  // click on the play button before that point needs to still respond
+  // instantly (flip the icon, etc.) rather than silently no-op because the
+  // ref is still empty. Consumers use this (not the ref) as an effect
+  // dependency, since a plain ref's identity never changes and so can't
+  // signal "the video just became available."
+  const [videoEl, setVideoEl] = useState(null)
   // Tracks whether the user has pressed play yet (vs. the silent muted
   // warm-up autoplay) — lives here, not in InspirationPage, so it survives
   // navigating away and back.
@@ -54,7 +62,7 @@ export function HeroVideoProvider({ children }) {
   }, [])
 
   return (
-    <HeroVideoContext.Provider value={{ videoRef, startedRef, setPortalTarget, offscreenRef }}>
+    <HeroVideoContext.Provider value={{ videoRef, videoEl, startedRef, setPortalTarget, offscreenRef }}>
       {children}
       {/* Default home for the video whenever no page has claimed it. */}
       <div ref={offscreenRef} style={{ position: 'fixed', top: -9999, left: -9999, width: 1, height: 1, overflow: 'hidden' }} />
@@ -67,7 +75,7 @@ export function HeroVideoProvider({ children }) {
           // silently discarding everything it had buffered. A callback ref
           // avoided that; verified via repeated real navigations (buffered
           // seconds keep growing across the nav, never resetting to 0).
-          ref={(el) => { videoRef.current = el }}
+          ref={(el) => { videoRef.current = el; setVideoEl(el) }}
           src={HERO_VIDEO_URL}
           preload="auto"
           fetchpriority="high"
