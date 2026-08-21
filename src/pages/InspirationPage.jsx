@@ -57,7 +57,11 @@ export default function InspirationPage() {
     if (!video) return
     if (video.paused) {
       studioVideoRef.current?.pause()
-      video.play()
+      // If an earlier load attempt failed/timed out (preload="metadata"
+      // means the full video isn't fetched until now), reset the element
+      // before retrying so a stale error state doesn't block playback.
+      if (video.error) video.load()
+      video.play()?.catch(() => {})
       setIsPlaying(true)
     } else {
       video.pause()
@@ -70,7 +74,8 @@ export default function InspirationPage() {
     if (!video) return
     if (video.paused) {
       heroVideoRef.current?.pause()
-      video.play()
+      if (video.error) video.load()
+      video.play()?.catch(() => {})
       setIsStudioPlaying(true)
     } else {
       video.pause()
@@ -143,7 +148,7 @@ export default function InspirationPage() {
             className="in-hero-video"
             src={HERO_VIDEO_URL}
             poster={heroPoster}
-            preload="auto"
+            preload="metadata"
             loop
             playsInline
             onPlay={() => setIsPlaying(true)}
@@ -237,7 +242,7 @@ export default function InspirationPage() {
               className="in-hero-video"
               src={STUDIO_VIDEOS[studioIndex].src}
               poster={STUDIO_VIDEOS[studioIndex].poster}
-              preload="auto"
+              preload="metadata"
               loop
               playsInline
               onPlay={() => setIsStudioPlaying(true)}
