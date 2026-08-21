@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useHeroVideo } from '../HeroVideoContext'
 import SearchLoader from '../components/SearchLoader'
 import Footer from '../components/Footer'
 import heroPoster from '../../images/inspiration-hero-poster.jpg'
@@ -25,7 +26,12 @@ import './InspirationPage.css'
 // but it measured slower in testing (~1.7s to first frame, and never
 // ramped past the lowest tier in 8s) than this plain MP4 + preload="auto"
 // approach (~470ms) — reverted rather than ship a regression.
-const HERO_VIDEO_URL = '/api/media/blush.mp4'
+//
+// The hero video element itself (HERO_VIDEO_URL) doesn't live in this
+// component — it's owned by HeroVideoContext at the app root, so it starts
+// buffering the moment the site opens (any page), not just once someone
+// navigates here. This component just claims a spot for it to render into
+// while this page is active. See HeroVideoContext.jsx.
 
 const STUDIO_VIDEOS = [
   { src: '/api/media/video2.mp4', poster: studioPoster2, credit: '@heesunrise on YouTube' },
@@ -43,14 +49,31 @@ export default function InspirationPage() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [btnHidden, setBtnHidden] = useState(false)
   const [heroFrameReady, setHeroFrameReady] = useState(false)
-  const heroVideoRef = useRef(null)
   const hideBtnTimeoutRef = useRef(null)
-  // Tracks whether the user has actually pressed play yet. The hero video
-  // is silently autoplaying muted in the background from page load (see
-  // the video element below) purely to warm up its buffer — this flag is
-  // what tells togglePlay to snap back to the very start on that first
-  // real press, rather than wherever the silent autoplay had drifted to.
-  const heroStartedRef = useRef(false)
+  // The actual hero <video> element (and whether the user has pressed play
+  // yet) lives in HeroVideoContext, at the app root, so it keeps buffering
+  // across page navigation instead of starting over each time this page
+  // mounts. This page just claims a spot for it via a portal target div.
+  const { videoRef: heroVideoRef, startedRef: heroStartedRef, setPortalTarget, offscreenRef } = useHeroVideo()
+  const heroContainerRef = useRef(null)
+
+  useEffect(() => {
+    setPortalTarget(heroContainerRef.current)
+    return () => setPortalTarget(offscreenRef.current)
+  }, [setPortalTarget, offscreenRef])
+
+  // heroFrameReady mirrors the video's real "loadeddata" event — but that
+  // event may well have already fired before this page even mounted (the
+  // video's been buffering site-wide since HeroVideoProvider mounted), so
+  // check the current readyState immediately too, not just future events.
+  useEffect(() => {
+    const video = heroVideoRef.current
+    if (!video) return
+    if (video.readyState >= 2) setHeroFrameReady(true)
+    const onLoadedData = () => setHeroFrameReady(true)
+    video.addEventListener('loadeddata', onLoadedData)
+    return () => video.removeEventListener('loadeddata', onLoadedData)
+  }, [heroVideoRef])
 
   const [isStudioPlaying, setIsStudioPlaying] = useState(false)
   const [studioBtnHidden, setStudioBtnHidden] = useState(false)
@@ -229,32 +252,11 @@ export default function InspirationPage() {
       {/* ── Hero rectangle ── */}
       <section className="in-hero">
         <div className="in-hero-video-wrap" onClick={togglePlay}>
-          <video
-            ref={heroVideoRef}
-            className="in-hero-video"
-            src={HERO_VIDEO_URL}
-            poster={heroPoster}
-            // Only the hero video preloads/autoplays eagerly — it's the sole
-            // video visible on page load, so there's no bandwidth contention
-            // risk (the earlier timeout bug came from hero + studio both
-            // eagerly preloading ~550MB simultaneously). The studio carousel
-            // only warms up once its section scrolls into view (see the
-            // IntersectionObserver effect above).
-            //
-            // autoPlay + muted here means the video is already silently
-            // playing (and thus fully warmed up / buffered) by the time the
-            // user presses the visible play button — the poster overlay
-            // below keeps this invisible until then, and togglePlay() jumps
-            // back to the start and unmutes on that first real press, so
-            // there's no cold-start network wait to actually see or hear.
-            preload="auto"
-            fetchpriority="high"
-            autoPlay
-            muted
-            loop
-            playsInline
-            onLoadedData={() => setHeroFrameReady(true)}
-          />
+          {/* The actual <video> is portaled in here from HeroVideoContext —
+              it's been silently playing muted since the site opened, on
+              whichever page the user landed on, not just since this page
+              mounted. See the comment near the top of this file. */}
+          <div ref={heroContainerRef} className="in-hero-video" />
           {/* Stays on screen until the user has actually pressed play AND a
               real frame is ready — heroFrameReady alone would go true as
               soon as the silent background autoplay above produces its

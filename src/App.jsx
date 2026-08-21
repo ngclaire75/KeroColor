@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { SearchProvider } from './SearchContext'
+import { HeroVideoProvider } from './HeroVideoContext'
 import ExplorePage  from './pages/ExplorePage'
 import LookPage     from './pages/LookPage'
 import PalettePage  from './pages/PalettePage'
@@ -80,6 +81,7 @@ export default function App() {
 
   return (
     <SearchProvider>
+    <HeroVideoProvider>
     <ScrollToHash />
     <Routes>
       <Route path="/" element={homePage} />
@@ -89,6 +91,7 @@ export default function App() {
       <Route path="/editorial" element={<EditorialPage />} />
       <Route path="/inspiration" element={<InspirationPage />} />
     </Routes>
+    </HeroVideoProvider>
     </SearchProvider>
   )
 }
