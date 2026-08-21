@@ -36,17 +36,20 @@ export default function InspirationPage() {
   const [contentReady, setContentReady] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
   const [btnHidden, setBtnHidden] = useState(false)
+  const [heroFrameReady, setHeroFrameReady] = useState(false)
   const heroVideoRef = useRef(null)
   const hideBtnTimeoutRef = useRef(null)
 
   const [isStudioPlaying, setIsStudioPlaying] = useState(false)
   const [studioBtnHidden, setStudioBtnHidden] = useState(false)
   const [studioIndex, setStudioIndex] = useState(0)
+  const [studioFrameReady, setStudioFrameReady] = useState(false)
   const studioVideoRef = useRef(null)
   const hideStudioBtnTimeoutRef = useRef(null)
 
   const goToStudioVideo = (index) => {
     if (index < 0 || index >= STUDIO_VIDEOS.length) return
+    setStudioFrameReady(false)
     studioVideoRef.current?.pause()
     setIsStudioPlaying(false)
     setStudioIndex(index)
@@ -177,6 +180,16 @@ export default function InspirationPage() {
             playsInline
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
+            onLoadedData={() => setHeroFrameReady(true)}
+          />
+          {/* Stays on screen until the video actually has a real frame ready
+              to paint — otherwise the poster vanishes the instant play() is
+              called (browser default) while the video is still buffering,
+              leaving a blank gap before playback visibly starts. */}
+          <img
+            src={heroPoster}
+            alt=""
+            className={`in-hero-poster-overlay${heroFrameReady ? ' in-hero-poster-overlay--hidden' : ''}`}
           />
           <div className={`in-hero-tint${isPlaying ? ' in-hero-tint--hidden' : ''}`} />
         </div>
@@ -271,6 +284,12 @@ export default function InspirationPage() {
               playsInline
               onPlay={() => setIsStudioPlaying(true)}
               onPause={() => setIsStudioPlaying(false)}
+              onLoadedData={() => setStudioFrameReady(true)}
+            />
+            <img
+              src={STUDIO_VIDEOS[studioIndex].poster}
+              alt=""
+              className={`in-hero-poster-overlay${studioFrameReady ? ' in-hero-poster-overlay--hidden' : ''}`}
             />
             <div className={`in-hero-tint${isStudioPlaying ? ' in-hero-tint--hidden' : ''}`} />
           </div>
