@@ -48,8 +48,19 @@ export function HeroVideoProvider({ children }) {
   // a usable buffer than racing everything else from t=0.
   const [shouldLoad, setShouldLoad] = useState(false)
 
+  // Sets the default (offscreen) portal target on mount — but only if
+  // nothing has claimed it yet. React fires effects bottom-up (children
+  // before ancestors); landing directly on /inspiration, InspirationPage
+  // mounts in the very same commit as this provider, so its own "claim
+  // this container" effect actually runs BEFORE this one. A plain
+  // setPortalTarget(offscreenRef.current) here unconditionally clobbered
+  // that registration back to offscreen every time, right after it was
+  // set — the video stayed stuck at 1x1px in the hidden div forever,
+  // which looked exactly like "the video disappears": the poster overlay
+  // still correctly faded away once the video was playing, revealing
+  // nothing behind it, since the real video was never actually there.
   useEffect(() => {
-    setPortalTarget(offscreenRef.current)
+    setPortalTarget((current) => current ?? offscreenRef.current)
   }, [])
 
   useEffect(() => {
