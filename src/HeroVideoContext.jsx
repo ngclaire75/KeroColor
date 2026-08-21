@@ -60,7 +60,14 @@ export function HeroVideoProvider({ children }) {
       <div ref={offscreenRef} style={{ position: 'fixed', top: -9999, left: -9999, width: 1, height: 1, overflow: 'hidden' }} />
       {portalTarget && shouldLoad && createPortal(
         <video
-          ref={videoRef}
+          // A callback ref, not ref={videoRef} directly — empirically, a
+          // plain object ref here let React's reconciler treat the portal's
+          // container change (offscreen div <-> InspirationPage's slot) as
+          // grounds to tear down and recreate the DOM node on navigation,
+          // silently discarding everything it had buffered. A callback ref
+          // avoided that; verified via repeated real navigations (buffered
+          // seconds keep growing across the nav, never resetting to 0).
+          ref={(el) => { videoRef.current = el }}
           src={HERO_VIDEO_URL}
           preload="auto"
           fetchpriority="high"
