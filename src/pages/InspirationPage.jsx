@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useHeroVideo } from '../HeroVideoContext'
 import SearchLoader from '../components/SearchLoader'
-import ScrambleText from '../components/ScrambleText'
 import Footer from '../components/Footer'
 import heroPoster from '../../images/inspiration-hero-poster.jpg'
 import square1 from '../../images/square1.jpeg'
@@ -35,9 +34,9 @@ import './InspirationPage.css'
 // while this page is active. See HeroVideoContext.jsx.
 
 const STUDIO_VIDEOS = [
-  { src: '/api/media/video2.mp4', poster: studioPoster2, credit: '@heesunrise on YouTube' },
-  { src: '/api/media/video4.mp4', poster: studioPoster4, credit: '@minjuddie on YouTube' },
   { src: '/api/media/video5.mp4', poster: studioPoster5, credit: '@iirixle on YouTube' },
+  { src: '/api/media/video4.mp4', poster: studioPoster4, credit: '@minjuddie on YouTube' },
+  { src: '/api/media/video2.mp4', poster: studioPoster2, credit: '@heesunrise on YouTube' },
 ]
 
 const NAV_ITEMS = ['All', 'Seasonal Edition', 'Editorial', 'Inspiration']
@@ -50,7 +49,6 @@ export default function InspirationPage() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [btnHidden, setBtnHidden] = useState(false)
   const [heroFrameReady, setHeroFrameReady] = useState(false)
-  const [heroEnded, setHeroEnded] = useState(false)
   const hideBtnTimeoutRef = useRef(null)
   // The actual hero <video> element (and whether the user has pressed play
   // yet) lives in HeroVideoContext, at the app root, so it keeps buffering
@@ -79,27 +77,10 @@ export default function InspirationPage() {
     return () => video.removeEventListener('loadeddata', onLoadedData)
   }, [heroVideoEl])
 
-  // Shows the end-card once the video actually finishes — only when the
-  // user was really watching it (isPlaying), not when the silent
-  // background warm-up autoplay happens to reach its own end unwatched.
-  useEffect(() => {
-    const video = heroVideoEl
-    if (!video) return
-    const onEnded = () => {
-      if (isPlaying) {
-        setIsPlaying(false)
-        setHeroEnded(true)
-      }
-    }
-    video.addEventListener('ended', onEnded)
-    return () => video.removeEventListener('ended', onEnded)
-  }, [heroVideoEl, isPlaying])
-
   const [isStudioPlaying, setIsStudioPlaying] = useState(false)
   const [studioBtnHidden, setStudioBtnHidden] = useState(false)
   const [studioIndex, setStudioIndex] = useState(0)
   const [studioFrameReady, setStudioFrameReady] = useState(false)
-  const [studioEnded, setStudioEnded] = useState(false)
   const studioVideoRef = useRef(null)
   const hideStudioBtnTimeoutRef = useRef(null)
   const studioStartedRef = useRef(false)
@@ -142,7 +123,6 @@ export default function InspirationPage() {
     setStudioFrameReady(false)
     studioVideoRef.current?.pause()
     setIsStudioPlaying(false)
-    setStudioEnded(false)
     studioStartedRef.current = false
     setStudioIndex(index)
   }
@@ -181,7 +161,6 @@ export default function InspirationPage() {
     const video = heroVideoEl
     if (!video) return
     if (isPlaying) {
-      setHeroEnded(false) // dismiss the end-card if replaying
       studioVideoRef.current?.pause()
       if (!heroStartedRef.current) {
         // First real press: the video has already been playing silently
@@ -190,9 +169,6 @@ export default function InspirationPage() {
         // cold-start network wait, because the data was already fetched.
         video.currentTime = 0
         heroStartedRef.current = true
-      } else if (video.ended) {
-        // Replaying after watching through to the end.
-        video.currentTime = 0
       }
       video.muted = false
       // If it's somehow not already playing (autoplay blocked, or an
@@ -214,13 +190,10 @@ export default function InspirationPage() {
     const video = studioVideoRef.current
     if (!video) return
     if (!isStudioPlaying) {
-      setStudioEnded(false) // dismiss the end-card if replaying
       heroVideoRef.current?.pause()
       if (!studioStartedRef.current) {
         video.currentTime = 0
         studioStartedRef.current = true
-      } else if (video.ended) {
-        video.currentTime = 0
       }
       video.muted = false
       if (video.paused) {
@@ -231,15 +204,6 @@ export default function InspirationPage() {
     } else {
       video.pause()
       setIsStudioPlaying(false)
-    }
-  }
-
-  // Shows the studio end-card once its video actually finishes, only when
-  // it was really being watched (mirrors the hero effect above).
-  const handleStudioEnded = () => {
-    if (isStudioPlaying) {
-      setIsStudioPlaying(false)
-      setStudioEnded(true)
     }
   }
 
@@ -318,17 +282,6 @@ export default function InspirationPage() {
             className={`in-hero-poster-overlay${heroFrameReady && isPlaying ? ' in-hero-poster-overlay--hidden' : ''}`}
           />
           <div className={`in-hero-tint${isPlaying ? ' in-hero-tint--hidden' : ''}`} />
-          {/* Shown once the video actually plays through to the end (not
-              on the silent background warm-up) — click it (or the video
-              area) again to replay. */}
-          <div className={`in-hero-endcard${heroEnded ? ' in-hero-endcard--visible' : ''}`}>
-            <p className="in-hero-endcard-line">
-              <ScrambleText text="WATCH THE FULL VIDEO" active={heroEnded} delay={0} />
-            </p>
-            <p className="in-hero-endcard-line">
-              <ScrambleText text="ON YOUTUBE" active={heroEnded} delay={260} />
-            </p>
-          </div>
         </div>
         <button
           type="button"
@@ -423,13 +376,9 @@ export default function InspirationPage() {
               preload={studioWarm ? 'auto' : 'metadata'}
               autoPlay={studioWarm}
               muted
-              // No loop — needs a real 'ended' event to show the
-              // end-card. The silent warm-up autoplay, if unwatched,
-              // just plays once and sits paused at the end (harmless,
-              // hidden behind the poster).
+              loop
               playsInline
               onLoadedData={() => setStudioFrameReady(true)}
-              onEnded={handleStudioEnded}
               // Click-through — same fix as the hero video (see
               // HeroVideoContext.jsx): a real trusted click landing
               // directly on a <video> can be swallowed by the browser's
@@ -444,14 +393,6 @@ export default function InspirationPage() {
               className={`in-hero-poster-overlay${studioFrameReady && isStudioPlaying ? ' in-hero-poster-overlay--hidden' : ''}`}
             />
             <div className={`in-hero-tint${isStudioPlaying ? ' in-hero-tint--hidden' : ''}`} />
-            <div className={`in-hero-endcard${studioEnded ? ' in-hero-endcard--visible' : ''}`}>
-              <p className="in-hero-endcard-line">
-                <ScrambleText text="WATCH THE FULL VIDEO" active={studioEnded} delay={0} />
-              </p>
-              <p className="in-hero-endcard-line">
-                <ScrambleText text="ON YOUTUBE" active={studioEnded} delay={260} />
-              </p>
-            </div>
           </div>
           <button
             type="button"

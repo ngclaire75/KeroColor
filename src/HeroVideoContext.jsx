@@ -96,12 +96,7 @@ export function HeroVideoProvider({ children }) {
           fetchpriority="high"
           autoPlay
           muted
-          // No loop — InspirationPage needs a real 'ended' event to show
-          // the end-card once the user has actually watched it through.
-          // The silent background warm-up (before any click) just plays
-          // once and sits paused at the end when unwatched — harmless,
-          // since it's hidden behind the poster and has already fetched
-          // everything it needed to by then.
+          loop
           playsInline
           // pointerEvents: 'none' — a real (trusted) mouse click landing
           // directly on a <video> element can trigger the browser's own
