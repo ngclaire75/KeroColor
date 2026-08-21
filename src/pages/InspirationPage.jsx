@@ -10,21 +10,21 @@ import studioPoster4 from '../../images/video4-poster.jpg'
 import studioPoster5 from '../../images/video5-poster.jpg'
 import './InspirationPage.css'
 
-// Hosted on Cloudflare R2 rather than bundled — the source files are well
-// over GitHub's and Vercel's 100MB per-file limits for normal repo/deploy
-// assets. R2 has zero egress/bandwidth fees (unlike Vercel Blob's Hobby
-// plan, which locked the store entirely after hitting its 1GB storage +
-// bandwidth caps) and serves correct video/mp4 headers (unlike GitHub
-// Releases, which forces application/octet-stream + Content-Disposition:
-// attachment and won't play inline in Safari). This keeps full original
-// quality with much more headroom (10GB free storage vs Vercel's 1GB).
-const R2_BASE = 'https://pub-638c4a59407449fea49102cbe427741f.r2.dev'
-const HERO_VIDEO_URL = `${R2_BASE}/blush.mp4`
+// Source files live on Cloudflare R2 (full original quality, well over
+// GitHub's/Vercel's 100MB per-file limits for normal repo/deploy assets),
+// but are served through /api/media/* — a same-origin Vercel proxy —
+// rather than the browser hitting the R2 pub-*.r2.dev subdomain directly.
+// That auto-generated subdomain showed real DNS resolution failures on
+// multiple independent networks ("hostname could not be found," even on a
+// zero-JS <link rel="preconnect">). Since the browser has already
+// resolved kerocolor.vercel.app to load the page, routing videos through
+// that same origin needs no new DNS lookup at all — see api/media/[file].js.
+const HERO_VIDEO_URL = '/api/media/blush.mp4'
 
 const STUDIO_VIDEOS = [
-  { src: `${R2_BASE}/video2.mp4`, poster: studioPoster2, credit: '@heesunrise on YouTube' },
-  { src: `${R2_BASE}/video4.mp4`, poster: studioPoster4, credit: '@minjuddie on YouTube' },
-  { src: `${R2_BASE}/video5.mp4`, poster: studioPoster5, credit: '@iirixle on YouTube' },
+  { src: '/api/media/video2.mp4', poster: studioPoster2, credit: '@heesunrise on YouTube' },
+  { src: '/api/media/video4.mp4', poster: studioPoster4, credit: '@minjuddie on YouTube' },
+  { src: '/api/media/video5.mp4', poster: studioPoster5, credit: '@iirixle on YouTube' },
 ]
 
 const NAV_ITEMS = ['All', 'Seasonal Edition', 'Editorial', 'Inspiration']
@@ -173,7 +173,6 @@ export default function InspirationPage() {
             src={HERO_VIDEO_URL}
             poster={heroPoster}
             preload="metadata"
-            crossOrigin="anonymous"
             loop
             playsInline
             onPlay={() => setIsPlaying(true)}
@@ -268,7 +267,6 @@ export default function InspirationPage() {
               src={STUDIO_VIDEOS[studioIndex].src}
               poster={STUDIO_VIDEOS[studioIndex].poster}
               preload="metadata"
-              crossOrigin="anonymous"
               loop
               playsInline
               onPlay={() => setIsStudioPlaying(true)}
