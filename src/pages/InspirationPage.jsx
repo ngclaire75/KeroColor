@@ -18,7 +18,13 @@ import './InspirationPage.css'
 // multiple independent networks ("hostname could not be found," even on a
 // zero-JS <link rel="preconnect">). Since the browser has already
 // resolved kerocolor.vercel.app to load the page, routing videos through
-// that same origin needs no new DNS lookup at all — see api/media/[file].js.
+// that same origin needs no new DNS lookup at all — see api/media.js.
+//
+// Tried adaptive-bitrate HLS for the hero video first (multiple quality
+// renditions, low-quality fast-start segment ramping up to full quality)
+// but it measured slower in testing (~1.7s to first frame, and never
+// ramped past the lowest tier in 8s) than this plain MP4 + preload="auto"
+// approach (~470ms) — reverted rather than ship a regression.
 const HERO_VIDEO_URL = '/api/media/blush.mp4'
 
 const STUDIO_VIDEOS = [
