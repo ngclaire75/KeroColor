@@ -10,6 +10,15 @@ document.addEventListener('contextmenu', e => {
   if (e.target.matches('img')) e.preventDefault()
 })
 
+// Registers the offline video cache (see public/sw.js) so the hero/studio
+// videos, once fully downloaded once, get saved on the device and load
+// instantly with zero network wait on every visit after that.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {})
+  })
+}
+
 // Prevent iOS Safari from auto-zooming on input focus without changing visual font size
 const viewport = document.querySelector('meta[name=viewport]')
 if (viewport) {
