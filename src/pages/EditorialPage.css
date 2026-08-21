@@ -127,8 +127,6 @@
      the grid below, same as the grid-to-text-body gap. */
   margin: 0 auto;
   text-transform: uppercase;
-  transform: scaleX(1.15);
-  transform-origin: center;
 }
 
 .ed-intro-item {
@@ -386,10 +384,7 @@
   margin: 0;
   font-size: 1.7rem;
   text-align: left;
-  /* Same scaleX as .ed-intro-heading, but anchored left (not center) so
-     it stretches rightward only, keeping the left edge aligned with the
-     body text below it. */
-  transform: scaleX(1.15);
+  transform: scaleX(1.08);
   transform-origin: left;
 }
 
@@ -431,7 +426,6 @@
   max-width: 470px;
   margin: 0 0 1.5rem;
   text-align: left;
-  transform-origin: left;
 }
 
 .ed-bnd-imgwrap {
@@ -617,10 +611,7 @@
   }
 
   /* Mobile keeps the heading left-aligned and unconstrained — the
-     centered/max-width treatment above is desktop-only. Uses its own
-     scaleX with transform-origin: left (not center, like desktop) so the
-     stretch grows rightward only — the left edge stays anchored and
-     matches the body text below, which has no transform. */
+     centered/max-width treatment above is desktop-only. */
   .ed-intro-heading {
     font-size: 1.4rem;
     line-height: 1.25;
@@ -628,8 +619,6 @@
     max-width: 82%;
     align-self: flex-start;
     margin: 0 0 1.75rem;
-    transform: scaleX(1.2);
-    transform-origin: left;
   }
 
   /* Scoped separately from .ed-intro's heading gap above */
