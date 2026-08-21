@@ -145,39 +145,31 @@
   opacity: 0;
 }
 
-.in-hero-play-btn {
+.in-hero-controls {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  right: 14px;
+  bottom: 14px;
   z-index: 2;
-  width: 56px;
-  height: 56px;
+  display: flex;
+  gap: 8px;
+}
+
+.in-hero-icon-btn {
+  width: 34px;
+  height: 34px;
   padding: 0;
   border: none;
   border-radius: 50%;
-  background: #e8d8c4;
+  background: rgba(0, 0, 0, 0.45);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 1;
-  transition: opacity 0.35s ease;
+  transition: background 0.15s ease;
 }
 
-.in-hero-play-btn--hidden {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.in-hero-play-btn-inner {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: #561c24;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.in-hero-icon-btn:hover {
+  background: rgba(0, 0, 0, 0.65);
 }
 
 .in-hero-credit {
@@ -443,19 +435,15 @@
     line-height: 1.3;
   }
 
-  .in-hero-play-btn {
-    width: 42px;
-    height: 42px;
+  .in-hero-controls {
+    right: 10px;
+    bottom: 10px;
+    gap: 6px;
   }
 
-  .in-hero-play-btn-inner {
+  .in-hero-icon-btn {
     width: 28px;
     height: 28px;
-  }
-
-  .in-hero-play-btn-inner svg {
-    width: 12px;
-    height: 12px;
   }
 
   .in-squares {

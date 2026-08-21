@@ -46,15 +46,20 @@ export default function InspirationPage() {
   const [overlayFading, setOverlayFading] = useState(false)
   const [overlayGone, setOverlayGone] = useState(false)
   const [contentReady, setContentReady] = useState(false)
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [btnHidden, setBtnHidden] = useState(false)
+  // Everything autoplays by default now — isPlaying/isStudioPlaying start
+  // true, and the small bottom-right button pauses rather than starts
+  // playback. Muted by default too (autoplay-with-sound isn't allowed
+  // without a user gesture); the separate mute/unmute button is that
+  // gesture.
+  const [isPlaying, setIsPlaying] = useState(true)
+  const [isMuted, setIsMuted] = useState(true)
   const [heroFrameReady, setHeroFrameReady] = useState(false)
-  const hideBtnTimeoutRef = useRef(null)
-  // The actual hero <video> element (and whether the user has pressed play
-  // yet) lives in HeroVideoContext, at the app root, so it keeps buffering
-  // across page navigation instead of starting over each time this page
-  // mounts. This page just claims a spot for it via a portal target div.
-  const { videoRef: heroVideoRef, videoEl: heroVideoEl, startedRef: heroStartedRef, setPortalTarget, offscreenRef } = useHeroVideo()
+  // The actual hero <video> element (and whether it's been snapped back to
+  // the true start yet) lives in HeroVideoContext, at the app root, so it
+  // keeps buffering across page navigation instead of starting over each
+  // time this page mounts. This page just claims a spot for it via a
+  // portal target div.
+  const { videoEl: heroVideoEl, startedRef: heroStartedRef, setPortalTarget, offscreenRef } = useHeroVideo()
   const heroContainerRef = useRef(null)
 
   useEffect(() => {
@@ -77,12 +82,23 @@ export default function InspirationPage() {
     return () => video.removeEventListener('loadeddata', onLoadedData)
   }, [heroVideoEl])
 
-  const [isStudioPlaying, setIsStudioPlaying] = useState(false)
-  const [studioBtnHidden, setStudioBtnHidden] = useState(false)
+  // The silent muted warm-up autoplay (see HeroVideoContext) may have
+  // already drifted forward while buffering in the background before this
+  // page even mounted. The first time it actually has a real frame ready
+  // to show here, snap back to the true start once, so what the user sees
+  // genuinely begins at 0 rather than wherever the warm-up had gotten to.
+  useEffect(() => {
+    const video = heroVideoEl
+    if (!video || !heroFrameReady || heroStartedRef.current) return
+    video.currentTime = 0
+    heroStartedRef.current = true
+  }, [heroFrameReady, heroVideoEl, heroStartedRef])
+
+  const [isStudioPlaying, setIsStudioPlaying] = useState(true)
+  const [isStudioMuted, setIsStudioMuted] = useState(true)
   const [studioIndex, setStudioIndex] = useState(0)
   const [studioFrameReady, setStudioFrameReady] = useState(false)
   const studioVideoRef = useRef(null)
-  const hideStudioBtnTimeoutRef = useRef(null)
   const studioStartedRef = useRef(false)
   // The studio carousel only starts its own silent muted-autoplay warm-up
   // once its section is actually scrolled near — starting it eagerly at
@@ -108,21 +124,50 @@ export default function InspirationPage() {
     return () => observer.disconnect()
   }, [])
 
-  // Once warmed up, re-trigger the silent muted autoplay whenever the
-  // carousel slide changes — changing a <video>'s src doesn't reliably
-  // resume autoplay on its own across browsers.
+  // Once warmed up, (re)start autoplay whenever the carousel slide changes
+  // — changing a <video>'s src doesn't reliably resume autoplay on its own
+  // across browsers. Applies the current mute/play intent at that moment;
+  // the dedicated effects below handle ongoing changes to either.
   useEffect(() => {
     const video = studioVideoRef.current
     if (!video || !studioWarm) return
-    video.muted = true
-    video.play()?.catch(() => {})
+    video.muted = isStudioMuted
+    if (isStudioPlaying) video.play()?.catch(() => {})
   }, [studioIndex, studioWarm])
+
+  // Same "snap back to the true start once a real frame exists" logic as
+  // the hero video, re-armed on every slide change (studioStartedRef and
+  // studioFrameReady both get reset in goToStudioVideo below).
+  useEffect(() => {
+    const video = studioVideoRef.current
+    if (!video || !studioFrameReady || studioStartedRef.current) return
+    video.currentTime = 0
+    studioStartedRef.current = true
+  }, [studioFrameReady])
+
+  // Ongoing play/pause, independent of the video's own availability.
+  useEffect(() => {
+    const video = studioVideoRef.current
+    if (!video) return
+    if (isStudioPlaying) {
+      if (video.paused) {
+        if (video.error) retryLoad(video)
+        else video.play()?.catch(() => retryLoad(video))
+      }
+    } else {
+      video.pause()
+    }
+  }, [isStudioPlaying])
+
+  useEffect(() => {
+    const video = studioVideoRef.current
+    if (video) video.muted = isStudioMuted
+  }, [isStudioMuted])
 
   const goToStudioVideo = (index) => {
     if (index < 0 || index >= STUDIO_VIDEOS.length) return
     setStudioFrameReady(false)
-    studioVideoRef.current?.pause()
-    setIsStudioPlaying(false)
+    setIsStudioPlaying(true) // the new slide autoplays too
     studioStartedRef.current = false
     setStudioIndex(index)
   }
@@ -145,89 +190,50 @@ export default function InspirationPage() {
     video.addEventListener('error', onErr, { once: true })
   }
 
-  // Just flips the user-facing intent — the button's icon/visibility must
-  // respond instantly to a click even if the actual <video> doesn't exist
-  // yet (it's created asynchronously, up to ~2s after mount; see
-  // HeroVideoContext). Unlike the studio video below, whose <video> is
-  // always present immediately, gating this on heroVideoRef.current being
-  // non-null meant a click in that window silently did nothing at all —
-  // no icon flip, nothing — which is exactly what "no pause button shows
-  // up for blush.mp4" looked like. The actual play/pause mechanics run in
-  // the effect below instead, whenever isPlaying or the video's own
-  // availability changes.
+  // Both videos autoplay by default now, so these buttons just flip the
+  // user-facing intent — instantly, regardless of whether the hero <video>
+  // element exists yet (it's created asynchronously, up to ~2s after
+  // mount; see HeroVideoContext). The actual play/pause mechanics run in
+  // the effects below, whenever isPlaying/isStudioPlaying or the video's
+  // own availability changes.
   const togglePlay = () => setIsPlaying((prev) => !prev)
+  const toggleStudioPlay = () => setIsStudioPlaying((prev) => !prev)
+
+  // Unmuting one mutes the other, so a viewer never gets two overlapping
+  // audio sources — but both videos keep playing regardless (autoplay
+  // muted has no audio to conflict over in the first place).
+  const toggleHeroMute = () => {
+    setIsMuted((prev) => {
+      const next = !prev
+      if (!next) setIsStudioMuted(true)
+      return next
+    })
+  }
+  const toggleStudioMute = () => {
+    setIsStudioMuted((prev) => {
+      const next = !prev
+      if (!next) setIsMuted(true)
+      return next
+    })
+  }
 
   useEffect(() => {
     const video = heroVideoEl
     if (!video) return
     if (isPlaying) {
-      studioVideoRef.current?.pause()
-      if (!heroStartedRef.current) {
-        // First real press: the video has already been playing silently
-        // (muted) in the background since page load to warm up its
-        // buffer, so jump back to the actual start and unmute — no
-        // cold-start network wait, because the data was already fetched.
-        video.currentTime = 0
-        heroStartedRef.current = true
-      }
-      video.muted = false
-      // If it's somehow not already playing (autoplay blocked, or an
-      // earlier load attempt failed/timed out), fall back to a normal
-      // play()/retry — same safety net as before.
       if (video.paused) {
         if (video.error) retryLoad(video)
         else video.play()?.catch(() => retryLoad(video))
       }
-    } else if (heroStartedRef.current) {
-      // Only pause if the user actually pressed play before — otherwise
-      // this is just the silent background warm-up autoplay, which should
-      // keep running untouched until the user's first real press.
+    } else {
       video.pause()
     }
   }, [isPlaying, heroVideoEl])
 
-  const toggleStudioPlay = () => {
-    const video = studioVideoRef.current
-    if (!video) return
-    if (!isStudioPlaying) {
-      heroVideoRef.current?.pause()
-      if (!studioStartedRef.current) {
-        video.currentTime = 0
-        studioStartedRef.current = true
-      }
-      video.muted = false
-      if (video.paused) {
-        if (video.error) retryLoad(video)
-        else video.play()?.catch(() => retryLoad(video))
-      }
-      setIsStudioPlaying(true)
-    } else {
-      video.pause()
-      setIsStudioPlaying(false)
-    }
-  }
-
-  // Let the icon flip to "pause" and sit visible for a beat before the
-  // button fades away — pausing again brings it back immediately.
   useEffect(() => {
-    clearTimeout(hideBtnTimeoutRef.current)
-    if (isPlaying) {
-      hideBtnTimeoutRef.current = setTimeout(() => setBtnHidden(true), 400)
-    } else {
-      setBtnHidden(false)
-    }
-    return () => clearTimeout(hideBtnTimeoutRef.current)
-  }, [isPlaying])
-
-  useEffect(() => {
-    clearTimeout(hideStudioBtnTimeoutRef.current)
-    if (isStudioPlaying) {
-      hideStudioBtnTimeoutRef.current = setTimeout(() => setStudioBtnHidden(true), 400)
-    } else {
-      setStudioBtnHidden(false)
-    }
-    return () => clearTimeout(hideStudioBtnTimeoutRef.current)
-  }, [isStudioPlaying])
+    const video = heroVideoEl
+    if (video) video.muted = isMuted
+  }, [isMuted, heroVideoEl])
 
   // Land on this page at the top, regardless of scroll position on the
   // tab navigated from (browsers preserve scroll across client-side route
@@ -272,37 +278,54 @@ export default function InspirationPage() {
               whichever page the user landed on, not just since this page
               mounted. See the comment near the top of this file. */}
           <div ref={heroContainerRef} className="in-hero-video" />
-          {/* Stays on screen until the user has actually pressed play AND a
-              real frame is ready — heroFrameReady alone would go true as
-              soon as the silent background autoplay above produces its
-              first frame, well before the user has clicked anything. */}
+          {/* Stays on screen until there's a real frame ready to show —
+              everything autoplays now, so this just covers the brief
+              window while the video is still buffering. */}
           <img
             src={heroPoster}
             alt=""
-            className={`in-hero-poster-overlay${heroFrameReady && isPlaying ? ' in-hero-poster-overlay--hidden' : ''}`}
+            className={`in-hero-poster-overlay${heroFrameReady ? ' in-hero-poster-overlay--hidden' : ''}`}
           />
           <div className={`in-hero-tint${isPlaying ? ' in-hero-tint--hidden' : ''}`} />
         </div>
-        <button
-          type="button"
-          className={`in-hero-play-btn${btnHidden ? ' in-hero-play-btn--hidden' : ''}`}
-          onClick={togglePlay}
-          aria-label={isPlaying ? 'Pause video' : 'Play video'}
-          tabIndex={btnHidden ? -1 : 0}
-        >
-          <span className="in-hero-play-btn-inner">
+        <div className="in-hero-controls">
+          <button
+            type="button"
+            className="in-hero-icon-btn"
+            onClick={(e) => { e.stopPropagation(); togglePlay() }}
+            aria-label={isPlaying ? 'Pause video' : 'Play video'}
+          >
             {isPlaying ? (
-              <svg viewBox="0 0 24 24" fill="#fff" width="16" height="16">
+              <svg viewBox="0 0 24 24" fill="#fff" width="14" height="14">
                 <rect x="5" y="4" width="5" height="16" rx="1" />
                 <rect x="14" y="4" width="5" height="16" rx="1" />
               </svg>
             ) : (
-              <svg viewBox="0 0 24 24" fill="#fff" width="16" height="16" style={{ marginLeft: '2px' }}>
+              <svg viewBox="0 0 24 24" fill="#fff" width="14" height="14" style={{ marginLeft: '2px' }}>
                 <path d="M6 4l15 8-15 8z" />
               </svg>
             )}
-          </span>
-        </button>
+          </button>
+          <button
+            type="button"
+            className="in-hero-icon-btn"
+            onClick={(e) => { e.stopPropagation(); toggleHeroMute() }}
+            aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+          >
+            {isMuted ? (
+              <svg viewBox="0 0 24 24" width="14" height="14">
+                <path d="M3 9v6h4l5 5V4L7 9H3z" fill="#fff" />
+                <path d="M16 9l5 6M21 9l-5 6" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" width="14" height="14">
+                <path d="M3 9v6h4l5 5V4L7 9H3z" fill="#fff" />
+                <path d="M16 8.5a5 5 0 0 1 0 7" stroke="#fff" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+                <path d="M18.5 6a8.5 8.5 0 0 1 0 12" stroke="#fff" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+              </svg>
+            )}
+          </button>
+        </div>
       </section>
 
       <p className="in-hero-credit">@_arinkim on YouTube</p>
@@ -390,30 +413,48 @@ export default function InspirationPage() {
             <img
               src={STUDIO_VIDEOS[studioIndex].poster}
               alt=""
-              className={`in-hero-poster-overlay${studioFrameReady && isStudioPlaying ? ' in-hero-poster-overlay--hidden' : ''}`}
+              className={`in-hero-poster-overlay${studioFrameReady ? ' in-hero-poster-overlay--hidden' : ''}`}
             />
             <div className={`in-hero-tint${isStudioPlaying ? ' in-hero-tint--hidden' : ''}`} />
           </div>
-          <button
-            type="button"
-            className={`in-hero-play-btn${studioBtnHidden ? ' in-hero-play-btn--hidden' : ''}`}
-            onClick={toggleStudioPlay}
-            aria-label={isStudioPlaying ? 'Pause video' : 'Play video'}
-            tabIndex={studioBtnHidden ? -1 : 0}
-          >
-            <span className="in-hero-play-btn-inner">
+          <div className="in-hero-controls">
+            <button
+              type="button"
+              className="in-hero-icon-btn"
+              onClick={(e) => { e.stopPropagation(); toggleStudioPlay() }}
+              aria-label={isStudioPlaying ? 'Pause video' : 'Play video'}
+            >
               {isStudioPlaying ? (
-                <svg viewBox="0 0 24 24" fill="#fff" width="16" height="16">
+                <svg viewBox="0 0 24 24" fill="#fff" width="14" height="14">
                   <rect x="5" y="4" width="5" height="16" rx="1" />
                   <rect x="14" y="4" width="5" height="16" rx="1" />
                 </svg>
               ) : (
-                <svg viewBox="0 0 24 24" fill="#fff" width="16" height="16" style={{ marginLeft: '2px' }}>
+                <svg viewBox="0 0 24 24" fill="#fff" width="14" height="14" style={{ marginLeft: '2px' }}>
                   <path d="M6 4l15 8-15 8z" />
                 </svg>
               )}
-            </span>
-          </button>
+            </button>
+            <button
+              type="button"
+              className="in-hero-icon-btn"
+              onClick={(e) => { e.stopPropagation(); toggleStudioMute() }}
+              aria-label={isStudioMuted ? 'Unmute video' : 'Mute video'}
+            >
+              {isStudioMuted ? (
+                <svg viewBox="0 0 24 24" width="14" height="14">
+                  <path d="M3 9v6h4l5 5V4L7 9H3z" fill="#fff" />
+                  <path d="M16 9l5 6M21 9l-5 6" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" />
+                </svg>
+              ) : (
+                <svg viewBox="0 0 24 24" width="14" height="14">
+                  <path d="M3 9v6h4l5 5V4L7 9H3z" fill="#fff" />
+                  <path d="M16 8.5a5 5 0 0 1 0 7" stroke="#fff" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+                  <path d="M18.5 6a8.5 8.5 0 0 1 0 12" stroke="#fff" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+                </svg>
+              )}
+            </button>
+          </div>
         </div>
 
         {STUDIO_VIDEOS[studioIndex].credit && (
