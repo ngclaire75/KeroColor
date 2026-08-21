@@ -35,12 +35,15 @@ export default async function handler(request) {
   const contentRange = upstreamRes.headers.get('content-range')
   if (contentRange) headers.set('Content-Range', contentRange)
   // Vercel's edge CDN cache keys on the URL alone — it does not vary by
-  // the Range header. Whichever response (full 200 or a specific 206
-  // byte-range) happens to be cached first for a given URL then gets
-  // served to every subsequent request regardless of what was actually
-  // asked for, silently corrupting playback/seeking. Never cache any
-  // response from this proxy at the edge to avoid that entirely.
-  headers.set('Cache-Control', 'no-store')
+  // the Range header. A specific byte-range (206) response cached under
+  // the plain URL would then get served for every other range request
+  // too, silently corrupting playback/seeking — so those must never be
+  // cached. A plain full-file (200, no Range asked) response is safe to
+  // cache normally since there's only ever one version of it.
+  headers.set(
+    'Cache-Control',
+    upstreamRes.status === 206 ? 'no-store' : 'public, max-age=31536000, immutable'
+  )
 
   return new Response(upstreamRes.body, {
     status: upstreamRes.status,

@@ -175,7 +175,14 @@ export default function InspirationPage() {
             className="in-hero-video"
             src={HERO_VIDEO_URL}
             poster={heroPoster}
-            preload="metadata"
+            // Only the hero video preloads eagerly — it's the sole video
+            // visible on page load, so there's no bandwidth contention
+            // risk (the earlier timeout bug came from hero + studio both
+            // eagerly preloading ~550MB simultaneously). The studio
+            // carousel stays on preload="metadata" since it's below the
+            // fold and its active video changes.
+            preload="auto"
+            fetchpriority="high"
             loop
             playsInline
             onPlay={() => setIsPlaying(true)}
