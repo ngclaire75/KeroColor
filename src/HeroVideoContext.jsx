@@ -36,16 +36,16 @@ export function HeroVideoProvider({ children }) {
   // navigating away and back.
   const startedRef = useRef(false)
   const [portalTarget, setPortalTarget] = useState(null)
-  // The home page alone ships hundreds of MB of images (Hero.jsx has 10
-  // full-bleed <img>s, several tens of MB each) that fire the instant the
-  // page loads. Starting the ~330MB video fetch in that same instant, even
-  // with fetchpriority="high", measured a 10s+ delay just for the first
-  // response byte — badly bandwidth-starved despite the priority hint.
-  // Waiting for the browser to go idle (or a capped fallback delay on
-  // browsers without requestIdleCallback, e.g. Safari) lets the page's own
-  // critical content get its shot at the connection first, so the video's
-  // request actually gets real throughput once it starts — net faster to
-  // a usable buffer than racing everything else from t=0.
+  // The home page ships hundreds of MB of images (Hero.jsx has 10
+  // full-bleed <img>s) that fire the instant the page loads. Starting the
+  // video fetch in that same instant, even with fetchpriority="high", can
+  // still get bandwidth-starved racing all of that from t=0 — so this
+  // still briefly yields to let the page's critical content get a head
+  // start. The delay is deliberately short now: the video itself used to
+  // be ~330MB (a real 10s+ stall when it lost that race) but is now
+  // trimmed to 1:20 at the same bitrate — well under 30MB per file — so
+  // the contention risk, and thus how long it's worth waiting, is much
+  // smaller too.
   const [shouldLoad, setShouldLoad] = useState(false)
 
   // Sets the default (offscreen) portal target on mount — but only if
@@ -65,10 +65,10 @@ export function HeroVideoProvider({ children }) {
 
   useEffect(() => {
     if (typeof requestIdleCallback === 'function') {
-      const id = requestIdleCallback(() => setShouldLoad(true), { timeout: 2000 })
+      const id = requestIdleCallback(() => setShouldLoad(true), { timeout: 500 })
       return () => cancelIdleCallback(id)
     }
-    const id = setTimeout(() => setShouldLoad(true), 1500)
+    const id = setTimeout(() => setShouldLoad(true), 300)
     return () => clearTimeout(id)
   }, [])
 
@@ -92,7 +92,12 @@ export function HeroVideoProvider({ children }) {
           fetchpriority="high"
           autoPlay
           muted
-          loop
+          // No loop — InspirationPage needs a real 'ended' event to show
+          // the end-card once the user has actually watched it through.
+          // The silent background warm-up (before any click) just plays
+          // once and sits paused at the end when unwatched — harmless,
+          // since it's hidden behind the poster and has already fetched
+          // everything it needed to by then.
           playsInline
           // pointerEvents: 'none' — a real (trusted) mouse click landing
           // directly on a <video> element can trigger the browser's own
