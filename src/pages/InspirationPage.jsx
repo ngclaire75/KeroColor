@@ -10,15 +10,19 @@ import studioPoster4 from '../../images/video4-poster.jpg'
 import studioPoster5 from '../../images/video5-poster.jpg'
 import './InspirationPage.css'
 
-// Hosted on Vercel Blob storage rather than bundled — the source files are
-// well over GitHub's and Vercel's 100MB per-file limits for normal
-// repo/deploy assets. This keeps full original quality.
-const HERO_VIDEO_URL = 'https://1thachn5rlbaos0z.public.blob.vercel-storage.com/inspiration-hero-blush-ktAiNTK6LuYWMhH6A2fSAeZzvot6lN.mp4'
+// Hosted as GitHub Release assets rather than bundled or on Vercel Blob —
+// the source files are well over GitHub's/Vercel's 100MB per-file limits
+// for normal repo/deploy assets, and Vercel Blob's Hobby-plan storage quota
+// proved unreliable (silently went "Inactive" and blocked all playback).
+// GitHub Release downloads have no comparable hard quota. This keeps full
+// original quality. The repo must stay public for these URLs to resolve.
+const RELEASE_BASE = 'https://github.com/ngclaire75/KeroColor/releases/download/media-v1'
+const HERO_VIDEO_URL = `${RELEASE_BASE}/blush.mp4`
 
 const STUDIO_VIDEOS = [
-  { src: 'https://1thachn5rlbaos0z.public.blob.vercel-storage.com/inspiration-studio-video2.mp4', poster: studioPoster2, credit: '@heesunrise on YouTube' },
-  { src: 'https://1thachn5rlbaos0z.public.blob.vercel-storage.com/inspiration-studio-video4.mp4', poster: studioPoster4, credit: '@minjuddie on YouTube' },
-  { src: 'https://1thachn5rlbaos0z.public.blob.vercel-storage.com/inspiration-studio-video5.mp4', poster: studioPoster5, credit: '@iirixle on YouTube' },
+  { src: `${RELEASE_BASE}/video2.mp4`, poster: studioPoster2, credit: '@heesunrise on YouTube' },
+  { src: `${RELEASE_BASE}/video4.mp4`, poster: studioPoster4, credit: '@minjuddie on YouTube' },
+  { src: `${RELEASE_BASE}/video5.mp4`, poster: studioPoster5, credit: '@iirixle on YouTube' },
 ]
 
 const NAV_ITEMS = ['All', 'Seasonal Edition', 'Editorial', 'Inspiration']
