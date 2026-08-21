@@ -616,7 +616,7 @@
     font-size: 1.4rem;
     line-height: 1.25;
     text-align: left;
-    max-width: 82%;
+    max-width: 100%;
     align-self: flex-start;
     margin: 0 0 1.75rem;
   }
