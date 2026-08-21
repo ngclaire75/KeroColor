@@ -281,6 +281,7 @@ export default function InspirationPage() {
             alt=""
             className={`in-hero-poster-overlay${heroFrameReady && isPlaying ? ' in-hero-poster-overlay--hidden' : ''}`}
           />
+          <div className={`in-hero-tint${isPlaying ? ' in-hero-tint--hidden' : ''}`} />
         </div>
         <button
           type="button"
@@ -391,6 +392,7 @@ export default function InspirationPage() {
               alt=""
               className={`in-hero-poster-overlay${studioFrameReady && isStudioPlaying ? ' in-hero-poster-overlay--hidden' : ''}`}
             />
+            <div className={`in-hero-tint${isStudioPlaying ? ' in-hero-tint--hidden' : ''}`} />
           </div>
           <button
             type="button"

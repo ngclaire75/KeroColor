@@ -132,6 +132,19 @@
   opacity: 0;
 }
 
+.in-hero-tint {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+.in-hero-tint--hidden {
+  opacity: 0;
+}
+
 .in-hero-play-btn {
   position: absolute;
   top: 50%;
