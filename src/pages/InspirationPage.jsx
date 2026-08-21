@@ -379,6 +379,13 @@ export default function InspirationPage() {
               loop
               playsInline
               onLoadedData={() => setStudioFrameReady(true)}
+              // Click-through — same fix as the hero video (see
+              // HeroVideoContext.jsx): a real trusted click landing
+              // directly on a <video> can be swallowed by the browser's
+              // own native handling before it bubbles to the wrapper's
+              // onClick. Routing every click through the plain wrapper
+              // div avoids that entirely.
+              style={{ pointerEvents: 'none' }}
             />
             <img
               src={STUDIO_VIDEOS[studioIndex].poster}

@@ -94,7 +94,18 @@ export function HeroVideoProvider({ children }) {
           muted
           loop
           playsInline
-          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          // pointerEvents: 'none' — a real (trusted) mouse click landing
+          // directly on a <video> element can trigger the browser's own
+          // native default handling for it in a way a synthetic .click()
+          // never does, which was swallowing the click before it bubbled
+          // up to InspirationPage's onClick handler on the wrapper —
+          // confirmed via a real click reaching document in the capture
+          // phase but never updating React state, while an identical
+          // element.click() worked every time. Making the video itself
+          // click-through means every click, trusted or not, always lands
+          // on the plain wrapper div instead, which has no such native
+          // behavior to worry about.
+          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', pointerEvents: 'none' }}
         />,
         portalTarget
       )}
