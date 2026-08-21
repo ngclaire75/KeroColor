@@ -10,21 +10,21 @@ import studioPoster4 from '../../images/video4-poster.jpg'
 import studioPoster5 from '../../images/video5-poster.jpg'
 import './InspirationPage.css'
 
-// Hosted on Vercel Blob storage rather than bundled — the source files are
-// well over GitHub's and Vercel's 100MB per-file limits for normal
-// repo/deploy assets. This keeps full original quality.
-// NOTE: as of 2026-08-21 this store is temporarily locked ("Inactive")
-// after hitting the Hobby-plan storage cap — Vercel's dashboard states
-// access resumes automatically on 2026-08-22. Serves correct video/mp4
-// headers (unlike GitHub Releases, which forces application/octet-stream
-// + Content-Disposition: attachment and won't play inline in Safari), so
-// this is the right long-term URL — it just needs the reset to land.
-const HERO_VIDEO_URL = 'https://1thachn5rlbaos0z.public.blob.vercel-storage.com/inspiration-hero-blush-ktAiNTK6LuYWMhH6A2fSAeZzvot6lN.mp4'
+// Hosted on Cloudflare R2 rather than bundled — the source files are well
+// over GitHub's and Vercel's 100MB per-file limits for normal repo/deploy
+// assets. R2 has zero egress/bandwidth fees (unlike Vercel Blob's Hobby
+// plan, which locked the store entirely after hitting its 1GB storage +
+// bandwidth caps) and serves correct video/mp4 headers (unlike GitHub
+// Releases, which forces application/octet-stream + Content-Disposition:
+// attachment and won't play inline in Safari). This keeps full original
+// quality with much more headroom (10GB free storage vs Vercel's 1GB).
+const R2_BASE = 'https://pub-638c4a59407449fea49102cbe427741f.r2.dev'
+const HERO_VIDEO_URL = `${R2_BASE}/blush.mp4`
 
 const STUDIO_VIDEOS = [
-  { src: 'https://1thachn5rlbaos0z.public.blob.vercel-storage.com/inspiration-studio-video2.mp4', poster: studioPoster2, credit: '@heesunrise on YouTube' },
-  { src: 'https://1thachn5rlbaos0z.public.blob.vercel-storage.com/inspiration-studio-video4.mp4', poster: studioPoster4, credit: '@minjuddie on YouTube' },
-  { src: 'https://1thachn5rlbaos0z.public.blob.vercel-storage.com/inspiration-studio-video5.mp4', poster: studioPoster5, credit: '@iirixle on YouTube' },
+  { src: `${R2_BASE}/video2.mp4`, poster: studioPoster2, credit: '@heesunrise on YouTube' },
+  { src: `${R2_BASE}/video4.mp4`, poster: studioPoster4, credit: '@minjuddie on YouTube' },
+  { src: `${R2_BASE}/video5.mp4`, poster: studioPoster5, credit: '@iirixle on YouTube' },
 ]
 
 const NAV_ITEMS = ['All', 'Seasonal Edition', 'Editorial', 'Inspiration']
