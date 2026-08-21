@@ -28,9 +28,29 @@ export function HeroVideoProvider({ children }) {
   // navigating away and back.
   const startedRef = useRef(false)
   const [portalTarget, setPortalTarget] = useState(null)
+  // The home page alone ships hundreds of MB of images (Hero.jsx has 10
+  // full-bleed <img>s, several tens of MB each) that fire the instant the
+  // page loads. Starting the ~330MB video fetch in that same instant, even
+  // with fetchpriority="high", measured a 10s+ delay just for the first
+  // response byte — badly bandwidth-starved despite the priority hint.
+  // Waiting for the browser to go idle (or a capped fallback delay on
+  // browsers without requestIdleCallback, e.g. Safari) lets the page's own
+  // critical content get its shot at the connection first, so the video's
+  // request actually gets real throughput once it starts — net faster to
+  // a usable buffer than racing everything else from t=0.
+  const [shouldLoad, setShouldLoad] = useState(false)
 
   useEffect(() => {
     setPortalTarget(offscreenRef.current)
+  }, [])
+
+  useEffect(() => {
+    if (typeof requestIdleCallback === 'function') {
+      const id = requestIdleCallback(() => setShouldLoad(true), { timeout: 2000 })
+      return () => cancelIdleCallback(id)
+    }
+    const id = setTimeout(() => setShouldLoad(true), 1500)
+    return () => clearTimeout(id)
   }, [])
 
   return (
@@ -38,7 +58,7 @@ export function HeroVideoProvider({ children }) {
       {children}
       {/* Default home for the video whenever no page has claimed it. */}
       <div ref={offscreenRef} style={{ position: 'fixed', top: -9999, left: -9999, width: 1, height: 1, overflow: 'hidden' }} />
-      {portalTarget && createPortal(
+      {portalTarget && shouldLoad && createPortal(
         <video
           ref={videoRef}
           src={HERO_VIDEO_URL}
