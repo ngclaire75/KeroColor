@@ -45,6 +45,12 @@ export default function InspirationPage() {
   const [heroFrameReady, setHeroFrameReady] = useState(false)
   const heroVideoRef = useRef(null)
   const hideBtnTimeoutRef = useRef(null)
+  // Tracks whether the user has actually pressed play yet. The hero video
+  // is silently autoplaying muted in the background from page load (see
+  // the video element below) purely to warm up its buffer — this flag is
+  // what tells togglePlay to snap back to the very start on that first
+  // real press, rather than wherever the silent autoplay had drifted to.
+  const heroStartedRef = useRef(false)
 
   const [isStudioPlaying, setIsStudioPlaying] = useState(false)
   const [studioBtnHidden, setStudioBtnHidden] = useState(false)
@@ -52,12 +58,47 @@ export default function InspirationPage() {
   const [studioFrameReady, setStudioFrameReady] = useState(false)
   const studioVideoRef = useRef(null)
   const hideStudioBtnTimeoutRef = useRef(null)
+  const studioStartedRef = useRef(false)
+  // The studio carousel only starts its own silent muted-autoplay warm-up
+  // once its section is actually scrolled near — starting it eagerly at
+  // page load alongside the hero video would recreate the real bandwidth-
+  // contention timeout bug from earlier (two ~300MB videos competing for
+  // the same connection).
+  const [studioWarm, setStudioWarm] = useState(false)
+  const studioSectionRef = useRef(null)
+
+  useEffect(() => {
+    const el = studioSectionRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          setStudioWarm(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '600px' } // start warming up well before it's on screen
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  // Once warmed up, re-trigger the silent muted autoplay whenever the
+  // carousel slide changes — changing a <video>'s src doesn't reliably
+  // resume autoplay on its own across browsers.
+  useEffect(() => {
+    const video = studioVideoRef.current
+    if (!video || !studioWarm) return
+    video.muted = true
+    video.play()?.catch(() => {})
+  }, [studioIndex, studioWarm])
 
   const goToStudioVideo = (index) => {
     if (index < 0 || index >= STUDIO_VIDEOS.length) return
     setStudioFrameReady(false)
     studioVideoRef.current?.pause()
     setIsStudioPlaying(false)
+    studioStartedRef.current = false
     setStudioIndex(index)
   }
 
@@ -82,15 +123,23 @@ export default function InspirationPage() {
   const togglePlay = () => {
     const video = heroVideoRef.current
     if (!video) return
-    if (video.paused) {
+    if (!isPlaying) {
       studioVideoRef.current?.pause()
-      // If an earlier load attempt failed/timed out (preload="metadata"
-      // means the full video isn't fetched until now), reset the element
-      // before retrying so a stale error state doesn't block playback.
-      if (video.error) {
-        retryLoad(video)
-      } else {
-        video.play()?.catch(() => retryLoad(video))
+      if (!heroStartedRef.current) {
+        // First real press: the video has already been playing silently
+        // (muted) in the background since page load to warm up its
+        // buffer, so jump back to the actual start and unmute — no
+        // cold-start network wait, because the data was already fetched.
+        video.currentTime = 0
+        heroStartedRef.current = true
+      }
+      video.muted = false
+      // If it's somehow not already playing (autoplay blocked, or an
+      // earlier load attempt failed/timed out), fall back to a normal
+      // play()/retry — same safety net as before.
+      if (video.paused) {
+        if (video.error) retryLoad(video)
+        else video.play()?.catch(() => retryLoad(video))
       }
       setIsPlaying(true)
     } else {
@@ -102,12 +151,16 @@ export default function InspirationPage() {
   const toggleStudioPlay = () => {
     const video = studioVideoRef.current
     if (!video) return
-    if (video.paused) {
+    if (!isStudioPlaying) {
       heroVideoRef.current?.pause()
-      if (video.error) {
-        retryLoad(video)
-      } else {
-        video.play()?.catch(() => retryLoad(video))
+      if (!studioStartedRef.current) {
+        video.currentTime = 0
+        studioStartedRef.current = true
+      }
+      video.muted = false
+      if (video.paused) {
+        if (video.error) retryLoad(video)
+        else video.play()?.catch(() => retryLoad(video))
       }
       setIsStudioPlaying(true)
     } else {
@@ -181,28 +234,35 @@ export default function InspirationPage() {
             className="in-hero-video"
             src={HERO_VIDEO_URL}
             poster={heroPoster}
-            // Only the hero video preloads eagerly — it's the sole video
-            // visible on page load, so there's no bandwidth contention
+            // Only the hero video preloads/autoplays eagerly — it's the sole
+            // video visible on page load, so there's no bandwidth contention
             // risk (the earlier timeout bug came from hero + studio both
-            // eagerly preloading ~550MB simultaneously). The studio
-            // carousel stays on preload="metadata" since it's below the
-            // fold and its active video changes.
+            // eagerly preloading ~550MB simultaneously). The studio carousel
+            // only warms up once its section scrolls into view (see the
+            // IntersectionObserver effect above).
+            //
+            // autoPlay + muted here means the video is already silently
+            // playing (and thus fully warmed up / buffered) by the time the
+            // user presses the visible play button — the poster overlay
+            // below keeps this invisible until then, and togglePlay() jumps
+            // back to the start and unmutes on that first real press, so
+            // there's no cold-start network wait to actually see or hear.
             preload="auto"
             fetchpriority="high"
+            autoPlay
+            muted
             loop
             playsInline
-            onPlay={() => setIsPlaying(true)}
-            onPause={() => setIsPlaying(false)}
             onLoadedData={() => setHeroFrameReady(true)}
           />
-          {/* Stays on screen until the video actually has a real frame ready
-              to paint — otherwise the poster vanishes the instant play() is
-              called (browser default) while the video is still buffering,
-              leaving a blank gap before playback visibly starts. */}
+          {/* Stays on screen until the user has actually pressed play AND a
+              real frame is ready — heroFrameReady alone would go true as
+              soon as the silent background autoplay above produces its
+              first frame, well before the user has clicked anything. */}
           <img
             src={heroPoster}
             alt=""
-            className={`in-hero-poster-overlay${heroFrameReady ? ' in-hero-poster-overlay--hidden' : ''}`}
+            className={`in-hero-poster-overlay${heroFrameReady && isPlaying ? ' in-hero-poster-overlay--hidden' : ''}`}
           />
           <div className={`in-hero-tint${isPlaying ? ' in-hero-tint--hidden' : ''}`} />
         </div>
@@ -256,7 +316,7 @@ export default function InspirationPage() {
       </section>
 
       {/* ── Video production studio ── */}
-      <section className="in-studio">
+      <section className="in-studio" ref={studioSectionRef}>
         <div className="in-studio-header">
           <h2 className="in-studio-heading">Experimenting<br />Different Makeup Styles</h2>
           <div className="in-studio-arrows">
@@ -292,17 +352,21 @@ export default function InspirationPage() {
               className="in-hero-video"
               src={STUDIO_VIDEOS[studioIndex].src}
               poster={STUDIO_VIDEOS[studioIndex].poster}
-              preload="metadata"
+              // Stays lazy (no eager fetch) until studioWarm flips true via
+              // the IntersectionObserver above; from then on it silently
+              // autoplays muted the same way the hero video does, so the
+              // first real press on any slide is instant too.
+              preload={studioWarm ? 'auto' : 'metadata'}
+              autoPlay={studioWarm}
+              muted
               loop
               playsInline
-              onPlay={() => setIsStudioPlaying(true)}
-              onPause={() => setIsStudioPlaying(false)}
               onLoadedData={() => setStudioFrameReady(true)}
             />
             <img
               src={STUDIO_VIDEOS[studioIndex].poster}
               alt=""
-              className={`in-hero-poster-overlay${studioFrameReady ? ' in-hero-poster-overlay--hidden' : ''}`}
+              className={`in-hero-poster-overlay${studioFrameReady && isStudioPlaying ? ' in-hero-poster-overlay--hidden' : ''}`}
             />
             <div className={`in-hero-tint${isStudioPlaying ? ' in-hero-tint--hidden' : ''}`} />
           </div>
