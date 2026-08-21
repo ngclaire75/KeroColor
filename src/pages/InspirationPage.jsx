@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useHeroVideo } from '../HeroVideoContext'
-import { cacheVideoOffline } from '../offlineVideoCache'
 import SearchLoader from '../components/SearchLoader'
 import Footer from '../components/Footer'
 import heroPoster from '../../images/inspiration-hero-poster.jpg'
@@ -106,15 +105,6 @@ export default function InspirationPage() {
     observer.observe(el)
     return () => observer.disconnect()
   }, [])
-
-  // Once the carousel is warm, also save full offline copies of all three
-  // studio videos in the background — the user might flip to any of them,
-  // and unlike the hero video there's no single "currently active" one to
-  // single out. See offlineVideoCache.js / public/sw.js.
-  useEffect(() => {
-    if (!studioWarm) return
-    STUDIO_VIDEOS.forEach((v) => cacheVideoOffline(v.src))
-  }, [studioWarm])
 
   // Once warmed up, re-trigger the silent muted autoplay whenever the
   // carousel slide changes — changing a <video>'s src doesn't reliably

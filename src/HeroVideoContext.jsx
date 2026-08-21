@@ -1,6 +1,5 @@
 import { createContext, useContext, useRef, useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { cacheVideoOffline } from './offlineVideoCache'
 
 // The hero video (blush.mp4, ~330MB, full original quality) needs to start
 // buffering the instant someone opens the site — not just once they
@@ -53,15 +52,6 @@ export function HeroVideoProvider({ children }) {
     const id = setTimeout(() => setShouldLoad(true), 1500)
     return () => clearTimeout(id)
   }, [])
-
-  // Once warm-up starts, also ask the service worker to save a full copy
-  // to Cache Storage in the background — first visit still pays for the
-  // download once, but every visit after that (this device/browser, even
-  // offline) loads instantly with no network wait at all. See
-  // public/sw.js and offlineVideoCache.js.
-  useEffect(() => {
-    if (shouldLoad) cacheVideoOffline(HERO_VIDEO_URL)
-  }, [shouldLoad])
 
   return (
     <HeroVideoContext.Provider value={{ videoRef, startedRef, setPortalTarget, offscreenRef }}>
