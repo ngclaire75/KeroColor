@@ -49,13 +49,22 @@ export default async function handler(request) {
   // the Range header. A specific byte-range (206) response cached under
   // the plain URL would then get served for every other range request
   // too, silently corrupting playback/seeking — so those must never be
-  // cached. Playlists (.m3u8) are tiny and never requested with Range;
-  // segments (.ts) are always fetched whole (200) in normal HLS
-  // playback, so both are safe to cache. Only an actual 206 stays
-  // uncached.
+  // cached. Only an actual 206 stays uncached.
+  //
+  // Full (200) responses used to be marked `immutable, max-age=31536000`
+  // (cache forever, never revalidate) — wrong for these specific URLs,
+  // since their content has genuinely changed multiple times at the same
+  // path this session (re-trims, faststart remux). A browser that ever
+  // cached a full response under the old policy would keep serving that
+  // stale copy for up to a year regardless of what's actually on R2 now —
+  // a private window (empty cache) would look fine while a normal browser
+  // session (holding the old cached copy) would look broken, which
+  // matches exactly what was reported. Kept short instead: real caching
+  // benefit within a session, but it self-heals soon if the file changes
+  // again, rather than staying wrong for a year.
   headers.set(
     'Cache-Control',
-    upstreamRes.status === 206 ? 'no-store' : 'public, max-age=31536000, immutable'
+    upstreamRes.status === 206 ? 'no-store' : 'public, max-age=300, must-revalidate'
   )
 
   return new Response(upstreamRes.body, {
