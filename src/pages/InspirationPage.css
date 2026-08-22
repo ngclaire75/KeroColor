@@ -146,10 +146,12 @@
   margin: 0 0 0.1em;
   font-family: 'Neue Haas Grotesk Text Pro 55 Roman', Arial, sans-serif;
   /* Fluid, not fixed — at a narrow desktop window (down to the 641px
-     breakpoint floor) a fixed 4.2rem would overflow the longest 4-word
-     row onto a second visual line, breaking the "always exactly 4 per
-     row" guarantee even though the JS chunking itself never changes. */
-  font-size: clamp(1.7rem, 4vw, 5.5rem);
+     breakpoint floor) a fixed size would overflow the longest 4-word row
+     onto a second visual line, breaking the "always exactly 4 per row"
+     guarantee even though the JS chunking itself never changes. max()
+     (not clamp()) — no upper ceiling, so it keeps growing on wide
+     desktop screens instead of topping out. */
+  font-size: max(1.7rem, 4vw);
   font-weight: 500;
   line-height: 1.02;
   text-transform: capitalize;
