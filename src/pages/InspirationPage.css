@@ -89,6 +89,109 @@
   transition: none;
 }
 
+/* ── Word hero — fills the viewport below the navbar (height set inline
+   from a measured navbar height, not assumed). Words start dark grey and
+   individually darken to black as the section scrolls past — see
+   wordProgress/revealedWordCount in InspirationPage.jsx. ── */
+.in-word-hero {
+  position: relative;
+  width: 100%;
+  background: #000;
+  display: flex;
+  align-items: center;
+  padding: 3rem 3rem;
+  box-sizing: border-box;
+  overflow: hidden;
+  cursor: default;
+  transition: background 0.4s ease;
+}
+
+/* Once scrolled fully past (see isPastWordSection in the JSX), the black
+   scroll-jacked look gives way to a white bg — text stays black but at
+   lower opacity by default (reading as muted grey against the white),
+   same "default" idea as the black-bg state's dark-grey-on-black, just
+   flipped for the new background. */
+.in-word-hero--past {
+  background: #fff;
+}
+
+.in-word-hero--past .in-word,
+.in-word-hero--past .in-word--active {
+  color: #000;
+  opacity: 0.35;
+}
+
+/* .in-nav carries its own margin-bottom (0.5rem), used to create the
+   nav-to-content gap everywhere else on this page — but this section is
+   explicitly meant to sit flush against the navbar with zero gap, so
+   that margin needs cancelling out just for this one pairing. */
+.in-nav + .in-word-hero {
+  margin-top: -0.5rem;
+}
+
+.in-word-text {
+  /* min-width: 0 overrides the flex-item default of min-width: auto,
+     which otherwise sizes a flex child to its content's UNWRAPPED
+     width before anything else is considered — the classic flexbox
+     text-overflow bug, and why this was rendering as one long line
+     spilling off-screen instead of wrapping. */
+  min-width: 0;
+  width: 100%;
+}
+
+/* Each row is an explicit chunk of (at most) 4 words — WORD_ROWS in the
+   JSX — not width-based wrapping, so the 4-per-line cap holds regardless
+   of viewport width or word length. */
+.in-word-row {
+  margin: 0 0 0.1em;
+  font-family: 'Neue Haas Grotesk Text Pro 55 Roman', Arial, sans-serif;
+  font-size: 4.9rem;
+  font-weight: 500;
+  line-height: 1.02;
+  text-transform: capitalize;
+  text-align: left;
+}
+
+.in-word {
+  color: #141414;
+  transition: color 0.5s ease;
+}
+
+.in-word--active {
+  color: #fff;
+}
+
+/* Cursor-following image trail — each mouse-move far enough from the
+   last spawn point drops one more image (JSX picks the position + which
+   of the 9 red-grid images), and this animation alone fades+zooms it in
+   then out over its lifetime. Several exist on screen at once (one per
+   recent cursor position), which is what reads as a "trail" following
+   the cursor rather than one image jumping around. Layer sits above the
+   text but pointer-events:none so it never blocks the section's own
+   scroll-jacking/mouse handling. */
+.in-word-trail {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.in-word-trail-img {
+  position: absolute;
+  width: 165px;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  transform: translate(-50%, -50%);
+  animation: in-word-trail-pulse 1.2s ease-in-out forwards;
+  will-change: opacity, transform;
+}
+
+@keyframes in-word-trail-pulse {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.65); }
+  45% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+}
+
 /* ── Hero rectangle — seulgi.jpeg, bottom+center aligned within its own
    box, two-line heading centered over it. ── */
 /* Fixed to the YouTube video's exact native size (1280x720), not a
@@ -225,23 +328,23 @@
   -webkit-mask-image: linear-gradient(
     to right,
     transparent 0%,
-    rgba(0, 0, 0, 0.25) 4%,
-    rgba(0, 0, 0, 0.6) 7%,
-    #000 11%,
-    #000 89%,
-    rgba(0, 0, 0, 0.6) 93%,
-    rgba(0, 0, 0, 0.25) 96%,
+    rgba(0, 0, 0, 0.4) 1%,
+    rgba(0, 0, 0, 0.8) 2%,
+    #000 3%,
+    #000 97%,
+    rgba(0, 0, 0, 0.8) 98%,
+    rgba(0, 0, 0, 0.4) 99%,
     transparent 100%
   );
   mask-image: linear-gradient(
     to right,
     transparent 0%,
-    rgba(0, 0, 0, 0.25) 4%,
-    rgba(0, 0, 0, 0.6) 7%,
-    #000 11%,
-    #000 89%,
-    rgba(0, 0, 0, 0.6) 93%,
-    rgba(0, 0, 0, 0.25) 96%,
+    rgba(0, 0, 0, 0.4) 1%,
+    rgba(0, 0, 0, 0.8) 2%,
+    #000 3%,
+    #000 97%,
+    rgba(0, 0, 0, 0.8) 98%,
+    rgba(0, 0, 0, 0.4) 99%,
     transparent 100%
   );
 }
@@ -272,6 +375,19 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  filter: grayscale(0%);
+  transition: filter 0.4s ease;
+}
+
+/* Hovering anywhere over the ticker desaturates every frame; the one
+   specific frame the cursor is actually over stays in full color —
+   the second, more specific rule (nested :hover) wins over the first. */
+.in-figures-track:hover .in-figure-cell img {
+  filter: grayscale(100%);
+}
+
+.in-figures-track:hover .in-figure-cell:hover img {
+  filter: grayscale(0%);
 }
 
 /* ── Intro copy ── */
@@ -416,6 +532,29 @@
   .in-nav-item {
     font-size: clamp(0.68rem, 2.2vw, 0.84rem);
     letter-spacing: 0.03em;
+  }
+
+  /* .in-nav's own margin-bottom is already 0 on mobile (above), so the
+     desktop -0.5rem that cancels out its 0.5rem margin-bottom would
+     over-subtract here — pulling the section up 8px into the navbar
+     instead of sitting flush against it. */
+  .in-nav + .in-word-hero {
+    margin-top: 0;
+  }
+
+  .in-word-hero {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .in-word-row {
+    /* clamp to viewport width, not a fixed size — 4 words per row needs
+       to keep fitting down to narrow phone screens too. */
+    font-size: clamp(1.4rem, 8.4vw, 3rem);
+    line-height: 1.02;
+  }
+
+  .in-word-trail-img {
+    width: 100px;
   }
 
   .in-hero {

@@ -1,9 +1,14 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useHeroVideo } from '../HeroVideoContext'
 import SearchLoader from '../components/SearchLoader'
 import Footer from '../components/Footer'
 import heroPoster from '../../images/inspiration-hero-poster.jpg'
+import skull1 from '../../images/skull1.jpeg'
+import skull2 from '../../images/skull2.jpeg'
+import skull3 from '../../images/skull3.jpeg'
+import skull4 from '../../images/skull4.jpeg'
+import skull5 from '../../images/skull5.jpeg'
 import figure1 from '../../images/figure1.jpg'
 import figure2 from '../../images/figure2.jpg'
 import figure3 from '../../images/figure3.jpg'
@@ -41,6 +46,22 @@ import './InspirationPage.css'
 
 const FIGURE_IMAGES = [figure1, figure2, figure3, figure4, figure5, figure6, figure7, figure8]
 
+const WORD_LIST = [
+  'undertone', 'contrast', 'radiance', 'texture', 'pigment', 'blend', 'glow', 'harmony',
+  'expression', 'blush', 'contour', 'highlight', 'palette', 'shade', 'tone', 'saturation',
+  'shimmer', 'matte', 'complexion', 'artistry', 'luminosity', 'warmth', 'depth', 'finish',
+  'coverage', 'dimension', 'balance',
+]
+const CURSOR_IMAGES = [skull1, skull2, skull3, skull4, skull5]
+
+// Rows are chunked in fixed-size groups — an explicit line break per
+// chunk, not width-based wrapping, so the words-per-row cap holds
+// regardless of how long any given word is. 4 per row on desktop, 2 on
+// mobile (see WORDS_PER_ROW_MOBILE / the wordsPerRow state below) — the
+// mobile breakpoint matches the CSS one (max-width: 640px).
+const WORDS_PER_ROW_DESKTOP = 4
+const WORDS_PER_ROW_MOBILE = 2
+
 const STUDIO_VIDEOS = [
   { src: '/api/media/video5.mp4', poster: studioPoster5, credit: '@iirixle on YouTube' },
   { src: '/api/media/video4.mp4', poster: studioPoster4, credit: '@minjuddie on YouTube' },
@@ -54,6 +75,245 @@ export default function InspirationPage() {
   const [overlayFading, setOverlayFading] = useState(false)
   const [overlayGone, setOverlayGone] = useState(false)
   const [contentReady, setContentReady] = useState(false)
+
+  // ── Word hero (first section) ──
+  // Fills the viewport below the navbar exactly (measured, not assumed —
+  // the navbar's real height can vary, e.g. wrapping to two lines on
+  // narrow screens). Scroll-jacked: while this section is filling the
+  // screen and not all words are revealed yet, wheel/touch input
+  // advances one word at a time instead of moving the page — the page
+  // only actually scrolls past this section once every word has turned
+  // black (or back up past it once every word is grey again). The
+  // cursor-following hover image is being reworked separately — text
+  // layout/scroll behavior comes first.
+  const wordSectionRef = useRef(null)
+  const [navHeight, setNavHeight] = useState(48)
+  // Starts at 1, not 0 — the first word ("undertone") is white by default
+  // even before any scroll input, rather than starting fully grey like
+  // the rest. 1 is also the floor it un-reveals back down to (see the
+  // drain/queue logic below), so it never goes dark again either.
+  const [revealedWordCount, setRevealedWordCount] = useState(1)
+  const [isWordSectionLocked, setIsWordSectionLocked] = useState(false)
+
+  // Flips to a white background with plain default text (instead of the
+  // black/grey/white scroll-jacked look) the instant the section releases
+  // scroll control after every word has been shown — that's the only way
+  // to end up below it at all, since scroll-jacking blocks getting past
+  // it any other way. Flips back to black only once the section is
+  // actually locked (stuck) again, not just from scrolling back into
+  // view, so it stays white while merely passing through on the way up.
+  const [isPastWordSection, setIsPastWordSection] = useState(false)
+  useEffect(() => {
+    if (isWordSectionLocked) {
+      setIsPastWordSection(false)
+    } else if (revealedWordCount >= WORD_LIST.length) {
+      setIsPastWordSection(true)
+    }
+  }, [isWordSectionLocked, revealedWordCount])
+
+  // 4 words/row on desktop, 2 on mobile — tracks the same breakpoint as
+  // the CSS (max-width: 640px) via matchMedia so it flips live on resize
+  // (e.g. rotating a device, or resizing a desktop window across it),
+  // not just on first render.
+  const [wordsPerRow, setWordsPerRow] = useState(WORDS_PER_ROW_DESKTOP)
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 640px)')
+    const update = () => setWordsPerRow(mq.matches ? WORDS_PER_ROW_MOBILE : WORDS_PER_ROW_DESKTOP)
+    update()
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
+  }, [])
+
+  const wordRows = useMemo(() => {
+    const rows = []
+    for (let i = 0; i < WORD_LIST.length; i += wordsPerRow) {
+      rows.push(WORD_LIST.slice(i, i + wordsPerRow))
+    }
+    return rows
+  }, [wordsPerRow])
+
+  // Cursor-following image trail. Each mousemove far enough from the last
+  // spawn point drops one more short-lived image at that position, cycling
+  // through the 9 red-grid images in order — several on screen at once is
+  // what reads as a "trail" following the cursor rather than one image
+  // teleporting around. Positions/lifetime tracked in refs (not state) so
+  // spawning doesn't itself trigger extra re-renders; only the actual list
+  // of currently-visible trail images is state.
+  const [imageTrail, setImageTrail] = useState([])
+  const trailLastPosRef = useRef(null)
+  const trailNextIdRef = useRef(0)
+  const trailNextImgRef = useRef(0)
+  const TRAIL_MIN_DIST = 130 // px of cursor movement before spawning the next image
+  const TRAIL_LIFETIME_MS = 1200 // matches the in-word-trail-pulse animation duration
+
+  // Shared by both mouse (desktop hover) and touch (mobile swipe/glide) —
+  // takes a point already local to the section and decides whether it's
+  // far enough from the last spawn to drop another trail image. No cap
+  // on how many can be alive at once — each spawn always plays out its
+  // own full, fixed-length fade via its own setTimeout below, so it
+  // never gets truncated early, and new ones never get skipped/delayed
+  // waiting for room either — both would show up as an unwanted stall or
+  // cutoff in the trail depending on how fast the cursor/finger moves.
+  const spawnTrailPoint = (x, y) => {
+    const last = trailLastPosRef.current
+    const dist = last ? Math.hypot(x - last.x, y - last.y) : Infinity
+    if (dist < TRAIL_MIN_DIST) return
+    trailLastPosRef.current = { x, y }
+
+    const id = trailNextIdRef.current++
+    const img = CURSOR_IMAGES[trailNextImgRef.current % CURSOR_IMAGES.length]
+    trailNextImgRef.current += 1
+    setImageTrail((t) => [...t, { id, x, y, img }])
+    setTimeout(() => {
+      setImageTrail((t) => t.filter((p) => p.id !== id))
+    }, TRAIL_LIFETIME_MS)
+  }
+
+  const handleWordTrailMouseMove = (e) => {
+    const rect = wordSectionRef.current?.getBoundingClientRect()
+    if (!rect) return
+    spawnTrailPoint(e.clientX - rect.left, e.clientY - rect.top)
+  }
+
+  // Fires alongside the window-level touchmove listener that intercepts
+  // scroll (see the rate-limiting effect below) — that one is imperative
+  // and scoped to scroll-jacking only; this one is a plain React handler
+  // on the section itself, just for spawning trail images as a finger
+  // glides across it, same "far enough from last point" rule as mouse.
+  const handleWordTrailTouchMove = (e) => {
+    const rect = wordSectionRef.current?.getBoundingClientRect()
+    const touch = e.touches[0]
+    if (!rect || !touch) return
+    spawnTrailPoint(touch.clientX - rect.left, touch.clientY - rect.top)
+  }
+
+  useEffect(() => {
+    const nav = document.querySelector('.in-nav')
+    if (!nav) return
+    const measure = () => setNavHeight(nav.getBoundingClientRect().height)
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [])
+
+  // Only intercept scroll input while the section is substantially
+  // filling the viewport — otherwise a normal scroll from elsewhere on
+  // the page could get unexpectedly hijacked the moment this section
+  // enters view. The moment it locks (entering from above OR scrolling
+  // back up into it from below), snap it to sit exactly flush against
+  // the navbar — otherwise it could lock while only partially scrolled
+  // into place and just stay stuck at that odd offset for the whole
+  // reveal sequence.
+  const wordLockPendingRef = useRef(0)
+  const wasWordSectionLockedRef = useRef(false)
+  useEffect(() => {
+    const section = wordSectionRef.current
+    if (!section) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const locked = entry.intersectionRatio > 0.6
+        setIsWordSectionLocked(locked)
+        // Only snap on the actual false->true transition into "locked" —
+        // not every time this callback fires while already locked. The
+        // observer keeps firing near the 0.6 boundary, and calling
+        // scrollTo() on every one of those was fighting the user's own
+        // scroll input, producing a visible jitter right around that
+        // threshold instead of a single clean snap.
+        if (locked && !wasWordSectionLockedRef.current) {
+          const target = section.getBoundingClientRect().top + window.scrollY - navHeight
+          window.scrollTo({ top: target, behavior: 'auto' })
+        }
+        wasWordSectionLockedRef.current = locked
+      },
+      { threshold: [0, 0.6, 1] }
+    )
+    observer.observe(section)
+    return () => observer.disconnect()
+  }, [navHeight])
+
+  // Kept in sync so the effect below can read the current count without
+  // needing it as a dependency — it used to, and that was a real bug:
+  // revealedWordCount changes on every drained step, which re-ran the
+  // whole effect (tearing down the interval/listeners and, worse, its
+  // cleanup zeroed the pending queue) after just one step of a big
+  // burst, discarding the rest of it instead of draining it over time.
+  const revealedWordCountRef = useRef(0)
+  useEffect(() => { revealedWordCountRef.current = revealedWordCount }, [revealedWordCount])
+
+  // Rate-limited: a fast/hard scroll burst queues up intent
+  // (wordLockPendingRef) rather than jumping several words at once — a
+  // fixed interval drains at most one word every ADVANCE_INTERVAL_MS
+  // regardless of how much input arrived.
+  useEffect(() => {
+    if (!isWordSectionLocked) return
+    const ADVANCE_INTERVAL_MS = 80
+    let wheelAccum = 0
+    const STEP = 60 // wheel/touch distance "worth" one queued word
+
+    const queue = (delta) => {
+      const goingDown = delta > 0
+      // Already fully revealed and still going down, or already back to
+      // the start (word 1 — the floor, see revealedWordCount's initial
+      // value) and still going up — release control, let the page's
+      // normal scroll carry on past this section instead of trapping it.
+      if (goingDown && revealedWordCountRef.current >= WORD_LIST.length && wordLockPendingRef.current <= 0) return false
+      if (!goingDown && revealedWordCountRef.current <= 1 && wordLockPendingRef.current >= 0) return false
+      wheelAccum += delta
+      while (wheelAccum >= STEP) {
+        wheelAccum -= STEP
+        wordLockPendingRef.current += 1
+      }
+      while (wheelAccum <= -STEP) {
+        wheelAccum += STEP
+        wordLockPendingRef.current -= 1
+      }
+      // Clamp queued intent to what's actually needed to reach either end
+      // of the list. Without this, one big fling queues far more steps
+      // than the list has words, and even once every word is revealed the
+      // section stays "locked" (scroll still trapped) until all that
+      // excess finishes draining at one step per tick — a long, pointless
+      // wait after the content is already done animating.
+      const maxForward = WORD_LIST.length - revealedWordCountRef.current
+      const maxBackward = -(revealedWordCountRef.current - 1)
+      wordLockPendingRef.current = Math.max(maxBackward, Math.min(maxForward, wordLockPendingRef.current))
+      return true
+    }
+
+    const onWheel = (e) => {
+      if (queue(e.deltaY)) e.preventDefault()
+    }
+    let touchStartY = null
+    const onTouchStart = (e) => { touchStartY = e.touches[0].clientY }
+    const onTouchMove = (e) => {
+      if (touchStartY === null) return
+      const currentY = e.touches[0].clientY
+      const delta = touchStartY - currentY // finger moving up = scrolling down
+      if (queue(delta)) e.preventDefault()
+      touchStartY = currentY
+    }
+
+    const drain = setInterval(() => {
+      if (wordLockPendingRef.current > 0) {
+        wordLockPendingRef.current -= 1
+        setRevealedWordCount((c) => Math.min(WORD_LIST.length, c + 1))
+      } else if (wordLockPendingRef.current < 0) {
+        wordLockPendingRef.current += 1
+        setRevealedWordCount((c) => Math.max(1, c - 1))
+      }
+    }, ADVANCE_INTERVAL_MS)
+
+    window.addEventListener('wheel', onWheel, { passive: false })
+    window.addEventListener('touchstart', onTouchStart, { passive: true })
+    window.addEventListener('touchmove', onTouchMove, { passive: false })
+    return () => {
+      clearInterval(drain)
+      wordLockPendingRef.current = 0
+      window.removeEventListener('wheel', onWheel)
+      window.removeEventListener('touchstart', onTouchStart)
+      window.removeEventListener('touchmove', onTouchMove)
+    }
+  }, [isWordSectionLocked])
+
   const [isPlaying, setIsPlaying] = useState(false)
   const [btnHidden, setBtnHidden] = useState(false)
   const [heroFrameReady, setHeroFrameReady] = useState(false)
@@ -271,6 +531,47 @@ export default function InspirationPage() {
           </button>
         ))}
       </nav>
+
+      {/* ── Word hero — fills the viewport below the navbar exactly (no
+          gap, no overlap). Words darken grey->black, scroll-jacked one
+          word at a time (see the wheel/touch effect above), releasing
+          to a normal page scroll once fully revealed (or back to 0). ── */}
+      <section
+        className={`in-word-hero${isPastWordSection ? ' in-word-hero--past' : ''}`}
+        ref={wordSectionRef}
+        style={{ height: `calc(100vh - ${navHeight}px)` }}
+        onMouseMove={handleWordTrailMouseMove}
+        onTouchMove={handleWordTrailTouchMove}
+      >
+        <div className="in-word-text">
+          {wordRows.map((row, rowIdx) => (
+            <p className="in-word-row" key={rowIdx}>
+              {row.map((word, i) => {
+                const globalIndex = rowIdx * wordsPerRow + i
+                const active = globalIndex === revealedWordCount - 1
+                return (
+                  <span key={word} className={`in-word${active ? ' in-word--active' : ''}`}>
+                    {word}
+                    {globalIndex < WORD_LIST.length - 1 ? ', ' : ''}
+                  </span>
+                )
+              })}
+            </p>
+          ))}
+        </div>
+
+        <div className="in-word-trail">
+          {imageTrail.map((p) => (
+            <img
+              key={p.id}
+              src={p.img}
+              alt=""
+              className="in-word-trail-img"
+              style={{ left: p.x, top: p.y }}
+            />
+          ))}
+        </div>
+      </section>
 
       {/* ── Hero rectangle ── */}
       <section className="in-hero">
