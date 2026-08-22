@@ -116,11 +116,11 @@
 .ed-intro-heading {
   order: 1;
   width: 100%;
-  max-width: 900px;
+  max-width: 1050px;
   text-align: center;
-  font-family: 'Akzidenz Grotesk BQ', sans-serif;
-  font-size: 2.4rem;
-  font-weight: 700;
+  font-family: 'Neue Haas Grotesk Text Pro 55 Roman', Arial, sans-serif;
+  font-size: 3rem;
+  font-weight: 600;
   line-height: 1;
   color: #fff;
   /* No bottom margin — the flex `gap` on .ed-intro already spaces it from
@@ -382,10 +382,8 @@
   order: 0;
   max-width: 340px;
   margin: 0;
-  font-size: 1.7rem;
+  font-size: 2rem;
   text-align: left;
-  transform: scaleX(1.08);
-  transform-origin: left;
 }
 
 .ed-gala-body {
@@ -590,7 +588,7 @@
   }
 
   .ed-gala-text-content .ed-intro-heading {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     max-width: 85%;
     margin: 0;
   }
@@ -613,7 +611,7 @@
   /* Mobile keeps the heading left-aligned and unconstrained — the
      centered/max-width treatment above is desktop-only. */
   .ed-intro-heading {
-    font-size: 1.4rem;
+    font-size: 1.9rem;
     line-height: 1.25;
     text-align: left;
     max-width: 100%;
@@ -623,6 +621,7 @@
 
   /* Scoped separately from .ed-intro's heading gap above */
   .ed-more .ed-intro-heading {
+    max-width: 80%;
     margin-bottom: 0.25rem;
   }
 
