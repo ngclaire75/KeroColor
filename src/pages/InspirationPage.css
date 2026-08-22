@@ -139,6 +139,42 @@
   width: 100%;
 }
 
+/* Mobile-only intro overlay ("Hold and / Hover Anywhere") — covers the
+   word list on every visit for a moment, then crossfades into it (see
+   holdHoverFading in the JSX, which also fades .in-word-text in at the
+   same time). Reuses .in-word-row for identical font/size to the word
+   list itself, just centered and colored for standalone display instead
+   of the grey/white scroll-reveal treatment. */
+.in-hold-hover {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  opacity: 1;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+}
+
+.in-hold-hover--hidden {
+  opacity: 0;
+}
+
+/* Compound selector (not just .in-hold-hover-row alone) so this reliably
+   beats .in-word-row's own text-transform:capitalize on specificity —
+   both are single-class rules otherwise, and .in-word-row happens to be
+   declared later in this file, so it was winning the tie and silently
+   overriding this back to capitalize. */
+.in-word-row.in-hold-hover-row {
+  text-align: center;
+  color: #fff;
+  opacity: 0.6;
+  text-transform: uppercase;
+}
+
 /* Each row is an explicit chunk of (at most) 4 words — WORD_ROWS in the
    JSX — not width-based wrapping, so the 4-per-line cap holds regardless
    of viewport width or word length. */
@@ -173,7 +209,12 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  z-index: 3;
+  /* Above .in-hold-hover (z-index 6) so the trail still shows during the
+     mobile intro overlay — events reach the section fine either way
+     (both this and the overlay are pointer-events:none), but without
+     this the trail images were painting BEHIND the overlay's opaque
+     black background and never actually visible until it faded out. */
+  z-index: 7;
 }
 
 .in-word-trail-img {
@@ -522,6 +563,10 @@
 
 /* ── Mobile ── */
 @media (max-width: 640px) {
+  .in-hold-hover {
+    display: flex;
+  }
+
   .in-nav {
     flex-wrap: wrap;
     padding: 0.75rem 1.25rem;

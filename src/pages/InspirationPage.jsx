@@ -132,6 +132,18 @@ export default function InspirationPage() {
     return rows
   }, [wordsPerRow])
 
+  // Mobile-only intro overlay — "Hold and / Hover Anywhere" covers the
+  // word list for a moment on every visit, then crossfades into it.
+  // Plain timer (not a one-time-per-browser flag), so it replays on
+  // every load, not just the first.
+  const isMobile = wordsPerRow === WORDS_PER_ROW_MOBILE
+  const [holdHoverFading, setHoldHoverFading] = useState(false)
+  useEffect(() => {
+    if (!isMobile) return
+    const timer = setTimeout(() => setHoldHoverFading(true), 4000)
+    return () => clearTimeout(timer)
+  }, [isMobile])
+
   // Cursor-following image trail. Each mousemove far enough from the last
   // spawn point drops one more short-lived image at that position, cycling
   // through the 9 red-grid images in order — several on screen at once is
@@ -543,7 +555,17 @@ export default function InspirationPage() {
         onMouseMove={handleWordTrailMouseMove}
         onTouchMove={handleWordTrailTouchMove}
       >
-        <div className="in-word-text">
+        {isMobile && (
+          <div className={`in-hold-hover${holdHoverFading ? ' in-hold-hover--hidden' : ''}`}>
+            <p className="in-word-row in-hold-hover-row">Hold and</p>
+            <p className="in-word-row in-hold-hover-row">Hover Anywhere</p>
+          </div>
+        )}
+
+        <div
+          className="in-word-text"
+          style={isMobile ? { opacity: holdHoverFading ? 1 : 0, transition: 'opacity 0.6s ease' } : undefined}
+        >
           {wordRows.map((row, rowIdx) => (
             <p className="in-word-row" key={rowIdx}>
               {row.map((word, i) => {
