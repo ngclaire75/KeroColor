@@ -139,42 +139,6 @@
   width: 100%;
 }
 
-/* Mobile-only intro overlay ("Hold and / Hover Anywhere") — covers the
-   word list on every visit for a moment, then crossfades into it (see
-   holdHoverFading in the JSX, which also fades .in-word-text in at the
-   same time). Reuses .in-word-row for identical font/size to the word
-   list itself, just centered and colored for standalone display instead
-   of the grey/white scroll-reveal treatment. */
-.in-hold-hover {
-  position: absolute;
-  inset: 0;
-  z-index: 6;
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: #000;
-  opacity: 1;
-  transition: opacity 0.6s ease;
-  pointer-events: none;
-}
-
-.in-hold-hover--hidden {
-  opacity: 0;
-}
-
-/* Compound selector (not just .in-hold-hover-row alone) so this reliably
-   beats .in-word-row's own text-transform:capitalize on specificity —
-   both are single-class rules otherwise, and .in-word-row happens to be
-   declared later in this file, so it was winning the tie and silently
-   overriding this back to capitalize. */
-.in-word-row.in-hold-hover-row {
-  text-align: center;
-  color: #fff;
-  opacity: 0.6;
-  text-transform: uppercase;
-}
-
 /* Each row is an explicit chunk of (at most) 4 words — WORD_ROWS in the
    JSX — not width-based wrapping, so the 4-per-line cap holds regardless
    of viewport width or word length. */
@@ -209,12 +173,7 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  /* Above .in-hold-hover (z-index 6) so the trail still shows during the
-     mobile intro overlay — events reach the section fine either way
-     (both this and the overlay are pointer-events:none), but without
-     this the trail images were painting BEHIND the overlay's opaque
-     black background and never actually visible until it faded out. */
-  z-index: 7;
+  z-index: 3;
 }
 
 .in-word-trail-img {
@@ -256,8 +215,42 @@
 /* Studio carousel prev/next — the new slide's wrap remounts (see
    key={studioIndex} in JSX), which replays this entrance animation:
    slides down from above, covering the previous slide's spot. */
+/* Static poster of the OUTGOING slide, kept mounted underneath for the
+   duration of the slide-down animation (see prevStudioIndex in the JSX)
+   — without it, key={studioIndex} remounting .in-studio-slide means the
+   old slide is already gone from the DOM the instant it changes, so the
+   incoming one would be sliding down over nothing instead of visibly
+   layering over the previous frame. */
+.in-studio-slide-under {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  /* Matches .in-hero-poster-overlay's grayscale treatment — without
+     this the outgoing slide would flash into full color for the brief
+     moment it's visible underneath the incoming one. */
+  filter: grayscale(100%);
+}
+
+/* Matches .in-hero-tint's dimming — without this the outgoing slide
+   would look brighter than its normal paused/idle appearance for the
+   brief moment it's visible underneath the incoming one. */
+.in-studio-slide-under-tint {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+}
+
 .in-studio-slide {
-  animation: in-studio-slide-in 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  /* position:absolute already comes from the shared .in-hero-video-wrap
+     class on this same element — just need z-index here to layer above
+     .in-studio-slide-under. */
+  z-index: 1;
+  animation: in-studio-slide-in 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @keyframes in-studio-slide-in {
@@ -524,6 +517,26 @@
   text-transform: uppercase;
 }
 
+/* Each letter is its own span (see splitLetters in the JSX) — on hover
+   of the heading, every letter zooms out slightly, then zooms back in
+   on hover-out (the transition alone handles both directions). */
+.in-studio-letter {
+  display: inline-block;
+  transform: scale(1);
+  transform-origin: center;
+  transition: transform 0.3s ease;
+  /* Hints the browser to keep this on its own compositing layer for the
+     whole animation instead of possibly re-rasterizing frame to frame,
+     which read as a slight jitter/shimmer across the many small
+     inline-block letters scaling at once. */
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.in-studio-heading:hover .in-studio-letter {
+  transform: scale(0.8);
+}
+
 .in-studio-arrows {
   display: flex;
   gap: 0.6rem;
@@ -563,9 +576,6 @@
 
 /* ── Mobile ── */
 @media (max-width: 640px) {
-  .in-hold-hover {
-    display: flex;
-  }
 
   .in-nav {
     flex-wrap: wrap;

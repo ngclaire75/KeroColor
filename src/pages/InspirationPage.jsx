@@ -70,6 +70,16 @@ const STUDIO_VIDEOS = [
 
 const NAV_ITEMS = ['All', 'Seasonal Edition', 'Editorial', 'Inspiration']
 
+// Splits text into one <span> per letter so each can be scaled
+// individually on hover (see .in-studio-letter) — nbsp for spaces so
+// they keep their width as a standalone span instead of collapsing.
+const splitLetters = (text) =>
+  text.split('').map((ch, i) => (
+    <span className="in-studio-letter" key={i}>
+      {ch === ' ' ? ' ' : ch}
+    </span>
+  ))
+
 export default function InspirationPage() {
   const navigate = useNavigate()
   const [overlayFading, setOverlayFading] = useState(false)
@@ -131,18 +141,6 @@ export default function InspirationPage() {
     }
     return rows
   }, [wordsPerRow])
-
-  // Mobile-only intro overlay — "Hold and / Hover Anywhere" covers the
-  // word list for a moment on every visit, then crossfades into it.
-  // Plain timer (not a one-time-per-browser flag), so it replays on
-  // every load, not just the first.
-  const isMobile = wordsPerRow === WORDS_PER_ROW_MOBILE
-  const [holdHoverFading, setHoldHoverFading] = useState(false)
-  useEffect(() => {
-    if (!isMobile) return
-    const timer = setTimeout(() => setHoldHoverFading(true), 4000)
-    return () => clearTimeout(timer)
-  }, [isMobile])
 
   // Cursor-following image trail. Each mousemove far enough from the last
   // spawn point drops one more short-lived image at that position, cycling
@@ -398,12 +396,28 @@ export default function InspirationPage() {
     video.play()?.catch(() => {})
   }, [studioIndex, studioWarm])
 
+  // Kept mounted (as a static poster layered underneath) for the
+  // duration of the slide-down animation, so the incoming slide visibly
+  // covers the outgoing one instead of sliding down over empty space —
+  // key={studioIndex} remounting .in-studio-slide below means the OLD
+  // one is gone from the DOM the instant studioIndex changes, so without
+  // this there'd be nothing left for the new slide to appear to cover.
+  const [prevStudioIndex, setPrevStudioIndex] = useState(null)
+  const prevStudioTimeoutRef = useRef(null)
+
   const goToStudioVideo = (index) => {
     if (index < 0 || index >= STUDIO_VIDEOS.length) return
+    // Ignore clicks while a transition is already playing — the current
+    // one always finishes before another can start, rather than being
+    // interrupted/remounted mid-slide by a fast follow-up click.
+    if (prevStudioIndex !== null) return
     setStudioFrameReady(false)
     studioVideoRef.current?.pause()
     setIsStudioPlaying(false)
     studioStartedRef.current = false
+    setPrevStudioIndex(studioIndex)
+    clearTimeout(prevStudioTimeoutRef.current)
+    prevStudioTimeoutRef.current = setTimeout(() => setPrevStudioIndex(null), 1050) // matches .in-studio-slide's 1s animation
     setStudioIndex(index)
   }
 
@@ -555,17 +569,7 @@ export default function InspirationPage() {
         onMouseMove={handleWordTrailMouseMove}
         onTouchMove={handleWordTrailTouchMove}
       >
-        {isMobile && (
-          <div className={`in-hold-hover${holdHoverFading ? ' in-hold-hover--hidden' : ''}`}>
-            <p className="in-word-row in-hold-hover-row">Hold and</p>
-            <p className="in-word-row in-hold-hover-row">Hover Anywhere</p>
-          </div>
-        )}
-
-        <div
-          className="in-word-text"
-          style={isMobile ? { opacity: holdHoverFading ? 1 : 0, transition: 'opacity 0.6s ease' } : undefined}
-        >
+        <div className="in-word-text">
           {wordRows.map((row, rowIdx) => (
             <p className="in-word-row" key={rowIdx}>
               {row.map((word, i) => {
@@ -666,7 +670,11 @@ export default function InspirationPage() {
       {/* ── Video production studio ── */}
       <section className="in-studio" ref={studioSectionRef}>
         <div className="in-studio-header">
-          <h2 className="in-studio-heading">Experimenting<br />Different Makeup Styles</h2>
+          <h2 className="in-studio-heading">
+            {splitLetters('Experimenting')}
+            <br />
+            {splitLetters('Different Makeup Styles')}
+          </h2>
           <div className="in-studio-arrows">
             <button
               type="button"
@@ -694,6 +702,16 @@ export default function InspirationPage() {
         </div>
 
         <div className="in-hero in-studio-hero">
+          {prevStudioIndex !== null && (
+            <>
+              <img
+                src={STUDIO_VIDEOS[prevStudioIndex].poster}
+                alt=""
+                className="in-studio-slide-under"
+              />
+              <div className="in-studio-slide-under-tint" />
+            </>
+          )}
           {/* key={studioIndex} — remounting this on every slide change is
               what makes the slide-in animation below replay each time
               (a CSS animation only plays on a fresh mount, not on a prop
