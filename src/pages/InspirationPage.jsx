@@ -264,6 +264,17 @@ export default function InspirationPage() {
         ))}
       </nav>
 
+      {/* ── Intro copy ── */}
+      <section className="in-intro">
+        <p className="in-intro-text">
+          A curated beauty video collection featuring GRWM, makeup transformations, and color-focused looks.{' '}
+          <span className="in-intro-highlight">
+            Discover how undertones, contrast, and seasonal palettes can guide blush, lip, eye, and overall makeup
+            choices, helping turn everyday beauty into a more personalized color experience.
+          </span>
+        </p>
+      </section>
+
       {/* ── Hero rectangle ── */}
       <section className="in-hero">
         <div className="in-hero-video-wrap" onClick={togglePlay}>
@@ -306,17 +317,6 @@ export default function InspirationPage() {
       </section>
 
       <p className="in-hero-credit">@_arinkim on YouTube</p>
-
-      {/* ── Intro copy ── */}
-      <section className="in-intro">
-        <p className="in-intro-text">
-          A curated beauty video collection featuring GRWM, makeup transformations, and color-focused looks.{' '}
-          <span className="in-intro-highlight">
-            Discover how undertones, contrast, and seasonal palettes can guide blush, lip, eye, and overall makeup
-            choices, helping turn everyday beauty into a more personalized color experience.
-          </span>
-        </p>
-      </section>
 
       {/* ── Square grid ── */}
       <section className="in-squares">
