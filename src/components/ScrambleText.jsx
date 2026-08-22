@@ -1,0 +1,38 @@
+import { useEffect, useState } from 'react'
+
+const SCRAMBLE_CHARS = 'abcdefghijklmnopqrstuvwxyz'
+const STEP_MS = 35 // one scramble tick
+const STEPS_PER_LETTER = 2.5 // how many ticks before each letter locks in
+
+// Decode-style reveal: every letter scrambles through random characters,
+// then locks into its real value one after another, left to right — not
+// all landing at once. Re-triggers from scratch each time `active` flips
+// true (e.g. a row scrolling into its "active" position again).
+export default function ScrambleText({ text, active }) {
+  const [display, setDisplay] = useState(text.replace(/\S/g, ' '))
+
+  useEffect(() => {
+    if (!active) return
+    const letters = text.split('')
+    const revealAt = letters.map((c, i) => (c === ' ' ? 0 : Math.round((i + 1) * STEPS_PER_LETTER) + Math.floor(Math.random() * 2)))
+    const maxFrame = Math.max(...revealAt)
+    let frame = 0
+    const intervalId = setInterval(() => {
+      frame++
+      setDisplay(
+        letters
+          .map((c, i) => {
+            if (c === ' ') return ' '
+            if (frame >= revealAt[i]) return c
+            return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]
+          })
+          .join('')
+      )
+      if (frame >= maxFrame) clearInterval(intervalId)
+    }, STEP_MS)
+
+    return () => clearInterval(intervalId)
+  }, [text, active])
+
+  return display
+}

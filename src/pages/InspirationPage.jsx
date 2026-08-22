@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useHeroVideo } from '../HeroVideoContext'
 import SearchLoader from '../components/SearchLoader'
+import ScrambleText from '../components/ScrambleText'
 import Footer from '../components/Footer'
 import heroPoster from '../../images/inspiration-hero-poster.jpg'
 import figure1 from '../../images/figure1.jpg'
@@ -40,6 +41,7 @@ import './InspirationPage.css'
 // while this page is active. See HeroVideoContext.jsx.
 
 const FIGURE_IMAGES = [figure1, figure2, figure3, figure4, figure5, figure6, figure7, figure8]
+const FIGURE_WORDS = ['blush', 'lips', 'eyes', 'brows', 'contour', 'highlight', 'lashes', 'glow']
 
 const STUDIO_VIDEOS = [
   { src: '/api/media/video5.mp4', poster: studioPoster5, credit: '@iirixle on YouTube' },
@@ -250,6 +252,29 @@ export default function InspirationPage() {
     return () => { clearTimeout(t1); clearTimeout(t2) }
   }, [])
 
+  // Figure grid — whichever row is crossing the vertical center of the
+  // viewport is "active" (full opacity, image scaled up); the rest sit
+  // dimmed and slightly smaller. rootMargin shrinks the observer's
+  // effective viewport down to a thin band at the center, so scrolling
+  // through the stack hands the active state from row to row in sequence.
+  const [activeFigureIndex, setActiveFigureIndex] = useState(0)
+  const figureRowRefs = useRef([])
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return
+          const idx = figureRowRefs.current.indexOf(entry.target)
+          if (idx !== -1) setActiveFigureIndex(idx)
+        })
+      },
+      { rootMargin: '-45% 0px -45% 0px', threshold: 0 }
+    )
+    figureRowRefs.current.forEach((el) => el && observer.observe(el))
+    return () => observer.disconnect()
+  }, [])
+
   const handleNavClick = (item) => {
     if (item === 'Inspiration') return
     if (item === 'Editorial') { navigate('/editorial'); return }
@@ -326,13 +351,28 @@ export default function InspirationPage() {
         </p>
       </section>
 
-      {/* ── Figure grid (8 images, no gap) ── */}
+      {/* ── Figure grid — image left, word right. Whichever row crosses
+          the viewport's vertical center is "active": full opacity, image
+          scaled up; the rest sit dimmed and slightly smaller. Scrolling
+          through the stack hands that active state from row to row. ── */}
       <section className="in-figures">
-        {FIGURE_IMAGES.map((src, i) => (
-          <div className="in-figure-cell" key={i}>
-            <img src={src} alt="" />
-          </div>
-        ))}
+        {FIGURE_IMAGES.map((src, i) => {
+          const active = activeFigureIndex === i
+          return (
+            <div
+              className={`in-figure-row${active ? ' in-figure-row--active' : ''}`}
+              key={i}
+              ref={(el) => { figureRowRefs.current[i] = el }}
+            >
+              <p className="in-figure-word">
+                <ScrambleText text={FIGURE_WORDS[i]} active={active} />
+              </p>
+              <div className="in-figure-image">
+                <img src={src} alt="" />
+              </div>
+            </div>
+          )
+        })}
       </section>
 
       {/* ── Video production studio ── */}
