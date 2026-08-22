@@ -358,35 +358,6 @@
   max-width: 960px;
   margin: 0 auto 4.5rem;
   overflow: hidden;
-  /* Fades the left/right ends instead of an abrupt cut-off — standard
-     for a ticker/marquee. A gentle eased curve, not a flat linear ramp
-     or a steep multi-band one (an earlier version packed too much
-     opacity change into too little space and read as rough/harsh) —
-     few stops, spread out, small increments early on. -webkit- prefix
-     needed for Safari, which doesn't support the unprefixed property
-     yet. */
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    rgba(0, 0, 0, 0.4) 1%,
-    rgba(0, 0, 0, 0.8) 2%,
-    #000 3%,
-    #000 97%,
-    rgba(0, 0, 0, 0.8) 98%,
-    rgba(0, 0, 0, 0.4) 99%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    rgba(0, 0, 0, 0.4) 1%,
-    rgba(0, 0, 0, 0.8) 2%,
-    #000 3%,
-    #000 97%,
-    rgba(0, 0, 0, 0.8) 98%,
-    rgba(0, 0, 0, 0.4) 99%,
-    transparent 100%
-  );
 }
 
 .in-figures-track {
