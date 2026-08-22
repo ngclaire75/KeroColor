@@ -271,7 +271,10 @@
 .in-intro {
   width: 960px;
   max-width: 960px;
-  margin: 0 auto 4.5rem;
+  /* Top margin matches EditorialPage's .ed-intro padding-top (4.5rem) —
+     .in-nav and .ed-nav share the same 0.5rem margin-bottom, so this
+     makes the total nav-to-content gap match between the two pages. */
+  margin: 4.5rem auto 4.5rem;
   padding: 0;
   text-align: left;
 }
