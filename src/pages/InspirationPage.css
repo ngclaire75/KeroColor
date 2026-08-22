@@ -348,7 +348,11 @@
 .in-studio {
   width: 960px;
   max-width: 960px;
-  margin: 0 auto 0;
+  /* Matches the 4.5rem (72px) gap used between every other section on
+     the page — the studio grid became the first section, and without
+     this its own top margin was 0, leaving only ~8px of incidental
+     spacing after the navbar instead of a real, consistent gap. */
+  margin: 4.5rem auto 0;
 }
 
 .in-studio-header {
