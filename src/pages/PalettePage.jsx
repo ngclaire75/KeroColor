@@ -169,14 +169,6 @@ export default function PalettePage() {
               <rect y="5.2" width="17" height="1.6" rx="0.8" fill="#371a16"/>
               <rect y="10.4" width="17" height="1.6" rx="0.8" fill="#371a16"/>
             </svg>
-            <span>Menu</span>
-          </button>
-          <button className="pp-nav-action">
-            <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-              <circle cx="6.5" cy="6.5" r="5.5" stroke="#371a16" strokeWidth="1.3"/>
-              <path d="M10.5 10.5L13.5 13.5" stroke="#371a16" strokeWidth="1.3" strokeLinecap="round"/>
-            </svg>
-            <span>Search</span>
           </button>
         </div>
 
@@ -187,13 +179,6 @@ export default function PalettePage() {
           </Link>
         </div>
 
-        <div className="pp-nav-right">
-          <button className="pp-nav-action pp-nav-icon-only">
-            <svg width="19" height="17" viewBox="0 0 24 22" fill="none">
-              <path d="M12 20.5C12 20.5 2 13.2 2 7.5C2 4.46 4.46 2 7.5 2C9.28 2 10.91 2.84 12 4.17C13.09 2.84 14.72 2 16.5 2C19.54 2 22 4.46 22 7.5C22 13.2 12 20.5 12 20.5Z" stroke="#371a16" strokeWidth="1.8"/>
-            </svg>
-          </button>
-        </div>
       </nav>
 
       {/* ── Hero content ── */}
