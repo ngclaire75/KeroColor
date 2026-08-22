@@ -380,9 +380,9 @@
    it down to fit this narrower panel. */
 .ed-gala-text-content .ed-intro-heading {
   order: 0;
-  max-width: 340px;
+  max-width: 390px;
   margin: 0;
-  font-size: 2rem;
+  font-size: 2.2rem;
   text-align: left;
 }
 
@@ -588,7 +588,7 @@
   }
 
   .ed-gala-text-content .ed-intro-heading {
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     max-width: 85%;
     margin: 0;
   }
