@@ -30,8 +30,8 @@
 
 @media (max-width: 640px) {
   .navbar {
-    flex-wrap: nowrap;
-    gap: clamp(1.5rem, 3vw, 4rem);
+    flex-wrap: wrap;
+    gap: 0.7rem clamp(1.5rem, 3vw, 4rem);
     padding: 0.9rem 0.5rem;
     justify-content: center;
   }
@@ -40,7 +40,6 @@
     font-size: clamp(0.68rem, 2.2vw, 0.84rem);
   }
 
-  .nav-link--secondary,
   .nav-break {
     display: none;
   }
