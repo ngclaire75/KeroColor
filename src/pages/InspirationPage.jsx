@@ -4,8 +4,14 @@ import { useHeroVideo } from '../HeroVideoContext'
 import SearchLoader from '../components/SearchLoader'
 import Footer from '../components/Footer'
 import heroPoster from '../../images/inspiration-hero-poster.jpg'
-import square1 from '../../images/square1.jpeg'
-import square2 from '../../images/square2.jpeg'
+import figure1 from '../../images/figure1.jpg'
+import figure2 from '../../images/figure2.jpg'
+import figure3 from '../../images/figure3.jpg'
+import figure4 from '../../images/figure4.jpg'
+import figure5 from '../../images/figure5.jpg'
+import figure6 from '../../images/figure6.jpg'
+import figure7 from '../../images/figure7.jpg'
+import figure8 from '../../images/figure8.jpg'
 import studioPoster2 from '../../images/video2-poster.jpg'
 import studioPoster4 from '../../images/video4-poster.jpg'
 import studioPoster5 from '../../images/video5-poster.jpg'
@@ -32,6 +38,8 @@ import './InspirationPage.css'
 // buffering the moment the site opens (any page), not just once someone
 // navigates here. This component just claims a spot for it to render into
 // while this page is active. See HeroVideoContext.jsx.
+
+const FIGURE_IMAGES = [figure1, figure2, figure3, figure4, figure5, figure6, figure7, figure8]
 
 const STUDIO_VIDEOS = [
   { src: '/api/media/video5.mp4', poster: studioPoster5, credit: '@iirixle on YouTube' },
@@ -318,18 +326,13 @@ export default function InspirationPage() {
         </p>
       </section>
 
-      {/* ── Square grid ── */}
-      <section className="in-squares">
-        <div className="in-square">
-          <img src={square1} alt="" />
-        </div>
-        <div className="in-squares-text">
-          <p className="in-squares-line">Figure out your favorite</p>
-          <p className="in-squares-line in-squares-line--highlight">makeup palette now!</p>
-        </div>
-        <div className="in-square">
-          <img src={square2} alt="" />
-        </div>
+      {/* ── Figure grid (8 images, no gap) ── */}
+      <section className="in-figures">
+        {FIGURE_IMAGES.map((src, i) => (
+          <div className="in-figure-cell" key={i}>
+            <img src={src} alt="" />
+          </div>
+        ))}
       </section>
 
       {/* ── Video production studio ── */}

@@ -193,78 +193,26 @@
   text-align: center;
 }
 
-/* ── Square grid ── */
-.in-squares {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
+/* ── Figure grid — 8 images, 1 per row, no gap between cells ── */
+.in-figures {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
   width: 960px;
   max-width: 960px;
   margin: 0 auto 4.5rem;
 }
 
-@property --in-square-angle {
-  syntax: '<angle>';
-  inherits: false;
-  initial-value: 0deg;
+.in-figure-cell {
+  height: 220px;
+  overflow: hidden;
 }
 
-.in-square {
-  flex: 1;
-  aspect-ratio: 1 / 1;
-  border-radius: 8px;
-  padding: 3px;
-  box-sizing: border-box;
-  background: conic-gradient(from var(--in-square-angle), #561c24, #6d2932, #c7b7a3, #e8d8c4, #c7b7a3, #6d2932, #561c24);
-  animation: in-square-spin 5s linear infinite;
-}
-
-@keyframes in-square-spin {
-  to { --in-square-angle: 360deg; }
-}
-
-.in-square img {
+.in-figure-cell img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  border-radius: 6px;
-}
-
-.in-squares-text {
-  flex: 1.15;
-  max-width: 360px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 0.3rem;
-}
-
-.in-squares-line {
-  margin: 0;
-  color: #000;
-  font-family: 'Akzidenz Grotesk BQ', sans-serif;
-  font-size: 1.5rem;
-  font-weight: 400;
-  line-height: 1;
-  text-transform: lowercase;
-  letter-spacing: 0.01em;
-}
-
-.in-squares-line--highlight {
-  background: linear-gradient(to right, #561c24 0%, #6d2932 38%, #c7b7a3 48%, #e8d8c4 50%, #c7b7a3 52%, #6d2932 62%, #561c24 100%);
-  background-size: 250% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  font-weight: 600;
-  font-style: italic;
-  line-height: 1;
-  padding: 0.15em 0.2em;
-  margin: -0.15em -0.2em;
-  display: inline-block;
 }
 
 /* ── Intro copy ── */
@@ -458,31 +406,11 @@
     height: 12px;
   }
 
-  .in-squares {
-    flex-wrap: wrap;
+  .in-figures {
+    grid-template-columns: 1fr;
     width: 100%;
     max-width: calc(100% - 2.5rem);
     margin: 0 auto 3.25rem;
-    gap: 1.2rem 0.75rem;
-  }
-
-  .in-square {
-    order: 1;
-    flex: 0 0 calc(50% - 0.375rem);
-  }
-
-  .in-squares-text {
-    order: 3;
-    flex: 0 0 100%;
-    max-width: 100%;
-    align-items: center;
-    text-align: center;
-  }
-
-  .in-squares-line {
-    width: 100%;
-    font-size: 1.05rem;
-    text-align: center;
   }
 
   .in-studio {
