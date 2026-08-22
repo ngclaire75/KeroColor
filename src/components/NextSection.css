@@ -100,7 +100,14 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  transform: scale(1);
+  transform-origin: center;
   transition: transform 0.5s ease, filter 0.5s ease;
+  /* Hints the browser to keep this on its own compositing layer for the
+     whole hover animation instead of re-rasterizing frame to frame,
+     which read as a slight jitter while scaling. */
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .next-card:hover .next-card-img {
@@ -144,7 +151,11 @@
   bottom: 0.55rem;
   right: 0.55rem;
   z-index: 2;
+  transform: scale(1);
+  transform-origin: center;
   transition: transform 0.5s ease;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .next-card:hover .next-card-arrow {

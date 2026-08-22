@@ -34,11 +34,16 @@
   --item-w: calc((100% - (var(--visible) - 1) * var(--gap)) / var(--visible));
 }
 
-/* ── Track — slides left/right (transform set via JS inline style) ── */
+/* ── Track — slides left/right (transform set via JS inline style) —
+   same sliding transition on desktop as mobile now, just moving a
+   bigger step (VISIBLE_DESKTOP items) per click instead of one. ── */
 .gallery-rects-track {
   display: flex;
   gap: var(--gap);
   padding-bottom: 2px;
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 /* ── Each rect — fixed size, no expand ── */
@@ -219,12 +224,6 @@
     padding: 3rem 1.5rem 0;
     --gap: 8px;
     --visible: 2;
-  }
-
-  .gallery-rects-track {
-    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-    will-change: transform;
-    backface-visibility: hidden;
   }
 
   .gallery-rect {
