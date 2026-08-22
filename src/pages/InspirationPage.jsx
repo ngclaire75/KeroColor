@@ -275,6 +275,20 @@ export default function InspirationPage() {
         </p>
       </section>
 
+      {/* ── Square grid ── */}
+      <section className="in-squares">
+        <div className="in-square">
+          <img src={square1} alt="" />
+        </div>
+        <div className="in-squares-text">
+          <p className="in-squares-line">Figure out your favorite</p>
+          <p className="in-squares-line in-squares-line--highlight">makeup palette now!</p>
+        </div>
+        <div className="in-square">
+          <img src={square2} alt="" />
+        </div>
+      </section>
+
       {/* ── Hero rectangle ── */}
       <section className="in-hero">
         <div className="in-hero-video-wrap" onClick={togglePlay}>
@@ -317,20 +331,6 @@ export default function InspirationPage() {
       </section>
 
       <p className="in-hero-credit">@_arinkim on YouTube</p>
-
-      {/* ── Square grid ── */}
-      <section className="in-squares">
-        <div className="in-square">
-          <img src={square1} alt="" />
-        </div>
-        <div className="in-squares-text">
-          <p className="in-squares-line">Figure out your favorite</p>
-          <p className="in-squares-line in-squares-line--highlight">makeup palette now!</p>
-        </div>
-        <div className="in-square">
-          <img src={square2} alt="" />
-        </div>
-      </section>
 
       {/* ── Video production studio ── */}
       <section className="in-studio" ref={studioSectionRef}>
