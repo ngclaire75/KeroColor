@@ -134,6 +134,8 @@
 
 @media (max-width: 640px) {
   .fm-overlay { padding: 1.6rem 1rem 3rem; }
+  .fm-close { top: 1.3rem; right: 1.1rem; padding: 0.35rem; }
+  .fm-close svg { width: 14px; height: 14px; }
   .fm-brand { font-size: 0.95rem; letter-spacing: 0.2em; }
   .fm-subtitle { font-size: 0.55rem; letter-spacing: 0.16em; margin-top: 0.3rem; }
   .fm-list-wrap { padding-top: 2.2rem; }

@@ -170,3 +170,8 @@
   border-color: var(--text-primary);
   transform: scale(1.12);
 }
+
+@media (max-width: 640px) {
+  .cal-close { top: 1.3rem; right: 1.1rem; padding: 0.35rem; }
+  .cal-close svg { width: 14px; height: 14px; }
+}
