@@ -4,11 +4,11 @@ import { useHeroVideo } from '../HeroVideoContext'
 import SearchLoader from '../components/SearchLoader'
 import Footer from '../components/Footer'
 import heroPoster from '../../images/inspiration-hero-poster.jpg'
-import skull1 from '../../images/skull1.jpeg'
-import skull2 from '../../images/skull2.jpeg'
-import skull3 from '../../images/skull3.jpeg'
-import skull4 from '../../images/skull4.jpeg'
-import skull5 from '../../images/skull5.jpeg'
+import trail1 from '../../images/trail1.jpg'
+import trail2 from '../../images/trail2.jpg'
+import trail3 from '../../images/trail3.jpg'
+import trail4 from '../../images/trail4.jpg'
+import trail5 from '../../images/trail5.jpg'
 import figure1 from '../../images/figure1.jpg'
 import figure2 from '../../images/figure2.jpg'
 import figure3 from '../../images/figure3.jpg'
@@ -52,7 +52,7 @@ const WORD_LIST = [
   'shimmer', 'matte', 'complexion', 'artistry', 'luminosity', 'warmth', 'depth', 'finish',
   'coverage', 'dimension', 'balance',
 ]
-const CURSOR_IMAGES = [skull1, skull2, skull3, skull4, skull5]
+const CURSOR_IMAGES = [trail1, trail2, trail3, trail4, trail5]
 
 // Rows are chunked in fixed-size groups — an explicit line break per
 // chunk, not width-based wrapping, so the words-per-row cap holds
@@ -221,7 +221,7 @@ export default function InspirationPage() {
         // threshold instead of a single clean snap.
         if (locked && !wasWordSectionLockedRef.current) {
           const target = section.getBoundingClientRect().top + window.scrollY - navHeight
-          window.scrollTo({ top: target, behavior: 'auto' })
+          window.scrollTo({ top: target, behavior: 'smooth' })
         }
         wasWordSectionLockedRef.current = locked
       },
