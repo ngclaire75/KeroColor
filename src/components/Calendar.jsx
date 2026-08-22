@@ -27,13 +27,6 @@ function buildCells(year, month) {
   return cells
 }
 
-function noteKey(y, m, d) { return `${y}-${m}-${d}` }
-
-function loadNotes() {
-  try { return JSON.parse(localStorage.getItem('kc-notes') || '{}') }
-  catch { return {} }
-}
-
 export default function Calendar({ onClose }) {
   const today = new Date()
   const [year,    setYear]    = useState(today.getFullYear())
@@ -42,9 +35,6 @@ export default function Calendar({ onClose }) {
     const saved = localStorage.getItem('kc-bg')
     return saved !== null ? Number(saved) : 2
   })
-  const [notes,   setNotes]   = useState(loadNotes)
-  const [selected, setSelected] = useState(null)   // { day, month, year }
-  const [noteText, setNoteText] = useState('')
 
   const cells = buildCells(year, month)
   const bg    = BACKGROUNDS[bgIndex]
@@ -62,30 +52,6 @@ export default function Calendar({ onClose }) {
   const isToday = (d) =>
     d === today.getDate() && month === today.getMonth() && year === today.getFullYear()
 
-  const isSelected = (d) =>
-    selected && selected.day === d && selected.month === month && selected.year === year
-
-  const hasNote = (d) => !!notes[noteKey(year, month, d)]
-
-  const handleDayClick = (d) => {
-    const key = noteKey(year, month, d)
-    setSelected({ day: d, month, year })
-    setNoteText(notes[key] || '')
-  }
-
-  const handleSave = () => {
-    if (!selected) return
-    const key = noteKey(selected.year, selected.month, selected.day)
-    const updated = { ...notes }
-    if (noteText.trim()) updated[key] = noteText.trim()
-    else delete updated[key]
-    setNotes(updated)
-    localStorage.setItem('kc-notes', JSON.stringify(updated))
-    setSelected(null)
-  }
-
-  const handleCancelNote = () => setSelected(null)
-
   const overlayStyle = bg.img
     ? { backgroundImage: `url(${bg.img})`, backgroundSize: 'cover', backgroundPosition: 'center' }
     : {}
@@ -97,7 +63,11 @@ export default function Calendar({ onClose }) {
     >
       <div className="cal">
 
-        <button className="cal-close" onClick={onClose} aria-label="Close">×</button>
+        <button className="cal-close" onClick={onClose} aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 11 11" fill="none">
+            <path d="M1 1L10 10M10 1L1 10" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
+          </svg>
+        </button>
 
         <h2 className="cal-month-name">{MONTHS[month]}</h2>
 
@@ -112,18 +82,10 @@ export default function Calendar({ onClose }) {
             <div key={d} className="cal-dayname">{d}</div>
           ))}
           {cells.map((d, i) => (
-            <div
-              key={i}
-              className={`cal-day${d ? ' cal-day--clickable' : ' cal-day--empty'}`}
-              onClick={() => d && handleDayClick(d)}
-            >
+            <div key={i} className={`cal-day${d ? '' : ' cal-day--empty'}`}>
               {d && (
                 <div className="cal-day-inner">
-                  <span className={[
-                    isToday(d)    ? 'cal-today'    : '',
-                    isSelected(d) ? 'cal-selected' : '',
-                    hasNote(d)    ? 'cal-has-note'  : '',
-                  ].filter(Boolean).join(' ')}>
+                  <span className={isToday(d) ? 'cal-today' : ''}>
                     <span className="cal-num">{d}</span>
                   </span>
                 </div>
@@ -131,27 +93,6 @@ export default function Calendar({ onClose }) {
             </div>
           ))}
         </div>
-
-        {/* ── Note panel ── */}
-        {selected && (
-          <div className="cal-note-panel">
-            <p className="cal-note-label">
-              {MONTHS[selected.month]} {selected.day}, {selected.year}
-            </p>
-            <textarea
-              className="cal-note-input"
-              value={noteText}
-              onChange={e => setNoteText(e.target.value)}
-              placeholder="Add a personal note…"
-              rows={3}
-              autoFocus
-            />
-            <div className="cal-note-actions">
-              <button className="cal-note-save"   onClick={handleSave}>Save</button>
-              <button className="cal-note-cancel" onClick={handleCancelNote}>Cancel</button>
-            </div>
-          </div>
-        )}
 
         {/* ── Background picker ── */}
         <div className="cal-picker">

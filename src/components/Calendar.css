@@ -38,24 +38,26 @@
 /* ── Close ── */
 .cal-close {
   position: fixed;
-  top: 1.2rem;
-  right: 1.5rem;
+  top: 1.7rem;
+  right: 2rem;
   background: none;
   border: none;
   color: var(--text-close);
-  font-size: 2rem;
-  line-height: 1;
+  opacity: 0.7;
   cursor: pointer;
-  transition: color 0.2s;
+  padding: 0.5rem;
+  transition: opacity 0.2s, color 0.2s;
   z-index: 10;
 }
-.cal-close:hover { color: var(--text-primary); }
+.cal-close:hover { opacity: 1; color: var(--text-primary); }
 
 /* ── Month name ── */
 .cal-month-name {
-  font-family: 'Great Vibes', cursive;
-  font-size: clamp(3rem, 8vw, 5.5rem);
+  font-family: 'Zapf-Humanist-Demi', Optima, 'Optima LT Std', 'Segoe UI', sans-serif;
+  font-size: clamp(2rem, 6vw, 3.4rem);
   font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
   color: var(--text-primary);
   margin: 0;
   line-height: 1;
@@ -69,11 +71,11 @@
 }
 
 .cal-year {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.3rem;
+  font-family: 'Zapf-Humanist-Demi', Optima, 'Optima LT Std', 'Segoe UI', sans-serif;
+  font-size: 1.1rem;
   font-style: normal;
   color: var(--text-secondary);
-  letter-spacing: 0.12em;
+  letter-spacing: 0.22em;
 }
 
 .cal-nav-btn {
@@ -98,12 +100,13 @@
 
 /* ── Day name headers ── */
 .cal-dayname {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(0.7rem, 1.8vw, 0.88rem);
+  font-family: 'Zapf-Humanist-Demi', Optima, 'Optima LT Std', 'Segoe UI', sans-serif;
+  font-size: clamp(0.62rem, 1.6vw, 0.75rem);
   font-style: normal;
   color: var(--text-secondary);
   text-align: center;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   padding-bottom: 0.6rem;
 }
 
@@ -116,8 +119,8 @@
 }
 
 .cal-day span {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  font-family: 'Zapf-Humanist-Demi', Optima, 'Optima LT Std', 'Segoe UI', sans-serif;
+  font-size: clamp(0.9rem, 2.3vw, 1.3rem);
   font-style: normal;
   color: var(--text-primary);
   display: flex;
@@ -134,123 +137,13 @@
   border-radius: 50% !important;
 }
 
-.cal-day--empty    { pointer-events: none; }
-.cal-day--clickable { cursor: pointer; }
-
-
-/* ── Selected date ── */
-.cal-selected {
-  background: rgba(255,255,255,0.18) !important;
-  border-radius: 50% !important;
-}
-.cal-overlay--light .cal-selected {
-  background: rgba(0,0,0,0.12) !important;
-}
+.cal-day--empty { pointer-events: none; }
 
 /* ── Number inside the date span ── */
 .cal-num {
   position: relative;
   z-index: 1;
 }
-
-/* ── Heart shape replaces circle when date has a note ── */
-.cal-has-note {
-  border: none !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  position: relative;
-}
-
-/* Dark background: white stroke heart */
-.cal-has-note::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: clamp(38px, 7vw, 52px);
-  height: clamp(38px, 7vw, 52px);
-  transform: translate(-50%, -50%);
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='rgba(255%2C255%2C255%2C0.85)' stroke-width='0.5' stroke-linejoin='round' d='M12 21.593 C5.63 16.054 1 11.296 1 7.191 C1 4.5 3.5 2 6.5 2 C8.5 2 10.5 3.5 12 5 C13.5 3.5 15.5 2 17.5 2 C20.5 2 23 4.5 23 7.191 C23 11.296 18.37 16.054 12 21.593Z'/%3E%3C%2Fsvg%3E") no-repeat center / contain;
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* Light background: dark stroke heart */
-.cal-overlay--light .cal-has-note::before {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='rgba(26%2C10%2C10%2C0.85)' stroke-width='0.5' stroke-linejoin='round' d='M12 21.593 C5.63 16.054 1 11.296 1 7.191 C1 4.5 3.5 2 6.5 2 C8.5 2 10.5 3.5 12 5 C13.5 3.5 15.5 2 17.5 2 C20.5 2 23 4.5 23 7.191 C23 11.296 18.37 16.054 12 21.593Z'/%3E%3C%2Fsvg%3E");
-}
-
-/* ── Note panel ── */
-.cal-note-panel {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  padding: 0.8rem 0 0;
-  border-top: 1px solid rgba(255,255,255,0.15);
-}
-.cal-overlay--light .cal-note-panel {
-  border-top-color: rgba(0,0,0,0.12);
-}
-
-.cal-note-label {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  margin: 0;
-  letter-spacing: 0.06em;
-}
-
-.cal-note-input {
-  width: 100%;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 4px;
-  padding: 0.65rem 0.8rem;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 0.95rem;
-  color: var(--text-primary);
-  resize: none;
-  outline: none;
-  transition: border-color 0.2s;
-}
-.cal-overlay--light .cal-note-input {
-  background: rgba(0,0,0,0.05);
-  border-color: rgba(0,0,0,0.15);
-}
-.cal-note-input::placeholder { color: var(--text-secondary); }
-.cal-note-input:focus { border-color: var(--text-primary); }
-
-.cal-note-actions {
-  display: flex;
-  gap: 0.6rem;
-}
-
-.cal-note-save,
-.cal-note-cancel {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  border: none;
-  cursor: pointer;
-  padding: 0.5rem 1.2rem;
-  border-radius: 3px;
-  transition: opacity 0.2s;
-}
-.cal-note-save {
-  background: var(--text-primary);
-  color: #3d0a08;
-}
-.cal-overlay--light .cal-note-save { color: #f5ede6; background: #3a1a22; }
-.cal-note-cancel {
-  background: transparent;
-  color: var(--text-secondary);
-  border: 1px solid var(--text-secondary);
-}
-.cal-note-save:hover,
-.cal-note-cancel:hover { opacity: 0.75; }
 
 /* ── Background picker ── */
 .cal-picker {

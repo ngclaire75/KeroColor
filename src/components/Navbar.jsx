@@ -6,7 +6,6 @@ const row1 = [
   { label: 'about us',       href: '#about',   type: 'anchor' },
   { label: 'color palette',  href: '/palette', type: 'link'   },
   { label: 'explore',        href: '/explore', type: 'link'   },
-  { label: 'color analyzer', href: '#',        type: 'anchor' },
 ]
 
 const row2 = [

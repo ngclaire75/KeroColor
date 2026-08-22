@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import SearchLoader from '../components/SearchLoader'
+import FullMenu from '../components/FullMenu'
+import { fetchPaletteNames, FALLBACK_NAMES } from '../utils/paletteNames'
 import heroImg from '../../images/fire.png'
 import springImg from '../../images/spr.png'
 import lipstickImg from '../../images/girlofmydreams.png'
@@ -59,7 +61,6 @@ const FOOTER_PAGES_LEFT = [
 ]
 
 const FOOTER_PAGES_RIGHT = [
-  { label: 'Color Analyzer', href: '#',        type: 'anchor' },
   { label: 'FAQ',            href: '/#faq',    type: 'link'   },
   { label: 'Contact',        href: '/#contact', type: 'link'  },
 ]
@@ -79,6 +80,8 @@ export default function PalettePage() {
   const [activeTab, setActiveTab] = useState(location.state?.tab || 'All')
   const [barOpen, setBarOpen] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [fullMenuOpen, setFullMenuOpen] = useState(false)
+  const [paletteNames, setPaletteNames] = useState(FALLBACK_NAMES.slice(0, 9))
   const [animPaused, setAnimPaused] = useState(false)
   const [tabLoading, setTabLoading] = useState(false)
   const [tabLoaderFading, setTabLoaderFading] = useState(false)
@@ -115,6 +118,18 @@ export default function PalettePage() {
     return () => window.removeEventListener('scroll', closeOnScroll)
   }, [menuOpen])
 
+  // Fetch real Colormind-generated palette names once, in the background,
+  // as soon as the page loads — so by the time the hamburger menu is
+  // opened the real names are already in place instead of swapping in
+  // after the fallback list has already animated onto screen.
+  useEffect(() => {
+    let cancelled = false
+    fetchPaletteNames(9).then(names => {
+      if (!cancelled) setPaletteNames(names)
+    })
+    return () => { cancelled = true }
+  }, [])
+
   const handleTabClick = (tab) => {
     if (tab === 'Editorial') { navigate('/editorial'); return }
     if (tab === 'Inspiration') { navigate('/inspiration'); return }
@@ -132,6 +147,8 @@ export default function PalettePage() {
 
   return (
     <div className="pp-page">
+      <FullMenu open={fullMenuOpen} onClose={() => setFullMenuOpen(false)} items={paletteNames} />
+
       {tabLoading && <SearchLoader fading={tabLoaderFading} />}
 
       {/* ── Announcement bar ── */}
@@ -163,7 +180,7 @@ export default function PalettePage() {
       {/* ── Navigation ── */}
       <nav className="pp-nav">
         <div className="pp-nav-left">
-          <button className="pp-nav-action">
+          <button className="pp-nav-action" onClick={() => setFullMenuOpen(true)} aria-label="Open menu">
             <svg width="17" height="12" viewBox="0 0 17 12" fill="none">
               <rect width="17" height="1.6" rx="0.8" fill="#371a16"/>
               <rect y="5.2" width="17" height="1.6" rx="0.8" fill="#371a16"/>
