@@ -673,7 +673,10 @@ export default function InspirationPage() {
           <h2 className="in-studio-heading">
             {splitLetters('Experimenting')}
             <br />
-            {splitLetters('Different Makeup Styles')}
+            {splitLetters('Different Makeup')}
+            {' '}
+            <br className="in-studio-mobile-break" />
+            {splitLetters('Styles')}
           </h2>
           <div className="in-studio-arrows">
             <button

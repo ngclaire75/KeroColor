@@ -517,6 +517,14 @@
   text-transform: uppercase;
 }
 
+/* Forces the heading to always be exactly 3 rows on mobile — Experimenting
+   / Different Makeup / Styles — regardless of viewport width. Hidden on
+   desktop so "Different Makeup Styles" stays on its own single line
+   there (see the mobile media query below). */
+.in-studio-mobile-break {
+  display: none;
+}
+
 /* Each letter is its own span (see splitLetters in the JSX) — on hover
    of the heading, every letter zooms out slightly, then zooms back in
    on hover-out (the transition alone handles both directions). */
@@ -682,6 +690,10 @@
 
   .in-studio-heading {
     font-size: 1.6rem;
+  }
+
+  .in-studio-mobile-break {
+    display: inline;
   }
 
   .in-studio-arrows {
