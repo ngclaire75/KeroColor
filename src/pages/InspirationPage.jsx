@@ -9,33 +9,6 @@ import square2 from '../../images/square2.jpeg'
 import studioPoster2 from '../../images/video2-poster.jpg'
 import studioPoster4 from '../../images/video4-poster.jpg'
 import studioPoster5 from '../../images/video5-poster.jpg'
-// First 25 images (in order) from the same ws→np→tj→... batch sequence
-// ExplorePage's NextSection cycles through, for the new gallery grid below.
-import ws1 from '../../images/ws1.jpeg'
-import ws2 from '../../images/ws2.jpeg'
-import ws3 from '../../images/ws3.jpeg'
-import ws4 from '../../images/ws4.jpeg'
-import ws5 from '../../images/ws5.jpeg'
-import ws6 from '../../images/ws6.jpeg'
-import ws7 from '../../images/ws7.jpeg'
-import ws8 from '../../images/ws8.jpeg'
-import ws9 from '../../images/ws9.jpeg'
-import np1 from '../../images/np1.jpeg'
-import np2 from '../../images/np2.jpeg'
-import np3 from '../../images/np3.jpeg'
-import np4 from '../../images/np4.jpeg'
-import np5 from '../../images/np5.jpeg'
-import np6 from '../../images/np6.jpeg'
-import np7 from '../../images/np7.jpeg'
-import np8 from '../../images/np8.jpeg'
-import np9 from '../../images/np9.jpeg'
-import tj1 from '../../images/tj1.jpeg'
-import tj2 from '../../images/tj2.jpeg'
-import tj3 from '../../images/tj3.jpeg'
-import tj4 from '../../images/tj4.jpeg'
-import tj5 from '../../images/tj5.jpeg'
-import tj6 from '../../images/tj6.jpeg'
-import tj7 from '../../images/tj7.jpeg'
 import './InspirationPage.css'
 
 // Source files live on Cloudflare R2 (full original quality, well over
@@ -59,14 +32,6 @@ import './InspirationPage.css'
 // buffering the moment the site opens (any page), not just once someone
 // navigates here. This component just claims a spot for it to render into
 // while this page is active. See HeroVideoContext.jsx.
-
-// First 25 images, in order, from the ws→np→tj→... batch sequence
-// ExplorePage's NextSection cycles through — a 5x5 grid.
-const GALLERY_IMAGES = [
-  ws1, ws2, ws3, ws4, ws5, ws6, ws7, ws8, ws9,
-  np1, np2, np3, np4, np5, np6, np7, np8, np9,
-  tj1, tj2, tj3, tj4, tj5, tj6, tj7,
-]
 
 const STUDIO_VIDEOS = [
   { src: '/api/media/video5.mp4', poster: studioPoster5, credit: '@iirixle on YouTube' },
@@ -298,17 +263,6 @@ export default function InspirationPage() {
           </button>
         ))}
       </nav>
-
-      {/* ── Gallery grid (25 images, black background) ── */}
-      <section className="in-gallery">
-        <div className="in-gallery-grid">
-          {GALLERY_IMAGES.map((src, i) => (
-            <div className="in-gallery-cell" key={i}>
-              <img src={src} alt="" />
-            </div>
-          ))}
-        </div>
-      </section>
 
       {/* ── Hero rectangle ── */}
       <section className="in-hero">
