@@ -264,74 +264,6 @@ export default function InspirationPage() {
         ))}
       </nav>
 
-      {/* ── Intro copy ── */}
-      <section className="in-intro">
-        <p className="in-intro-text">
-          A curated beauty video collection featuring GRWM, makeup transformations, and color-focused looks.{' '}
-          <span className="in-intro-highlight">
-            Discover how undertones, contrast, and seasonal palettes can guide blush, lip, eye, and overall makeup
-            choices, helping turn everyday beauty into a more personalized color experience.
-          </span>
-        </p>
-      </section>
-
-      {/* ── Square grid ── */}
-      <section className="in-squares">
-        <div className="in-square">
-          <img src={square1} alt="" />
-        </div>
-        <div className="in-squares-text">
-          <p className="in-squares-line">Figure out your favorite</p>
-          <p className="in-squares-line in-squares-line--highlight">makeup palette now!</p>
-        </div>
-        <div className="in-square">
-          <img src={square2} alt="" />
-        </div>
-      </section>
-
-      {/* ── Hero rectangle ── */}
-      <section className="in-hero">
-        <div className="in-hero-video-wrap" onClick={togglePlay}>
-          {/* The actual <video> is portaled in here from HeroVideoContext —
-              it's been silently playing muted since the site opened, on
-              whichever page the user landed on, not just since this page
-              mounted. See the comment near the top of this file. */}
-          <div ref={heroContainerRef} className="in-hero-video" />
-          {/* Stays on screen until the user has actually pressed play AND a
-              real frame is ready — heroFrameReady alone would go true as
-              soon as the silent background autoplay above produces its
-              first frame, well before the user has clicked anything. */}
-          <img
-            src={heroPoster}
-            alt=""
-            className={`in-hero-poster-overlay${heroFrameReady && isPlaying ? ' in-hero-poster-overlay--hidden' : ''}`}
-          />
-          <div className={`in-hero-tint${isPlaying ? ' in-hero-tint--hidden' : ''}`} />
-        </div>
-        <button
-          type="button"
-          className={`in-hero-play-btn${btnHidden ? ' in-hero-play-btn--hidden' : ''}`}
-          onClick={togglePlay}
-          aria-label={isPlaying ? 'Pause video' : 'Play video'}
-          tabIndex={btnHidden ? -1 : 0}
-        >
-          <span className="in-hero-play-btn-inner">
-            {isPlaying ? (
-              <svg viewBox="0 0 24 24" fill="#fff" width="16" height="16">
-                <rect x="5" y="4" width="5" height="16" rx="1" />
-                <rect x="14" y="4" width="5" height="16" rx="1" />
-              </svg>
-            ) : (
-              <svg viewBox="0 0 24 24" fill="#fff" width="16" height="16" style={{ marginLeft: '2px' }}>
-                <path d="M6 4l15 8-15 8z" />
-              </svg>
-            )}
-          </span>
-        </button>
-      </section>
-
-      <p className="in-hero-credit">@_arinkim on YouTube</p>
-
       {/* ── Video production studio ── */}
       <section className="in-studio" ref={studioSectionRef}>
         <div className="in-studio-header">
@@ -420,6 +352,74 @@ export default function InspirationPage() {
           <p className="in-hero-credit">{STUDIO_VIDEOS[studioIndex].credit}</p>
         )}
       </section>
+
+      {/* ── Intro copy ── */}
+      <section className="in-intro">
+        <p className="in-intro-text">
+          A curated beauty video collection featuring GRWM, makeup transformations, and color-focused looks.{' '}
+          <span className="in-intro-highlight">
+            Discover how undertones, contrast, and seasonal palettes can guide blush, lip, eye, and overall makeup
+            choices, helping turn everyday beauty into a more personalized color experience.
+          </span>
+        </p>
+      </section>
+
+      {/* ── Square grid ── */}
+      <section className="in-squares">
+        <div className="in-square">
+          <img src={square1} alt="" />
+        </div>
+        <div className="in-squares-text">
+          <p className="in-squares-line">Figure out your favorite</p>
+          <p className="in-squares-line in-squares-line--highlight">makeup palette now!</p>
+        </div>
+        <div className="in-square">
+          <img src={square2} alt="" />
+        </div>
+      </section>
+
+      {/* ── Hero rectangle ── */}
+      <section className="in-hero">
+        <div className="in-hero-video-wrap" onClick={togglePlay}>
+          {/* The actual <video> is portaled in here from HeroVideoContext —
+              it's been silently playing muted since the site opened, on
+              whichever page the user landed on, not just since this page
+              mounted. See the comment near the top of this file. */}
+          <div ref={heroContainerRef} className="in-hero-video" />
+          {/* Stays on screen until the user has actually pressed play AND a
+              real frame is ready — heroFrameReady alone would go true as
+              soon as the silent background autoplay above produces its
+              first frame, well before the user has clicked anything. */}
+          <img
+            src={heroPoster}
+            alt=""
+            className={`in-hero-poster-overlay${heroFrameReady && isPlaying ? ' in-hero-poster-overlay--hidden' : ''}`}
+          />
+          <div className={`in-hero-tint${isPlaying ? ' in-hero-tint--hidden' : ''}`} />
+        </div>
+        <button
+          type="button"
+          className={`in-hero-play-btn${btnHidden ? ' in-hero-play-btn--hidden' : ''}`}
+          onClick={togglePlay}
+          aria-label={isPlaying ? 'Pause video' : 'Play video'}
+          tabIndex={btnHidden ? -1 : 0}
+        >
+          <span className="in-hero-play-btn-inner">
+            {isPlaying ? (
+              <svg viewBox="0 0 24 24" fill="#fff" width="16" height="16">
+                <rect x="5" y="4" width="5" height="16" rx="1" />
+                <rect x="14" y="4" width="5" height="16" rx="1" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" fill="#fff" width="16" height="16" style={{ marginLeft: '2px' }}>
+                <path d="M6 4l15 8-15 8z" />
+              </svg>
+            )}
+          </span>
+        </button>
+      </section>
+
+      <p className="in-hero-credit">@_arinkim on YouTube</p>
 
       {/* Content coming later */}
 
