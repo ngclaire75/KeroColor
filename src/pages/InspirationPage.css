@@ -97,12 +97,7 @@
   position: relative;
   width: 960px;
   height: 540px;
-  /* No top margin here — .in-hero has overflow:hidden, which stops its
-     margin from collapsing with the preceding .in-squares section's
-     bottom margin, so both together doubled the gap (144px) versus the
-     other inter-section gaps (72px). Relying solely on .in-squares'
-     existing 4.5rem bottom margin keeps it consistent. */
-  margin: 0 auto 0.5rem;
+  margin: 4.5rem auto 0.5rem;
   border-radius: 8px;
   overflow: hidden;
 }
@@ -276,10 +271,7 @@
 .in-intro {
   width: 960px;
   max-width: 960px;
-  /* Top margin matches EditorialPage's .ed-intro padding-top (4.5rem) —
-     .in-nav and .ed-nav share the same 0.5rem margin-bottom, so this
-     makes the total nav-to-content gap match between the two pages. */
-  margin: 4.5rem auto 4.5rem;
+  margin: 0 auto 4.5rem;
   padding: 0;
   text-align: left;
 }
@@ -348,11 +340,7 @@
 .in-studio {
   width: 960px;
   max-width: 960px;
-  /* Matches the 4.5rem (72px) gap used between every other section on
-     the page — the studio grid became the first section, and without
-     this its own top margin was 0, leaving only ~8px of incidental
-     spacing after the navbar instead of a real, consistent gap. */
-  margin: 4.5rem auto 0;
+  margin: 0 auto 0;
 }
 
 .in-studio-header {
