@@ -97,7 +97,12 @@
   position: relative;
   width: 960px;
   height: 540px;
-  margin: 4.5rem auto 0.5rem;
+  /* No top margin here — .in-hero has overflow:hidden, which stops its
+     margin from collapsing with the preceding .in-squares section's
+     bottom margin, so both together doubled the gap (144px) versus the
+     other inter-section gaps (72px). Relying solely on .in-squares'
+     existing 4.5rem bottom margin keeps it consistent. */
+  margin: 0 auto 0.5rem;
   border-radius: 8px;
   overflow: hidden;
 }
