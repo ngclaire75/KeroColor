@@ -1,7 +1,7 @@
 import './HowWeWork.css'
-import endorse1 from '../../images/endorse1.png'
+import endorse1 from '../../images/endorse1.jpg'
 import endorse2 from '../../images/endorse2.png'
-import endorse3 from '../../images/endorse3.png'
+import endorse3 from '../../images/endorse3.jpg'
 import decoImg  from '../../images/deco.png'
 
 const steps = [
@@ -37,14 +37,14 @@ export default function HowWeWork() {
 
       <div className="hww-timeline">
         <div className="hww-line" />
-        <img src={decoImg} alt="" className="hww-deco hww-deco-1" aria-hidden="true" />
-        <img src={decoImg} alt="" className="hww-deco hww-deco-2" aria-hidden="true" />
+        <img src={decoImg} alt="" className="hww-deco hww-deco-1" aria-hidden="true" loading="lazy" decoding="async" />
+        <img src={decoImg} alt="" className="hww-deco hww-deco-2" aria-hidden="true" loading="lazy" decoding="async" />
         {steps.map((s) => (
           <div key={s.num} className="hww-step">
             <div className="hww-node">
-              <img src={s.img} alt={s.title} className="hww-node-img" />
+              <img src={s.img} alt={s.title} className="hww-node-img" loading="lazy" decoding="async" />
             </div>
-            {s.deco && <img src={decoImg} alt="" className="hww-step-deco" aria-hidden="true" />}
+            {s.deco && <img src={decoImg} alt="" className="hww-step-deco" aria-hidden="true" loading="lazy" decoding="async" />}
             <div className="hww-step-text">
               <span className="hww-num">{s.num}</span>
               <strong className="hww-title">{s.title}</strong>

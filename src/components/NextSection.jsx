@@ -405,7 +405,7 @@ export default function NextSection({ searchResult }) {
                 navigate('/look', { state: { imgSrc: src, batch: isPink ? 'p' : isBlue ? 'b' : isGreen ? 'g' : getBatch(phase, progress, i), cardIndex: i } })
               }}
             >
-              <img src={src} alt="" className="next-card-img" style={isGreen && i === 6 ? { objectPosition: 'center 90%' } : undefined} />
+              <img src={src} alt="" className="next-card-img" style={isGreen && i === 6 ? { objectPosition: 'center 90%' } : undefined} loading="lazy" decoding="async" />
               <div className="next-card-header">
                 <span>KEROCOLOR</span>
                 <span>2026</span>

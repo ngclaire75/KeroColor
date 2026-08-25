@@ -1,12 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { SearchProvider } from './SearchContext'
 import { HeroVideoProvider } from './HeroVideoContext'
-import ExplorePage  from './pages/ExplorePage'
-import LookPage     from './pages/LookPage'
-import PalettePage  from './pages/PalettePage'
-import EditorialPage from './pages/EditorialPage'
-import InspirationPage from './pages/InspirationPage'
 import Navbar     from './components/Navbar'
 import SiteHeader from './components/SiteHeader'
 import InfoBar    from './components/InfoBar'
@@ -22,6 +17,16 @@ import Footer          from './components/Footer'
 import cakeImg    from '../images/model2.jpeg'
 import drinkImg   from '../images/model1.jpeg'
 import './App.css'
+
+// Lazy — each page's JS (and everything it imports) now ships in its own
+// chunk, fetched only when that route is actually visited, instead of
+// every page's code being bundled into the one JS file every visitor
+// downloads regardless of which page they land on.
+const ExplorePage  = lazy(() => import('./pages/ExplorePage'))
+const LookPage     = lazy(() => import('./pages/LookPage'))
+const PalettePage  = lazy(() => import('./pages/PalettePage'))
+const EditorialPage = lazy(() => import('./pages/EditorialPage'))
+const InspirationPage = lazy(() => import('./pages/InspirationPage'))
 
 function ScrollToHash() {
   const location = useLocation()
@@ -83,14 +88,21 @@ export default function App() {
     <SearchProvider>
     <HeroVideoProvider>
     <ScrollToHash />
-    <Routes>
-      <Route path="/" element={homePage} />
-      <Route path="/explore"  element={<ExplorePage />} />
-      <Route path="/look"     element={<LookPage />} />
-      <Route path="/palette"  element={<PalettePage />} />
-      <Route path="/editorial" element={<EditorialPage />} />
-      <Route path="/inspiration" element={<InspirationPage />} />
-    </Routes>
+    {/* Each lazy page already shows its own SearchLoader overlay once it
+        starts mounting — this fallback only covers the brief window
+        before that (fetching the route's JS chunk), so it stays empty
+        rather than introducing a second, different-looking loading
+        state. */}
+    <Suspense fallback={null}>
+      <Routes>
+        <Route path="/" element={homePage} />
+        <Route path="/explore"  element={<ExplorePage />} />
+        <Route path="/look"     element={<LookPage />} />
+        <Route path="/palette"  element={<PalettePage />} />
+        <Route path="/editorial" element={<EditorialPage />} />
+        <Route path="/inspiration" element={<InspirationPage />} />
+      </Routes>
+    </Suspense>
     </HeroVideoProvider>
     </SearchProvider>
   )

@@ -154,7 +154,7 @@ export default function GallerySection({ searchResult, onColorChange }) {
           >
             {displayImages.map(({ src, i }) => (
               <div key={i} className="gallery-rect" data-idx={i}>
-                <img src={src} alt="" />
+                <img src={src} alt="" loading="lazy" decoding="async" />
               </div>
             ))}
           </div>

@@ -4,11 +4,11 @@ import SearchLoader from '../components/SearchLoader'
 import Footer from '../components/Footer'
 import bnd1 from '../../images/bnd1.png'
 import bnd2 from '../../images/bnd2.png'
-import edp1 from '../../images/edp1.png'
-import edp2 from '../../images/edp2.png'
-import edp3 from '../../images/edp3.png'
-import edt5 from '../../images/edt5.png'
-import edt6 from '../../images/edt6.png'
+import edp1 from '../../images/edp1.jpg'
+import edp2 from '../../images/edp2.jpg'
+import edp3 from '../../images/edp3.jpg'
+import edt5 from '../../images/edt5.jpg'
+import edt6 from '../../images/edt6.jpg'
 import z10 from '../../images/z10.png'
 import z10v2 from '../../images/z10v2.png'
 import './EditorialPage.css'
@@ -134,10 +134,10 @@ export default function EditorialPage() {
       {/* ── Gala case-study grid ── */}
       <section ref={galaRef} className={`ed-gala${galaVisible ? ' ed-fade-in--visible' : ''}`}>
         <div className="ed-gala-media">
-          <img src={z10v2} alt="" className="ed-gala-img" />
+          <img src={z10v2} alt="" className="ed-gala-img" loading="lazy" decoding="async" />
         </div>
         <div className="ed-gala-text">
-          <img src={z10} alt="" className="ed-gala-text-bg" />
+          <img src={z10} alt="" className="ed-gala-text-bg" loading="lazy" decoding="async" />
           <div className="ed-gala-text-overlay" />
           <div className="ed-gala-text-content">
             <h2 className="ed-intro-heading">The 2016 "Manus x Machina: Fashion in an Age of Technology" Gala</h2>
@@ -154,8 +154,8 @@ export default function EditorialPage() {
           className={`ed-bnd-imgwrap${bndSwapped ? ' ed-bnd-imgwrap--swapped' : ''}`}
           onClick={() => setBndSwapped(v => !v)}
         >
-          <img src={bnd1} alt="" className="ed-bnd-img ed-bnd-img--base" />
-          <img src={bnd2} alt="" className="ed-bnd-img ed-bnd-img--alt" />
+          <img src={bnd1} alt="" className="ed-bnd-img ed-bnd-img--base" loading="lazy" decoding="async" />
+          <img src={bnd2} alt="" className="ed-bnd-img ed-bnd-img--alt" loading="lazy" decoding="async" />
           <span className="ed-bnd-caption">Close-Up of Z's Audrey Hepburn's Inspired Hairdo</span>
         </div>
         <p className="ed-bnd-credit">Photography by Getty Images</p>

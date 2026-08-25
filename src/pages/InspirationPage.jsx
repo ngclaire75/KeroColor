@@ -738,7 +738,7 @@ export default function InspirationPage() {
         <div className="in-figures-track" ref={figuresTrackRef}>
           {[...FIGURE_IMAGES, ...FIGURE_IMAGES].map((src, i) => (
             <div className="in-figure-cell" key={i}>
-              <img src={src} alt="" />
+              <img src={src} alt="" loading="lazy" decoding="async" />
             </div>
           ))}
         </div>
@@ -825,6 +825,8 @@ export default function InspirationPage() {
               src={STUDIO_VIDEOS[studioIndex].poster}
               alt=""
               className={`in-hero-poster-overlay${studioFrameReady && isStudioPlaying ? ' in-hero-poster-overlay--hidden' : ''}`}
+              loading="lazy"
+              decoding="async"
             />
             <div className={`in-hero-tint${isStudioPlaying ? ' in-hero-tint--hidden' : ''}`} />
           </div>

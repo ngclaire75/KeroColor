@@ -3,12 +3,12 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import SearchLoader from '../components/SearchLoader'
 import FullMenu from '../components/FullMenu'
 import { fetchPaletteNames, FALLBACK_NAMES } from '../utils/paletteNames'
-import heroImg from '../../images/fire.png'
-import springImg from '../../images/spr.png'
-import lipstickImg from '../../images/girlofmydreams.png'
-import vogueImg from '../../images/vogue.png'
-import deerImg from '../../images/deer.png'
-import petalImg from '../../images/petal.png'
+import heroImg from '../../images/fire.jpg'
+import springImg from '../../images/spr.jpg'
+import lipstickImg from '../../images/girlofmydreams.jpg'
+import vogueImg from '../../images/vogue.jpg'
+import deerImg from '../../images/deer.jpg'
+import petalImg from '../../images/petal.jpg'
 import bearImg from '../../images/bear.png'
 import './PalettePage.css'
 
@@ -283,7 +283,7 @@ export default function PalettePage() {
         {duoItems.map((item) => (
           <div key={item.name} className="pp-palette-item">
             <div className="pp-duo-swatch">
-              <img src={item.img} alt={item.name} className={`pp-duo-img${item.name === 'Musical Daydream' ? ' pp-duo-img-desat' : ''}`} />
+              <img src={item.img} alt={item.name} className={`pp-duo-img${item.name === 'Musical Daydream' ? ' pp-duo-img-desat' : ''}`} loading="lazy" decoding="async" />
             </div>
             <div className="pp-duo-text">
               <p className="pp-palette-desc">{item.desc}</p>

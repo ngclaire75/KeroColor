@@ -57,7 +57,7 @@ export default function ColorMeaning() {
         <div className="cm-features">
           {featuresTop.map((f, i) => (
             <div key={i} className={`cm-feat${visible ? ' cm-feat--visible' : ''}`} style={{ transitionDelay: `${i * 0.15}s` }}>
-              <img src={diamondImg} alt="" className="cm-diamond" aria-hidden="true" />
+              <img src={diamondImg} alt="" className="cm-diamond" aria-hidden="true" loading="lazy" decoding="async" />
               <p>{f.text}</p>
             </div>
           ))}
@@ -65,16 +65,16 @@ export default function ColorMeaning() {
 
         {/* Images */}
         <div className="cm-frame-wrap">
-          <img src={vo1} alt="" className={`cm-vo cm-vo--1${visible ? ' cm-vo--visible' : ''}`} />
-          <img src={vo2} alt="" className={`cm-vo cm-vo--2${visible ? ' cm-vo--visible' : ''}`} />
-          <img src={vo3} alt="" className={`cm-vo cm-vo--3${visible ? ' cm-vo--visible' : ''}`} />
+          <img src={vo1} alt="" className={`cm-vo cm-vo--1${visible ? ' cm-vo--visible' : ''}`} loading="lazy" decoding="async" />
+          <img src={vo2} alt="" className={`cm-vo cm-vo--2${visible ? ' cm-vo--visible' : ''}`} loading="lazy" decoding="async" />
+          <img src={vo3} alt="" className={`cm-vo cm-vo--3${visible ? ' cm-vo--visible' : ''}`} loading="lazy" decoding="async" />
         </div>
 
         {/* Bottom feature row */}
         <div className="cm-features">
           {featuresBottom.map((f, i) => (
             <div key={i} className={`cm-feat${visible ? ' cm-feat--visible' : ''}`} style={{ transitionDelay: `${(i + 3) * 0.15}s` }}>
-              <img src={diamondImg} alt="" className="cm-diamond" aria-hidden="true" />
+              <img src={diamondImg} alt="" className="cm-diamond" aria-hidden="true" loading="lazy" decoding="async" />
               <p>{f.text}</p>
             </div>
           ))}
