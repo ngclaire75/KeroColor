@@ -67,6 +67,13 @@
        scroll at either end (a second, CSS-only source of jitter
        alongside the Lenis one — see data-lenis-prevent in the JSX). */
     overscroll-behavior-x: contain;
+    /* Promotes the row to its own GPU layer so scrolling translates an
+       already-rasterized bitmap instead of re-rasterizing every pill's
+       rounded border/edges each frame — that per-frame re-rasterization
+       (not Lenis, not overscroll) is what actually reads as vibration
+       during a touch-scroll, distinct from both fixes above. */
+    transform: translateZ(0);
+    backface-visibility: hidden;
   }
 
   .dp-tabs::-webkit-scrollbar {
@@ -74,6 +81,10 @@
   }
 
   .dp-tab {
+    /* Same GPU-layer promotion, per pill — the row-level one alone can
+       still leave each child re-rasterizing independently in some
+       browsers. */
+    transform: translateZ(0);
     flex-shrink: 0;
     padding: 0.5rem 1.1rem;
     font-size: 0.7rem;
