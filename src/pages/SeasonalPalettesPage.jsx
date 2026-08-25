@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import FullMenu from '../components/FullMenu'
-import { fetchPaletteSwatches } from '../utils/paletteNames'
 import { generatePalette, hexSaturation } from '../utils/generatePalette'
 import bearImg from '../../images/bear.png'
 // Reused wholesale (not just the class names) so the nav, grid, fonts,
@@ -12,38 +11,45 @@ import bearImg from '../../images/bear.png'
 import './PalettePage.css'
 import './DiscoverPalettesPage.css'
 
+// Everything here is generated locally (see utils/generatePalette.js) —
+// no external API. TOTAL_COUNT is generated once per tab up front;
+// PER_TAB_COUNT is shown right away, and "Discover More Palettes"
+// reveals the rest of that same already-generated, already low -> high
+// saturation-ordered set.
 const PER_TAB_COUNT = 45
-const LOAD_MORE_BATCH = 6
+const TOTAL_COUNT = 90
 
 // Each season is a base hue/saturation range plus theme word banks (see
 // DiscoverPalettesPage.jsx for why — at this volume per tab, generating
 // names combinatorially is what keeps them unique without hand-writing
-// each one). Spring is split into two segments, greens then pinks — new
-// growth giving way to blossom — rather than running a single hue.
+// each one). Saturation ranges are kept wide so adjacent swatches read
+// as genuinely different colors rather than the same shade repeated.
+// Spring is split into two segments, greens then pinks — new growth
+// giving way to blossom — rather than running a single hue.
 const SEASONS = [
   {
     tab: 'Spring',
     segments: [
-      { hue: 128, sat: [10, 55], count: 24,
+      { hue: 128, sat: [6, 90], count: 48,
         nouns: ['Leaf', 'Sprout', 'Bud', 'Meadow', 'Fern', 'Clover', 'Vine', 'Moss'],
         descs: ['Green still soft from the stem', 'Growth pushing through soil', 'A field waking up', 'Shade under new branches', 'Grass thick with rain', 'Climbing toward the light'] },
-      { hue: 340, sat: [12, 55], count: 21,
+      { hue: 340, sat: [8, 90], count: 42,
         nouns: ['Blossom', 'Petal', 'Bloom', 'Cherry', 'Blush'],
         descs: ['The first bud opening', 'Pink just past the bud', 'A branch heavy with flowers', 'Petals catching the wind', 'The last bloom before the leaves take over'] },
     ],
   },
   {
-    tab: 'Summer', hue: 42, sat: [30, 96],
+    tab: 'Summer', hue: 42, sat: [8, 98],
     nouns: ['Sun', 'Citrus', 'Mango', 'Marigold', 'Amber', 'Coral', 'Copper', 'Peach', 'Cream'],
     descs: ['Light without any weight', 'Warmth held just under the skin', 'Midday at its brightest', 'Sharp, sweet, and warm', 'The air just before a storm', 'The day, slowing down', 'The last warm hour'],
   },
   {
-    tab: 'Autumn', hue: 24, sat: [18, 82],
+    tab: 'Autumn', hue: 24, sat: [8, 96],
     nouns: ['Straw', 'Wheat', 'Leaf', 'Maple', 'Pumpkin', 'Cinnamon', 'Acorn', 'Sienna', 'Rust', 'Bark'],
     descs: ['Fields cut and drying', 'A leaf just starting to turn', 'Sap slowing in the cold', 'Warmth against the first chill', 'Gathered before the frost', 'Leaves giving up their green', 'The tree, bare and waiting'],
   },
   {
-    tab: 'Winter', hue: 208, sat: [4, 52],
+    tab: 'Winter', hue: 208, sat: [4, 85],
     nouns: ['Frost', 'Ice', 'Snow', 'Mist', 'Steel', 'Glacier', 'Slate', 'Fjord', 'Pine', 'Polar'],
     descs: ['Breath visible in cold light', 'The first freeze on glass', 'Bright, flat, and quiet', 'Clouds holding onto snow', 'Old ice, still moving slowly', 'Stone under a hard freeze', 'Winter at its darkest edge'],
   },
@@ -51,21 +57,15 @@ const SEASONS = [
 
 const TABS = SEASONS.map((s) => s.tab)
 
-// Spring has two hue segments (greens, then pinks — see above) instead
-// of one; "load more" anchors to the first/primary segment's hue rather
-// than trying to represent both at once.
-const HUE_ANCHOR_BY_TAB = Object.fromEntries(
-  SEASONS.map(({ tab, hue, sat, segments }) => {
-    const { hue: h, sat: s } = segments ? segments[0] : { hue, sat }
-    return [tab, { hue: h, sat: (s[0] + s[1]) / 2 }]
-  })
-)
-
 const PALETTES = Object.fromEntries(
   SEASONS.map(({ tab, hue, sat, nouns, descs, segments }) => {
     const list = segments
-      ? segments.flatMap((seg) => generatePalette({ ...seg, count: seg.count }))
-      : generatePalette({ hue, sat, nouns, descs, count: PER_TAB_COUNT })
+      // Each segment is already sorted on its own (see generatePalette),
+      // but the two segments' saturation ranges overlap, so the merged
+      // list needs its own explicit sort to stay truly low -> high
+      // across the whole tab, not just within each segment.
+      ? segments.flatMap((seg) => generatePalette(seg)).sort((a, b) => hexSaturation(a.color) - hexSaturation(b.color))
+      : generatePalette({ hue, sat, nouns, descs, count: TOTAL_COUNT })
     return [tab, list]
   })
 )
@@ -88,9 +88,10 @@ export default function SeasonalPalettesPage() {
     TABS.includes(location.state?.tab) ? location.state.tab : TABS[0]
   )
   const [fullMenuOpen, setFullMenuOpen] = useState(false)
-  const [extraByTab, setExtraByTab] = useState({})
-  const [loadingMore, setLoadingMore] = useState(false)
-  const [exhaustedTabs, setExhaustedTabs] = useState(() => new Set())
+  // How many of each tab's already-generated set are currently shown —
+  // starts at PER_TAB_COUNT, "Discover More Palettes" bumps it to the
+  // tab's full length. No fetching involved either way.
+  const [visibleCountByTab, setVisibleCountByTab] = useState({})
   const giantTextRef = useRef(null)
 
   useEffect(() => {
@@ -119,31 +120,13 @@ export default function SeasonalPalettesPage() {
     handleTabClick(tab)
   }
 
-  const paletteItems = [...PALETTES[activeTab], ...(extraByTab[activeTab] || [])]
-    .sort((a, b) => hexSaturation(a.color) - hexSaturation(b.color))
+  const fullList = PALETTES[activeTab]
+  const visibleCount = visibleCountByTab[activeTab] ?? PER_TAB_COUNT
+  const paletteItems = fullList.slice(0, visibleCount)
+  const isFullyShown = visibleCount >= fullList.length
 
-  const loadMore = async () => {
-    setLoadingMore(true)
-    try {
-      const more = await fetchPaletteSwatches(LOAD_MORE_BATCH, HUE_ANCHOR_BY_TAB[activeTab])
-      const existingNames = new Set(paletteItems.map((p) => p.name))
-      const fresh = more.filter((s) => !existingNames.has(s.name))
-      if (fresh.length) {
-        setExtraByTab((prev) => ({
-          ...prev,
-          [activeTab]: [...(prev[activeTab] || []), ...fresh],
-        }))
-      }
-      // A short batch (fewer unique results than asked for) means this
-      // tab's family is effectively drained — treat it as exhausted now
-      // instead of waiting for a next click that would just come back
-      // empty anyway.
-      if (fresh.length < LOAD_MORE_BATCH) {
-        setExhaustedTabs((prev) => new Set(prev).add(activeTab))
-      }
-    } finally {
-      setLoadingMore(false)
-    }
+  const loadMore = () => {
+    setVisibleCountByTab((prev) => ({ ...prev, [activeTab]: fullList.length }))
   }
 
   return (
@@ -189,8 +172,8 @@ export default function SeasonalPalettesPage() {
         </div>
       </div>
 
-      {/* ── Palette grid — same swatch layout/fonts as PalettePage; each
-          season's full, complete set shown immediately. ── */}
+      {/* ── Palette grid — same swatch layout/fonts as PalettePage, low
+          -> high saturation across the whole set. ── */}
       <div className="pp-palette-grid">
         {paletteItems.map((item) => (
           <div key={item.name} className="pp-palette-item">
@@ -204,11 +187,9 @@ export default function SeasonalPalettesPage() {
         ))}
       </div>
 
-      {!exhaustedTabs.has(activeTab) && (
+      {!isFullyShown && (
         <div className="pp-discover-wrap">
-          <button className="pp-discover-btn" onClick={loadMore} disabled={loadingMore}>
-            {loadingMore ? 'Loading...' : 'Discover More Palettes'}
-          </button>
+          <button className="pp-discover-btn" onClick={loadMore}>Discover More Palettes</button>
         </div>
       )}
 
