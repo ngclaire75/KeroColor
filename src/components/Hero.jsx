@@ -29,7 +29,7 @@ export default function Hero() {
           If you love bold palettes, expressive art, and colors with a story
           to tell. You're in the right place and we're happy to deliver.
         </p>
-        <a href="#" className="hero-btn">analyze palette now!</a>
+        <a href="#" className="hero-btn">view palettes now!</a>
       </div>
 
       <div className="hero-img">

@@ -3,24 +3,24 @@ import { useState } from 'react'
 
 const faqs = [
   {
-    q: 'How does the color analyzer work?',
-    a: 'Our color analyzer uses advanced algorithms to evaluate your uploaded images or selected swatches, identifying dominant hues, tones, and complementary shades that form your unique color profile.',
+    q: 'What can I do on KeroColor?',
+    a: 'KeroColor is a curated color inspiration site. Explore mood-driven imagery filtered by color family, browse styled looks, discover ready-made palettes with names and hex codes, and read seasonal editorials, all in one place.',
   },
   {
-    q: 'What is a color palette analysis?',
-    a: 'A color palette analysis breaks down your chosen or detected colors into a cohesive system, including primary, secondary, and accent tones, helping you understand how each hue works together.',
+    q: 'How are the color palettes chosen?',
+    a: 'The Palette page groups curated collections into tabs, All, Seasonal Edition, Editorial, and Inspiration, each with its own set of swatches, names, and hex codes to browse and reference.',
   },
   {
-    q: 'How do I find my signature color?',
-    a: 'Start by exploring our color analyzer tool. Upload an inspiration image or browse our curated palettes. We will identify recurring hues and suggest a signature color that best represents your aesthetic.',
+    q: "What's the difference between Explore, Look, and Inspiration?",
+    a: 'Explore lets you browse mood-driven imagery filtered by color family. Look pairs styled outfits with the palettes that inspired them. Inspiration is a video and visual mood board for a closer, more editorial look at color in motion.',
   },
   {
-    q: 'Can I save and export my palettes?',
-    a: 'Yes, all generated palettes can be saved to your KeroColor profile and exported in multiple formats including HEX, RGB, and PNG swatches for use across design tools.',
+    q: 'Do I need an account to use KeroColor?',
+    a: 'No account or sign-up required. Every page, palette, and editorial is open to browse right away.',
   },
   {
     q: 'Is KeroColor free to use?',
-    a: 'KeroColor is completely free to use. Explore our color analyzer, build palettes, and discover your signature colors, all at no cost.',
+    a: 'KeroColor is completely free to use. Explore our palettes, styled looks, and editorials at no cost.',
   },
 ]
 

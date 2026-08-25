@@ -45,8 +45,8 @@ export default function ColorMeaning() {
           of revolution — red speaks before words ever can.
         </p>
         <a href="#" className="cm-cta">
-          <span className="cm-cta-line">Discover what your colors say</span><br />
-          <span className="cm-cta-line">&rarr; Explore Color Analyzer</span>
+          <span className="cm-cta-line">Discover our moodboard</span><br />
+          <span className="cm-cta-line">&rarr; Go to Explore Section</span>
         </a>
       </div>
 
