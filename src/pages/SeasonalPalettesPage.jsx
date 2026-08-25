@@ -33,7 +33,9 @@ const SEASONS = [
       { hue: 128, sat: [12, 38], count: 48,
         nouns: ['Leaf', 'Sprout', 'Bud', 'Meadow', 'Fern', 'Clover', 'Vine', 'Moss'],
         descs: ['Green still soft from the stem', 'Growth pushing through soil', 'A field waking up', 'Shade under new branches', 'Grass thick with rain', 'Climbing toward the light'] },
-      { hue: 340, sat: [12, 38], count: 42,
+      // Lighter and softer than the rest of the site's default dark-to-
+      // mid band — pastel blossom pinks rather than muted-dark ones.
+      { hue: 340, sat: [8, 30], light: [58, 92], count: 42,
         nouns: ['Blossom', 'Petal', 'Bloom', 'Cherry', 'Blush'],
         descs: ['The first bud opening', 'Pink just past the bud', 'A branch heavy with flowers', 'Petals catching the wind', 'The last bloom before the leaves take over'] },
     ],

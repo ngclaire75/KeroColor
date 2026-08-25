@@ -49,7 +49,8 @@ export function hexSaturation(hex) {
 // theme-specific words (8-10 is plenty). descs: short poetic phrases,
 // cycled (don't need to be unique). count: how many swatches to
 // generate — kept well under nouns.length * 14 so every name is unique.
-export function generatePalette({ hue, hueRange, hueCycle, sat, nouns, descs, count = 45 }) {
+export function generatePalette({ hue, hueRange, hueCycle, sat, light, nouns, descs, count = 45 }) {
+  const [lMin, lSpan] = light ? [light[0], light[1] - light[0]] : [10, 42]
   const combos = []
   for (const noun of nouns) {
     for (const adj of ADJECTIVES) combos.push(`${adj} ${noun}`)
@@ -62,11 +63,12 @@ export function generatePalette({ hue, hueRange, hueCycle, sat, nouns, descs, co
     // the name/hue cycling below, so two swatches with close saturation
     // values still land far enough apart in lightness to read as
     // genuinely different colors rather than "the same shade" repeated
-    // with a slightly different label. Capped well below "bright" —
-    // kept in a dark-to-mid band, per the site's low-saturation, darker,
-    // more editorial (Pantone-report-like) direction over anything
-    // approaching neon.
-    const l = 10 + ((i * 47) % 42)
+    // with a slightly different label. Defaults to a dark-to-mid band
+    // (10-52%), per the site's low-saturation, darker, more editorial
+    // direction over anything approaching neon — light: [min, max]
+    // overrides that band for the rare tab that should read lighter
+    // instead (e.g. Spring's pastel blossoms).
+    const l = lMin + ((i * 47) % Math.max(lSpan, 1))
     const h = hueRange
       ? hueRange[0] + (hueRange[1] - hueRange[0]) * t
       : hueCycle
