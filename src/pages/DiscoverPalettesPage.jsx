@@ -70,7 +70,9 @@ const CATEGORIES = [
     descs: ['Barely a color at all', 'Warmth without weight', 'Linen left in the sun', 'Skin-warm and quiet', 'Sun-deepened and even', 'Spice settled into skin', 'The last, darkest warmth'],
   },
   {
-    tab: 'Autumn Harvest', hue: 26, sat: [30, 96],
+    // Sweeps brown -> orange -> red as saturation rises, rather than
+    // staying one fixed hue.
+    tab: 'Autumn Harvest', hueRange: [28, 2], sat: [30, 96],
     nouns: ['Wheat', 'Pumpkin', 'Maple', 'Harvest', 'Cinnamon', 'Chestnut', 'Rust', 'Umber', 'Mahogany', 'Bark'],
     descs: ['Fields ready for cutting', 'Sap turning to syrup', 'Spice still on the branch', 'Roasted over open coals', 'Leaves giving up their green', 'The last color before the drop', 'The field after the frost'],
   },
@@ -84,15 +86,6 @@ const CATEGORIES = [
     nouns: ['Berry', 'Raspberry', 'Cranberry', 'Wine', 'Merlot', 'Burgundy', 'Garnet', 'Rosewood', 'Grape', 'Plum'],
     descs: ['The first ripening', 'Fruit still cool from the vine', 'Sweetness with a little bite', 'Fruit past its brightest red', 'Poured and left to breathe', 'Color aged in oak', 'The last color of the harvest'],
   },
-  {
-    // The one tab that isn't a single color family — cycles through
-    // several hues (generatePalette accepts an array) while saturation
-    // still runs low -> high across the whole set, same as every other
-    // tab. Fully local, same as the rest — no external API involved.
-    tab: 'Fresh Mix', hue: [18, 200, 38, 265, 345, 140, 8, 205, 26, 350], sat: [26, 96],
-    nouns: ['Hue', 'Tone', 'Shade', 'Mix', 'Blend', 'Cast', 'Note'],
-    descs: ['A shade freshly drawn', 'Color, undiluted', 'Straight from the source', 'A tone worth pausing on', 'A color found, not chosen', 'A color in its own right'],
-  },
 ]
 
 const TABS = CATEGORIES.map((c) => c.tab)
@@ -100,9 +93,7 @@ const TABS = CATEGORIES.map((c) => c.tab)
 // Built once at module load, not per-render — the palette lists never
 // change, only how many of each are currently shown.
 const PALETTES = Object.fromEntries(
-  CATEGORIES.map(({ tab, hue, sat, nouns, descs }) =>
-    [tab, generatePalette({ hue, sat, nouns, descs, count: TOTAL_COUNT })]
-  )
+  CATEGORIES.map((cat) => [cat.tab, generatePalette({ ...cat, count: TOTAL_COUNT })])
 )
 
 const FOOTER_PAGES_LEFT = [

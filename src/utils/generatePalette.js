@@ -37,31 +37,38 @@ export function hexSaturation(hex) {
   return (l > 0.5 ? d / (2 - max - min) : d / (max + min)) * 100
 }
 
-// hue: 0-360, or an array of them (cycled by index — used for the one
-// "mixed" tab that isn't a single color family). sat: [min, max]
-// (0-100), the full range this tab's swatches span, low -> high — every
-// item's own saturation is computed straight from this, so the low ->
-// high order is exact by construction, not just a byproduct of some
-// other formula. nouns: theme-specific words (8-10 is plenty). descs:
-// short poetic phrases, cycled (don't need to be unique). count: how
-// many swatches to generate — kept well under nouns.length * 14 so
-// every name in the batch is unique.
-export function generatePalette({ hue, sat, nouns, descs, count = 45 }) {
-  const hues = Array.isArray(hue) ? hue : [hue]
+// hue: 0-360, one fixed hue for the whole tab. hueRange: [start, end]
+// instead, to sweep smoothly across a span as saturation rises — e.g.
+// brown into orange into red — rather than staying one color family.
+// hueCycle: an array of several unrelated hues, cycled by index (used
+// only for the one "mixed" tab that isn't a single color story). Give
+// exactly one of the three. sat: [min, max] (0-100), the full range
+// this tab's swatches span, low -> high — every item's own saturation
+// is computed straight from this, so the low -> high order is exact by
+// construction, not just a byproduct of some other formula. nouns:
+// theme-specific words (8-10 is plenty). descs: short poetic phrases,
+// cycled (don't need to be unique). count: how many swatches to
+// generate — kept well under nouns.length * 14 so every name is unique.
+export function generatePalette({ hue, hueRange, hueCycle, sat, nouns, descs, count = 45 }) {
   const combos = []
   for (const noun of nouns) {
     for (const adj of ADJECTIVES) combos.push(`${adj} ${noun}`)
   }
   const items = []
   for (let i = 0; i < count; i++) {
-    const s = sat[0] + (sat[1] - sat[0]) * (i / Math.max(count - 1, 1))
+    const t = i / Math.max(count - 1, 1)
+    const s = sat[0] + (sat[1] - sat[0]) * t
     // Lightness swings across a wide band on a different cycle length
     // than the name/hue cycling below, so two swatches with close
     // saturation values still land far enough apart in lightness to
     // read as genuinely different colors rather than "the same shade"
     // repeated with a slightly different label.
     const l = 18 + ((i * 53) % 68)
-    const h = hues[i % hues.length]
+    const h = hueRange
+      ? hueRange[0] + (hueRange[1] - hueRange[0]) * t
+      : hueCycle
+        ? hueCycle[i % hueCycle.length]
+        : hue
     items.push({
       color: hslToHex(h, s, l),
       name: combos[i % combos.length],

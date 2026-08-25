@@ -14,9 +14,9 @@ import './PalettePage.css'
 
 const TABS = ['All', 'Seasonal Edition', 'Editorial', 'Inspiration']
 
-// Every tab that exists on Discover Palettes (12 categories + Fresh Mix)
-// and Seasonal Palettes (the 4 seasons) — kept in sync by hand with the
-// tab names defined in DiscoverPalettesPage.jsx/SeasonalPalettesPage.jsx.
+// Every tab that exists on Discover Palettes (12 categories) and
+// Seasonal Palettes (the 4 seasons) — kept in sync by hand with the tab
+// names defined in DiscoverPalettesPage.jsx/SeasonalPalettesPage.jsx.
 // The hamburger menu shows all of them (not capped at 9) so every tab is
 // reachable from here, each one routing to the right page with that
 // exact tab pre-selected.
@@ -24,7 +24,7 @@ const SEASON_NAMES = new Set(['Spring', 'Summer', 'Autumn', 'Winter'])
 const DISCOVER_MENU_ITEMS = [
   'Warm Terracotta', 'Cool Slate', 'Golden Hour', 'Midnight Bloom', 'Rose Quartz',
   'Forest Canopy', 'Desert Bloom', 'Ocean Depth', 'Nude Series', 'Autumn Harvest',
-  'Coastal Breeze', 'Berry Wine', 'Fresh Mix',
+  'Coastal Breeze', 'Berry Wine',
   'Spring', 'Summer', 'Autumn', 'Winter',
 ]
 
