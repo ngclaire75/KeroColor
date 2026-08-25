@@ -148,10 +148,17 @@ export default function SeasonalPalettesPage() {
         </div>
 
         <div className="pp-nav-center">
-          <Link to="/" className="pp-nav-brand">
-            <span className="pp-nav-brand-text">KEROCOLOR</span>
-            <img src={bearImg} alt="KeroColor" className="pp-nav-brand-img" />
-          </Link>
+          <div className="pp-nav-brand">
+            <Link to="/" className="pp-nav-brand-text-link">
+              <span className="pp-nav-brand-text">KEROCOLOR</span>
+            </Link>
+            {/* Back to the Seasonal Edition tab on Color Palette, not
+                home — this page is reached from there, so the bear leads
+                back to it. */}
+            <Link to="/palette" state={{ tab: 'Seasonal Edition' }}>
+              <img src={bearImg} alt="KeroColor" className="pp-nav-brand-img" />
+            </Link>
+          </div>
         </div>
       </nav>
 
