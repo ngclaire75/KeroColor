@@ -1,0 +1,48 @@
+/* ── Tab selector — deliberately different from PalettePage's underlined
+   text tabs (.pp-tab): filled red chips instead (same red as the
+   hamburger menu overlay), so this page reads as its own thing while
+   everything else (nav, grid, fonts, footer) stays identical for
+   consistency. ── */
+.dp-tabs-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 2.5rem 1.5rem 1rem;
+}
+
+.dp-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.7rem;
+  max-width: 900px;
+}
+
+.dp-tab {
+  background: #4d0c12;
+  opacity: 0.55;
+  border: 1px solid #4d0c12;
+  border-radius: 999px;
+  padding: 0.6rem 1.4rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: #fff;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.dp-tab--active {
+  opacity: 1;
+}
+
+@media (max-width: 640px) {
+  .dp-tabs-wrap {
+    padding: 1.8rem 1rem 0.5rem;
+  }
+
+  .dp-tab {
+    padding: 0.5rem 1.1rem;
+    font-size: 0.7rem;
+  }
+}

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import SearchLoader from '../components/SearchLoader'
 import FullMenu from '../components/FullMenu'
+import { useSearch } from '../SearchContext'
 import { fetchPaletteNames, FALLBACK_NAMES } from '../utils/paletteNames'
 import heroImg from '../../images/fire.jpg'
 import springImg from '../../images/spr.jpg'
@@ -77,6 +78,7 @@ const PALETTE_ITEMS = [
 export default function PalettePage() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { setSearchResult } = useSearch()
   const [activeTab, setActiveTab] = useState(location.state?.tab || 'All')
   const [barOpen, setBarOpen] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -173,8 +175,21 @@ export default function PalettePage() {
             )}
           </button>
           <div className={`pp-bar-texts${animPaused ? ' pp-bar-texts--paused' : ''}`}>
-            <span className="pp-bar-text pp-bar-text--1">Discover the new <span className="pp-bar-underline">Kerocolor Nude Series.</span></span>
-            <span className="pp-bar-text pp-bar-text--2">Have a Look at Our <span className="pp-bar-underline">Color Analyzer</span><span className="pp-bar-text-tail"> to Unlock Your True Colors</span></span>
+            <span className="pp-bar-text pp-bar-text--1">
+              Discover the new{' '}
+              <Link to="/palette/discover" state={{ tab: 'Nude Series' }} className="pp-bar-underline">Kerocolor Nude Series.</Link>
+            </span>
+            <span className="pp-bar-text pp-bar-text--2">
+              Explore Our{' '}
+              <Link
+                to="/explore"
+                className="pp-bar-underline"
+                onClick={() => setSearchResult({ query: 'green', valid: true, colorFamily: 'green' })}
+              >
+                Green Color Edit
+              </Link>
+              <span className="pp-bar-text-tail"> to Find Your Perfect Shade</span>
+            </span>
           </div>
           <button className="pp-bar-close" onClick={() => setBarOpen(false)} aria-label="Close">
             <svg width="13" height="13" viewBox="0 0 11 11" fill="none">

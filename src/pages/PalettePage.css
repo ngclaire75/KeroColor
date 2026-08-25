@@ -95,6 +95,10 @@
 }
 
 .pp-bar-underline {
+  /* Now real Link elements (used to be plain spans) — color:inherit
+     stops the browser's default link-blue from overriding the white
+     text color they need to inherit from .pp-bar-text. */
+  color: inherit;
   text-decoration: underline;
   text-underline-offset: 2px;
   text-decoration-thickness: 1px;

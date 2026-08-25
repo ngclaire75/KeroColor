@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { getLenis } from '../lenis'
 import './FullMenu.css'
 
-export default function FullMenu({ open, onClose, items }) {
+export default function FullMenu({ open, onClose, items, onItemClick }) {
   useEffect(() => {
     if (!open) return
     const onKey = (e) => { if (e.key === 'Escape') onClose() }
@@ -53,15 +53,23 @@ export default function FullMenu({ open, onClose, items }) {
       </div>
       <div className="fm-list-wrap">
         <nav className="fm-list">
-          {items.map((name, i) => (
+          {items.map((name, i) => {
             // Keyed by position, not name: swapping fallback names for the
             // fetched Colormind names should update text in place, not
             // remount the row and restart its slide-in/fade-in animation.
-            <div className="fm-item" key={i}>
-              <span className="fm-num">{String(i + 1).padStart(3, '0')}</span>
-              <span className="fm-name">{name}</span>
-            </div>
-          ))}
+            const Tag = onItemClick ? 'button' : 'div'
+            return (
+              <Tag
+                className={`fm-item${onItemClick ? ' fm-item--clickable' : ''}`}
+                key={i}
+                type={onItemClick ? 'button' : undefined}
+                onClick={onItemClick ? () => onItemClick(name, i) : undefined}
+              >
+                <span className="fm-num">{String(i + 1).padStart(3, '0')}</span>
+                <span className="fm-name">{name}</span>
+              </Tag>
+            )
+          })}
         </nav>
       </div>
     </div>

@@ -73,6 +73,69 @@ function nameFromRgb([r, g, b]) {
   return `${descriptor(l, s)} ${noun}`
 }
 
+function rgbToHex([r, g, b]) {
+  const toHex = (n) => n.toString(16).padStart(2, '0')
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`
+}
+
+// Short, generic, mood-appropriate — Colormind gives us a color, not a
+// story, so the description is picked from the same lightness/saturation
+// read used for the name rather than hand-written per swatch.
+const DESCS = [
+  'A shade freshly drawn',
+  'Color, undiluted',
+  'Straight from the source',
+  'A tone worth pausing on',
+  'Unmixed and exact',
+  'A color in its own right',
+]
+
+function descFromRgb([, , b], i) {
+  return DESCS[i % DESCS.length]
+}
+
+async function fetchColormindColors(count) {
+  const calls = Math.ceil(count / 5)
+  const responses = await Promise.all(
+    Array.from({ length: calls }, () =>
+      // Content-Type is deliberately 'text/plain' (not 'application/json'):
+      // Colormind's API parses the body as JSON regardless, but its preflight
+      // response doesn't allow 'application/json' as a request header, which
+      // makes browsers block the real request. 'text/plain' is CORS-safelisted,
+      // so no preflight is sent at all.
+      fetch('https://colormind.io/api/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ model: 'default' }),
+      }).then(res => res.json())
+    )
+  )
+  return responses.flatMap(r => r.result)
+}
+
+// Like fetchPaletteNames, but returns the actual generated colors too
+// (hex + name + a short description), sorted light -> dark so a grid
+// built from them reads as one arranged set rather than a random
+// scatter — same convention as the hand-curated categories.
+export async function fetchPaletteSwatches(count = 12) {
+  try {
+    const rgbs = await fetchColormindColors(count)
+    const seen = new Set()
+    const swatches = []
+    for (const rgb of rgbs) {
+      const name = nameFromRgb(rgb)
+      if (seen.has(name)) continue
+      seen.add(name)
+      swatches.push({ color: rgbToHex(rgb), name, desc: descFromRgb(rgb, swatches.length), _l: rgbToHsl(...rgb)[2] })
+      if (swatches.length >= count) break
+    }
+    swatches.sort((a, b) => b._l - a._l)
+    return swatches.map(({ _l, ...s }) => s)
+  } catch {
+    return []
+  }
+}
+
 // Fetches real generated palettes from the Colormind API and derives
 // `count` unique palette names from their colors. Falls back to a
 // curated list if the API is unreachable.

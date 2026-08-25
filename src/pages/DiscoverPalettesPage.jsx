@@ -1,50 +1,265 @@
 import { useState, useEffect, useRef } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import SearchLoader from '../components/SearchLoader'
+import { Link, useLocation } from 'react-router-dom'
 import FullMenu from '../components/FullMenu'
-import { fetchPaletteNames, FALLBACK_NAMES } from '../utils/paletteNames'
+import { fetchPaletteSwatches } from '../utils/paletteNames'
 import bearImg from '../../images/bear.png'
-// Reused wholesale (not just the class names) so this page is pixel-for-
-// pixel consistent with PalettePage — same nav, same tab styling, same
-// 6-swatch grid, same fonts, same footer.
+// Reused wholesale (not just the class names) so the nav, grid, fonts,
+// and footer are pixel-for-pixel consistent with PalettePage. The tab
+// selector itself is intentionally different — see DiscoverPalettesPage.css.
 import './PalettePage.css'
+import './DiscoverPalettesPage.css'
 
-const TABS = ['Warm Terracotta', 'Cool Slate', 'Golden Hour', 'Midnight Bloom']
-
-const PALETTES = {
-  'Warm Terracotta': [
-    { color: '#8C4A2F', name: 'Baked Clay',    desc: 'Sun-warmed adobe earth' },
-    { color: '#B9764B', name: 'Amber Ochre',   desc: 'Toasted desert spice' },
-    { color: '#D9A066', name: 'Honey Terra',   desc: 'Golden clay at midday' },
-    { color: '#E8C9A0', name: 'Sandstone',     desc: 'Bleached canyon dust' },
-    { color: '#6E3524', name: 'Burnt Sienna',  desc: 'Ember at the edge of ash' },
-    { color: '#4A2418', name: 'Umber Root',    desc: 'Deep earth after rain' },
-  ],
-  'Cool Slate': [
-    { color: '#2C3539', name: 'Storm Slate',   desc: 'Rain over quiet water' },
-    { color: '#4A5C61', name: 'Harbor Fog',    desc: 'Mist rolling off the coast' },
-    { color: '#7C93A0', name: 'Steel Mist',    desc: 'Overcast morning light' },
-    { color: '#A9BAC2', name: 'Pale Frost',    desc: 'First frost on glass' },
-    { color: '#1B2226', name: 'Deep Basalt',   desc: 'Volcanic rock, cooled' },
-    { color: '#C9D6DA', name: 'Glacier Air',   desc: 'Thin, clean mountain air' },
-  ],
-  'Golden Hour': [
-    { color: '#F2B441', name: 'Amber Glow',    desc: 'Light through honey glass' },
-    { color: '#E8863C', name: 'Marigold Dusk', desc: 'The sun dropping low' },
-    { color: '#C4522B', name: 'Copper Flame',  desc: 'Embers catching wind' },
-    { color: '#F6D9A0', name: 'Wheat Light',   desc: 'Fields at sundown' },
-    { color: '#8A3A1F', name: 'Rust Horizon',  desc: 'Where the light finally rests' },
-    { color: '#FCEBC7', name: 'First Blush',   desc: 'The sky just before gold' },
-  ],
-  'Midnight Bloom': [
-    { color: '#1A0F2E', name: 'Void Violet',   desc: 'The hour past midnight' },
-    { color: '#3D1E5C', name: 'Orchid Shadow', desc: 'A bloom seen by moonlight' },
-    { color: '#6B3FA0', name: 'Twilight Iris', desc: 'Dusk folding into dusk' },
-    { color: '#9B72C9', name: 'Lilac Haze',    desc: 'Perfume on cool air' },
-    { color: '#2B1547', name: 'Plum Eclipse',  desc: 'Shadow with a pulse of color' },
-    { color: '#D8C4EE', name: 'Moon Petal',    desc: 'Soft light on pale petals' },
-  ],
+// Converts an HSL color to a hex string — swatches are generated from a
+// per-category base hue rather than hand-picked, so every category's
+// list can be built already sorted light -> dark by construction instead
+// of needing to eyeball/reorder hand-chosen hex values.
+function hslToHex(h, s, l) {
+  s /= 100; l /= 100
+  const k = (n) => (n + h / 30) % 12
+  const a = s * Math.min(l, 1 - l)
+  const f = (n) => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)))
+  const toHex = (x) => Math.round(255 * x).toString(16).padStart(2, '0')
+  return `#${toHex(f(0))}${toHex(f(8))}${toHex(f(4))}`
 }
+
+// Each category is a base hue/saturation range plus 12 names+descs,
+// already ordered light -> dark to match the generated lightness steps —
+// this is what keeps every tab's grid reading as one smooth arranged
+// progression rather than a random scatter of colors.
+const CATEGORIES = [
+  {
+    tab: 'Warm Terracotta', hue: 18, sat: [42, 68],
+    items: [
+      ['Sandstone', 'Bleached canyon dust'],
+      ['Wheat Clay', 'Sun-dried riverbank'],
+      ['Honey Terra', 'Golden clay at midday'],
+      ['Sunbaked Ochre', 'Desert spice, warmed through'],
+      ['Amber Terra', 'Clay lit from within'],
+      ['Toasted Adobe', 'Walls warm from the sun'],
+      ['Baked Clay', 'Sun-warmed adobe earth'],
+      ['Rustic Copper', 'Weathered metal, quiet glow'],
+      ['Burnt Sienna', 'Ember at the edge of ash'],
+      ['Umber Root', 'Deep earth after rain'],
+      ['Deep Terracotta', 'Kiln-fired and settled'],
+      ['Charred Earth', 'Where the fire finally rests'],
+    ],
+  },
+  {
+    tab: 'Cool Slate', hue: 200, sat: [10, 22],
+    items: [
+      ['Glacier Air', 'Thin, clean mountain air'],
+      ['Pale Frost', 'First frost on glass'],
+      ['Winter Haze', 'Breath in cold light'],
+      ['Steel Mist', 'Overcast morning light'],
+      ['Quiet Fog', 'Mist rolling off the coast'],
+      ['Harbor Mist', 'Boats waiting out the rain'],
+      ['Storm Slate', 'Rain over quiet water'],
+      ['Rainer Grey', 'A sky that won’t decide'],
+      ['Slate Water', 'Still, deep, and cold'],
+      ['Shadowed Steel', 'Metal under low cloud'],
+      ['Deep Basalt', 'Volcanic rock, cooled'],
+      ['Void Slate', 'Where the light runs out'],
+    ],
+  },
+  {
+    tab: 'Golden Hour', hue: 38, sat: [70, 92],
+    items: [
+      ['First Blush', 'The sky just before gold'],
+      ['Wheat Light', 'Fields at sundown'],
+      ['Honey Ray', 'Light through honey glass'],
+      ['Amber Glow', 'Warmth held in glass'],
+      ['Marigold Dusk', 'The sun dropping low'],
+      ['Sunlit Copper', 'Metal catching last light'],
+      ['Ember Gold', 'Coals just past the flame'],
+      ['Molten Amber', 'Heat still moving'],
+      ['Copper Flame', 'Embers catching wind'],
+      ['Rust Horizon', 'Where the light finally rests'],
+      ['Burnt Marigold', 'Petals scorched by evening'],
+      ['Dusk Ember', 'The last coal of the day'],
+    ],
+  },
+  {
+    tab: 'Midnight Bloom', hue: 265, sat: [32, 55],
+    items: [
+      ['Moon Petal', 'Soft light on pale petals'],
+      ['Lilac Haze', 'Perfume on cool air'],
+      ['Dusty Orchid', 'A bloom losing its color'],
+      ['Twilight Iris', 'Dusk folding into dusk'],
+      ['Hushed Violet', 'Quiet before the dark'],
+      ['Orchid Shadow', 'A bloom seen by moonlight'],
+      ['Velvet Bloom', 'Petals thick with night'],
+      ['Plum Eclipse', 'Shadow with a pulse of color'],
+      ['Deep Amethyst', 'Stone that holds the dark'],
+      ['Shadowed Iris', 'Color barely surfacing'],
+      ['Void Violet', 'The hour past midnight'],
+      ['Ink Bloom', 'A flower drawn in the dark'],
+    ],
+  },
+  {
+    tab: 'Rose Quartz', hue: 345, sat: [28, 48],
+    items: [
+      ['Whispered Pink', 'Barely there at all'],
+      ['Sheer Blush', 'Color caught in light fabric'],
+      ['Petal Powder', 'Dust from a spent bloom'],
+      ['Rosewater', 'Faint sweetness in the air'],
+      ['Dusty Rose', 'Faded blossom petal pink'],
+      ['Soft Coral', 'Warmth without the heat'],
+      ['Blush Quartz', 'Stone holding onto pink'],
+      ['Muted Rosewood', 'Wood grain, softly stained'],
+      ['Faded Berry', 'Sweetness gone quiet'],
+      ['Deep Rosewood', 'Furniture polished by years'],
+      ['Wine Blush', 'A color one glass in'],
+      ['Shadowed Rose', 'Pink losing its light'],
+    ],
+  },
+  {
+    tab: 'Forest Canopy', hue: 140, sat: [24, 42],
+    items: [
+      ['Pale Fern', 'New growth, still soft'],
+      ['Sage Mist', 'Herb garden after rain'],
+      ['Quiet Moss', 'Damp stone, undisturbed'],
+      ['Dappled Leaf', 'Light breaking through branches'],
+      ['Woodland Green', 'The color of standing still'],
+      ['Fern Shade', 'Cool, low, and green'],
+      ['Mossy Canopy', 'Where the light barely reaches'],
+      ['Evergreen Grove', 'Needles holding their color'],
+      ['Deep Pine', 'Forest at its darkest edge'],
+      ['Shaded Thicket', 'Undergrowth, dense and dark'],
+      ['Forest Shadow', 'The color between the trees'],
+      ['Hidden Grove', 'Where the canopy closes over'],
+    ],
+  },
+  {
+    tab: 'Desert Bloom', hue: 8, sat: [46, 68],
+    items: [
+      ['Sunlit Sand', 'Warm underfoot at noon'],
+      ['Warm Mesa', 'Rock holding the day’s heat'],
+      ['Dune Blush', 'Sand catching evening color'],
+      ['Cactus Bloom', 'A flower against the odds'],
+      ['Desert Coral', 'Warmth in dry air'],
+      ['Sunbaked Rose', 'Petals under a hard sun'],
+      ['Wild Salmon', 'Color that survives the heat'],
+      ['Arid Bloom', 'Beauty in scarce water'],
+      ['Canyon Coral', 'Rock walls at sundown'],
+      ['Bloomrose Dusk', 'The last color before dark'],
+      ['Deep Terra Rose', 'Earth with a flush of pink'],
+      ['Sunset Mesa', 'Where the desert catches fire'],
+    ],
+  },
+  {
+    tab: 'Ocean Depth', hue: 205, sat: [48, 70],
+    items: [
+      ['Pale Tide', 'Foam catching morning light'],
+      ['Coastal Air', 'Salt on an open window'],
+      ['Shallow Current', 'Water still holding sunlight'],
+      ['Tidal Blue', 'The pull of an outgoing tide'],
+      ['Ocean Mist', 'Spray off a breaking wave'],
+      ['Deep Current', 'Water moving with intent'],
+      ['Reef Blue', 'Color just past the shallows'],
+      ['Sunken Azure', 'Light fading with depth'],
+      ['Abyssal Tide', 'Where the sunlight stops'],
+      ['Trench Blue', 'Pressure, cold, and quiet'],
+      ['Deep Abyss', 'The color has nowhere left to go'],
+      ['Void Depth', 'Past where anything is seen'],
+    ],
+  },
+  {
+    tab: 'Nude Series', hue: 28, sat: [26, 42],
+    items: [
+      ['Sheer Nude', 'Barely a color at all'],
+      ['Soft Sand', 'Warmth without weight'],
+      ['Warm Beige', 'Linen left in the sun'],
+      ['Honey Nude', 'Skin-warm and quiet'],
+      ['Buff Blush', 'A hush of warmth'],
+      ['Toffee Tan', 'Sun-deepened and even'],
+      ['Caramel Nude', 'Rich, warm, unhurried'],
+      ['Cinnamon Beige', 'Spice settled into skin'],
+      ['Cocoa Nude', 'Deep warmth, softly matte'],
+      ['Toasted Umber', 'Bronze fading to earth'],
+      ['Deep Cocoa', 'Rich, dark, and warm'],
+      ['Espresso Nude', 'The last, darkest warmth'],
+    ],
+  },
+  {
+    tab: 'Autumn Harvest', hue: 26, sat: [48, 70],
+    items: [
+      ['Golden Wheat', 'Fields ready for cutting'],
+      ['Pumpkin Spice', 'Warmth in a cool month'],
+      ['Maple Amber', 'Sap turning to syrup'],
+      ['Harvest Gold', 'The color of a full crop'],
+      ['Cinnamon Bark', 'Spice still on the branch'],
+      ['Toasted Chestnut', 'Roasted over open coals'],
+      ['Burnt Pumpkin', 'A gourd left past its season'],
+      ['Autumn Rust', 'Leaves giving up their green'],
+      ['Spiced Umber', 'Warm earth, lightly dusted'],
+      ['Mahogany Leaf', 'The last color before the drop'],
+      ['Bark Brown', 'Rough, dry, and grounded'],
+      ['Midnight Harvest', 'The field after the frost'],
+    ],
+  },
+  {
+    tab: 'Coastal Breeze', hue: 185, sat: [32, 55],
+    items: [
+      ['Sea Foam', 'Where the wave just broke'],
+      ['Pale Aqua', 'Shallow water over sand'],
+      ['Breezy Teal', 'Wind off an open deck'],
+      ['Coastal Mist', 'Spray caught in morning light'],
+      ['Seaglass', 'Smoothed by years of tide'],
+      ['Lagoon Blue', 'Calm water, held in by reef'],
+      ['Tidepool Teal', 'Color trapped between the rocks'],
+      ['Deep Lagoon', 'Where the shallows finally end'],
+      ['Marine Teal', 'A color built for depth'],
+      ['Ocean Slate', 'Water under a grey sky'],
+      ['Deep Teal', 'Past where the light softens'],
+      ['Midnight Marine', 'The sea with the sun long gone'],
+    ],
+  },
+  {
+    tab: 'Berry Wine', hue: 350, sat: [42, 65],
+    items: [
+      ['Blush Berry', 'The first ripening'],
+      ['Raspberry Mist', 'Fruit still cool from the vine'],
+      ['Cranberry Rose', 'Tart color, softly lit'],
+      ['Wine Berry', 'Sweetness with a little bite'],
+      ['Merlot Blush', 'A color one sip in'],
+      ['Deep Cranberry', 'Fruit past its brightest red'],
+      ['Burgundy Wine', 'Poured and left to breathe'],
+      ['Garnet Berry', 'Stone-dark and glowing'],
+      ['Dark Merlot', 'The bottom of the glass'],
+      ['Deep Burgundy', 'Color aged in oak'],
+      ['Wine Shadow', 'Where the light stops in the glass'],
+      ['Midnight Berry', 'The last color of the harvest'],
+    ],
+  },
+]
+
+// Last tab is powered by the live Colormind API instead of a hand-curated
+// list — see the fetch in the component below.
+const FRESH_MIX_TAB = 'Fresh Mix'
+const TABS = [...CATEGORIES.map((c) => c.tab), FRESH_MIX_TAB]
+
+const FRESH_MIX_FALLBACK = [
+  { color: '#3a2a2f', name: 'Deep Mahogany', desc: 'A shade freshly drawn' },
+  { color: '#7c5b52', name: 'Rich Umber',    desc: 'Color, undiluted' },
+  { color: '#b98f7a', name: 'Warm Clay',     desc: 'Straight from the source' },
+  { color: '#e3c9b6', name: 'Pale Linen',    desc: 'A tone worth pausing on' },
+  { color: '#4a5c52', name: 'Deep Sage',     desc: 'Unmixed and exact' },
+  { color: '#8fae9c', name: 'Soft Sage',     desc: 'A color in its own right' },
+]
+
+// Built once at module load, not per-render — the palette lists never
+// change, only which tab/how many of each are currently shown.
+const PALETTES = Object.fromEntries(
+  CATEGORIES.map(({ tab, hue, sat, items }) => {
+    const n = items.length
+    const list = items.map(([name, desc], i) => {
+      const l = 82 - i * (68 / (n - 1)) // lightness: light -> dark across the set
+      const s = sat[0] + (sat[1] - sat[0]) * (i / (n - 1))
+      return { color: hslToHex(hue, s, l), name, desc }
+    })
+    return [tab, list]
+  })
+)
 
 const FOOTER_PAGES_LEFT = [
   { label: 'Home',           href: '/',        type: 'link'   },
@@ -59,14 +274,12 @@ const FOOTER_PAGES_RIGHT = [
 ]
 
 export default function DiscoverPalettesPage() {
-  const navigate = useNavigate()
-  const [activeTab, setActiveTab] = useState(TABS[0])
-  const [menuOpen, setMenuOpen] = useState(false)
+  const location = useLocation()
+  const [activeTab, setActiveTab] = useState(
+    TABS.includes(location.state?.tab) ? location.state.tab : TABS[0]
+  )
   const [fullMenuOpen, setFullMenuOpen] = useState(false)
-  const [paletteNames, setPaletteNames] = useState(FALLBACK_NAMES.slice(0, 9))
-  const [tabLoading, setTabLoading] = useState(false)
-  const [tabLoaderFading, setTabLoaderFading] = useState(false)
-  const tabTimeoutsRef = useRef([])
+  const [freshMix, setFreshMix] = useState(FRESH_MIX_FALLBACK)
   const giantTextRef = useRef(null)
 
   // Land on this page at the top, regardless of scroll position on the
@@ -74,6 +287,18 @@ export default function DiscoverPalettesPage() {
   // changes by default).
   useEffect(() => {
     window.scrollTo(0, 0)
+  }, [])
+
+  // Fresh Mix is the one tab backed by the live Colormind API rather
+  // than a hand-curated list — fetched once in the background so it's
+  // ready by the time anyone actually switches to it, falling back to
+  // the static set above if the API is unreachable.
+  useEffect(() => {
+    let cancelled = false
+    fetchPaletteSwatches(12).then((swatches) => {
+      if (!cancelled && swatches.length) setFreshMix(swatches)
+    })
+    return () => { cancelled = true }
   }, [])
 
   // Same flashlight hover effect on the giant footer "kero." text as
@@ -92,44 +317,23 @@ export default function DiscoverPalettesPage() {
     return () => window.removeEventListener('mousemove', handleMove)
   }, [])
 
-  useEffect(() => {
-    if (!menuOpen) return
-    const closeOnScroll = () => setMenuOpen(false)
-    window.addEventListener('scroll', closeOnScroll, { passive: true })
-    return () => window.removeEventListener('scroll', closeOnScroll)
-  }, [menuOpen])
-
-  useEffect(() => {
-    let cancelled = false
-    fetchPaletteNames(9).then(names => {
-      if (!cancelled) setPaletteNames(names)
-    })
-    return () => { cancelled = true }
-  }, [])
-
-  // Same brief SearchLoader flash as PalettePage's own tab switch, so
-  // moving between palette categories reads consistently across both
-  // pages instead of one feeling instant and the other feeling loaded.
   const handleTabClick = (tab) => {
     if (tab === activeTab) return
-    tabTimeoutsRef.current.forEach(clearTimeout)
-    setTabLoaderFading(false)
-    setTabLoading(true)
-    const t1 = setTimeout(() => {
-      setActiveTab(tab)
-      setTabLoaderFading(true)
-    }, 900)
-    const t2 = setTimeout(() => setTabLoading(false), 1600)
-    tabTimeoutsRef.current = [t1, t2]
+    setActiveTab(tab)
   }
 
-  const paletteItems = PALETTES[activeTab]
+  // Menu items are this page's own tab names, not decorative Colormind
+  // names — picking one switches straight to that tab and closes the menu.
+  const handleMenuItemClick = (tab) => {
+    setFullMenuOpen(false)
+    handleTabClick(tab)
+  }
+
+  const paletteItems = activeTab === FRESH_MIX_TAB ? freshMix : PALETTES[activeTab]
 
   return (
     <div className="pp-page">
-      <FullMenu open={fullMenuOpen} onClose={() => setFullMenuOpen(false)} items={paletteNames} />
-
-      {tabLoading && <SearchLoader fading={tabLoaderFading} />}
+      <FullMenu open={fullMenuOpen} onClose={() => setFullMenuOpen(false)} items={TABS} onItemClick={handleMenuItemClick} />
 
       {/* ── Navigation — identical to PalettePage's ── */}
       <nav className="pp-nav">
@@ -151,57 +355,29 @@ export default function DiscoverPalettesPage() {
         </div>
       </nav>
 
-      {/* ── Hero content ── */}
-      <header className="pp-hero">
-        <p className="pp-hero-sub">The KeroColor Studio</p>
-        <h1 className="pp-hero-title">Discover More Palettes</h1>
-      </header>
-
-      {/* ── Tabs (desktop) ── */}
-      <div className="pp-tabs-wrap">
-        <div className="pp-tabs">
+      {/* ── Tabs — filled chip style, different from PalettePage's
+          underlined text tabs on purpose (see DiscoverPalettesPage.css).
+          Wraps naturally so no separate mobile dropdown is needed. ── */}
+      <div className="dp-tabs-wrap">
+        <div className="dp-tabs">
           {TABS.map(tab => (
             <button
               key={tab}
-              className={`pp-tab${activeTab === tab ? ' pp-tab--active' : ''}`}
+              className={`dp-tab${activeTab === tab ? ' dp-tab--active' : ''}`}
               onClick={() => handleTabClick(tab)}
             >
-              <span>{tab}</span>
+              {tab}
             </button>
           ))}
         </div>
       </div>
 
-      {/* ── Menu dropdown (mobile) ── */}
-      <div className="pp-menu-dropdown">
-        <button className="pp-menu-toggle" onClick={() => setMenuOpen(o => !o)}>
-          <span>Menu</span>
-          <svg
-            className={`pp-menu-chevron${menuOpen ? ' pp-menu-chevron--open' : ''}`}
-            fill="none" viewBox="0 0 24 24" focusable="false" aria-hidden="true"
-          >
-            <path fill="#000" d="m11.558 16.505.496.495 7.949-8.01v-.987L19.999 8h-.985l-6.967 7.017L4.992 8H4v.987z"></path>
-          </svg>
-        </button>
-        <div className={`pp-menu-list${menuOpen ? ' pp-menu-list--open' : ''}`}>
-          <div className="pp-menu-list-inner">
-            {TABS.map(tab => (
-              <button
-                key={tab}
-                className={`pp-menu-item${activeTab === tab ? ' pp-menu-item--active' : ''}`}
-                onClick={() => { handleTabClick(tab); setMenuOpen(false) }}
-              >
-                <span>{tab}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ── Palette grid — same 6-swatch layout/fonts as PalettePage ── */}
+      {/* ── Palette grid — same swatch layout/fonts as PalettePage. Every
+          tab's full, complete set is shown at once — no pagination — and
+          arranged light -> dark. ── */}
       <div className="pp-palette-grid">
         {paletteItems.map((item) => (
-          <div key={item.color} className="pp-palette-item">
+          <div key={item.name} className="pp-palette-item">
             <div className="pp-palette-swatch" style={{ background: item.color }} />
             <div className="pp-palette-text">
               <p className="pp-palette-desc">{item.desc}</p>
@@ -210,11 +386,6 @@ export default function DiscoverPalettesPage() {
             </div>
           </div>
         ))}
-      </div>
-
-      {/* ── Back to Color Palette ── */}
-      <div className="pp-discover-wrap">
-        <button className="pp-discover-btn" onClick={() => navigate('/palette')}>Back to Color Palette</button>
       </div>
 
       {/* ── Footer — identical to PalettePage's ── */}
