@@ -197,7 +197,7 @@ export default function PalettePage() {
               <Link to="/palette/discover" state={{ tab: 'Nude Series' }} className="pp-bar-underline">Kerocolor Nude Series.</Link>
             </span>
             <span className="pp-bar-text pp-bar-text--2">
-              Explore Our{' '}
+              Unveil Our{' '}
               <Link
                 to="/explore"
                 className="pp-bar-underline"
@@ -205,7 +205,7 @@ export default function PalettePage() {
               >
                 Green Color Edit
               </Link>
-              <span className="pp-bar-text-tail"> to Find Your Perfect Shade</span>
+              <span className="pp-bar-text-tail"> — Curated with Elegance</span>
             </span>
           </div>
           <button className="pp-bar-close" onClick={() => setBarOpen(false)} aria-label="Close">
