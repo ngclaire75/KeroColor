@@ -584,6 +584,41 @@ export default function InspirationPage() {
     navigate('/palette', { state: { tab: item } })
   }
 
+  // Figure ticker — back to a pure CSS animation (see @keyframes
+  // in-figures-scroll), not JS-driven. A JS requestAnimationFrame loop
+  // that sets track.style.transform every frame runs on the MAIN
+  // thread, competing with everything else happening there (React
+  // renders, other components' effects/intervals) — any main-thread
+  // congestion shows up as visible stutter. A CSS animation instead runs
+  // on the compositor thread, immune to that.
+  //
+  // The image list still renders twice back-to-back so it can loop
+  // seamlessly, but a plain translateX(-50%) keyframe assumes the
+  // halfway point of the track's total width IS the exact repeat
+  // distance — it isn't, once `gap` is involved: the track's total width
+  // includes a gap after all 15 cell-boundaries, while the true repeat
+  // distance (start of cell 1 to the start of cell 9, its duplicate)
+  // only spans 8 of those gaps, so -50% was off by half a gap and every
+  // loop restart visibly snapped. This measures the real distance once
+  // (and again on resize) and exposes it as a CSS custom property that
+  // the keyframes read — self-corrects at any viewport/breakpoint
+  // without needing separate hardcoded desktop/mobile values, while the
+  // actual animation stays 100% CSS.
+  const figuresTrackRef = useRef(null)
+  useEffect(() => {
+    const track = figuresTrackRef.current
+    if (!track) return
+    const measure = () => {
+      const cells = track.querySelectorAll('.in-figure-cell')
+      if (cells.length < FIGURE_IMAGES.length + 1) return
+      const d = cells[FIGURE_IMAGES.length].getBoundingClientRect().left - cells[0].getBoundingClientRect().left
+      if (d > 0) track.style.setProperty('--figures-repeat', `${d}px`)
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [])
+
   return (
     <>
     {!overlayGone && <SearchLoader fading={overlayFading} />}
@@ -700,7 +735,7 @@ export default function InspirationPage() {
           twice back-to-back so the CSS animation can scroll exactly one
           set's width and loop seamlessly. ── */}
       <section className="in-figures">
-        <div className="in-figures-track">
+        <div className="in-figures-track" ref={figuresTrackRef}>
           {[...FIGURE_IMAGES, ...FIGURE_IMAGES].map((src, i) => (
             <div className="in-figure-cell" key={i}>
               <img src={src} alt="" />

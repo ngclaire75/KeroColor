@@ -351,8 +351,18 @@
 
 /* ── Figure ticker — one continuously auto-scrolling row of 16:9 frames
    with a thin black border. .in-figures-track renders the image list
-   twice back-to-back and scrolls exactly one set's width (-50%) on a
-   linear infinite loop, so it wraps seamlessly with no visible jump. ── */
+   twice back-to-back and loops via a pure CSS animation (compositor
+   thread — immune to any main-thread jank elsewhere on the page, unlike
+   a JS-driven per-frame transform). A plain translateX(-50%) keyframe
+   assumes the halfway point of the track's total width is the exact
+   repeat distance, but it isn't once `gap` is involved (the total width
+   includes a gap after all 15 cell-boundaries, while the true repeat
+   distance — start of cell 1 to the start of its duplicate, cell 9 —
+   only spans 8 of those gaps), so -50% was off by half a gap and every
+   loop restart visibly snapped. InspirationPage.jsx measures the real
+   distance at runtime and sets it as --figures-repeat below, so this
+   stays correct at any viewport/breakpoint without needing separate
+   hardcoded desktop/mobile values. */
 .in-figures {
   width: 960px;
   max-width: 960px;
@@ -364,12 +374,17 @@
   display: flex;
   gap: 10px;
   width: max-content;
+  will-change: transform;
+  backface-visibility: hidden;
+  /* Fallback (2000px) covers the moment before InspirationPage.jsx's
+     effect measures and sets the real value, and non-JS contexts. */
+  --figures-repeat: 2000px;
   animation: in-figures-scroll 30s linear infinite;
 }
 
 @keyframes in-figures-scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(calc(-1 * var(--figures-repeat)), 0, 0); }
 }
 
 .in-figure-cell {
@@ -502,24 +517,11 @@
   display: none;
 }
 
-/* Each letter is its own span (see splitLetters in the JSX) — on hover
-   of the heading, every letter zooms out slightly, then zooms back in
-   on hover-out (the transition alone handles both directions). */
+/* Each letter is its own span (see splitLetters in the JSX) — needed so
+   the heading can be forced to exactly 3 rows on mobile (see
+   .in-studio-mobile-break above), not for any hover effect. */
 .in-studio-letter {
   display: inline-block;
-  transform: scale(1);
-  transform-origin: center;
-  transition: transform 0.3s ease;
-  /* Hints the browser to keep this on its own compositing layer for the
-     whole animation instead of possibly re-rasterizing frame to frame,
-     which read as a slight jitter/shimmer across the many small
-     inline-block letters scaling at once. */
-  will-change: transform;
-  backface-visibility: hidden;
-}
-
-.in-studio-heading:hover .in-studio-letter {
-  transform: scale(0.8);
 }
 
 .in-studio-arrows {
