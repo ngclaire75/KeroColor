@@ -136,8 +136,8 @@
   .fm-overlay { padding: 1.6rem 1rem 3rem; }
   .fm-close { top: 1.3rem; right: 1.1rem; padding: 0.35rem; }
   .fm-close svg { width: 14px; height: 14px; }
-  .fm-brand { font-size: 1.15rem; letter-spacing: 0.2em; }
-  .fm-subtitle { font-size: 0.65rem; letter-spacing: 0.16em; margin-top: 0.3rem; }
+  .fm-brand { font-size: 1.25rem; letter-spacing: 0.2em; }
+  .fm-subtitle { font-size: 0.7rem; letter-spacing: 0.16em; margin-top: 0.3rem; }
   .fm-list-wrap { padding-top: 2.2rem; }
   .fm-list { gap: 1.1rem; }
   .fm-item { gap: 0.55rem; }
