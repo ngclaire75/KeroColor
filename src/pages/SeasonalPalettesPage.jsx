@@ -30,26 +30,26 @@ const SEASONS = [
   {
     tab: 'Spring',
     segments: [
-      { hue: 128, sat: [6, 90], count: 48,
+      { hue: 128, sat: [28, 90], count: 48,
         nouns: ['Leaf', 'Sprout', 'Bud', 'Meadow', 'Fern', 'Clover', 'Vine', 'Moss'],
         descs: ['Green still soft from the stem', 'Growth pushing through soil', 'A field waking up', 'Shade under new branches', 'Grass thick with rain', 'Climbing toward the light'] },
-      { hue: 340, sat: [8, 90], count: 42,
+      { hue: 340, sat: [28, 90], count: 42,
         nouns: ['Blossom', 'Petal', 'Bloom', 'Cherry', 'Blush'],
         descs: ['The first bud opening', 'Pink just past the bud', 'A branch heavy with flowers', 'Petals catching the wind', 'The last bloom before the leaves take over'] },
     ],
   },
   {
-    tab: 'Summer', hue: 42, sat: [8, 98],
+    tab: 'Summer', hue: 42, sat: [30, 98],
     nouns: ['Sun', 'Citrus', 'Mango', 'Marigold', 'Amber', 'Coral', 'Copper', 'Peach', 'Cream'],
     descs: ['Light without any weight', 'Warmth held just under the skin', 'Midday at its brightest', 'Sharp, sweet, and warm', 'The air just before a storm', 'The day, slowing down', 'The last warm hour'],
   },
   {
-    tab: 'Autumn', hue: 24, sat: [8, 96],
+    tab: 'Autumn', hue: 24, sat: [30, 96],
     nouns: ['Straw', 'Wheat', 'Leaf', 'Maple', 'Pumpkin', 'Cinnamon', 'Acorn', 'Sienna', 'Rust', 'Bark'],
     descs: ['Fields cut and drying', 'A leaf just starting to turn', 'Sap slowing in the cold', 'Warmth against the first chill', 'Gathered before the frost', 'Leaves giving up their green', 'The tree, bare and waiting'],
   },
   {
-    tab: 'Winter', hue: 208, sat: [4, 85],
+    tab: 'Winter', hue: 208, sat: [26, 85],
     nouns: ['Frost', 'Ice', 'Snow', 'Mist', 'Steel', 'Glacier', 'Slate', 'Fjord', 'Pine', 'Polar'],
     descs: ['Breath visible in cold light', 'The first freeze on glass', 'Bright, flat, and quiet', 'Clouds holding onto snow', 'Old ice, still moving slowly', 'Stone under a hard freeze', 'Winter at its darkest edge'],
   },
