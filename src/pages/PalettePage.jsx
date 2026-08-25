@@ -164,10 +164,14 @@ export default function PalettePage() {
 
   return (
     <div className="pp-page">
+      {/* Capped at 9 for both mobile and desktop — same as Discover
+          Palettes' own hamburger (FullMenu's entrance animation only
+          staggers up to 9 rows anyway, see .fm-item:nth-child in
+          FullMenu.css). */}
       <FullMenu
         open={fullMenuOpen}
         onClose={() => setFullMenuOpen(false)}
-        items={DISCOVER_MENU_ITEMS}
+        items={DISCOVER_MENU_ITEMS.slice(0, 9)}
         onItemClick={handleMenuItemClick}
       />
 
