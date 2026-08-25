@@ -58,12 +58,15 @@ export function generatePalette({ hue, hueRange, hueCycle, sat, nouns, descs, co
   for (let i = 0; i < count; i++) {
     const t = i / Math.max(count - 1, 1)
     const s = sat[0] + (sat[1] - sat[0]) * t
-    // Lightness swings across a wide band on a different cycle length
-    // than the name/hue cycling below, so two swatches with close
-    // saturation values still land far enough apart in lightness to
-    // read as genuinely different colors rather than "the same shade"
-    // repeated with a slightly different label.
-    const l = 18 + ((i * 53) % 68)
+    // Lightness swings across a band on a different cycle length than
+    // the name/hue cycling below, so two swatches with close saturation
+    // values still land far enough apart in lightness to read as
+    // genuinely different colors rather than "the same shade" repeated
+    // with a slightly different label. Capped well below "bright" —
+    // kept in a dark-to-mid band, per the site's low-saturation, darker,
+    // more editorial (Pantone-report-like) direction over anything
+    // approaching neon.
+    const l = 10 + ((i * 47) % 42)
     const h = hueRange
       ? hueRange[0] + (hueRange[1] - hueRange[0]) * t
       : hueCycle

@@ -20,69 +20,71 @@ const TOTAL_COUNT = 90
 // Each category is a base hue/saturation range plus theme word banks —
 // generatePalette combines those into TOTAL_COUNT swatches, ordered
 // low -> high saturation, since at this volume per tab hand-authoring
-// every single entry isn't practical. Saturation ranges are kept wide
-// (not just a narrow band) so adjacent swatches read as genuinely
-// different colors rather than the same shade repeated.
+// every single entry isn't practical. Saturation stays low throughout
+// (muted, editorial, never bright/neon) and lightness runs dark-to-mid —
+// each range's floor is still high enough that the tab's own hue reads
+// clearly even at its most muted end, so tabs stay distinct from each
+// other without needing to reach into vivid territory.
 const CATEGORIES = [
   {
-    tab: 'Warm Terracotta', hue: 18, sat: [28, 92],
+    tab: 'Warm Terracotta', hue: 18, sat: [16, 46],
     nouns: ['Clay', 'Terra', 'Ochre', 'Adobe', 'Canyon', 'Sienna', 'Umber', 'Sandstone', 'Brick', 'Rust'],
     descs: ['Sun-warmed adobe earth', 'Clay lit from within', 'Ember at the edge of ash', 'Deep earth after rain', 'Kiln-fired and settled', 'Where the fire finally rests', 'Weathered metal, quiet glow'],
   },
   {
-    tab: 'Cool Slate', hue: 200, sat: [26, 88],
+    tab: 'Cool Slate', hue: 200, sat: [10, 38],
     nouns: ['Slate', 'Fog', 'Mist', 'Frost', 'Basalt', 'Stone', 'Cloud', 'Steel', 'Rain', 'Harbor'],
     descs: ['Thin, clean mountain air', 'First frost on glass', 'Overcast morning light', 'Rain over quiet water', 'Volcanic rock, cooled', 'Where the light runs out', 'Still, deep, and cold'],
   },
   {
-    tab: 'Golden Hour', hue: 38, sat: [32, 98],
+    tab: 'Golden Hour', hue: 38, sat: [20, 55],
     nouns: ['Glow', 'Dusk', 'Flame', 'Horizon', 'Amber', 'Ember', 'Marigold', 'Copper', 'Gold', 'Ray'],
     descs: ['The sky just before gold', 'Light through honey glass', 'Warmth held in glass', 'The sun dropping low', 'Coals just past the flame', 'Embers catching wind', 'The last coal of the day'],
   },
   {
-    tab: 'Midnight Bloom', hue: 265, sat: [28, 92],
+    tab: 'Midnight Bloom', hue: 265, sat: [14, 44],
     nouns: ['Violet', 'Shadow', 'Iris', 'Haze', 'Eclipse', 'Petal', 'Bloom', 'Orchid', 'Dusk', 'Ink'],
     descs: ['Soft light on pale petals', 'Perfume on cool air', 'Dusk folding into dusk', 'A bloom seen by moonlight', 'Shadow with a pulse of color', 'The hour past midnight', 'A flower drawn in the dark'],
   },
   {
-    tab: 'Rose Quartz', hue: 345, sat: [28, 90],
+    tab: 'Rose Quartz', hue: 345, sat: [12, 40],
     nouns: ['Quartz', 'Petal', 'Rosewater', 'Bloom', 'Coral', 'Blush', 'Blossom', 'Rosewood', 'Berry', 'Wine'],
     descs: ['Barely there at all', 'Faint sweetness in the air', 'Faded blossom petal pink', 'Stone holding onto pink', 'Furniture polished by years', 'A color one glass in', 'Pink losing its light'],
   },
   {
-    tab: 'Forest Canopy', hue: 140, sat: [26, 88],
+    tab: 'Forest Canopy', hue: 140, sat: [12, 40],
     nouns: ['Canopy', 'Moss', 'Forest', 'Fern', 'Pine', 'Grove', 'Leaf', 'Shade', 'Thicket', 'Sage'],
     descs: ['New growth, still soft', 'Herb garden after rain', 'Light breaking through branches', 'Forest at its darkest edge', 'Undergrowth, dense and dark', 'The color between the trees', 'Where the canopy closes over'],
   },
   {
-    tab: 'Desert Bloom', hue: 8, sat: [30, 95],
+    tab: 'Desert Bloom', hue: 8, sat: [18, 48],
     nouns: ['Mesa', 'Dune', 'Bloom', 'Desert', 'Sand', 'Cactus', 'Coral', 'Canyon', 'Salmon', 'Terra'],
     descs: ['Warm underfoot at noon', 'Sand catching evening color', 'A flower against the odds', 'Petals under a hard sun', 'Rock walls at sundown', 'Where the desert catches fire', 'Earth with a flush of pink'],
   },
   {
-    tab: 'Ocean Depth', hue: 205, sat: [30, 96],
+    tab: 'Ocean Depth', hue: 205, sat: [16, 46],
     nouns: ['Depth', 'Current', 'Reef', 'Tide', 'Wave', 'Trench', 'Horizon', 'Azure', 'Marine', 'Lagoon'],
     descs: ['Foam catching morning light', 'Water still holding sunlight', 'Spray off a breaking wave', 'Color just past the shallows', 'Where the sunlight stops', 'Pressure, cold, and quiet', 'Past where anything is seen'],
   },
   {
-    tab: 'Nude Series', hue: 28, sat: [22, 75],
+    tab: 'Nude Series', hue: 28, sat: [8, 28],
     nouns: ['Nude', 'Sand', 'Beige', 'Honey', 'Buff', 'Toffee', 'Caramel', 'Cinnamon', 'Cocoa', 'Umber'],
     descs: ['Barely a color at all', 'Warmth without weight', 'Linen left in the sun', 'Skin-warm and quiet', 'Sun-deepened and even', 'Spice settled into skin', 'The last, darkest warmth'],
   },
   {
     // Sweeps brown -> orange -> red as saturation rises, rather than
     // staying one fixed hue.
-    tab: 'Autumn Harvest', hueRange: [28, 2], sat: [30, 96],
+    tab: 'Autumn Harvest', hueRange: [28, 2], sat: [18, 50],
     nouns: ['Wheat', 'Pumpkin', 'Maple', 'Harvest', 'Cinnamon', 'Chestnut', 'Rust', 'Umber', 'Mahogany', 'Bark'],
     descs: ['Fields ready for cutting', 'Sap turning to syrup', 'Spice still on the branch', 'Roasted over open coals', 'Leaves giving up their green', 'The last color before the drop', 'The field after the frost'],
   },
   {
-    tab: 'Coastal Breeze', hue: 185, sat: [28, 90],
+    tab: 'Coastal Breeze', hue: 185, sat: [10, 36],
     nouns: ['Foam', 'Aqua', 'Teal', 'Mist', 'Seaglass', 'Lagoon', 'Tidepool', 'Marine', 'Slate', 'Breeze'],
     descs: ['Where the wave just broke', 'Shallow water over sand', 'Spray caught in morning light', 'Smoothed by years of tide', 'Color trapped between the rocks', 'Where the shallows finally end', 'The sea with the sun long gone'],
   },
   {
-    tab: 'Berry Wine', hue: 350, sat: [30, 95],
+    tab: 'Berry Wine', hue: 350, sat: [18, 50],
     nouns: ['Berry', 'Raspberry', 'Cranberry', 'Wine', 'Merlot', 'Burgundy', 'Garnet', 'Rosewood', 'Grape', 'Plum'],
     descs: ['The first ripening', 'Fruit still cool from the vine', 'Sweetness with a little bite', 'Fruit past its brightest red', 'Poured and left to breathe', 'Color aged in oak', 'The last color of the harvest'],
   },
