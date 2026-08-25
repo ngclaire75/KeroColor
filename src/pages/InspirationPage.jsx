@@ -216,9 +216,20 @@ export default function InspirationPage() {
   // reveal sequence.
   const wordLockPendingRef = useRef(0)
   const wasWordSectionLockedRef = useRef(false)
+  // True only once the snap-to-navbar scroll has actually finished
+  // settling — not the instant the section crosses the lock threshold.
+  // The snap animates (behavior: 'smooth'), so there's a real window
+  // where intersectionRatio already says "locked" but the page is still
+  // visually sliding into place; gating word reveal/un-reveal on this
+  // instead of the raw locked flag stops scroll input during that window
+  // from advancing words while the snap is still mid-flight — most
+  // noticeable scrolling back up into the section, where it could start
+  // un-revealing words before the section was actually fully stuck.
+  const [isFullyStuck, setIsFullyStuck] = useState(false)
   useEffect(() => {
     const section = wordSectionRef.current
     if (!section) return
+    let settleTimer
     const observer = new IntersectionObserver(
       ([entry]) => {
         const locked = entry.intersectionRatio > 0.6
@@ -230,15 +241,31 @@ export default function InspirationPage() {
         // scroll input, producing a visible jitter right around that
         // threshold instead of a single clean snap.
         if (locked && !wasWordSectionLockedRef.current) {
+          setIsFullyStuck(false)
           const target = section.getBoundingClientRect().top + window.scrollY - navHeight
           window.scrollTo({ top: target, behavior: 'smooth' })
+          const onScrollEnd = () => {
+            setIsFullyStuck(true)
+            window.removeEventListener('scrollend', onScrollEnd)
+            clearTimeout(settleTimer)
+          }
+          window.addEventListener('scrollend', onScrollEnd)
+          // Fallback for browsers without 'scrollend' (and for a
+          // zero-distance snap, which never fires it at all — e.g.
+          // landing on the page already positioned at the section).
+          settleTimer = setTimeout(onScrollEnd, 700)
+        } else if (!locked) {
+          setIsFullyStuck(false)
         }
         wasWordSectionLockedRef.current = locked
       },
       { threshold: [0, 0.6, 1] }
     )
     observer.observe(section)
-    return () => observer.disconnect()
+    return () => {
+      observer.disconnect()
+      clearTimeout(settleTimer)
+    }
   }, [navHeight])
 
   // Kept in sync so the effect below can read the current count without
@@ -254,6 +281,16 @@ export default function InspirationPage() {
   // (wordLockPendingRef) rather than jumping several words at once — a
   // fixed interval drains at most one word every ADVANCE_INTERVAL_MS
   // regardless of how much input arrived.
+  // Mirrors isFullyStuck into a ref, read fresh inside the drain interval
+  // below (not a dependency of the effect itself) — the effect stays
+  // scoped to isWordSectionLocked only, same reasoning as
+  // revealedWordCountRef above: isFullyStuck flipping true mid-lock
+  // would otherwise tear the effect down and wipe wordLockPendingRef,
+  // discarding whatever the user already queued up while waiting for
+  // the section to finish settling.
+  const isFullyStuckRef = useRef(false)
+  useEffect(() => { isFullyStuckRef.current = isFullyStuck }, [isFullyStuck])
+
   useEffect(() => {
     if (!isWordSectionLocked) return
     const ADVANCE_INTERVAL_MS = 80
@@ -303,6 +340,11 @@ export default function InspirationPage() {
     }
 
     const drain = setInterval(() => {
+      // Queuing (the wheel/touch handlers above) still runs regardless —
+      // only the actual word advance waits for the snap to finish
+      // settling, so nothing the user does during that window gets lost,
+      // it just doesn't visibly apply until the section is fully stuck.
+      if (!isFullyStuckRef.current) return
       if (wordLockPendingRef.current > 0) {
         wordLockPendingRef.current -= 1
         setRevealedWordCount((c) => Math.min(WORD_LIST.length, c + 1))
