@@ -629,6 +629,16 @@
   color: #111;
 }
 
+.pp-discover-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.pp-discover-btn:disabled:hover {
+  background: #221616;
+  color: #fff;
+}
+
 /* ── Footer ── */
 .pp-footer {
   position: relative;

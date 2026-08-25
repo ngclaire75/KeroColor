@@ -280,6 +280,11 @@ export default function DiscoverPalettesPage() {
   )
   const [fullMenuOpen, setFullMenuOpen] = useState(false)
   const [freshMix, setFreshMix] = useState(FRESH_MIX_FALLBACK)
+  // Extra swatches fetched live from Colormind and appended onto a tab's
+  // base list via "Discover More Palettes" — keyed by tab name so each
+  // tab keeps its own growing set independently.
+  const [extraByTab, setExtraByTab] = useState({})
+  const [loadingMore, setLoadingMore] = useState(false)
   const giantTextRef = useRef(null)
 
   // Land on this page at the top, regardless of scroll position on the
@@ -329,11 +334,36 @@ export default function DiscoverPalettesPage() {
     handleTabClick(tab)
   }
 
-  const paletteItems = activeTab === FRESH_MIX_TAB ? freshMix : PALETTES[activeTab]
+  const baseItems = activeTab === FRESH_MIX_TAB ? freshMix : PALETTES[activeTab]
+  const paletteItems = [...baseItems, ...(extraByTab[activeTab] || [])]
+
+  // Fetches another batch of real Colormind colors and appends them to
+  // whichever tab is active — every tab can grow this way, not just
+  // Fresh Mix. Names are deduped against what's already showing so a
+  // repeat click can't add a visible duplicate.
+  const loadMore = async () => {
+    setLoadingMore(true)
+    try {
+      const more = await fetchPaletteSwatches(6)
+      const existingNames = new Set(paletteItems.map((p) => p.name))
+      const fresh = more.filter((s) => !existingNames.has(s.name))
+      if (fresh.length) {
+        setExtraByTab((prev) => ({
+          ...prev,
+          [activeTab]: [...(prev[activeTab] || []), ...fresh],
+        }))
+      }
+    } finally {
+      setLoadingMore(false)
+    }
+  }
 
   return (
     <div className="pp-page">
-      <FullMenu open={fullMenuOpen} onClose={() => setFullMenuOpen(false)} items={TABS} onItemClick={handleMenuItemClick} />
+      {/* Capped at 9 — FullMenu's own entrance animation only staggers
+          up to 9 rows (see .fm-item:nth-child in FullMenu.css), same as
+          every other page's hamburger menu. */}
+      <FullMenu open={fullMenuOpen} onClose={() => setFullMenuOpen(false)} items={TABS.slice(0, 9)} onItemClick={handleMenuItemClick} />
 
       {/* ── Navigation — identical to PalettePage's ── */}
       <nav className="pp-nav">
@@ -373,8 +403,9 @@ export default function DiscoverPalettesPage() {
       </div>
 
       {/* ── Palette grid — same swatch layout/fonts as PalettePage. Every
-          tab's full, complete set is shown at once — no pagination — and
-          arranged light -> dark. ── */}
+          tab starts with its full, complete curated set, and "Discover
+          More Palettes" below fetches more real Colormind colors and
+          appends them, per tab. ── */}
       <div className="pp-palette-grid">
         {paletteItems.map((item) => (
           <div key={item.name} className="pp-palette-item">
@@ -386,6 +417,12 @@ export default function DiscoverPalettesPage() {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="pp-discover-wrap">
+        <button className="pp-discover-btn" onClick={loadMore} disabled={loadingMore}>
+          {loadingMore ? 'Loading...' : 'Discover More Palettes'}
+        </button>
       </div>
 
       {/* ── Footer — identical to PalettePage's ── */}
