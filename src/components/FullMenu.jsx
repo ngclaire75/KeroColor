@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { getLenis } from '../lenis'
 import './FullMenu.css'
 
 export default function FullMenu({ open, onClose, items }) {
@@ -6,11 +7,34 @@ export default function FullMenu({ open, onClose, items }) {
     if (!open) return
     const onKey = (e) => { if (e.key === 'Escape') onClose() }
     document.addEventListener('keydown', onKey)
-    const prevOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
+    // overflow:hidden alone doesn't reliably block scroll on its own —
+    // iOS Safari still lets the body rubber-band/scroll behind a fixed
+    // overlay unless it's also taken out of normal flow (position:fixed
+    // + width:100%), and Lenis intercepts wheel/touch directly to drive
+    // scroll itself, so it ignores the body's overflow entirely unless
+    // explicitly stopped too. Needed for both desktop (Lenis) and mobile
+    // (the iOS quirk) to actually stop scroll behind the menu.
+    //
+    // position:fixed takes the body out of flow, which snaps it to
+    // scrollY 0 — offsetting it by -scrollY (via top) keeps the page
+    // looking exactly where it was instead of visibly jumping to the
+    // top the instant the menu opens, then jumping again on close.
+    const b = document.body
+    const scrollY = window.scrollY
+    const prev = { overflow: b.style.overflow, position: b.style.position, width: b.style.width, top: b.style.top }
+    b.style.overflow = 'hidden'
+    b.style.position = 'fixed'
+    b.style.width = '100%'
+    b.style.top = `-${scrollY}px`
+    getLenis()?.stop()
     return () => {
       document.removeEventListener('keydown', onKey)
-      document.body.style.overflow = prevOverflow
+      b.style.overflow = prev.overflow
+      b.style.position = prev.position
+      b.style.width = prev.width
+      b.style.top = prev.top
+      window.scrollTo(0, scrollY)
+      getLenis()?.start()
     }
   }, [open, onClose])
 
