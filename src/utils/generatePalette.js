@@ -69,11 +69,16 @@ export function generatePalette({ hue, hueRange, hueCycle, sat, light, nouns, de
     // overrides that band for the rare tab that should read lighter
     // instead (e.g. Spring's pastel blossoms).
     const l = lMin + ((i * 47) % Math.max(lSpan, 1))
-    const h = hueRange
+    const hRaw = hueRange
       ? hueRange[0] + (hueRange[1] - hueRange[0]) * t
       : hueCycle
         ? hueCycle[i % hueCycle.length]
         : hue
+    // hueRange endpoints can go negative on purpose (e.g. sweeping past
+    // true red at 0deg into crimson just beyond it) — normalized here
+    // rather than left negative, since hslToHex's own modulo math
+    // assumes a positive 0-360 input.
+    const h = ((hRaw % 360) + 360) % 360
     items.push({
       color: hslToHex(h, s, l),
       name: combos[i % combos.length],

@@ -72,10 +72,11 @@ const CATEGORIES = [
     descs: ['Barely a color at all', 'Warmth without weight', 'Linen left in the sun', 'Skin-warm and quiet', 'Sun-deepened and even', 'Spice settled into skin', 'The last, darkest warmth'],
   },
   {
-    // Sweeps brown -> orange -> red as saturation rises, rather than
-    // staying one fixed hue.
-    tab: 'Autumn Harvest', hueRange: [28, 2], sat: [18, 50],
-    nouns: ['Wheat', 'Pumpkin', 'Maple', 'Harvest', 'Cinnamon', 'Chestnut', 'Rust', 'Umber', 'Mahogany', 'Bark'],
+    // Sweeps brown -> orange -> red -> crimson as saturation rises (-10
+    // wraps past true red at 0deg into crimson just beyond it) rather
+    // than staying one fixed hue.
+    tab: 'Autumn Harvest', hueRange: [28, -10], sat: [18, 58],
+    nouns: ['Wheat', 'Pumpkin', 'Maple', 'Harvest', 'Cinnamon', 'Chestnut', 'Rust', 'Crimson', 'Mahogany', 'Bark'],
     descs: ['Fields ready for cutting', 'Sap turning to syrup', 'Spice still on the branch', 'Roasted over open coals', 'Leaves giving up their green', 'The last color before the drop', 'The field after the frost'],
   },
   {
