@@ -84,6 +84,12 @@
   max-width: 720px;
   opacity: 0;
   transition: opacity 0.5s ease;
+  /* Promotes the fading text to its own compositor layer while it's
+     simultaneously being clipped by the still-growing .faq-a-wrap above
+     — without this, the browser can re-rasterize the text glyphs against
+     a moving clip boundary on every frame, which is what read as jitter. */
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .faq-a-wrap--open .faq-a {

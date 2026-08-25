@@ -1,5 +1,11 @@
 import './FaqSection.css'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
+import { getLenis } from '../lenis'
+
+// Matches the accordion's own timing (0.7s grid-row grow + the text's
+// 0.6s opacity fade starting 0.15s in, i.e. finishing around 0.75s) plus
+// a small buffer.
+const TRANSITION_MS = 800
 
 const faqs = [
   {
@@ -26,8 +32,26 @@ const faqs = [
 
 export default function FaqSection() {
   const [open, setOpen] = useState(null)
+  const resumeTimeoutRef = useRef(null)
 
-  const toggle = (i) => setOpen(open === i ? null : i)
+  // The accordion grows/shrinks the page's total height continuously over
+  // the whole transition — Lenis reads that height every frame to clamp
+  // the scroll position, and a page that's still resizing mid-frame is a
+  // moving target for it, which is exactly what showed up as jitter
+  // (most visible on the last item, since expanding it is what pushes the
+  // page closest to/past its previous scroll limit). Stopping Lenis for
+  // the transition's duration, then resizing it once the DOM has actually
+  // settled at its new height, avoids that fight entirely.
+  const toggle = (i) => {
+    setOpen(open === i ? null : i)
+    getLenis()?.stop()
+    clearTimeout(resumeTimeoutRef.current)
+    resumeTimeoutRef.current = setTimeout(() => {
+      const lenis = getLenis()
+      lenis?.resize()
+      lenis?.start()
+    }, TRANSITION_MS)
+  }
 
   return (
     <section className="faq" id="faq">
