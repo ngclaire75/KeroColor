@@ -3,7 +3,6 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import SearchLoader from '../components/SearchLoader'
 import FullMenu from '../components/FullMenu'
 import { useSearch } from '../SearchContext'
-import { fetchPaletteNames, FALLBACK_NAMES } from '../utils/paletteNames'
 import heroImg from '../../images/fire.jpg'
 import springImg from '../../images/spr.jpg'
 import lipstickImg from '../../images/girlofmydreams.jpg'
@@ -14,6 +13,20 @@ import bearImg from '../../images/bear.png'
 import './PalettePage.css'
 
 const TABS = ['All', 'Seasonal Edition', 'Editorial', 'Inspiration']
+
+// Every tab that exists on Discover Palettes (12 categories + Fresh Mix)
+// and Seasonal Palettes (the 4 seasons) — kept in sync by hand with the
+// tab names defined in DiscoverPalettesPage.jsx/SeasonalPalettesPage.jsx.
+// The hamburger menu shows all of them (not capped at 9) so every tab is
+// reachable from here, each one routing to the right page with that
+// exact tab pre-selected.
+const SEASON_NAMES = new Set(['Spring', 'Summer', 'Autumn', 'Winter'])
+const DISCOVER_MENU_ITEMS = [
+  'Warm Terracotta', 'Cool Slate', 'Golden Hour', 'Midnight Bloom', 'Rose Quartz',
+  'Forest Canopy', 'Desert Bloom', 'Ocean Depth', 'Nude Series', 'Autumn Harvest',
+  'Coastal Breeze', 'Berry Wine', 'Fresh Mix',
+  'Spring', 'Summer', 'Autumn', 'Winter',
+]
 
 const DUO_ITEMS = [
   { img: lipstickImg, name: 'Velvet Keepsake', desc: 'A heart kept safe in ruby velvet', hexes: ['#742833'] },
@@ -83,7 +96,6 @@ export default function PalettePage() {
   const [barOpen, setBarOpen] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
   const [fullMenuOpen, setFullMenuOpen] = useState(false)
-  const [paletteNames, setPaletteNames] = useState(FALLBACK_NAMES.slice(0, 9))
   const [animPaused, setAnimPaused] = useState(false)
   const [tabLoading, setTabLoading] = useState(false)
   const [tabLoaderFading, setTabLoaderFading] = useState(false)
@@ -127,18 +139,6 @@ export default function PalettePage() {
     return () => window.removeEventListener('scroll', closeOnScroll)
   }, [menuOpen])
 
-  // Fetch real Colormind-generated palette names once, in the background,
-  // as soon as the page loads — so by the time the hamburger menu is
-  // opened the real names are already in place instead of swapping in
-  // after the fallback list has already animated onto screen.
-  useEffect(() => {
-    let cancelled = false
-    fetchPaletteNames(9).then(names => {
-      if (!cancelled) setPaletteNames(names)
-    })
-    return () => { cancelled = true }
-  }, [])
-
   const handleTabClick = (tab) => {
     if (tab === 'Editorial') { navigate('/editorial'); return }
     if (tab === 'Inspiration') { navigate('/inspiration'); return }
@@ -154,9 +154,22 @@ export default function PalettePage() {
     tabTimeoutsRef.current = [t1, t2]
   }
 
+  // Every menu item is a Discover/Seasonal Palettes tab name — always
+  // navigates there with that exact tab pre-selected.
+  const handleMenuItemClick = (tabName) => {
+    setFullMenuOpen(false)
+    const route = SEASON_NAMES.has(tabName) ? '/palette/discover/seasonal' : '/palette/discover'
+    navigate(route, { state: { tab: tabName } })
+  }
+
   return (
     <div className="pp-page">
-      <FullMenu open={fullMenuOpen} onClose={() => setFullMenuOpen(false)} items={paletteNames} />
+      <FullMenu
+        open={fullMenuOpen}
+        onClose={() => setFullMenuOpen(false)}
+        items={DISCOVER_MENU_ITEMS}
+        onItemClick={handleMenuItemClick}
+      />
 
       {tabLoading && <SearchLoader fading={tabLoaderFading} />}
 

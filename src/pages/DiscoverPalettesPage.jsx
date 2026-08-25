@@ -11,6 +11,7 @@ import './PalettePage.css'
 import './DiscoverPalettesPage.css'
 
 const PER_TAB_COUNT = 45
+const LOAD_MORE_BATCH = 6
 
 // Each category is a base hue/saturation range plus theme word banks —
 // generatePalette (see utils/generatePalette.js) combines those into
@@ -90,7 +91,7 @@ const TABS = [...CATEGORIES.map((c) => c.tab), FRESH_MIX_TAB]
 const FRESH_MIX_FALLBACK = generatePalette({
   hue: 20, sat: [10, 90],
   nouns: ['Hue', 'Tone', 'Shade', 'Mix', 'Blend', 'Cast', 'Note'],
-  descs: ['A shade freshly drawn', 'Color, undiluted', 'Straight from the source', 'A tone worth pausing on', 'Unmixed and exact', 'A color in its own right'],
+  descs: ['A shade freshly drawn', 'Color, undiluted', 'Straight from the source', 'A tone worth pausing on', 'A color found, not chosen', 'A color in its own right'],
   count: PER_TAB_COUNT,
 })
 
@@ -203,7 +204,7 @@ export default function DiscoverPalettesPage() {
   const loadMore = async () => {
     setLoadingMore(true)
     try {
-      const more = await fetchPaletteSwatches(6, HUE_ANCHOR_BY_TAB[activeTab])
+      const more = await fetchPaletteSwatches(LOAD_MORE_BATCH, HUE_ANCHOR_BY_TAB[activeTab])
       const existingNames = new Set(paletteItems.map((p) => p.name))
       const fresh = more.filter((s) => !existingNames.has(s.name))
       if (fresh.length) {
@@ -211,7 +212,12 @@ export default function DiscoverPalettesPage() {
           ...prev,
           [activeTab]: [...(prev[activeTab] || []), ...fresh],
         }))
-      } else {
+      }
+      // A short batch (fewer unique results than asked for) means this
+      // tab's family is effectively drained — treat it as exhausted now
+      // instead of waiting for a next click that would just come back
+      // empty anyway.
+      if (fresh.length < LOAD_MORE_BATCH) {
         setExhaustedTabs((prev) => new Set(prev).add(activeTab))
       }
     } finally {

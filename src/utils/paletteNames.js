@@ -97,7 +97,7 @@ const DESCS = [
   'Color, undiluted',
   'Straight from the source',
   'A tone worth pausing on',
-  'Unmixed and exact',
+  'A color found, not chosen',
   'A color in its own right',
 ]
 

@@ -13,6 +13,7 @@ import './PalettePage.css'
 import './DiscoverPalettesPage.css'
 
 const PER_TAB_COUNT = 45
+const LOAD_MORE_BATCH = 6
 
 // Each season is a base hue/saturation range plus theme word banks (see
 // DiscoverPalettesPage.jsx for why — at this volume per tab, generating
@@ -124,7 +125,7 @@ export default function SeasonalPalettesPage() {
   const loadMore = async () => {
     setLoadingMore(true)
     try {
-      const more = await fetchPaletteSwatches(6, HUE_ANCHOR_BY_TAB[activeTab])
+      const more = await fetchPaletteSwatches(LOAD_MORE_BATCH, HUE_ANCHOR_BY_TAB[activeTab])
       const existingNames = new Set(paletteItems.map((p) => p.name))
       const fresh = more.filter((s) => !existingNames.has(s.name))
       if (fresh.length) {
@@ -132,7 +133,12 @@ export default function SeasonalPalettesPage() {
           ...prev,
           [activeTab]: [...(prev[activeTab] || []), ...fresh],
         }))
-      } else {
+      }
+      // A short batch (fewer unique results than asked for) means this
+      // tab's family is effectively drained — treat it as exhausted now
+      // instead of waiting for a next click that would just come back
+      // empty anyway.
+      if (fresh.length < LOAD_MORE_BATCH) {
         setExhaustedTabs((prev) => new Set(prev).add(activeTab))
       }
     } finally {

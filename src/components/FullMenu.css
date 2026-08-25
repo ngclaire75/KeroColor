@@ -109,6 +109,18 @@
 .fm-item:nth-child(7) { animation-delay: 1.40s; }
 .fm-item:nth-child(8) { animation-delay: 1.60s; }
 .fm-item:nth-child(9) { animation-delay: 1.80s; }
+/* Beyond 9 (pages with more menu items than PalettePage's original
+   short list, e.g. all the Discover/Seasonal Palettes tabs) — a tighter
+   0.1s step so a long list doesn't drag the entrance out too far. */
+.fm-item:nth-child(10) { animation-delay: 1.90s; }
+.fm-item:nth-child(11) { animation-delay: 2.00s; }
+.fm-item:nth-child(12) { animation-delay: 2.10s; }
+.fm-item:nth-child(13) { animation-delay: 2.20s; }
+.fm-item:nth-child(14) { animation-delay: 2.30s; }
+.fm-item:nth-child(15) { animation-delay: 2.40s; }
+.fm-item:nth-child(16) { animation-delay: 2.50s; }
+.fm-item:nth-child(17) { animation-delay: 2.60s; }
+.fm-item:nth-child(18) { animation-delay: 2.70s; }
 
 @keyframes fm-rise {
   from { opacity: 0; transform: translateY(26px); }
