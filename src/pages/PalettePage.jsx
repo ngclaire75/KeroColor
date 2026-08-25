@@ -205,7 +205,6 @@ export default function PalettePage() {
               >
                 Verdant Collection
               </Link>
-              <span className="pp-bar-text-tail"> — Curated with Elegance</span>
             </span>
           </div>
           <button className="pp-bar-close" onClick={() => setBarOpen(false)} aria-label="Close">
