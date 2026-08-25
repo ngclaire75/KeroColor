@@ -1,5 +1,5 @@
-import { useState, useEffect, lazy, Suspense } from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { useEffect, lazy, Suspense } from 'react'
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import { SearchProvider } from './SearchContext'
 import { HeroVideoProvider } from './HeroVideoContext'
 import Navbar     from './components/Navbar'
@@ -12,7 +12,6 @@ import ColorMeaning    from './components/ColorMeaning'
 import AboutUs         from './components/AboutUs'
 import ContactSection  from './components/ContactSection'
 import FaqSection      from './components/FaqSection'
-import Calendar        from './components/Calendar'
 import Footer          from './components/Footer'
 import LenisProvider    from './components/LenisProvider'
 import { getLenis } from './lenis'
@@ -29,6 +28,7 @@ const LookPage     = lazy(() => import('./pages/LookPage'))
 const PalettePage  = lazy(() => import('./pages/PalettePage'))
 const EditorialPage = lazy(() => import('./pages/EditorialPage'))
 const InspirationPage = lazy(() => import('./pages/InspirationPage'))
+const CalendarPage = lazy(() => import('./pages/CalendarPage'))
 
 function ScrollToHash() {
   const location = useLocation()
@@ -52,39 +52,13 @@ function ScrollToHash() {
 }
 
 export default function App() {
-  const [calOpen, setCalOpen] = useState(false)
-
-  useEffect(() => {
-    const b = document.body
-    // Lenis intercepts wheel/touch and drives scroll itself, so it
-    // doesn't respect the body's overflow:hidden the way native scroll
-    // does — it needs to be explicitly stopped too, or the page keeps
-    // smooth-scrolling underneath the open calendar.
-    if (calOpen) {
-      b.style.overflow = 'hidden'
-      b.style.position = 'fixed'
-      b.style.width    = '100%'
-      getLenis()?.stop()
-    } else {
-      b.style.overflow = ''
-      b.style.position = ''
-      b.style.width    = ''
-      getLenis()?.start()
-    }
-    return () => {
-      b.style.overflow = ''
-      b.style.position = ''
-      b.style.width    = ''
-      getLenis()?.start()
-    }
-  }, [calOpen])
+  const navigate = useNavigate()
 
   const homePage = (
     <div className="site">
-      {calOpen && <Calendar onClose={() => setCalOpen(false)} />}
       <Navbar />
       <SiteHeader />
-      <InfoBar onDateClick={() => setCalOpen(true)} />
+      <InfoBar onDateClick={() => navigate('/calendar')} />
       <div className="mobile-strip mobile-strip--model2">
         <img src={cakeImg} alt="Model" />
       </div>
@@ -120,6 +94,7 @@ export default function App() {
         <Route path="/palette"  element={<PalettePage />} />
         <Route path="/editorial" element={<EditorialPage />} />
         <Route path="/inspiration" element={<InspirationPage />} />
+        <Route path="/calendar" element={<CalendarPage />} />
       </Routes>
     </Suspense>
     </HeroVideoProvider>

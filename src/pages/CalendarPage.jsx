@@ -1,5 +1,6 @@
-import './Calendar.css'
+import './CalendarPage.css'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import bgBeige   from '../../images/beigeglow.png'
 import bgOnyx    from '../../images/onyxblack.png'
 import bgMerlot  from '../../images/deepmerlot.png'
@@ -18,6 +19,16 @@ const BACKGROUNDS = [
   { id: 3, img: bgStone,  dark: true,  label: 'Toasted Stone' },
 ]
 
+// Entrance stagger step for the day-name headers + date cells (see
+// .cal-day-inner/.cal-dayname in the CSS) — same fade-up-from-below
+// animation as FullMenu's .fm-item, just noticeably faster: FullMenu
+// steps 0.20s per item (fine for its max ~9 rows) but a full month grid
+// has up to 42 cells, so the same step would take way too long to
+// finish revealing — 0.018s keeps the whole cascade under ~1s even for
+// a 6-row month, while still reading as a clear left-to-right,
+// top-to-bottom ripple rather than everything popping in at once.
+const STAGGER_STEP_S = 0.018
+
 function buildCells(year, month) {
   const daysInMonth = new Date(year, month + 1, 0).getDate()
   const firstDow    = new Date(year, month, 1).getDay()
@@ -27,7 +38,8 @@ function buildCells(year, month) {
   return cells
 }
 
-export default function Calendar({ onClose }) {
+export default function CalendarPage() {
+  const navigate = useNavigate()
   const today = new Date()
   const [year,    setYear]    = useState(today.getFullYear())
   const [month,   setMonth]   = useState(today.getMonth())
@@ -58,33 +70,42 @@ export default function Calendar({ onClose }) {
 
   return (
     <div
-      className={`cal-overlay${light ? ' cal-overlay--light' : ''}`}
+      className={`cal-page${light ? ' cal-page--light' : ''}`}
       style={overlayStyle}
     >
       <div className="cal">
 
-        <button className="cal-close" onClick={onClose} aria-label="Close">
+        <button className="cal-close" onClick={() => navigate(-1)} aria-label="Close">
           <svg width="18" height="18" viewBox="0 0 11 11" fill="none">
             <path d="M1 1L10 10M10 1L1 10" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
           </svg>
         </button>
 
-        <h2 className="cal-month-name">{MONTHS[month]}</h2>
+        <h2 className="cal-month-name cal-rise">{MONTHS[month]}</h2>
 
-        <div className="cal-nav">
+        <div className="cal-nav cal-rise" style={{ animationDelay: '0.06s' }}>
           <button className="cal-nav-btn" onClick={prevMonth}>‹</button>
           <span className="cal-year">{year}</span>
           <button className="cal-nav-btn" onClick={nextMonth}>›</button>
         </div>
 
         <div className="cal-grid">
-          {DAYS.map(d => (
-            <div key={d} className="cal-dayname">{d}</div>
+          {DAYS.map((d, i) => (
+            <div
+              key={d}
+              className="cal-dayname cal-rise"
+              style={{ animationDelay: `${i * STAGGER_STEP_S}s` }}
+            >
+              {d}
+            </div>
           ))}
           {cells.map((d, i) => (
             <div key={i} className={`cal-day${d ? '' : ' cal-day--empty'}`}>
               {d && (
-                <div className="cal-day-inner">
+                <div
+                  className="cal-day-inner cal-rise"
+                  style={{ animationDelay: `${(DAYS.length + i) * STAGGER_STEP_S}s` }}
+                >
                   <span className={isToday(d) ? 'cal-today' : ''}>
                     <span className="cal-num">{d}</span>
                   </span>
@@ -95,7 +116,10 @@ export default function Calendar({ onClose }) {
         </div>
 
         {/* ── Background picker ── */}
-        <div className="cal-picker">
+        <div
+          className="cal-picker cal-rise"
+          style={{ animationDelay: `${(DAYS.length + cells.length) * STAGGER_STEP_S}s` }}
+        >
           {BACKGROUNDS.map((b) => (
             <button
               key={b.id}

@@ -1,30 +1,34 @@
-/* ── Full-screen overlay ── */
-.cal-overlay {
-  position: fixed;
-  inset: 0;
+/* ── Full page (own route, not a modal overlay) — fills the viewport
+   width/height like any other top-level page instead of being capped to
+   a small centered card. ── */
+.cal-page {
+  min-height: 100vh;
+  width: 100%;
   background: #3d0a08;
-  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 /* ── Text colour variables ── */
-.cal-overlay {
+.cal-page {
   --text-primary:   #f5ede6;
   --text-secondary: rgba(255,255,255,0.5);
   --text-close:     rgba(255,255,255,0.55);
   --circle-border:  rgba(255,255,255,0.8);
 }
 
-.cal-overlay--light {
+.cal-page--light {
   --text-primary:   #1a0a0a;
   --text-secondary: rgba(0,0,0,0.45);
   --text-close:     rgba(0,0,0,0.45);
   --circle-border:  rgba(0,0,0,0.7);
 }
 
-/* ── Calendar box ── */
+/* ── Calendar box — same size/format as the original modal by default
+   (governs mobile); shrunk specifically on desktop below. Only the page
+   around it actually changed (full route instead of a fixed-overlay
+   modal). ── */
 .cal {
   position: relative;
   width: min(620px, 92vw);
@@ -118,6 +122,12 @@
   height: clamp(36px, 7vw, 52px);
 }
 
+.cal-day-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .cal-day span {
   font-family: 'Zapf-Humanist-Demi', Optima, 'Optima LT Std', 'Segoe UI', sans-serif;
   font-size: clamp(0.9rem, 2.3vw, 1.3rem);
@@ -169,6 +179,42 @@
 .cal-swatch--active {
   border-color: var(--text-primary);
   transform: scale(1.12);
+}
+
+/* ── Entrance — same fade-up-from-below animation as FullMenu's
+   .fm-item, just faster (see STAGGER_STEP_S in the JSX for why the
+   per-cell delay step is so much smaller than FullMenu's). Each element
+   gets its delay inline, since the number of items (day-name headers +
+   however many cells this month needs) isn't a fixed count the way
+   FullMenu's ~9 nth-child rules could assume. */
+.cal-rise {
+  opacity: 0;
+  animation: cal-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes cal-rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Desktop-only downscale — everything else keeps the original
+   modal's size/format; just the day-name headers (Mon-Sun) and the date
+   numbers read too large once this became a full page. ── */
+@media (min-width: 641px) {
+  .cal-dayname {
+    font-size: 0.72rem;
+    padding-bottom: 0.48rem;
+  }
+
+  .cal-day {
+    height: 47px;
+  }
+
+  .cal-day span {
+    font-size: 1.06rem;
+    width: 36px;
+    height: 36px;
+  }
 }
 
 @media (max-width: 640px) {
