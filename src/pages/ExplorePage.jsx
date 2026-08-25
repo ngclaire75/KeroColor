@@ -37,6 +37,13 @@ export default function ExplorePage() {
   const wonderlandRef = useRef(null)
   const { searchResult, setSearchResult } = useSearch()
 
+  // Land on this page at the top, regardless of scroll position on the
+  // tab navigated from (browsers preserve scroll across client-side route
+  // changes by default).
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   useEffect(() => {
     const fit = () => {
       const el = wonderlandRef.current

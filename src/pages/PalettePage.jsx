@@ -88,6 +88,13 @@ export default function PalettePage() {
   const tabTimeoutsRef = useRef([])
   const giantTextRef = useRef(null)
 
+  // Land on this page at the top, regardless of scroll position on the
+  // tab navigated from (browsers preserve scroll across client-side route
+  // changes by default).
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   // Flashlight hover effect on the giant footer "kero." text — tracks the
   // cursor via CSS custom properties so the spotlight overlay's radial-gradient
   // mask can follow it without triggering a React re-render per mousemove.
