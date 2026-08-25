@@ -318,9 +318,15 @@ export default function PalettePage() {
         ))}
       </div>
 
-      {/* ── Discover more button ── */}
+      {/* ── Discover more button — Seasonal Edition leads to the 4-season
+          version of this page rather than the general category one. ── */}
       <div className="pp-discover-wrap">
-        <button className="pp-discover-btn" onClick={() => navigate('/palette/discover')}>Discover More Palettes</button>
+        <button
+          className="pp-discover-btn"
+          onClick={() => navigate(activeTab === 'Seasonal Edition' ? '/palette/discover/seasonal' : '/palette/discover')}
+        >
+          Discover More Palettes
+        </button>
       </div>
 
       {/* ── Footer ── */}

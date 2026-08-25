@@ -78,6 +78,17 @@ function rgbToHex([r, g, b]) {
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`
 }
 
+// Used to build a lock color for Colormind's API (see fetchColormindColors)
+// so a "load more" request comes back in the same color family as an
+// existing tab instead of an unrelated random palette.
+function hslToRgb(h, s, l) {
+  s /= 100; l /= 100
+  const k = (n) => (n + h / 30) % 12
+  const a = s * Math.min(l, 1 - l)
+  const f = (n) => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)))
+  return [Math.round(255 * f(0)), Math.round(255 * f(8)), Math.round(255 * f(4))]
+}
+
 // Short, generic, mood-appropriate — Colormind gives us a color, not a
 // story, so the description is picked from the same lightness/saturation
 // read used for the name rather than hand-written per swatch.
@@ -94,8 +105,18 @@ function descFromRgb([, , b], i) {
   return DESCS[i % DESCS.length]
 }
 
-async function fetchColormindColors(count) {
+// lockRgb, if given, is sent as one fixed slot in Colormind's 5-color
+// input (the rest as "N" for "generate"), so every color that comes
+// back is a real Colormind pick that's still plausible alongside that
+// anchor color — the model's own job is producing colors that work
+// together, which is exactly what "matches this tab's family" needs.
+// Without a lock, Colormind free-generates from its default model.
+async function fetchColormindColors(count, lockRgb) {
   const calls = Math.ceil(count / 5)
+  const body = JSON.stringify({
+    model: 'default',
+    input: lockRgb ? [lockRgb, 'N', 'N', 'N', 'N'] : undefined,
+  })
   const responses = await Promise.all(
     Array.from({ length: calls }, () =>
       // Content-Type is deliberately 'text/plain' (not 'application/json'):
@@ -106,34 +127,100 @@ async function fetchColormindColors(count) {
       fetch('https://colormind.io/api/', {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({ model: 'default' }),
+        body,
       }).then(res => res.json())
     )
   )
-  return responses.flatMap(r => r.result)
+  let colors = responses.flatMap(r => r.result)
+  // Drop the echoed lock color itself from each response — it's not a
+  // new generated color, just the anchor we sent back unchanged.
+  if (lockRgb) {
+    const [lr, lg, lb] = lockRgb
+    colors = colors.filter(([r, g, b]) => !(r === lr && g === lg && b === lb))
+  }
+  return colors
+}
+
+// Shortest distance between two hues on the color wheel (0-360, wraps
+// around) — plain subtraction breaks near the 0/360 seam (e.g. 5 and 355
+// are 10deg apart, not 350).
+function hueDistance(a, b) {
+  const d = Math.abs(a - b) % 360
+  return d > 180 ? 360 - d : d
+}
+
+// Locking one Colormind input slot keeps that exact color, but the model
+// still fills the other slots with whatever it judges "harmonious" —
+// often a genuinely complementary (i.e. visually distant) hue, which
+// reads as unrelated rather than "more of this same family." Filtering
+// the response to hues actually close to the anchor is what makes that
+// reliable instead of a coin flip.
+const HUE_TOLERANCE = 30
+
+// Generates one more on-hue color deterministically from a tab's own
+// hue/sat, used to top up a batch when Colormind's response doesn't
+// return enough in-family colors on its own — guarantees "load more"
+// always comes back full and aligned, rather than depending on how many
+// of Colormind's picks happen to pass the hue filter.
+function localSwatch(hueAnchor, seed) {
+  // Spreads seeds across a wide lightness range with small hue jitter so
+  // repeated calls (repeated "load more" clicks) don't all land on the
+  // same color, while everything still reads as the same family.
+  const l = 20 + ((seed * 37) % 65)
+  const hueJitter = ((seed * 53) % 21) - 10
+  const rgb = hslToRgb(hueAnchor.hue + hueJitter, hueAnchor.sat, l)
+  return rgb
 }
 
 // Like fetchPaletteNames, but returns the actual generated colors too
 // (hex + name + a short description), sorted light -> dark so a grid
 // built from them reads as one arranged set rather than a random
 // scatter — same convention as the hand-curated categories.
-export async function fetchPaletteSwatches(count = 12) {
-  try {
-    const rgbs = await fetchColormindColors(count)
-    const seen = new Set()
-    const swatches = []
-    for (const rgb of rgbs) {
-      const name = nameFromRgb(rgb)
-      if (seen.has(name)) continue
-      seen.add(name)
-      swatches.push({ color: rgbToHex(rgb), name, desc: descFromRgb(rgb, swatches.length), _l: rgbToHsl(...rgb)[2] })
-      if (swatches.length >= count) break
-    }
-    swatches.sort((a, b) => b._l - a._l)
-    return swatches.map(({ _l, ...s }) => s)
-  } catch {
-    return []
+//
+// hueAnchor, if given, is a { hue, sat } pair (0-360, 0-100) used both to
+// lock the Colormind request and to filter/top up its response, so
+// "load more" reliably stays in that tab's color family instead of
+// occasionally pulling in an unrelated complementary hue.
+export async function fetchPaletteSwatches(count = 12, hueAnchor) {
+  const seen = new Set()
+  const swatches = []
+
+  const tryAdd = (rgb) => {
+    const name = nameFromRgb(rgb)
+    if (seen.has(name)) return false
+    seen.add(name)
+    swatches.push({ color: rgbToHex(rgb), name, desc: descFromRgb(rgb, swatches.length), _s: rgbToHsl(...rgb)[1] })
+    return true
   }
+
+  try {
+    const lockRgb = hueAnchor ? hslToRgb(hueAnchor.hue, hueAnchor.sat, 50) : undefined
+    const rgbs = await fetchColormindColors(count, lockRgb)
+    for (const rgb of rgbs) {
+      if (swatches.length >= count) break
+      if (hueAnchor) {
+        const [h] = rgbToHsl(...rgb)
+        if (hueDistance(h, hueAnchor.hue) > HUE_TOLERANCE) continue
+      }
+      tryAdd(rgb)
+    }
+  } catch {
+    // Colormind unreachable — local top-up below covers the whole count.
+  }
+
+  // Colormind rarely returns enough in-family colors to fill the batch
+  // on its own (it's optimizing for a harmonious palette, not a
+  // monochromatic one) — this guarantees a full, aligned batch regardless.
+  if (hueAnchor) {
+    let seed = 1
+    while (swatches.length < count && seed < count * 6) {
+      tryAdd(localSwatch(hueAnchor, seed))
+      seed++
+    }
+  }
+
+  swatches.sort((a, b) => b._l - a._l)
+  return swatches.map(({ _l, ...s }) => s)
 }
 
 // Fetches real generated palettes from the Colormind API and derives

@@ -37,11 +37,40 @@
 }
 
 @media (max-width: 640px) {
+  /* Left edge matches .pp-palette-grid's own left edge on mobile
+     (width:88%, centered -> 6% inset each side), so the tab row and the
+     grid below it line up instead of the tabs sitting flush left. */
   .dp-tabs-wrap {
-    padding: 1.8rem 1rem 0.5rem;
+    padding: 1.8rem 0 1.1rem 6vw;
+    justify-content: flex-start;
+  }
+
+  /* Single row, horizontally swipeable, instead of wrapping — 13 tabs
+     wrapped to several lines was a lot of vertical space on a phone.
+     Scrollbar hidden the same way as the rest of the site (see
+     html::-webkit-scrollbar in index.css). Right padding keeps the last
+     chip from sitting flush against (and reading as cropped by) the
+     viewport edge. Setting overflow-x alone implicitly makes overflow-y
+     'auto' too (a CSS overflow-box quirk), so the pills' rounded bottom
+     edge was getting clipped right at the row's own box edge — the
+     vertical padding here is what gives them room instead of sitting
+     flush against that clip boundary. */
+  .dp-tabs {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0.35rem 6vw 0.35rem 0;
+    max-width: none;
+  }
+
+  .dp-tabs::-webkit-scrollbar {
+    display: none;
   }
 
   .dp-tab {
+    flex-shrink: 0;
     padding: 0.5rem 1.1rem;
     font-size: 0.7rem;
   }
