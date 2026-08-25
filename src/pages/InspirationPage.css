@@ -110,52 +110,6 @@
   cursor: pointer;
 }
 
-/* Studio carousel prev/next — the new slide's wrap remounts (see
-   key={studioIndex} in JSX), which replays this entrance animation:
-   slides down from above, covering the previous slide's spot. */
-/* Static poster of the OUTGOING slide, kept mounted underneath for the
-   duration of the slide-down animation (see prevStudioIndex in the JSX)
-   — without it, key={studioIndex} remounting .in-studio-slide means the
-   old slide is already gone from the DOM the instant it changes, so the
-   incoming one would be sliding down over nothing instead of visibly
-   layering over the previous frame. */
-.in-studio-slide-under {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
-  /* Matches .in-hero-poster-overlay's grayscale treatment — without
-     this the outgoing slide would flash into full color for the brief
-     moment it's visible underneath the incoming one. */
-  filter: grayscale(100%);
-}
-
-/* Matches .in-hero-tint's dimming — without this the outgoing slide
-   would look brighter than its normal paused/idle appearance for the
-   brief moment it's visible underneath the incoming one. */
-.in-studio-slide-under-tint {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background: rgba(0, 0, 0, 0.18);
-  pointer-events: none;
-}
-
-.in-studio-slide {
-  /* position:absolute already comes from the shared .in-hero-video-wrap
-     class on this same element — just need z-index here to layer above
-     .in-studio-slide-under. */
-  z-index: 1;
-  animation: in-studio-slide-in 1s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@keyframes in-studio-slide-in {
-  from { transform: translateY(-100%); }
-  to { transform: translateY(0); }
-}
-
 .in-hero-video {
   width: 100%;
   height: 100%;

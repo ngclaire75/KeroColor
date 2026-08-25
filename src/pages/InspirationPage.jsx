@@ -137,28 +137,12 @@ export default function InspirationPage() {
     video.play()?.catch(() => {})
   }, [studioIndex, studioWarm])
 
-  // Kept mounted (as a static poster layered underneath) for the
-  // duration of the slide-down animation, so the incoming slide visibly
-  // covers the outgoing one instead of sliding down over empty space —
-  // key={studioIndex} remounting .in-studio-slide below means the OLD
-  // one is gone from the DOM the instant studioIndex changes, so without
-  // this there'd be nothing left for the new slide to appear to cover.
-  const [prevStudioIndex, setPrevStudioIndex] = useState(null)
-  const prevStudioTimeoutRef = useRef(null)
-
   const goToStudioVideo = (index) => {
     if (index < 0 || index >= STUDIO_VIDEOS.length) return
-    // Ignore clicks while a transition is already playing — the current
-    // one always finishes before another can start, rather than being
-    // interrupted/remounted mid-slide by a fast follow-up click.
-    if (prevStudioIndex !== null) return
     setStudioFrameReady(false)
     studioVideoRef.current?.pause()
     setIsStudioPlaying(false)
     studioStartedRef.current = false
-    setPrevStudioIndex(studioIndex)
-    clearTimeout(prevStudioTimeoutRef.current)
-    prevStudioTimeoutRef.current = setTimeout(() => setPrevStudioIndex(null), 1050) // matches .in-studio-slide's 1s animation
     setStudioIndex(index)
   }
 
@@ -440,22 +424,7 @@ export default function InspirationPage() {
         </div>
 
         <div className="in-hero in-studio-hero">
-          {prevStudioIndex !== null && (
-            <>
-              <img
-                src={STUDIO_VIDEOS[prevStudioIndex].poster}
-                alt=""
-                className="in-studio-slide-under"
-              />
-              <div className="in-studio-slide-under-tint" />
-            </>
-          )}
-          {/* key={studioIndex} — remounting this on every slide change is
-              what makes the slide-in animation below replay each time
-              (a CSS animation only plays on a fresh mount, not on a prop
-              update), giving the "next video sliding down over the
-              previous one" effect on prev/next. */}
-          <div className="in-hero-video-wrap in-studio-slide" onClick={toggleStudioPlay} key={studioIndex}>
+          <div className="in-hero-video-wrap" onClick={toggleStudioPlay} key={studioIndex}>
             <video
               ref={studioVideoRef}
               className="in-hero-video"
