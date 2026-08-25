@@ -19,7 +19,7 @@
   gap: 1.2rem;
   position: relative;
   align-self: center;
-  height: 640px;
+  height: 660px;
 
   /* Concave corner mask — radial cutouts at every corner */
   -webkit-mask:
