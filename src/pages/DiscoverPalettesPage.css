@@ -63,6 +63,10 @@
     scrollbar-width: none;
     padding: 0.35rem 6vw 0.35rem 0;
     max-width: none;
+    /* Stops this row's own scroll from rubber-banding into the page
+       scroll at either end (a second, CSS-only source of jitter
+       alongside the Lenis one — see data-lenis-prevent in the JSX). */
+    overscroll-behavior-x: contain;
   }
 
   .dp-tabs::-webkit-scrollbar {

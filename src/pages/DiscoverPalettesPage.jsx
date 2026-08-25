@@ -256,7 +256,13 @@ export default function DiscoverPalettesPage() {
           underlined text tabs on purpose (see DiscoverPalettesPage.css).
           Wraps naturally so no separate mobile dropdown is needed. ── */}
       <div className="dp-tabs-wrap">
-        <div className="dp-tabs">
+        {/* data-lenis-prevent — Lenis intercepts touch/wheel at the
+            window level to drive its own smooth scroll, which otherwise
+            fights this row's own native horizontal scroll on mobile
+            (two things trying to own the same gesture each frame is
+            what read as jitter while sliding). This attribute tells
+            Lenis to leave gestures starting inside this element alone. */}
+        <div className="dp-tabs" data-lenis-prevent>
           {TABS.map(tab => (
             <button
               key={tab}

@@ -173,7 +173,10 @@ export default function SeasonalPalettesPage() {
       {/* ── Tabs — just the 4 seasons, same red-chip style as
           DiscoverPalettesPage's tabs. ── */}
       <div className="dp-tabs-wrap">
-        <div className="dp-tabs">
+        {/* data-lenis-prevent — see DiscoverPalettesPage.jsx: stops
+            Lenis's own touch/wheel handling from fighting this row's
+            native horizontal scroll on mobile. */}
+        <div className="dp-tabs" data-lenis-prevent>
           {TABS.map(tab => (
             <button
               key={tab}
