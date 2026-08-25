@@ -197,13 +197,13 @@ export default function PalettePage() {
               <Link to="/palette/discover" state={{ tab: 'Nude Series' }} className="pp-bar-underline">Kerocolor Nude Series.</Link>
             </span>
             <span className="pp-bar-text pp-bar-text--2">
-              Unveil Our{' '}
+              Have a Look at Our{' '}
               <Link
                 to="/explore"
                 className="pp-bar-underline"
                 onClick={() => setSearchResult({ query: 'green', valid: true, colorFamily: 'green' })}
               >
-                Green Color Edit
+                Verdant Collection
               </Link>
               <span className="pp-bar-text-tail"> — Curated with Elegance</span>
             </span>
