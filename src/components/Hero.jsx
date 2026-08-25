@@ -1,4 +1,5 @@
 import './Hero.css'
+import { Link } from 'react-router-dom'
 import cakeImg   from '../../images/model2.jpeg'
 import drinkImg  from '../../images/model1.jpeg'
 import starImg   from '../../images/star.png'
@@ -29,7 +30,7 @@ export default function Hero() {
           If you love bold palettes, expressive art, and colors with a story
           to tell. You're in the right place and we're happy to deliver.
         </p>
-        <a href="#" className="hero-btn">view palettes now!</a>
+        <Link to="/palette" className="hero-btn">view palettes now!</Link>
       </div>
 
       <div className="hero-img">

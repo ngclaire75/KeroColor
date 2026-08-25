@@ -1,4 +1,5 @@
 import './ColorMeaning.css'
+import { Link } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import textureImg  from '../../images/texture.png'
 import vo1 from '../../images/vo1.jpeg'
@@ -44,10 +45,10 @@ export default function ColorMeaning() {
           no other hue can replicate. From the blush of romance to the roar
           of revolution — red speaks before words ever can.
         </p>
-        <a href="#" className="cm-cta">
+        <Link to="/explore" className="cm-cta">
           <span className="cm-cta-line">Discover our moodboard</span><br />
           <span className="cm-cta-line">&rarr; Go to Explore Section</span>
-        </a>
+        </Link>
       </div>
 
       {/* ── Right panel ── */}
