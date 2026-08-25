@@ -29,6 +29,7 @@ const PalettePage  = lazy(() => import('./pages/PalettePage'))
 const EditorialPage = lazy(() => import('./pages/EditorialPage'))
 const InspirationPage = lazy(() => import('./pages/InspirationPage'))
 const CalendarPage = lazy(() => import('./pages/CalendarPage'))
+const DiscoverPalettesPage = lazy(() => import('./pages/DiscoverPalettesPage'))
 
 function ScrollToHash() {
   const location = useLocation()
@@ -95,6 +96,7 @@ export default function App() {
         <Route path="/editorial" element={<EditorialPage />} />
         <Route path="/inspiration" element={<InspirationPage />} />
         <Route path="/calendar" element={<CalendarPage />} />
+        <Route path="/palette/discover" element={<DiscoverPalettesPage />} />
       </Routes>
     </Suspense>
     </HeroVideoProvider>

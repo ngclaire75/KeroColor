@@ -305,7 +305,7 @@ export default function PalettePage() {
 
       {/* ── Discover more button ── */}
       <div className="pp-discover-wrap">
-        <button className="pp-discover-btn">Discover More Palettes</button>
+        <button className="pp-discover-btn" onClick={() => navigate('/palette/discover')}>Discover More Palettes</button>
       </div>
 
       {/* ── Footer ── */}
