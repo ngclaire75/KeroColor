@@ -14,6 +14,8 @@ import ContactSection  from './components/ContactSection'
 import FaqSection      from './components/FaqSection'
 import Calendar        from './components/Calendar'
 import Footer          from './components/Footer'
+import LenisProvider    from './components/LenisProvider'
+import { getLenis } from './lenis'
 import cakeImg    from '../images/model2.jpeg'
 import drinkImg   from '../images/model1.jpeg'
 import './App.css'
@@ -34,7 +36,16 @@ function ScrollToHash() {
   useEffect(() => {
     if (!location.hash) return
     const el = document.querySelector(location.hash)
-    if (el) requestAnimationFrame(() => el.scrollIntoView({ behavior: 'smooth' }))
+    if (!el) return
+    // Route through Lenis rather than native scrollIntoView, so the jump
+    // is smoothed by the same engine handling wheel/touch scroll — two
+    // different smoothing systems both trying to own the scroll position
+    // at once is what causes stutter/fighting.
+    requestAnimationFrame(() => {
+      const lenis = getLenis()
+      if (lenis) lenis.scrollTo(el, { offset: 0 })
+      else el.scrollIntoView({ behavior: 'smooth' })
+    })
   }, [location])
 
   return null
@@ -45,19 +56,26 @@ export default function App() {
 
   useEffect(() => {
     const b = document.body
+    // Lenis intercepts wheel/touch and drives scroll itself, so it
+    // doesn't respect the body's overflow:hidden the way native scroll
+    // does — it needs to be explicitly stopped too, or the page keeps
+    // smooth-scrolling underneath the open calendar.
     if (calOpen) {
       b.style.overflow = 'hidden'
       b.style.position = 'fixed'
       b.style.width    = '100%'
+      getLenis()?.stop()
     } else {
       b.style.overflow = ''
       b.style.position = ''
       b.style.width    = ''
+      getLenis()?.start()
     }
     return () => {
       b.style.overflow = ''
       b.style.position = ''
       b.style.width    = ''
+      getLenis()?.start()
     }
   }, [calOpen])
 
@@ -87,6 +105,7 @@ export default function App() {
   return (
     <SearchProvider>
     <HeroVideoProvider>
+    <LenisProvider />
     <ScrollToHash />
     {/* Each lazy page already shows its own SearchLoader overlay once it
         starts mounting — this fallback only covers the brief window
