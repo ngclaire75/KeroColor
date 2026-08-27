@@ -141,11 +141,29 @@
        back down to how 0.8rem (12.8px = 16px * 0.8) used to look, and
        width is inflated by the inverse of that same 0.8 (125%) so the
        post-scale box exactly fills the wrapper's 100% again — same
-       technique as ContactSection's name/email/subject fields. */
+       technique as ContactSection's name/email/subject fields.
+       height/line-height are set explicitly (not left to padding+font
+       metrics) and pre-inflated by that same /0.8, so the box also
+       lands on an exact, known height post-scale — 38px, matching
+       .dp-hex-btn's own explicit height below. */
+    height: 47.5px;
+    line-height: 47.5px;
+    padding: 0 1rem;
     width: 125%;
     font-size: 16px;
     transform: scale(0.8);
     transform-origin: left center;
+  }
+
+  /* Explicit height (not padding-derived) to exactly match the input's
+     own post-scale 38px height above — padding alone can't guarantee
+     that once one side's height comes from a transform: scale(). */
+  .dp-hex-btn {
+    height: 38px;
+    padding: 0 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
