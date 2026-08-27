@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useHeroVideo } from '../HeroVideoContext'
 import SearchLoader from '../components/SearchLoader'
 import Footer from '../components/Footer'
+import EntryConsentModal from '../components/EntryConsentModal'
 import heroPoster from '../../images/inspiration-hero-poster.jpg'
 import figure1 from '../../images/figure1.jpg'
 import figure2 from '../../images/figure2.jpg'
@@ -64,6 +65,9 @@ export default function InspirationPage() {
   const [overlayFading, setOverlayFading] = useState(false)
   const [overlayGone, setOverlayGone] = useState(false)
   const [contentReady, setContentReady] = useState(false)
+  // No persistence (no localStorage/sessionStorage flag) — shows on every
+  // visit to this page, by design.
+  const [consentOpen, setConsentOpen] = useState(true)
 
   const [isPlaying, setIsPlaying] = useState(false)
   const [btnHidden, setBtnHidden] = useState(false)
@@ -305,6 +309,7 @@ export default function InspirationPage() {
   return (
     <>
     {!overlayGone && <SearchLoader fading={overlayFading} />}
+    <EntryConsentModal open={consentOpen} onAgree={() => setConsentOpen(false)} />
     <div className={`in-page${contentReady ? ' in-page--revealed' : ' in-page--hidden'}`}>
       <nav className="in-nav">
         {NAV_ITEMS.map(item => (

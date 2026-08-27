@@ -1,0 +1,130 @@
+.ecm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5vw;
+  background: rgba(20, 12, 10, 0.55);
+  backdrop-filter: blur(4px);
+  animation: ecm-fade-in 0.4s ease;
+}
+
+@keyframes ecm-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.ecm-panel {
+  display: flex;
+  width: 100%;
+  max-width: 760px;
+  max-height: 90vh;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+  animation: ecm-rise-in 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes ecm-rise-in {
+  from { opacity: 0; transform: translateY(18px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.ecm-image {
+  flex: 0 0 42%;
+  position: relative;
+}
+
+.ecm-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ecm-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3rem 2.75rem;
+}
+
+.ecm-brand {
+  font-family: 'Akzidenz Grotesk BQ', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  color: #4d0c12;
+  margin-bottom: 1.6rem;
+}
+
+.ecm-heading {
+  font-family: 'Akzidenz Grotesk BQ', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: #221616;
+  margin: 0 0 1rem;
+  line-height: 1.2;
+}
+
+.ecm-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: rgba(34, 22, 22, 0.75);
+  margin: 0 0 2rem;
+}
+
+.ecm-agree {
+  align-self: flex-start;
+  background: #4d0c12;
+  border: 1px solid #4d0c12;
+  border-radius: 999px;
+  padding: 0.75rem 2.2rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.ecm-agree:hover {
+  background: #221616;
+  border-color: #221616;
+}
+
+@media (max-width: 640px) {
+  .ecm-overlay {
+    padding: 6vw;
+  }
+
+  .ecm-panel {
+    flex-direction: column;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+
+  .ecm-image {
+    flex: 0 0 auto;
+    height: 38vh;
+  }
+
+  .ecm-content {
+    padding: 2.2rem 1.6rem 2.4rem;
+  }
+
+  .ecm-heading {
+    font-size: 1.35rem;
+  }
+
+  .ecm-agree {
+    align-self: stretch;
+    text-align: center;
+  }
+}
