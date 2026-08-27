@@ -11,9 +11,18 @@
   animation: ecm-fade-in 0.4s ease;
 }
 
+.ecm-overlay--closing {
+  animation: ecm-fade-out 0.35s ease forwards;
+}
+
 @keyframes ecm-fade-in {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+@keyframes ecm-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }
 
 .ecm-panel {
@@ -24,18 +33,52 @@
   background: #fff;
   border-radius: 8px;
   overflow: hidden;
+  position: relative;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
-  animation: ecm-rise-in 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: ecm-zoom-in 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes ecm-rise-in {
-  from { opacity: 0; transform: translateY(18px) scale(0.98); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+.ecm-overlay--closing .ecm-panel {
+  animation: ecm-zoom-out 0.35s ease forwards;
+}
+
+@keyframes ecm-zoom-in {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes ecm-zoom-out {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.85); }
+}
+
+.ecm-close {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  z-index: 1;
+  background: none;
+  border: none;
+  color: #221616;
+  opacity: 0.6;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  transition: opacity 0.2s;
+}
+
+.ecm-close:hover {
+  opacity: 1;
 }
 
 .ecm-image {
   flex: 0 0 42%;
   position: relative;
+  /* 10px gap on top/bottom/left only — the right edge stays flush
+     against the text column, matching the panel's own edge there. */
+  margin: 10px 0 10px 10px;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .ecm-image img {
@@ -51,15 +94,6 @@
   flex-direction: column;
   justify-content: center;
   padding: 3rem 2.75rem;
-}
-
-.ecm-brand {
-  font-family: 'Akzidenz Grotesk BQ', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.28em;
-  color: #4d0c12;
-  margin-bottom: 1.6rem;
 }
 
 .ecm-heading {
@@ -113,6 +147,20 @@
   .ecm-image {
     flex: 0 0 auto;
     height: 38vh;
+    /* Stacked layout: the shared edge with the content below is the
+       bottom, so the gap goes on top/right/left instead. */
+    margin: 10px 10px 0 10px;
+  }
+
+  .ecm-close {
+    top: 0.6rem;
+    right: 0.6rem;
+    padding: 0.35rem;
+  }
+
+  .ecm-close svg {
+    width: 14px;
+    height: 14px;
   }
 
   .ecm-content {
