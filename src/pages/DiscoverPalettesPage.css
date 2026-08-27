@@ -130,6 +130,13 @@
        leave the box's own layout space unchanged and the text blurry). */
     font-size: 16px;
   }
+
+  /* Matches the button's height to the input's now that the input's
+     font-size jumped to 16px (padding stayed the same on both, so a
+     bigger font alone made the input taller than the button beside it). */
+  .dp-hex-btn {
+    font-size: 16px;
+  }
 }
 
 @media (max-width: 640px) {
