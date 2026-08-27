@@ -25,18 +25,6 @@ function hexToRgb(hex) {
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255]
 }
 
-// Used to keep "load more" (real Colormind colors, which don't carry a
-// known saturation the way generated ones do) sorted into the same
-// low -> high order as the generated base list.
-export function hexSaturation(hex) {
-  const [r, g, b] = hexToRgb(hex).map((v) => v / 255)
-  const max = Math.max(r, g, b), min = Math.min(r, g, b)
-  const l = (max + min) / 2
-  if (max === min) return 0
-  const d = max - min
-  return (l > 0.5 ? d / (2 - max - min) : d / (max + min)) * 100
-}
-
 // hue: 0-360, one fixed hue for the whole tab. hueRange: [start, end]
 // instead, to sweep smoothly across a span as saturation rises — e.g.
 // brown into orange into red — rather than staying one color family.
@@ -136,6 +124,17 @@ function lightnessDescriptor(l) {
   return 'Palest'
 }
 
+// Describes a swatch's actual saturation, the same way lightnessDescriptor
+// above describes its actual lightness — both used to build the name/desc
+// straight from that swatch's own real HSL values, not a rotating list of
+// words unrelated to the color itself.
+function saturationDescriptor(s) {
+  if (s < 25) return 'muted'
+  if (s < 40) return 'soft'
+  if (s < 55) return 'balanced'
+  return 'vivid'
+}
+
 export function isValidHex(value) {
   return /^#?[0-9a-f]{3}$|^#?[0-9a-f]{6}$/i.test(value.trim())
 }
@@ -147,12 +146,16 @@ function normalizeHex(value) {
 }
 
 // Powers the hex search on Discover/Seasonal Palettes: takes whatever
-// hex the user typed and builds a full light -> dark family around it —
-// lighter tints above it, darker shades below, sweeping from a near-
-// white ceiling down to a near-black floor — with the entered hex
-// itself guaranteed to appear in the grid exactly as typed (not a
-// recomputed approximation), placed at whichever step in that sweep is
-// closest to its own actual lightness.
+// hex the user typed and builds a family around it — only a handful of
+// shades lighter (LIGHTER_STEPS, each a small fixed step up from the
+// input's own lightness, not a sweep toward white), the entered hex
+// itself exactly as typed, then the rest of the grid sweeping down to
+// a near-black floor.
+const LIGHTER_STEPS = 4
+const LIGHT_STEP = 5 // lightness points per step above the input — kept
+// small (max +10 across 2 steps) so the lighter shades stay close to
+// the input, not too light
+
 export function generateShadesFromHex(inputHex, count = 45) {
   const hex = normalizeHex(inputHex)
   const [h, inputSat, inputLight] = hexToHsl(hex)
@@ -161,30 +164,68 @@ export function generateShadesFromHex(inputHex, count = 45) {
   // make half the generated shades look identical (near-grey or
   // near-neon) regardless of lightness.
   const sat = Math.max(20, Math.min(65, inputSat || 35))
-  const lightCeil = 92
-  const darkFloor = 4
+  // Not all the way to near-black — a shallower floor so the darkest
+  // swatch still reads as a shade of the input color, not just black.
+  const darkFloor = 10
+  // A light input skips the darker sweep entirely — it has much less
+  // room to go darker before it starts looking unrelated to what was
+  // searched, so it only gets the lighter steps plus the anchor.
+  const isLightInput = inputLight >= 65
+  const hexIndex = Math.min(LIGHTER_STEPS, count - 1)
   const items = []
-  let closestIndex = 0
-  let closestDiff = Infinity
-  for (let i = 0; i < count; i++) {
-    const t = i / Math.max(count - 1, 1)
-    const l = lightCeil - t * (lightCeil - darkFloor)
-    const diff = Math.abs(l - inputLight)
-    if (diff < closestDiff) {
-      closestDiff = diff
-      closestIndex = i
+  const hue = hueName(h)
+  const satWord = saturationDescriptor(sat)
+  // Both name and desc are computed straight from each swatch's own
+  // actual lightness (and the shared hue/saturation) — nothing rotated
+  // from a fixed word list unrelated to the real color.
+  const describe = (l) => {
+    const lightWord = lightnessDescriptor(l)
+    return {
+      name: `${lightWord} ${hue}`,
+      desc: `A ${satWord}, ${lightWord.toLowerCase()} ${hue.toLowerCase()} tone.`,
     }
-    items.push({
-      color: hslToHex(h, sat, l),
-      name: `${lightnessDescriptor(l)} ${hueName(h)}`,
-      desc: `A shade of ${hex}`,
-    })
   }
-  items[closestIndex] = {
-    color: hex,
-    name: `${lightnessDescriptor(inputLight)} ${hueName(h)}`,
-    desc: `A shade of ${hex}`,
+
+  // Guards against two steps landing on the exact same hex — the eased
+  // curve below (and the small LIGHT_STEP increments above) can put two
+  // consecutive lightness values close enough that hslToHex's rounding
+  // collapses them to an identical hex. On a collision, nudges further
+  // in the direction that step was already heading (lighter items push
+  // lighter, darker items push darker) rather than toward the anchor,
+  // so the light -> dark order stays intact.
+  const usedColors = new Set([hex])
+  const pushUnique = (l, direction) => {
+    let color = hslToHex(h, sat, l)
+    let attempts = 0
+    while (usedColors.has(color) && attempts < 12) {
+      l = Math.max(0, Math.min(100, l + direction))
+      color = hslToHex(h, sat, l)
+      attempts++
+    }
+    usedColors.add(color)
+    items.push({ color, ...describe(l) })
   }
+
+  for (let i = 0; i < hexIndex; i++) {
+    const l = Math.min(97, inputLight + (hexIndex - i) * LIGHT_STEP)
+    pushUnique(l, 1)
+  }
+
+  items.push({ color: hex, ...describe(inputLight) })
+
+  const darkSteps = isLightInput ? 0 : count - 1 - hexIndex
+  for (let i = 1; i <= darkSteps; i++) {
+    const t = i / Math.max(darkSteps, 1)
+    // Eased (t^1.4), not linear — a milder curve than t^2 so it doesn't
+    // bunch the first couple of steps too close to the input itself,
+    // while still delaying the drop into a darker lightnessDescriptor
+    // bucket rather than crossing it right after the anchor and then
+    // sitting there, unchanged-looking, for most of the remaining run.
+    const eased = Math.pow(t, 1.4)
+    const l = inputLight - eased * (inputLight - darkFloor)
+    pushUnique(l, -1)
+  }
+
   return items
 }
 

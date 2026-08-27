@@ -66,8 +66,11 @@ export default function InspirationPage() {
   const [overlayGone, setOverlayGone] = useState(false)
   const [contentReady, setContentReady] = useState(false)
   // No persistence (no localStorage/sessionStorage flag) — shows on every
-  // visit to this page, by design.
-  const [consentOpen, setConsentOpen] = useState(true)
+  // visit to this page, by design. Starts false and only flips true once
+  // the loading overlay has fully cleared (see the overlayGone timeout
+  // below) — otherwise its fade-in plays silently underneath SearchLoader
+  // and is already finished/invisible by the time that overlay lifts.
+  const [consentOpen, setConsentOpen] = useState(false)
 
   const [isPlaying, setIsPlaying] = useState(false)
   const [btnHidden, setBtnHidden] = useState(false)
@@ -261,7 +264,10 @@ export default function InspirationPage() {
 
   useEffect(() => {
     const t1 = setTimeout(() => { setOverlayFading(true); setContentReady(true) }, 1700)
-    const t2 = setTimeout(() => setOverlayGone(true), 2500)
+    // Consent banner opens right as the loading overlay finishes clearing,
+    // not before — so its own fade-in is the thing the user actually sees
+    // happen, instead of playing out hidden underneath SearchLoader.
+    const t2 = setTimeout(() => { setOverlayGone(true); setConsentOpen(true) }, 2400)
     return () => { clearTimeout(t1); clearTimeout(t2) }
   }, [])
 

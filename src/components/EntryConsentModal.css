@@ -8,11 +8,11 @@
   padding: 5vw;
   background: rgba(20, 12, 10, 0.55);
   backdrop-filter: blur(4px);
-  animation: ecm-fade-in 0.4s ease;
+  animation: ecm-fade-in 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .ecm-overlay--closing {
-  animation: ecm-fade-out 0.35s ease forwards;
+  animation: ecm-fade-out 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 @keyframes ecm-fade-in {
@@ -35,21 +35,19 @@
   overflow: hidden;
   position: relative;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
-  animation: ecm-zoom-in 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: ecm-fade-in 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Static, not part of the open/close animation below — a flat
+     multiplier so the whole panel renders a bit smaller/larger
+     uniformly (every child's own sizing/margins/positioning stay
+     exactly as authored, since percentages and absolute offsets are
+     computed against the pre-transform box) without being tied to
+     whatever the entrance/exit transition happens to do to opacity. */
+  --ecm-panel-scale: 1;
+  transform: scale(var(--ecm-panel-scale));
 }
 
 .ecm-overlay--closing .ecm-panel {
-  animation: ecm-zoom-out 0.35s ease forwards;
-}
-
-@keyframes ecm-zoom-in {
-  from { opacity: 0; transform: scale(0.85); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-@keyframes ecm-zoom-out {
-  from { opacity: 1; transform: scale(1); }
-  to { opacity: 0; transform: scale(0.85); }
+  animation: ecm-fade-out 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .ecm-close {
@@ -83,30 +81,23 @@
   display: block;
 }
 
-.ecm-image-word {
-  position: absolute;
-  left: 50%;
-  bottom: 1rem;
-  transform: translateX(-50%);
-  font-family: 'Blinker', sans-serif;
-  font-weight: 700;
-  font-size: 3.2rem;
-  text-transform: lowercase;
-  color: #fff;
-}
-
 .ecm-content {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  /* text-align only, not align-items — the heading/paragraph stay at
+     their existing full-width boxes (so wrapping/line count doesn't
+     shift), just with their text centered within that box. */
+  text-align: center;
   padding: 3rem 2.75rem;
 }
 
 .ecm-heading {
   font-family: 'Akzidenz Grotesk BQ', sans-serif;
-  font-size: 1.6rem;
-  font-weight: 400;
+  font-size: 1.7rem;
+  font-weight: 700;
+  text-transform: lowercase;
   color: #221616;
   margin: 0 0 1rem;
   line-height: 1.2;
@@ -114,16 +105,33 @@
 
 .ecm-text {
   font-family: 'Inter', sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   line-height: 1.6;
+  text-transform: lowercase;
   color: rgba(34, 22, 22, 0.75);
   margin: 0 0 2rem;
 }
 
+@media (min-width: 641px) {
+  .ecm-heading {
+    margin-bottom: 1.6rem;
+  }
+
+  .ecm-text {
+    max-width: 380px;
+    margin: 0 auto 1.4rem;
+  }
+}
+
 .ecm-agree {
-  align-self: flex-start;
-  background: #4d0c12;
-  border: 1px solid #4d0c12;
+  /* Stretches to the same width as .ecm-text above it — both sit in the
+     same .ecm-content column, so align-self: stretch alone (rather than
+     an explicit width) keeps them matched at any panel size. */
+  align-self: stretch;
+  text-align: center;
+  text-transform: lowercase;
+  background: #0d0d0d;
+  border: 1px solid #0d0d0d;
   border-radius: 999px;
   padding: 0.75rem 2.2rem;
   font-family: 'Inter', sans-serif;
@@ -136,50 +144,75 @@
 }
 
 .ecm-agree:hover {
-  background: #221616;
-  border-color: #221616;
+  background: #2a2a2a;
+  border-color: #2a2a2a;
+}
+
+/* Only the label crossfades when X is pressed before Agree — the pill
+   itself (background, border, size, position) never animates. */
+.ecm-agree-label {
+  display: inline-block;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.ecm-agree-label--hidden {
+  opacity: 0;
 }
 
 @media (max-width: 640px) {
   .ecm-overlay {
-    padding: 6vw;
+    /* Fixed, not vw-based — the gap around the panel no longer grows or
+       shrinks with the device's viewport width. Narrowed from 20px to
+       16px alongside the panel's width increase (340px -> 380px) so
+       the same ~360px-wide phones that fit the panel at full size
+       before still do now. */
+    padding: 16px;
   }
 
   .ecm-panel {
     flex-direction: column;
+    /* A fixed target width, not a percentage of the viewport, so the
+       panel itself renders at the same size on every mobile device
+       instead of scaling with screen width. max-width is still the
+       hard safety floor for anything narrower than 380px + the
+       overlay's own padding, not a second sizing mechanism. */
+    width: 380px;
+    max-width: calc(100vw - 32px);
     max-height: 85vh;
     overflow-y: auto;
+    --ecm-panel-scale: 0.88;
   }
 
   .ecm-image {
     flex: 0 0 auto;
-    height: 38vh;
-    /* Stacked layout: the shared edge with the content below is the
-       bottom, so the gap goes on top/right/left instead. */
-    margin: 10px 10px 0 10px;
+    aspect-ratio: 1 / 1;
+    /* Smaller and centered, with a gap on all four sides (not just
+       top/right/left) so every corner reads as rounded, floating free
+       of the panel edges instead of just three of them. */
+    width: 85%;
+    /* Extra top margin clears the X button (top: 0.6rem, sized ~26px
+       tall including its padding) so the image sits below it instead
+       of overlapping. */
+    margin: 3.6rem auto 1rem auto;
   }
 
   .ecm-close {
     top: 0.6rem;
     right: 0.6rem;
-    padding: 0.35rem;
+    padding: 0.45rem;
   }
 
   .ecm-close svg {
-    width: 14px;
-    height: 14px;
+    width: 16px;
+    height: 16px;
   }
 
   .ecm-content {
-    padding: 2.2rem 1.6rem 2.4rem;
+    padding: 1.2rem 1.6rem 2.4rem;
   }
 
   .ecm-heading {
-    font-size: 1.35rem;
-  }
-
-  .ecm-agree {
-    align-self: stretch;
-    text-align: center;
+    font-size: 1.55rem;
   }
 }

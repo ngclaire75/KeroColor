@@ -146,8 +146,8 @@ export default function PalettePage() {
     tabTimeoutsRef.current = [t1, t2]
   }
 
-  // Every menu item is a Discover/Seasonal Palettes tab name — always
-  // navigates there with that exact tab pre-selected.
+  // Every menu item is a sample hex code — navigates to Discover
+  // Palettes with that color pre-searched.
   const handleMenuItemClick = (hex) => {
     setFullMenuOpen(false)
     navigate('/palette/discover', { state: { hex } })
@@ -325,13 +325,11 @@ export default function PalettePage() {
         ))}
       </div>
 
-      {/* ── Discover more button — Seasonal Edition leads to the 4-season
-          version of this page rather than the general category one. ── */}
+      {/* ── Discover more button — always leads to the one Discover
+          Palettes page now (the separate Seasonal Edition variant of
+          this page was removed). ── */}
       <div className="pp-discover-wrap">
-        <button
-          className="pp-discover-btn"
-          onClick={() => navigate(activeTab === 'Seasonal Edition' ? '/palette/discover/seasonal' : '/palette/discover')}
-        >
+        <button className="pp-discover-btn" onClick={() => navigate('/palette/discover')}>
           Discover More Palettes
         </button>
       </div>
