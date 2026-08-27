@@ -184,8 +184,10 @@ export default function PalettePage() {
           </button>
           <div className={`pp-bar-texts${animPaused ? ' pp-bar-texts--paused' : ''}`}>
             <span className="pp-bar-text pp-bar-text--1">
-              Discover colors related to your favorite{' '}
-              <Link to="/palette/discover" className="pp-bar-underline">hexcode!</Link>
+              <Link to="/palette/discover">
+                Discover colors related to your favorite{' '}
+                <span className="pp-bar-underline">hexcode!</span>
+              </Link>
             </span>
             <span className="pp-bar-text pp-bar-text--2">
               Have a Look at Our{' '}
