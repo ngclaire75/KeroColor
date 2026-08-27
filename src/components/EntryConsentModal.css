@@ -64,11 +64,6 @@
   cursor: pointer;
   padding: 0.5rem;
   display: flex;
-  transition: opacity 0.2s;
-}
-
-.ecm-close:hover {
-  opacity: 1;
 }
 
 .ecm-image {
