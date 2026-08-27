@@ -2,7 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- maximum-scale=1 caps the page at its default zoom level, which is
+         what actually stops mobile browsers auto-zooming in on any input
+         with a computed font-size under 16px — the alternative to raising
+         font-size on individual inputs, since no per-input CSS actually
+         changes that browser behavior. Trade-off: it also caps how far a
+         visitor can pinch-zoom the whole page in to read something. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <link rel="icon" type="image/png" href="/favicon.png?v=2" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" />
     <title>KeroColor</title>
