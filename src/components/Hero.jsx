@@ -1,9 +1,9 @@
 import './Hero.css'
 import { Link } from 'react-router-dom'
-import cakeImg   from '../../images/model2.jpeg'
-import drinkImg  from '../../images/model1.jpeg'
-import starImg   from '../../images/star.png'
-import ribbonImg from '../../images/ribbon.png'
+import cakeImg   from '../../images/model2.webp'
+import drinkImg  from '../../images/model1.webp'
+import starImg   from '../../images/star.webp'
+import ribbonImg from '../../images/ribbon.webp'
 
 export default function Hero() {
   return (

@@ -15,8 +15,8 @@ import FaqSection      from './components/FaqSection'
 import Footer          from './components/Footer'
 import LenisProvider    from './components/LenisProvider'
 import { getLenis } from './lenis'
-import cakeImg    from '../images/model2.jpeg'
-import drinkImg   from '../images/model1.jpeg'
+import cakeImg    from '../images/model2.webp'
+import drinkImg   from '../images/model1.webp'
 import './App.css'
 
 // Lazy — each page's JS (and everything it imports) now ships in its own

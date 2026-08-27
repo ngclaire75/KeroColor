@@ -1,11 +1,11 @@
 import './ColorMeaning.css'
 import { Link } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
-import textureImg  from '../../images/texture.png'
-import vo1 from '../../images/vo1.jpeg'
-import vo2 from '../../images/vo2.jpeg'
-import vo3 from '../../images/vo3.jpeg'
-import diamondImg  from '../../images/diamond.png'
+import textureImg  from '../../images/texture.webp'
+import vo1 from '../../images/vo1.webp'
+import vo2 from '../../images/vo2.webp'
+import vo3 from '../../images/vo3.webp'
+import diamondImg  from '../../images/diamond.webp'
 
 const featuresTop = [
   { text: 'Evokes passion, deep desire and romantic intensity' },

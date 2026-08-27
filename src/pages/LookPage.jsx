@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useSearch } from '../SearchContext'
-import kImg from '../../images/k.png'
+import kImg from '../../images/k.webp'
 import SearchLoader from '../components/SearchLoader'
 import './LookPage.css'
 

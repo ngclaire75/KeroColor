@@ -1,5 +1,5 @@
 import './SiteHeader.css'
-import bearImg from '../../images/bear.png'
+import bearImg from '../../images/bear.webp'
 
 export default function SiteHeader() {
   return (

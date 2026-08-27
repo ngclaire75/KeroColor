@@ -1,8 +1,8 @@
 import './HowWeWork.css'
-import endorse1 from '../../images/endorse1.jpg'
-import endorse2 from '../../images/endorse2.png'
-import endorse3 from '../../images/endorse3.jpg'
-import decoImg  from '../../images/deco.png'
+import endorse1 from '../../images/endorse1.webp'
+import endorse2 from '../../images/endorse2.webp'
+import endorse3 from '../../images/endorse3.webp'
+import decoImg  from '../../images/deco.webp'
 
 const steps = [
   {

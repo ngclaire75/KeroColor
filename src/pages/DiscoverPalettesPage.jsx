@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import FullMenu from '../components/FullMenu'
 import { getLenis } from '../lenis'
 import { generateShadesFromHex, isValidHex, SAMPLE_HEX_CODES } from '../utils/generatePalette'
-import bearImg from '../../images/bear.png'
+import bearImg from '../../images/bear.webp'
 // Reused wholesale (not just the class names) so the nav, grid, fonts,
 // and footer are pixel-for-pixel consistent with PalettePage.
 import './PalettePage.css'

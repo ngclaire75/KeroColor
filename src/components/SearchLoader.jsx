@@ -1,4 +1,4 @@
-import badImg from '../../images/bad.png.png'
+import badImg from '../../images/bad.png.webp'
 import './SearchLoader.css'
 
 export default function SearchLoader({ fading }) {

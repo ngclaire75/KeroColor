@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { getLenis } from '../lenis'
-import trail2 from '../../images/trail2.jpg'
+import trail2 from '../../images/trail2.webp'
 import './EntryConsentModal.css'
 
 const CLOSE_ANIM_MS = 600

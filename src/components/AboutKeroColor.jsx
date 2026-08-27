@@ -1,8 +1,8 @@
 import './AboutKeroColor.css'
-import beigeGlowImg    from '../../images/beigeglow.png'
-import deepMerlotImg   from '../../images/deepmerlot.png'
-import onyxBlackImg    from '../../images/onyxblack.png'
-import toastedStoneImg from '../../images/toastedstone.png'
+import beigeGlowImg    from '../../images/beigeglow.webp'
+import deepMerlotImg   from '../../images/deepmerlot.webp'
+import onyxBlackImg    from '../../images/onyxblack.webp'
+import toastedStoneImg from '../../images/toastedstone.webp'
 
 const cards = [
   {

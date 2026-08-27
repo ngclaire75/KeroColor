@@ -1,5 +1,5 @@
-import folderImg from '../../images/folder.png'
-import badImg from '../../images/bad.png.png'
+import folderImg from '../../images/folder.webp'
+import badImg from '../../images/bad.png.webp'
 import { useSearch } from '../SearchContext'
 import './SkullPandaSection.css'
 

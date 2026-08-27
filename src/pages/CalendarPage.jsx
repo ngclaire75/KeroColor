@@ -1,10 +1,10 @@
 import './CalendarPage.css'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import bgBeige   from '../../images/beigeglow.png'
-import bgOnyx    from '../../images/onyxblack.png'
-import bgMerlot  from '../../images/deepmerlot.png'
-import bgStone   from '../../images/toastedstone.png'
+import bgBeige   from '../../images/beigeglow.webp'
+import bgOnyx    from '../../images/onyxblack.webp'
+import bgMerlot  from '../../images/deepmerlot.webp'
+import bgStone   from '../../images/toastedstone.webp'
 
 const MONTHS = [
   'January','February','March','April','May','June',
