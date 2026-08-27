@@ -119,14 +119,23 @@ export default function DiscoverPalettesPage() {
           Type a color and see it swept light -> dark; the hamburger menu
           (9 sample hex codes) is the other way in. ── */}
       <form className="dp-hex-search" onSubmit={handleHexSearch}>
-        <input
-          type="text"
-          className="dp-hex-input"
-          placeholder="Search a hex code, e.g. #7c1a2e"
-          value={hexInput}
-          onChange={(e) => { setHexInput(e.target.value); setHexError(false) }}
-          maxLength={7}
-        />
+        {/* Wrapper exists for mobile only (see .dp-hex-input-wrap) — it's
+            what actually participates in the row's flex layout there,
+            clipping the input's own compensating scale-up/scale-down
+            trick (same technique as ContactSection's fields) so the
+            visible size/placement never changes while its real
+            font-size stays >=16px, which is what stops the browser's
+            zoom-on-focus. */}
+        <div className="dp-hex-input-wrap">
+          <input
+            type="text"
+            className="dp-hex-input"
+            placeholder="Search a hex code, e.g. #7c1a2e"
+            value={hexInput}
+            onChange={(e) => { setHexInput(e.target.value); setHexError(false) }}
+            maxLength={7}
+          />
+        </div>
         <button type="submit" className="dp-hex-btn">Search</button>
       </form>
       {hexError && <p className="dp-hex-error">Enter a valid hex code, like #7c1a2e or #b06.</p>}

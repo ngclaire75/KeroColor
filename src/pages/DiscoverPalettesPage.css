@@ -46,6 +46,13 @@
   padding: 2.5rem 1.5rem 1.5rem;
 }
 
+/* Transparent on desktop — the input participates directly in
+   .dp-hex-search's row exactly as if this wrapper didn't exist. Only
+   becomes a real box on mobile (see the media query below). */
+.dp-hex-input-wrap {
+  display: contents;
+}
+
 .dp-hex-input {
   width: 420px;
   max-width: 70vw;
@@ -118,10 +125,27 @@
     padding: 1.8rem 6vw 1.5rem;
   }
 
-  .dp-hex-input {
-    width: 100%;
-    max-width: none;
+  /* Real box now (not display:contents) — this is what actually takes
+     the row's flex:1 share and clips the input's compensating overflow. */
+  .dp-hex-input-wrap {
+    display: block;
     flex: 1;
+    overflow: hidden;
+  }
+
+  .dp-hex-input {
+    max-width: none;
+    /* font-size must be >=16px for mobile browsers to skip auto-zooming
+       the page on focus — no per-input CSS below 16px avoids that, it's
+       a hard browser rule. transform: scale() then visually renders it
+       back down to how 0.8rem (12.8px = 16px * 0.8) used to look, and
+       width is inflated by the inverse of that same 0.8 (125%) so the
+       post-scale box exactly fills the wrapper's 100% again — same
+       technique as ContactSection's name/email/subject fields. */
+    width: 125%;
+    font-size: 16px;
+    transform: scale(0.8);
+    transform-origin: left center;
   }
 }
 
