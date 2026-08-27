@@ -147,13 +147,12 @@ function normalizeHex(value) {
 }
 
 // Powers the hex search on Discover/Seasonal Palettes: takes whatever
-// hex the user typed and builds a family of shades of that same color.
-// The entered hex itself is always item[0] — exactly as typed, not a
-// recomputed approximation of it — and every item after it steps
-// progressively darker from there down to a near-black floor, so the
-// grid reads as "here's your color, then here's where it goes as it
-// darkens" rather than an independent light->dark sweep that just
-// happens to pass near the input somewhere in the middle.
+// hex the user typed and builds a full light -> dark family around it —
+// lighter tints above it, darker shades below, sweeping from a near-
+// white ceiling down to a near-black floor — with the entered hex
+// itself guaranteed to appear in the grid exactly as typed (not a
+// recomputed approximation), placed at whichever step in that sweep is
+// closest to its own actual lightness.
 export function generateShadesFromHex(inputHex, count = 45) {
   const hex = normalizeHex(inputHex)
   const [h, inputSat, inputLight] = hexToHsl(hex)
@@ -162,24 +161,29 @@ export function generateShadesFromHex(inputHex, count = 45) {
   // make half the generated shades look identical (near-grey or
   // near-neon) regardless of lightness.
   const sat = Math.max(20, Math.min(65, inputSat || 35))
-  const items = [{
-    color: hex,
-    name: `${lightnessDescriptor(inputLight)} ${hueName(h)}`,
-    desc: `A shade of ${hex}`,
-  }]
-  const darkFloor = 5
-  // Minimum 4-point span even when the input is already near-black, so
-  // an already-dark search still yields visibly distinct darker steps
-  // instead of a run of near-duplicates.
-  const span = Math.max(inputLight - darkFloor, 4)
-  for (let i = 1; i < count; i++) {
+  const lightCeil = 92
+  const darkFloor = 4
+  const items = []
+  let closestIndex = 0
+  let closestDiff = Infinity
+  for (let i = 0; i < count; i++) {
     const t = i / Math.max(count - 1, 1)
-    const l = Math.max(inputLight - t * span, 0)
+    const l = lightCeil - t * (lightCeil - darkFloor)
+    const diff = Math.abs(l - inputLight)
+    if (diff < closestDiff) {
+      closestDiff = diff
+      closestIndex = i
+    }
     items.push({
       color: hslToHex(h, sat, l),
       name: `${lightnessDescriptor(l)} ${hueName(h)}`,
       desc: `A shade of ${hex}`,
     })
+  }
+  items[closestIndex] = {
+    color: hex,
+    name: `${lightnessDescriptor(inputLight)} ${hueName(h)}`,
+    desc: `A shade of ${hex}`,
   }
   return items
 }
