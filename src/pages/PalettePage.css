@@ -21,19 +21,26 @@
   overflow: hidden;
 }
 
+/* pointer-events tracks the same visible/hidden state as opacity at
+   each step — both bar lines are position:absolute, stacked directly
+   on top of each other, and .pp-bar-text--2 sits later in the DOM so
+   it paints above --1 regardless of which one is actually opaque right
+   now. Without this, the invisible line still intercepts clicks meant
+   for the visible one underneath it — its own link silently swallows
+   the click and nothing navigates. */
 @keyframes pp-text1 {
-  0%, 35%   { transform: translateY(0); opacity: 1; animation-timing-function: cubic-bezier(0.4, 0, 1, 1); }
-  42%       { transform: translateY(-40%); opacity: 0; animation-timing-function: steps(1); }
-  43%, 87%  { transform: translateY(40%); opacity: 0; animation-timing-function: cubic-bezier(0, 0, 0.3, 1); }
-  94%, 100% { transform: translateY(0); opacity: 1; }
+  0%, 35%   { transform: translateY(0); opacity: 1; pointer-events: auto; animation-timing-function: cubic-bezier(0.4, 0, 1, 1); }
+  42%       { transform: translateY(-40%); opacity: 0; pointer-events: none; animation-timing-function: steps(1); }
+  43%, 87%  { transform: translateY(40%); opacity: 0; pointer-events: none; animation-timing-function: cubic-bezier(0, 0, 0.3, 1); }
+  94%, 100% { transform: translateY(0); opacity: 1; pointer-events: auto; }
 }
 
 @keyframes pp-text2 {
-  0%, 44%   { transform: translateY(40%); opacity: 0; animation-timing-function: cubic-bezier(0, 0, 0.3, 1); }
-  51%       { transform: translateY(0); opacity: 1; animation-timing-function: cubic-bezier(0.4, 0, 1, 1); }
-  78%       { transform: translateY(0); opacity: 1; animation-timing-function: cubic-bezier(0.4, 0, 1, 1); }
-  85%       { transform: translateY(-40%); opacity: 0; animation-timing-function: steps(1); }
-  86%, 100% { transform: translateY(40%); opacity: 0; }
+  0%, 44%   { transform: translateY(40%); opacity: 0; pointer-events: none; animation-timing-function: cubic-bezier(0, 0, 0.3, 1); }
+  51%       { transform: translateY(0); opacity: 1; pointer-events: auto; animation-timing-function: cubic-bezier(0.4, 0, 1, 1); }
+  78%       { transform: translateY(0); opacity: 1; pointer-events: auto; animation-timing-function: cubic-bezier(0.4, 0, 1, 1); }
+  85%       { transform: translateY(-40%); opacity: 0; pointer-events: none; animation-timing-function: steps(1); }
+  86%, 100% { transform: translateY(40%); opacity: 0; pointer-events: none; }
 }
 
 .pp-bar-texts {
