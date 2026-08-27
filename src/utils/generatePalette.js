@@ -147,26 +147,37 @@ function normalizeHex(value) {
 }
 
 // Powers the hex search on Discover/Seasonal Palettes: takes whatever
-// hex the user typed and builds a family of shades of that same color,
-// light -> dark (the search's own ordering — distinct from the
-// saturation-ascending convention every hand-curated tab uses), instead
-// of the tab-based word-bank categories above.
+// hex the user typed and builds a family of shades of that same color.
+// The entered hex itself is always item[0] — exactly as typed, not a
+// recomputed approximation of it — and every item after it steps
+// progressively darker from there down to a near-black floor, so the
+// grid reads as "here's your color, then here's where it goes as it
+// darkens" rather than an independent light->dark sweep that just
+// happens to pass near the input somewhere in the middle.
 export function generateShadesFromHex(inputHex, count = 45) {
   const hex = normalizeHex(inputHex)
-  const [h, inputSat] = hexToHsl(hex)
+  const [h, inputSat, inputLight] = hexToHsl(hex)
   // Keeps close to the searched color's own saturation rather than
   // reusing it exactly — a very low or very high input would otherwise
   // make half the generated shades look identical (near-grey or
   // near-neon) regardless of lightness.
   const sat = Math.max(20, Math.min(65, inputSat || 35))
-  const items = []
-  for (let i = 0; i < count; i++) {
+  const items = [{
+    color: hex,
+    name: `${lightnessDescriptor(inputLight)} ${hueName(h)}`,
+    desc: `A shade of ${hex}`,
+  }]
+  const darkFloor = 5
+  // Minimum 4-point span even when the input is already near-black, so
+  // an already-dark search still yields visibly distinct darker steps
+  // instead of a run of near-duplicates.
+  const span = Math.max(inputLight - darkFloor, 4)
+  for (let i = 1; i < count; i++) {
     const t = i / Math.max(count - 1, 1)
-    const l = 90 - t * 82 // light -> dark, 90% down to 8%
-    const name = `${lightnessDescriptor(l)} ${hueName(h)}`
+    const l = Math.max(inputLight - t * span, 0)
     items.push({
       color: hslToHex(h, sat, l),
-      name,
+      name: `${lightnessDescriptor(l)} ${hueName(h)}`,
       desc: `A shade of ${hex}`,
     })
   }
