@@ -122,6 +122,13 @@
     width: 100%;
     max-width: none;
     flex: 1;
+    /* Mobile Safari/Chrome auto-zoom the whole page on focusing any
+       input with a computed font-size under 16px — this was 0.8rem
+       (~12.8px), well under that. 16px is the standard fix (accepting
+       the slightly larger input text is the normal tradeoff every site
+       makes here, rather than fighting it with a transform hack that'd
+       leave the box's own layout space unchanged and the text blurry). */
+    font-size: 16px;
   }
 }
 
