@@ -71,14 +71,15 @@ export default function EntryConsentModal({ open, onAgree }) {
         </button>
         <div className="ecm-image">
           <img src={trail4} alt="" />
+          <span className="ecm-image-word">kero</span>
         </div>
         <div className="ecm-content">
           <h2 className="ecm-heading">Before You Continue</h2>
           <p className="ecm-text">
             This page features clips from creators' full videos on YouTube.
             For the complete look, every step, product, and detail, we
-            recommend watching the full version there. Click agree to keep
-            browsing here.
+            recommend watching the full version on their respective
+            channels. Click agree to keep browsing here.
           </p>
           <button type="button" className="ecm-agree" onClick={onAgree}>
             Agree
