@@ -248,8 +248,3 @@ const SAMPLE_FAMILIES = [
 export const SAMPLE_HEX_CODES = SAMPLE_FAMILIES.map(
   (f) => generatePalette({ ...f, nouns: ['x'], descs: ['x'], count: 90 })[45].color
 )
-
-// The Nude Series and Autumn Harvest hex specifically — used by
-// PalettePage's announcement bar links, which used to point at named
-// tabs that no longer exist.
-export const NUDE_SAMPLE_HEX = generatePalette({ hue: 28, sat: [8, 28], nouns: ['x'], descs: ['x'], count: 90 })[45].color

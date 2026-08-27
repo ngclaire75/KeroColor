@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import SearchLoader from '../components/SearchLoader'
 import FullMenu from '../components/FullMenu'
 import { useSearch } from '../SearchContext'
-import { SAMPLE_HEX_CODES, NUDE_SAMPLE_HEX } from '../utils/generatePalette'
+import { SAMPLE_HEX_CODES } from '../utils/generatePalette'
 import heroImg from '../../images/fire.webp'
 import springImg from '../../images/spr.webp'
 import lipstickImg from '../../images/girlofmydreams.webp'
@@ -184,8 +184,8 @@ export default function PalettePage() {
           </button>
           <div className={`pp-bar-texts${animPaused ? ' pp-bar-texts--paused' : ''}`}>
             <span className="pp-bar-text pp-bar-text--1">
-              Discover the new{' '}
-              <Link to="/palette/discover" state={{ hex: NUDE_SAMPLE_HEX }} className="pp-bar-underline">Kerocolor Nude Series.</Link>
+              Discover colors related to your favorite{' '}
+              <Link to="/palette/discover" className="pp-bar-underline">hexcode!</Link>
             </span>
             <span className="pp-bar-text pp-bar-text--2">
               Have a Look at Our{' '}
