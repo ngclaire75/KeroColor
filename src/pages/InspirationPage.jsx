@@ -50,6 +50,10 @@ const STUDIO_VIDEOS = [
 
 const NAV_ITEMS = ['All', 'Seasonal Edition', 'Editorial', 'Inspiration']
 
+// localStorage (not sessionStorage) so "once per device" survives across
+// tabs/sessions, not just the current one.
+const CONSENT_KEY = 'kerocolor-inspiration-consent'
+
 // Splits text into one <span> per letter so each can be scaled
 // individually on hover (see .in-studio-letter) — nbsp for spaces so
 // they keep their width as a standalone span instead of collapsing.
@@ -65,11 +69,12 @@ export default function InspirationPage() {
   const [overlayFading, setOverlayFading] = useState(false)
   const [overlayGone, setOverlayGone] = useState(false)
   const [contentReady, setContentReady] = useState(false)
-  // No persistence (no localStorage/sessionStorage flag) — shows on every
-  // visit to this page, by design. Starts false and only flips true once
-  // the loading overlay has fully cleared (see the overlayGone timeout
-  // below) — otherwise its fade-in plays silently underneath SearchLoader
-  // and is already finished/invisible by the time that overlay lifts.
+  // Persisted in localStorage — shown once per device, not on every
+  // visit. Starts false and only flips true (in the overlayGone timeout
+  // below) once the loading overlay has fully cleared AND this device
+  // hasn't agreed before — otherwise its fade-in would play silently
+  // underneath SearchLoader and be already finished/invisible by the
+  // time that overlay lifts.
   const [consentOpen, setConsentOpen] = useState(false)
 
   const [isPlaying, setIsPlaying] = useState(false)
@@ -266,8 +271,18 @@ export default function InspirationPage() {
     const t1 = setTimeout(() => { setOverlayFading(true); setContentReady(true) }, 1700)
     // Consent banner opens right as the loading overlay finishes clearing,
     // not before — so its own fade-in is the thing the user actually sees
-    // happen, instead of playing out hidden underneath SearchLoader.
-    const t2 = setTimeout(() => { setOverlayGone(true); setConsentOpen(true) }, 2400)
+    // happen, instead of playing out hidden underneath SearchLoader. Only
+    // opens at all if this device hasn't already agreed.
+    const t2 = setTimeout(() => {
+      setOverlayGone(true)
+      let alreadyAgreed = false
+      try {
+        alreadyAgreed = localStorage.getItem(CONSENT_KEY) === '1'
+      } catch {
+        // Private browsing / storage blocked — falls back to showing it.
+      }
+      if (!alreadyAgreed) setConsentOpen(true)
+    }, 2400)
     return () => { clearTimeout(t1); clearTimeout(t2) }
   }, [])
 
@@ -315,7 +330,18 @@ export default function InspirationPage() {
   return (
     <>
     {!overlayGone && <SearchLoader fading={overlayFading} />}
-    <EntryConsentModal open={consentOpen} onAgree={() => setConsentOpen(false)} />
+    <EntryConsentModal
+      open={consentOpen}
+      onAgree={() => {
+        setConsentOpen(false)
+        try {
+          localStorage.setItem(CONSENT_KEY, '1')
+        } catch {
+          // Private browsing / storage blocked — nothing to persist to,
+          // it'll just show again next visit.
+        }
+      }}
+    />
     <div className={`in-page${contentReady ? ' in-page--revealed' : ' in-page--hidden'}`}>
       <nav className="in-nav">
         {NAV_ITEMS.map(item => (
