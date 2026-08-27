@@ -36,6 +36,95 @@
   opacity: 1;
 }
 
+/* ── Hex search — an alternative way to fill the grid below: type a
+   color instead of picking a tab. ── */
+.dp-hex-search {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 2.5rem 1.5rem 1.5rem;
+}
+
+.dp-hex-input {
+  width: 420px;
+  max-width: 70vw;
+  padding: 0.6rem 1rem;
+  border: 1px solid #221616;
+  border-radius: 999px;
+  /* Same beige as the page itself, not white — the pill reads as part
+     of the page rather than a separate white card sitting on it. */
+  background: #f2e8d9;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  color: #221616;
+}
+
+.dp-hex-input::placeholder {
+  color: rgba(34, 22, 22, 0.45);
+}
+
+.dp-hex-input:focus {
+  outline: none;
+  border-color: #4d0c12;
+}
+
+.dp-hex-btn {
+  /* Same red as the hamburger menu overlay background. */
+  background: #4d0c12;
+  border: 1px solid #4d0c12;
+  border-radius: 999px;
+  padding: 0.6rem 1.4rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.dp-hex-btn:hover {
+  background: #221616;
+}
+
+.dp-hex-clear {
+  background: none;
+  border: none;
+  color: #221616;
+  opacity: 0.6;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+}
+
+.dp-hex-clear:hover {
+  opacity: 1;
+}
+
+.dp-hex-error {
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  color: #4d0c12;
+  margin: -1rem 0 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .dp-hex-search {
+    padding: 1.8rem 6vw 1.2rem;
+  }
+
+  .dp-hex-input {
+    width: 100%;
+    max-width: none;
+    flex: 1;
+  }
+}
+
 @media (max-width: 640px) {
   /* Left edge matches .pp-palette-grid's own left edge on mobile
      (width:88%, centered -> 6% inset each side), so the tab row and the

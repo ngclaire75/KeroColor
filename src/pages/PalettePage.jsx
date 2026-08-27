@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import SearchLoader from '../components/SearchLoader'
 import FullMenu from '../components/FullMenu'
 import { useSearch } from '../SearchContext'
+import { SAMPLE_HEX_CODES, NUDE_SAMPLE_HEX } from '../utils/generatePalette'
 import heroImg from '../../images/fire.jpg'
 import springImg from '../../images/spr.jpg'
 import lipstickImg from '../../images/girlofmydreams.jpg'
@@ -14,19 +15,10 @@ import './PalettePage.css'
 
 const TABS = ['All', 'Seasonal Edition', 'Editorial', 'Inspiration']
 
-// Every tab that exists on Discover Palettes (12 categories) and
-// Seasonal Palettes (the 4 seasons) — kept in sync by hand with the tab
-// names defined in DiscoverPalettesPage.jsx/SeasonalPalettesPage.jsx.
-// The hamburger menu shows all of them (not capped at 9) so every tab is
-// reachable from here, each one routing to the right page with that
-// exact tab pre-selected.
-const SEASON_NAMES = new Set(['Spring', 'Summer', 'Autumn', 'Winter'])
-const DISCOVER_MENU_ITEMS = [
-  'Warm Terracotta', 'Cool Slate', 'Golden Hour', 'Midnight Bloom', 'Rose Quartz',
-  'Forest Canopy', 'Desert Bloom', 'Ocean Depth', 'Nude Series', 'Autumn Harvest',
-  'Coastal Breeze', 'Berry Wine',
-  'Spring', 'Summer', 'Autumn', 'Winter',
-]
+// Discover Palettes is browsed by hex search now, not named tabs — the
+// menu shows the same 9 sample hex codes as that page's own hamburger,
+// each opening straight into that color's grid there.
+const DISCOVER_MENU_ITEMS = SAMPLE_HEX_CODES
 
 const DUO_ITEMS = [
   { img: lipstickImg, name: 'Velvet Keepsake', desc: 'A heart kept safe in ruby velvet', hexes: ['#742833'] },
@@ -156,10 +148,9 @@ export default function PalettePage() {
 
   // Every menu item is a Discover/Seasonal Palettes tab name — always
   // navigates there with that exact tab pre-selected.
-  const handleMenuItemClick = (tabName) => {
+  const handleMenuItemClick = (hex) => {
     setFullMenuOpen(false)
-    const route = SEASON_NAMES.has(tabName) ? '/palette/discover/seasonal' : '/palette/discover'
-    navigate(route, { state: { tab: tabName } })
+    navigate('/palette/discover', { state: { hex } })
   }
 
   return (
@@ -194,7 +185,7 @@ export default function PalettePage() {
           <div className={`pp-bar-texts${animPaused ? ' pp-bar-texts--paused' : ''}`}>
             <span className="pp-bar-text pp-bar-text--1">
               Discover the new{' '}
-              <Link to="/palette/discover" state={{ tab: 'Nude Series' }} className="pp-bar-underline">Kerocolor Nude Series.</Link>
+              <Link to="/palette/discover" state={{ hex: NUDE_SAMPLE_HEX }} className="pp-bar-underline">Kerocolor Nude Series.</Link>
             </span>
             <span className="pp-bar-text pp-bar-text--2">
               Have a Look at Our{' '}

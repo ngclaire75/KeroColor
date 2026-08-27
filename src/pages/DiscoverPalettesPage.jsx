@@ -1,103 +1,15 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import FullMenu from '../components/FullMenu'
-import { generatePalette } from '../utils/generatePalette'
+import { generateShadesFromHex, isValidHex, SAMPLE_HEX_CODES } from '../utils/generatePalette'
 import bearImg from '../../images/bear.png'
 // Reused wholesale (not just the class names) so the nav, grid, fonts,
-// and footer are pixel-for-pixel consistent with PalettePage. The tab
-// selector itself is intentionally different — see DiscoverPalettesPage.css.
+// and footer are pixel-for-pixel consistent with PalettePage.
 import './PalettePage.css'
 import './DiscoverPalettesPage.css'
 
-// Everything here is generated locally (see utils/generatePalette.js) —
-// no external API. TOTAL_COUNT is generated once per tab up front;
-// PER_TAB_COUNT is shown right away, and "Discover More Palettes"
-// reveals the rest of that same already-generated, already low -> high
-// saturation-ordered set — never a fresh/different fetch.
-const PER_TAB_COUNT = 45
 const TOTAL_COUNT = 90
-
-// Each category is a base hue/saturation range plus theme word banks —
-// generatePalette combines those into TOTAL_COUNT swatches, ordered
-// low -> high saturation, since at this volume per tab hand-authoring
-// every single entry isn't practical. Saturation stays low throughout
-// (muted, editorial, never bright/neon) and lightness runs dark-to-mid —
-// each range's floor is still high enough that the tab's own hue reads
-// clearly even at its most muted end, so tabs stay distinct from each
-// other without needing to reach into vivid territory.
-const CATEGORIES = [
-  {
-    tab: 'Warm Terracotta', hue: 18, sat: [16, 46],
-    nouns: ['Clay', 'Terra', 'Ochre', 'Adobe', 'Canyon', 'Sienna', 'Umber', 'Sandstone', 'Brick', 'Rust'],
-    descs: ['Sun-warmed adobe earth', 'Clay lit from within', 'Ember at the edge of ash', 'Deep earth after rain', 'Kiln-fired and settled', 'Where the fire finally rests', 'Weathered metal, quiet glow'],
-  },
-  {
-    tab: 'Cool Slate', hue: 200, sat: [10, 38],
-    nouns: ['Slate', 'Fog', 'Mist', 'Frost', 'Basalt', 'Stone', 'Cloud', 'Steel', 'Rain', 'Harbor'],
-    descs: ['Thin, clean mountain air', 'First frost on glass', 'Overcast morning light', 'Rain over quiet water', 'Volcanic rock, cooled', 'Where the light runs out', 'Still, deep, and cold'],
-  },
-  {
-    tab: 'Golden Hour', hue: 38, sat: [20, 55],
-    nouns: ['Glow', 'Dusk', 'Flame', 'Horizon', 'Amber', 'Ember', 'Marigold', 'Copper', 'Gold', 'Ray'],
-    descs: ['The sky just before gold', 'Light through honey glass', 'Warmth held in glass', 'The sun dropping low', 'Coals just past the flame', 'Embers catching wind', 'The last coal of the day'],
-  },
-  {
-    tab: 'Midnight Bloom', hue: 265, sat: [14, 44],
-    nouns: ['Violet', 'Shadow', 'Iris', 'Haze', 'Eclipse', 'Petal', 'Bloom', 'Orchid', 'Dusk', 'Ink'],
-    descs: ['Soft light on pale petals', 'Perfume on cool air', 'Dusk folding into dusk', 'A bloom seen by moonlight', 'Shadow with a pulse of color', 'The hour past midnight', 'A flower drawn in the dark'],
-  },
-  {
-    tab: 'Rose Quartz', hue: 345, sat: [12, 40],
-    nouns: ['Quartz', 'Petal', 'Rosewater', 'Bloom', 'Coral', 'Blush', 'Blossom', 'Rosewood', 'Berry', 'Wine'],
-    descs: ['Barely there at all', 'Faint sweetness in the air', 'Faded blossom petal pink', 'Stone holding onto pink', 'Furniture polished by years', 'A color one glass in', 'Pink losing its light'],
-  },
-  {
-    tab: 'Forest Canopy', hue: 140, sat: [12, 40],
-    nouns: ['Canopy', 'Moss', 'Forest', 'Fern', 'Pine', 'Grove', 'Leaf', 'Shade', 'Thicket', 'Sage'],
-    descs: ['New growth, still soft', 'Herb garden after rain', 'Light breaking through branches', 'Forest at its darkest edge', 'Undergrowth, dense and dark', 'The color between the trees', 'Where the canopy closes over'],
-  },
-  {
-    tab: 'Desert Bloom', hue: 8, sat: [18, 48],
-    nouns: ['Mesa', 'Dune', 'Bloom', 'Desert', 'Sand', 'Cactus', 'Coral', 'Canyon', 'Salmon', 'Terra'],
-    descs: ['Warm underfoot at noon', 'Sand catching evening color', 'A flower against the odds', 'Petals under a hard sun', 'Rock walls at sundown', 'Where the desert catches fire', 'Earth with a flush of pink'],
-  },
-  {
-    tab: 'Ocean Depth', hue: 205, sat: [16, 46],
-    nouns: ['Depth', 'Current', 'Reef', 'Tide', 'Wave', 'Trench', 'Horizon', 'Azure', 'Marine', 'Lagoon'],
-    descs: ['Foam catching morning light', 'Water still holding sunlight', 'Spray off a breaking wave', 'Color just past the shallows', 'Where the sunlight stops', 'Pressure, cold, and quiet', 'Past where anything is seen'],
-  },
-  {
-    tab: 'Nude Series', hue: 28, sat: [8, 28],
-    nouns: ['Nude', 'Sand', 'Beige', 'Honey', 'Buff', 'Toffee', 'Caramel', 'Cinnamon', 'Cocoa', 'Umber'],
-    descs: ['Barely a color at all', 'Warmth without weight', 'Linen left in the sun', 'Skin-warm and quiet', 'Sun-deepened and even', 'Spice settled into skin', 'The last, darkest warmth'],
-  },
-  {
-    // Sweeps brown -> orange -> red -> crimson as saturation rises (-10
-    // wraps past true red at 0deg into crimson just beyond it) rather
-    // than staying one fixed hue.
-    tab: 'Autumn Harvest', hueRange: [28, -10], sat: [18, 58],
-    nouns: ['Wheat', 'Pumpkin', 'Maple', 'Harvest', 'Cinnamon', 'Chestnut', 'Rust', 'Crimson', 'Mahogany', 'Bark'],
-    descs: ['Fields ready for cutting', 'Sap turning to syrup', 'Spice still on the branch', 'Roasted over open coals', 'Leaves giving up their green', 'The last color before the drop', 'The field after the frost'],
-  },
-  {
-    tab: 'Coastal Breeze', hue: 185, sat: [10, 36],
-    nouns: ['Foam', 'Aqua', 'Teal', 'Mist', 'Seaglass', 'Lagoon', 'Tidepool', 'Marine', 'Slate', 'Breeze'],
-    descs: ['Where the wave just broke', 'Shallow water over sand', 'Spray caught in morning light', 'Smoothed by years of tide', 'Color trapped between the rocks', 'Where the shallows finally end', 'The sea with the sun long gone'],
-  },
-  {
-    tab: 'Berry Wine', hue: 350, sat: [18, 50],
-    nouns: ['Berry', 'Raspberry', 'Cranberry', 'Wine', 'Merlot', 'Burgundy', 'Garnet', 'Rosewood', 'Grape', 'Plum'],
-    descs: ['The first ripening', 'Fruit still cool from the vine', 'Sweetness with a little bite', 'Fruit past its brightest red', 'Poured and left to breathe', 'Color aged in oak', 'The last color of the harvest'],
-  },
-]
-
-const TABS = CATEGORIES.map((c) => c.tab)
-
-// Built once at module load, not per-render — the palette lists never
-// change, only how many of each are currently shown.
-const PALETTES = Object.fromEntries(
-  CATEGORIES.map((cat) => [cat.tab, generatePalette({ ...cat, count: TOTAL_COUNT })])
-)
+const DEFAULT_HEX = '#4d0c12' // same red as the hamburger menu overlay background
 
 const FOOTER_PAGES_LEFT = [
   { label: 'Home',           href: '/',        type: 'link'   },
@@ -113,14 +25,11 @@ const FOOTER_PAGES_RIGHT = [
 
 export default function DiscoverPalettesPage() {
   const location = useLocation()
-  const [activeTab, setActiveTab] = useState(
-    TABS.includes(location.state?.tab) ? location.state.tab : TABS[0]
-  )
+  const initialHex = isValidHex(location.state?.hex || '') ? location.state.hex : DEFAULT_HEX
   const [fullMenuOpen, setFullMenuOpen] = useState(false)
-  // How many of each tab's already-generated TOTAL_COUNT swatches are
-  // currently shown — starts at PER_TAB_COUNT, "Discover More Palettes"
-  // bumps it to TOTAL_COUNT. No fetching involved either way.
-  const [visibleCountByTab, setVisibleCountByTab] = useState({})
+  const [hexInput, setHexInput] = useState(initialHex)
+  const [palette, setPalette] = useState(() => generateShadesFromHex(initialHex, TOTAL_COUNT))
+  const [hexError, setHexError] = useState(false)
   const giantTextRef = useRef(null)
 
   // Land on this page at the top, regardless of scroll position on the
@@ -146,32 +55,33 @@ export default function DiscoverPalettesPage() {
     return () => window.removeEventListener('mousemove', handleMove)
   }, [])
 
-  const handleTabClick = (tab) => {
-    if (tab === activeTab) return
-    setActiveTab(tab)
+  const runSearch = (hex) => {
+    if (!isValidHex(hex)) {
+      setHexError(true)
+      return
+    }
+    setHexError(false)
+    setHexInput(hex)
+    setPalette(generateShadesFromHex(hex, TOTAL_COUNT))
   }
 
-  // Menu items are this page's own tab names, not decorative Colormind
-  // names — picking one switches straight to that tab and closes the menu.
-  const handleMenuItemClick = (tab) => {
+  const handleHexSearch = (e) => {
+    e.preventDefault()
+    runSearch(hexInput)
+  }
+
+  // Hamburger menu items are hex codes, not category names — picking one
+  // opens that color's own light -> dark grid, same as typing it in.
+  const handleMenuItemClick = (hex) => {
     setFullMenuOpen(false)
-    handleTabClick(tab)
-  }
-
-  const visibleCount = visibleCountByTab[activeTab] ?? PER_TAB_COUNT
-  const paletteItems = PALETTES[activeTab].slice(0, visibleCount)
-  const isFullyShown = visibleCount >= TOTAL_COUNT
-
-  const loadMore = () => {
-    setVisibleCountByTab((prev) => ({ ...prev, [activeTab]: TOTAL_COUNT }))
+    runSearch(hex)
   }
 
   return (
     <div className="pp-page">
       {/* Capped at 9 — FullMenu's own entrance animation only staggers
-          up to 9 rows (see .fm-item:nth-child in FullMenu.css), same as
-          every other page's hamburger menu. */}
-      <FullMenu open={fullMenuOpen} onClose={() => setFullMenuOpen(false)} items={TABS.slice(0, 9)} onItemClick={handleMenuItemClick} />
+          up to 9 rows (see .fm-item:nth-child in FullMenu.css). */}
+      <FullMenu open={fullMenuOpen} onClose={() => setFullMenuOpen(false)} items={SAMPLE_HEX_CODES} onItemClick={handleMenuItemClick} />
 
       {/* ── Navigation — identical to PalettePage's ── */}
       <nav className="pp-nav">
@@ -199,35 +109,27 @@ export default function DiscoverPalettesPage() {
         </div>
       </nav>
 
-      {/* ── Tabs — filled chip style, different from PalettePage's
-          underlined text tabs on purpose (see DiscoverPalettesPage.css).
-          Wraps naturally so no separate mobile dropdown is needed. ── */}
-      <div className="dp-tabs-wrap">
-        {/* data-lenis-prevent — Lenis intercepts touch/wheel at the
-            window level to drive its own smooth scroll, which otherwise
-            fights this row's own native horizontal scroll on mobile
-            (two things trying to own the same gesture each frame is
-            what read as jitter while sliding). This attribute tells
-            Lenis to leave gestures starting inside this element alone. */}
-        <div className="dp-tabs" data-lenis-prevent>
-          {TABS.map(tab => (
-            <button
-              key={tab}
-              className={`dp-tab${activeTab === tab ? ' dp-tab--active' : ''}`}
-              onClick={() => handleTabClick(tab)}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-      </div>
+      {/* ── Hex search — the only way to choose what's shown below now.
+          Type a color and see it swept light -> dark; the hamburger menu
+          (9 sample hex codes) is the other way in. ── */}
+      <form className="dp-hex-search" onSubmit={handleHexSearch}>
+        <input
+          type="text"
+          className="dp-hex-input"
+          placeholder="Search a hex code, e.g. #7c1a2e"
+          value={hexInput}
+          onChange={(e) => { setHexInput(e.target.value); setHexError(false) }}
+          maxLength={7}
+        />
+        <button type="submit" className="dp-hex-btn">Search</button>
+      </form>
+      {hexError && <p className="dp-hex-error">Enter a valid hex code, like #7c1a2e or #b06.</p>}
 
-      {/* ── Palette grid — same swatch layout/fonts as PalettePage, low
-          -> high saturation across the whole set. "Discover More
-          Palettes" reveals the rest of this same generated set. ── */}
+      {/* ── Palette grid — same swatch layout/fonts as PalettePage, the
+          searched color swept light -> dark. ── */}
       <div className="pp-palette-grid">
-        {paletteItems.map((item) => (
-          <div key={item.name} className="pp-palette-item">
+        {palette.map((item) => (
+          <div key={item.color} className="pp-palette-item">
             <div className="pp-palette-swatch" style={{ background: item.color }} />
             <div className="pp-palette-text">
               <p className="pp-palette-desc">{item.desc}</p>
@@ -237,12 +139,6 @@ export default function DiscoverPalettesPage() {
           </div>
         ))}
       </div>
-
-      {!isFullyShown && (
-        <div className="pp-discover-wrap">
-          <button className="pp-discover-btn" onClick={loadMore}>Discover More Palettes</button>
-        </div>
-      )}
 
       {/* ── Footer — identical to PalettePage's ── */}
       <footer className="pp-footer">

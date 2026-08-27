@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import FullMenu from '../components/FullMenu'
-import { generatePalette, hexSaturation } from '../utils/generatePalette'
+import { generatePalette, hexSaturation, generateShadesFromHex, isValidHex } from '../utils/generatePalette'
 import bearImg from '../../images/bear.png'
 // Reused wholesale (not just the class names) so the nav, grid, fonts,
 // tab style, and footer are pixel-for-pixel consistent with
@@ -94,6 +94,9 @@ export default function SeasonalPalettesPage() {
   // starts at PER_TAB_COUNT, "Discover More Palettes" bumps it to the
   // tab's full length. No fetching involved either way.
   const [visibleCountByTab, setVisibleCountByTab] = useState({})
+  const [hexInput, setHexInput] = useState('')
+  const [searchPalette, setSearchPalette] = useState(null)
+  const [hexError, setHexError] = useState(false)
   const giantTextRef = useRef(null)
 
   useEffect(() => {
@@ -113,6 +116,9 @@ export default function SeasonalPalettesPage() {
   }, [])
 
   const handleTabClick = (tab) => {
+    setSearchPalette(null)
+    setHexInput('')
+    setHexError(false)
     if (tab === activeTab) return
     setActiveTab(tab)
   }
@@ -122,10 +128,26 @@ export default function SeasonalPalettesPage() {
     handleTabClick(tab)
   }
 
+  const handleHexSearch = (e) => {
+    e.preventDefault()
+    if (!isValidHex(hexInput)) {
+      setHexError(true)
+      return
+    }
+    setHexError(false)
+    setSearchPalette(generateShadesFromHex(hexInput, TOTAL_COUNT))
+  }
+
+  const clearSearch = () => {
+    setHexInput('')
+    setSearchPalette(null)
+    setHexError(false)
+  }
+
   const fullList = PALETTES[activeTab]
   const visibleCount = visibleCountByTab[activeTab] ?? PER_TAB_COUNT
-  const paletteItems = fullList.slice(0, visibleCount)
-  const isFullyShown = visibleCount >= fullList.length
+  const paletteItems = searchPalette ?? fullList.slice(0, visibleCount)
+  const isFullyShown = searchPalette ? true : visibleCount >= fullList.length
 
   const loadMore = () => {
     setVisibleCountByTab((prev) => ({ ...prev, [activeTab]: fullList.length }))
@@ -172,7 +194,7 @@ export default function SeasonalPalettesPage() {
           {TABS.map(tab => (
             <button
               key={tab}
-              className={`dp-tab${activeTab === tab ? ' dp-tab--active' : ''}`}
+              className={`dp-tab${!searchPalette && activeTab === tab ? ' dp-tab--active' : ''}`}
               onClick={() => handleTabClick(tab)}
             >
               {tab}
@@ -181,11 +203,34 @@ export default function SeasonalPalettesPage() {
         </div>
       </div>
 
-      {/* ── Palette grid — same swatch layout/fonts as PalettePage, low
-          -> high saturation across the whole set. ── */}
+      {/* ── Hex search — an alternative to picking a season: type a hex
+          code and see that same color swept light -> dark instead. ── */}
+      <form className="dp-hex-search" onSubmit={handleHexSearch}>
+        <input
+          type="text"
+          className="dp-hex-input"
+          placeholder="Search a hex code, e.g. #7c1a2e"
+          value={hexInput}
+          onChange={(e) => { setHexInput(e.target.value); setHexError(false) }}
+          maxLength={7}
+        />
+        <button type="submit" className="dp-hex-btn">Search</button>
+        {searchPalette && (
+          <button type="button" className="dp-hex-clear" onClick={clearSearch} aria-label="Clear search">
+            <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+              <path d="M1 1L10 10M10 1L1 10" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+            </svg>
+          </button>
+        )}
+      </form>
+      {hexError && <p className="dp-hex-error">Enter a valid hex code, like #7c1a2e or #b06.</p>}
+
+      {/* ── Palette grid — same swatch layout/fonts as PalettePage. A
+          season runs low -> high saturation; a hex search instead runs
+          light -> dark. ── */}
       <div className="pp-palette-grid">
         {paletteItems.map((item) => (
-          <div key={item.name} className="pp-palette-item">
+          <div key={item.color} className="pp-palette-item">
             <div className="pp-palette-swatch" style={{ background: item.color }} />
             <div className="pp-palette-text">
               <p className="pp-palette-desc">{item.desc}</p>
