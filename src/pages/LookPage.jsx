@@ -490,14 +490,14 @@ export default function LookPage() {
 
         <div className="look-img-container">
           <div className="look-img-frame">
-            <img src={imgSrc} alt="" className="look-img" style={isGreen && cardIndex === 6 ? { objectPosition: 'center 90%' } : undefined} />
+            <img loading="lazy" src={imgSrc} alt="" className="look-img" style={isGreen && cardIndex === 6 ? { objectPosition: 'center 90%' } : undefined} />
           </div>
 
           <div className="look-card-wrap">
             <div className="look-card">
               <span className="look-card-brand">KEROCOLOR</span>
               <div className="look-card-thumb">
-                <img
+                <img loading="lazy"
                   src={kImg}
                   alt=""
                   style={

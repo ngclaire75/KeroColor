@@ -341,7 +341,7 @@ export default function InspirationPage() {
               real frame is ready — heroFrameReady alone would go true as
               soon as the silent background autoplay above produces its
               first frame, well before the user has clicked anything. */}
-          <img
+          <img loading="lazy"
             src={heroPoster}
             alt=""
             className={`in-hero-poster-overlay${heroFrameReady && isPlaying ? ' in-hero-poster-overlay--hidden' : ''}`}

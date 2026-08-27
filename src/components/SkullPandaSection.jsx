@@ -16,7 +16,7 @@ export default function SkullPandaSection({ onSearch }) {
 
   return (
     <section className="skull-section">
-      <img src={badImg} alt="" className="skull-model-img" />
+      <img loading="lazy" src={badImg} alt="" className="skull-model-img" />
 
       <div className="skull-color-rows">
         {COLOR_ITEMS.map(({ label, colorFamily, filter }) => (
@@ -25,7 +25,7 @@ export default function SkullPandaSection({ onSearch }) {
             className="skull-color-row"
             onClick={() => handleClick(colorFamily, label)}
           >
-            <img
+            <img loading="lazy"
               src={folderImg}
               alt=""
               className="skull-folder-img"

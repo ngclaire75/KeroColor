@@ -221,7 +221,7 @@ export default function PalettePage() {
         <div className="pp-nav-center">
           <Link to="/" className="pp-nav-brand">
             <span className="pp-nav-brand-text">KEROCOLOR</span>
-            <img src={bearImg} alt="KeroColor" className="pp-nav-brand-img" />
+            <img loading="lazy" src={bearImg} alt="KeroColor" className="pp-nav-brand-img" />
           </Link>
         </div>
 
@@ -276,7 +276,7 @@ export default function PalettePage() {
 
       {/* ── Feature image ── */}
       <div className="pp-feature">
-        <img src={content.heroImg} alt="" className={`pp-feature-img${activeTab === 'Seasonal Edition' ? ' pp-feature-img--spring' : ''}`} />
+        <img loading="lazy" src={content.heroImg} alt="" className={`pp-feature-img${activeTab === 'Seasonal Edition' ? ' pp-feature-img--spring' : ''}`} />
       </div>
 
       {/* ── Featured content ── */}

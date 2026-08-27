@@ -109,7 +109,7 @@ export default function DiscoverPalettesPage() {
             {/* Back to the All tab on Color Palette, not home — this page
                 is reached from there, so the bear leads back to it. */}
             <Link to="/palette" state={{ tab: 'All' }}>
-              <img src={bearImg} alt="KeroColor" className="pp-nav-brand-img" />
+              <img loading="lazy" src={bearImg} alt="KeroColor" className="pp-nav-brand-img" />
             </Link>
           </div>
         </div>

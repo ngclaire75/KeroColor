@@ -91,23 +91,23 @@ export default function EditorialPage() {
 
         <div className="ed-intro-media">
           <div className="ed-intro-media-big">
-            <img src={edt5} alt="" />
+            <img loading="lazy" src={edt5} alt="" />
           </div>
 
           <div className="ed-intro-media-col">
             <div className="ed-intro-grid-row ed-intro-grid-row--images">
-              <img src={edp1} alt="" />
+              <img loading="lazy" src={edp1} alt="" />
               <div className="ed-intro-img-zoom">
-                <img src={edp2} alt="" />
+                <img loading="lazy" src={edp2} alt="" />
               </div>
-              <img src={edp3} alt="" className="ed-intro-img--edp3" />
+              <img loading="lazy" src={edp3} alt="" className="ed-intro-img--edp3" />
             </div>
             <div className="ed-intro-grid-row ed-intro-grid-row--bottom">
               <div className="ed-intro-red-block">
                 <p>The Science Behind<br />Color Analysis</p>
               </div>
               <div className="ed-intro-phone-block">
-                <img src={edt6} alt="" />
+                <img loading="lazy" src={edt6} alt="" />
               </div>
             </div>
           </div>

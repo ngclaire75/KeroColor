@@ -111,7 +111,7 @@ export default function HoverColorPicker({ src, alt }) {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      <img src={src} alt={alt} />
+      <img loading="lazy" src={src} alt={alt} />
       <canvas ref={canvasRef} className="hcp-canvas" />
       {tooltip && (
         <div

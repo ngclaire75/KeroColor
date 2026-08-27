@@ -9,18 +9,18 @@ export default function Hero() {
   return (
     <section className="hero">
       <div className="hero-img">
-        <img src={cakeImg} alt="Model" />
+        <img loading="lazy" src={cakeImg} alt="Model" />
       </div>
 
       <div className="hero-center">
-        <img src={starImg}   alt="" className="star star-tl"     aria-hidden="true" />
-        <img src={starImg}   alt="" className="star star-tr"     aria-hidden="true" />
-        <img src={starImg}   alt="" className="star star-mid"    aria-hidden="true" />
-        <img src={starImg}   alt="" className="star star-bl"     aria-hidden="true" />
-        <img src={starImg}   alt="" className="star star-br"     aria-hidden="true" />
-        <img src={ribbonImg} alt="" className="ribbon ribbon-cl" aria-hidden="true" />
-        <img src={ribbonImg} alt="" className="ribbon ribbon-cl2" aria-hidden="true" />
-        <img src={ribbonImg} alt="" className="ribbon ribbon-cr" aria-hidden="true" />
+        <img loading="lazy" src={starImg}   alt="" className="star star-tl"     aria-hidden="true" />
+        <img loading="lazy" src={starImg}   alt="" className="star star-tr"     aria-hidden="true" />
+        <img loading="lazy" src={starImg}   alt="" className="star star-mid"    aria-hidden="true" />
+        <img loading="lazy" src={starImg}   alt="" className="star star-bl"     aria-hidden="true" />
+        <img loading="lazy" src={starImg}   alt="" className="star star-br"     aria-hidden="true" />
+        <img loading="lazy" src={ribbonImg} alt="" className="ribbon ribbon-cl" aria-hidden="true" />
+        <img loading="lazy" src={ribbonImg} alt="" className="ribbon ribbon-cl2" aria-hidden="true" />
+        <img loading="lazy" src={ribbonImg} alt="" className="ribbon ribbon-cr" aria-hidden="true" />
 
         <p className="hero-script">
           color that<br />
@@ -34,7 +34,7 @@ export default function Hero() {
       </div>
 
       <div className="hero-img">
-        <img src={drinkImg} alt="Model" />
+        <img loading="lazy" src={drinkImg} alt="Model" />
       </div>
     </section>
   )

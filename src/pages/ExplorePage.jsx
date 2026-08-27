@@ -76,11 +76,11 @@ export default function ExplorePage() {
         </nav>
         <div className="explore-main">
           <div className="explore-left-group">
-            <img src={img2} alt="" className="explore-img--left" />
+            <img loading="lazy" src={img2} alt="" className="explore-img--left" />
             <span className="explore-embrace">EMBRACE</span>
           </div>
-          <img src={img1} alt="" className="explore-img explore-img--center" />
-          <img src={img3} alt="" className="explore-img explore-img--right" />
+          <img loading="lazy" src={img1} alt="" className="explore-img explore-img--center" />
+          <img loading="lazy" src={img3} alt="" className="explore-img explore-img--right" />
           <div className="explore-labels">
             <span>NEW IN</span>
             <span>/PALETTE - 25/</span>

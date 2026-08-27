@@ -121,7 +121,7 @@ export default function EntryConsentModal({ open, onAgree }) {
           </svg>
         </button>
         <div className="ecm-image">
-          <img src={trail2} alt="" />
+          <img loading="lazy" src={trail2} alt="" />
         </div>
         <div className="ecm-content">
           <h2 className="ecm-heading">Before You Continue</h2>

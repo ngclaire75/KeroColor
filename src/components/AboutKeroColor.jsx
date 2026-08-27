@@ -52,7 +52,7 @@ export default function AboutKeroColor() {
           <div key={c.title} className={`ak-card${c.featured ? ' ak-card--featured' : ''}`}>
             <h3 className="ak-card-title">{c.title}</h3>
             <div className="ak-card-img-wrap">
-              <img src={c.img} alt={c.title} className="ak-card-img" />
+              <img loading="lazy" src={c.img} alt={c.title} className="ak-card-img" />
             </div>
             <p className="ak-card-body">{c.body}</p>
           </div>
