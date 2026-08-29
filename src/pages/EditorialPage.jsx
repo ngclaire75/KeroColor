@@ -140,7 +140,7 @@ export default function EditorialPage() {
           <img src={z10} alt="" className="ed-gala-text-bg" loading="lazy" decoding="async" />
           <div className="ed-gala-text-overlay" />
           <div className="ed-gala-text-content">
-            <h2 className="ed-intro-heading">The 2016 "Manus x Machina: Fashion in an Age of Technology" Gala</h2>
+            <h2 className="ed-intro-heading">The "Manus x Machina: Fashion in an Age of Technology" Gala</h2>
             <p className="ed-gala-body">Zendaya wore a one-shoulder bronze sequined Michael Kors dress, accompanied by a sleek bob and brown-toned smoky eye. Vogue's beauty retrospective specifically notes the bronze dress and coordinated makeup. The shifting sheen brings warmth, movement, and dimension to the look.</p>
           </div>
         </div>
