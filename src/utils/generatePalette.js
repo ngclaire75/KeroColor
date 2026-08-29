@@ -102,18 +102,14 @@ function hexToHsl(hex) {
   return [h, s * 100, l * 100]
 }
 
-// desc is now the swatch's own RGB and CMYK values — genuinely
-// specific to that exact hex (not a word-bank sentence), and
-// automatically unique across a grid as long as the colors themselves
-// are (already guaranteed by usedColors in generateShadesFromHex), so
-// no separate uniqueness bookkeeping is needed for desc at all.
-function rgbCmykText(hex) {
+// desc is now the swatch's own RGB values — genuinely specific to that
+// exact hex (not a word-bank sentence), and automatically unique across
+// a grid as long as the colors themselves are (already guaranteed by
+// usedColors in generateShadesFromHex), so no separate uniqueness
+// bookkeeping is needed for desc at all.
+function rgbText(hex) {
   const [r, g, b] = hexToRgb(hex)
-  const k = 1 - Math.max(r, g, b) / 255
-  const toPct = (channel) => Math.round(k < 1 ? ((1 - channel / 255 - k) / (1 - k)) * 100 : 0)
-  const c = toPct(r), m = toPct(g), y = toPct(b)
-  const kPct = Math.round(k * 100)
-  return `RGB ${r}, ${g}, ${b} · CMYK ${c}%, ${m}%, ${y}%, ${kPct}%`
+  return `RGB ${r}, ${g}, ${b}`
 }
 
 // The real, recognized name of the closest color in WIKI_COLOR_NAMES by
@@ -208,7 +204,7 @@ export function generateShadesFromHex(inputHex, count = 45) {
   const describeUnique = (color) => {
     const name = nearestColorName(color, usedNames)
     usedNames.add(name)
-    return { name, desc: rgbCmykText(color) }
+    return { name, desc: rgbText(color) }
   }
 
   const pushUnique = (l, direction) => {
