@@ -147,10 +147,9 @@ export default function DiscoverPalettesPage() {
           <div key={item.color} className="pp-palette-item">
             <div className="pp-palette-swatch" style={{ background: item.color }} />
             <div className="pp-palette-text">
-              {/* Just the hex now — name/desc removed, sized to match
-                  where .pp-palette-name used to read (see .dp-hex-big
-                  in DiscoverPalettesPage.css). */}
-              <p className="pp-palette-hex dp-hex-big">{item.color}</p>
+              <p className="pp-palette-desc">{item.desc}</p>
+              <h3 className="pp-palette-name">{item.name}</h3>
+              <p className="pp-palette-hex">{item.color}</p>
             </div>
           </div>
         ))}
