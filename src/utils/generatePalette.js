@@ -6,6 +6,8 @@
 // convention for the Discover Palettes pages; lightness is varied for
 // visual richness but isn't part of the ordering.
 
+import { WIKI_COLOR_NAMES } from './colorNames.js'
+
 const ADJECTIVES = [
   'Deep', 'Soft', 'Pale', 'Warm', 'Cool', 'Muted', 'Rich', 'Dusty',
   'Faded', 'Hushed', 'Quiet', 'Bold', 'Sheer', 'Subtle',
@@ -100,40 +102,36 @@ function hexToHsl(hex) {
   return [h, s * 100, l * 100]
 }
 
-// Real, specific color-family vocabulary (the way a paint catalog names
-// swatches — Mahogany, Blush, Espresso — not a generic light/dark scale
-// reused across every hue). Each family carries both nouns AND modifier
-// words particular to that family (Mossy/Woodland for greens, Molten/
-// Burnished for coppers, Twilight/Velvet for purples, ...) instead of a
-// single Deep/Rich/Soft/Pale scale applied uniformly to any color. Near-
-// black and near-grey/near-white swatches get their own vocabulary
-// regardless of hue — a very dark red and a very dark blue both just
-// read as "near-black" to the eye, which is why PalettePage's own hand-
-// written names include things like "Night Rider" and "Espresso Dark"
-// for colors that aren't red or brown at all.
+// Modifier vocabulary per hue family, specific to what that family
+// actually feels like (Mossy/Woodland for greens, Molten/Burnished for
+// coppers, Twilight/Velvet for purples, ...) instead of a single Deep/
+// Rich/Soft/Pale scale applied uniformly to any color — used to build
+// the desc sentence. Near-black and near-grey/near-white swatches get
+// their own vocabulary regardless of hue, since a very dark red and a
+// very dark blue both just read as "near-black" to the eye.
 const HUE_FAMILIES = [
-  { max: 12,  nouns: ['Crimson', 'Cherry', 'Scarlet'], mods: ['Smoldering', 'Blazing', 'Sunburnt', 'Molten'] },
-  { max: 30,  nouns: ['Mahogany', 'Rust', 'Terracotta', 'Sienna'], mods: ['Charred', 'Weathered', 'Sunbaked', 'Burnished'] },
-  { max: 45,  nouns: ['Amber', 'Copper', 'Ginger'], mods: ['Molten', 'Burnished', 'Glowing', 'Honeyed'] },
-  { max: 65,  nouns: ['Gold', 'Honey', 'Mustard'], mods: ['Burnt', 'Toasted', 'Gilded', 'Sunlit'] },
-  { max: 90,  nouns: ['Olive', 'Moss'], mods: ['Shadowed', 'Weathered', 'Mossy', 'Sunlit'] },
-  { max: 150, nouns: ['Sage', 'Forest', 'Ivy'], mods: ['Shadowed', 'Woodland', 'Mossy', 'Misted'] },
-  { max: 195, nouns: ['Teal', 'Lagoon', 'Jade'], mods: ['Murky', 'Oceanic', 'Glassy', 'Misted'] },
-  { max: 225, nouns: ['Azure', 'Denim', 'Slate'], mods: ['Stormy', 'Weathered', 'Faded', 'Hazy'] },
-  { max: 255, nouns: ['Indigo', 'Navy', 'Cobalt'], mods: ['Midnight', 'Twilight', 'Stormy', 'Hazy'] },
-  { max: 285, nouns: ['Violet', 'Plum', 'Aubergine'], mods: ['Smoldering', 'Twilight', 'Velvet', 'Misted'] },
-  { max: 320, nouns: ['Orchid', 'Mauve', 'Lilac'], mods: ['Twilight', 'Powdery', 'Faded', 'Sunlit'] },
-  { max: 350, nouns: ['Rose', 'Blush', 'Berry'], mods: ['Smoldering', 'Sunkissed', 'Powdery', 'Sunlit'] },
-  { max: 360, nouns: ['Crimson', 'Cherry', 'Scarlet'], mods: ['Smoldering', 'Blazing', 'Sunburnt', 'Molten'] },
+  { max: 12,  mods: ['Smoldering', 'Blazing', 'Sunburnt', 'Molten'] },
+  { max: 30,  mods: ['Charred', 'Weathered', 'Sunbaked', 'Burnished'] },
+  { max: 45,  mods: ['Molten', 'Burnished', 'Glowing', 'Honeyed'] },
+  { max: 65,  mods: ['Burnt', 'Toasted', 'Gilded', 'Sunlit'] },
+  { max: 90,  mods: ['Shadowed', 'Weathered', 'Mossy', 'Sunlit'] },
+  { max: 150, mods: ['Shadowed', 'Woodland', 'Mossy', 'Misted'] },
+  { max: 195, mods: ['Murky', 'Oceanic', 'Glassy', 'Misted'] },
+  { max: 225, mods: ['Stormy', 'Weathered', 'Faded', 'Hazy'] },
+  { max: 255, mods: ['Midnight', 'Twilight', 'Stormy', 'Hazy'] },
+  { max: 285, mods: ['Smoldering', 'Twilight', 'Velvet', 'Misted'] },
+  { max: 320, mods: ['Twilight', 'Powdery', 'Faded', 'Sunlit'] },
+  { max: 350, mods: ['Smoldering', 'Sunkissed', 'Powdery', 'Sunlit'] },
+  { max: 360, mods: ['Smoldering', 'Blazing', 'Sunburnt', 'Molten'] },
 ]
-const NEAR_BLACK = { nouns: ['Espresso', 'Onyx', 'Charcoal', 'Raven', 'Ebony'], mods: ['Smoky', 'Shadowed', 'Charred', 'Midnight', 'Inky'] }
-const NEAR_GREY = { nouns: ['Stone', 'Ash', 'Pewter', 'Fog'], mods: ['Weathered', 'Overcast', 'Misted', 'Faded'] }
-const NEAR_WHITE = { nouns: ['Linen', 'Cream', 'Ivory', 'Powder'], mods: ['Sunwashed', 'Powdery', 'Bleached', 'Hazy'] }
+const NEAR_BLACK_MODS = ['Smoky', 'Shadowed', 'Charred', 'Midnight', 'Inky']
+const NEAR_GREY_MODS = ['Weathered', 'Overcast', 'Misted', 'Faded']
+const NEAR_WHITE_MODS = ['Sunwashed', 'Powdery', 'Bleached', 'Hazy']
 
-function colorFamily(h, s, l) {
-  if (l < 14) return NEAR_BLACK
-  if (s < 12) return l > 80 ? NEAR_WHITE : NEAR_GREY
-  return HUE_FAMILIES.find((b) => h <= b.max) ?? HUE_FAMILIES[HUE_FAMILIES.length - 1]
+function familyMods(h, s, l) {
+  if (l < 14) return NEAR_BLACK_MODS
+  if (s < 12) return l > 80 ? NEAR_WHITE_MODS : NEAR_GREY_MODS
+  return (HUE_FAMILIES.find((b) => h <= b.max) ?? HUE_FAMILIES[HUE_FAMILIES.length - 1]).mods
 }
 
 // A word describing what the hue itself feels like, for the desc's own
@@ -159,25 +157,55 @@ function hueTexture(h, s, l) {
 // 'cast', and 'note' stay as their own options.
 const TONE_WORDS = ['shade', 'shade', 'shade', 'glow', 'cast', 'note']
 
-// Builds a name/desc pair from a swatch's own h/s/l, cycling through
-// every noun x modifier combo in that hue family's own word bank
-// (comboIdx counts up across noun then modifier, so it exhausts every
-// pairing before any repeats) instead of a universal Deep/Rich/Soft/
-// Pale scale — none of those words appear anywhere here. desc uses a
-// different modifier (offset by one) than the name, so the two don't
-// just restate each other.
-function describeShade(h, s, l, comboIdx) {
-  const family = colorFamily(h, s, l)
-  const nounIdx = comboIdx % family.nouns.length
-  const modIdx = Math.floor(comboIdx / family.nouns.length) % family.mods.length
-  const name = comboIdx % 3 === 2
-    ? `${family.nouns[nounIdx]} ${family.mods[modIdx]}`
-    : `${family.mods[modIdx]} ${family.nouns[nounIdx]}`
-  const descModIdx = (modIdx + 1) % family.mods.length
+// Builds this swatch's desc from its own h/s/l — a family-specific
+// modifier plus what the hue itself feels like plus a tone word, cycled
+// by comboIdx for variety. True cartesian counting (not two independent
+// % operations, whose combined period is only lcm(mods.length,
+// TONE_WORDS.length) — 12 for a 4-word mods list, which collided with
+// this page's own 12-item grid) so all mods.length * TONE_WORDS.length
+// combos get used before any repeat.
+function describeShadeText(h, s, l, comboIdx) {
+  const mods = familyMods(h, s, l)
+  const modIdx = comboIdx % mods.length
+  const toneIdx = Math.floor(comboIdx / mods.length) % TONE_WORDS.length
   const hueWord = hueTexture(h, s, l)
-  const tone = TONE_WORDS[comboIdx % TONE_WORDS.length]
-  const desc = `${family.mods[descModIdx]} ${hueWord} ${tone}`
-  return { name, desc }
+  const tone = TONE_WORDS[toneIdx]
+  return `${mods[modIdx]} ${hueWord} ${tone}`
+}
+
+// The real, recognized name of the closest color in WIKI_COLOR_NAMES by
+// RGB distance — not an invented word-bank combination. usedNames is
+// checked so two swatches in the same grid never share a name; with
+// only up to ~12 swatches against 764 real names, this almost always
+// lands on a genuinely close match rather than needing to skip far
+// down the list.
+// Real Wikipedia names occasionally include one of these words on their
+// own merits ("Deep Sky Blue", "Pale Cerulean") — skipped the same as
+// an already-used name, in favor of the next-nearest real match, since
+// the no-soft/rich/deep/deepest/palest rule applies to whatever ends up
+// as the actual displayed name, not just the invented word banks.
+const BANNED_NAME_WORDS = /\b(soft|rich|deep|deepest|palest)\b/i
+// Also skips any real name containing a digit ("Olive Drab #7") — no
+// numbers allowed in the displayed name.
+const HAS_DIGIT = /[0-9]/
+function nearestColorName(hex, usedNames) {
+  const [r, g, b] = hexToRgb(hex)
+  let best = null
+  let bestDist = Infinity
+  for (const [candHex, candName] of WIKI_COLOR_NAMES) {
+    if (usedNames.has(candName) || BANNED_NAME_WORDS.test(candName) || HAS_DIGIT.test(candName)) continue
+    const rr = parseInt(candHex.slice(0, 2), 16)
+    const gg = parseInt(candHex.slice(2, 4), 16)
+    const bb = parseInt(candHex.slice(4, 6), 16)
+    const dist = (r - rr) ** 2 + (g - gg) ** 2 + (b - bb) ** 2
+    if (dist < bestDist) {
+      bestDist = dist
+      best = candName
+    }
+  }
+  // Unreachable in practice (764 names vs. a grid of at most ~12), but
+  // never return nothing.
+  return best ?? WIKI_COLOR_NAMES[0][1]
 }
 
 export function isValidHex(value) {
@@ -218,8 +246,8 @@ export function generateShadesFromHex(inputHex, count = 45) {
   const isLightInput = inputLight >= 65
   const hexIndex = Math.min(LIGHTER_STEPS, count - 1)
   const items = []
-  // Shared across every push below (not reset per-loop) so the name/
-  // desc variety (see describeShade) stays spread across the whole
+  // Shared across every push below (not reset per-loop) so the desc
+  // variety (see describeShadeText) stays spread across the whole
   // grid instead of restarting at each segment.
   let idx = 0
 
@@ -238,22 +266,26 @@ export function generateShadesFromHex(inputHex, count = 45) {
   // override collapses several steps into the same small word bank).
   const usedNames = new Set()
   const usedDescs = new Set()
-  const describeUnique = (l) => {
-    let result = describeShade(h, sat, l, idx)
+  // name: the real, closest-matching color name from WIKI_COLOR_NAMES
+  // (nearestColorName already skips names in usedNames, so it's never a
+  // duplicate — no numbered suffix needed, since 764 real names is far
+  // more than this grid ever needs). desc: still generated from h/s/l,
+  // retried at a later comboIdx on collision (the mods x tone combo
+  // space is comfortably larger than any count this page actually uses,
+  // so this never needs to fall back to a numbered suffix either).
+  const describeUnique = (l, color) => {
+    const name = nearestColorName(color, usedNames)
+    usedNames.add(name)
+    let desc = describeShadeText(h, sat, l, idx)
     let attempts = 0
-    while ((usedNames.has(result.name) || usedDescs.has(result.desc)) && attempts < 40) {
+    while (usedDescs.has(desc) && attempts < 40) {
       idx++
-      result = describeShade(h, sat, l, idx)
+      desc = describeShadeText(h, sat, l, idx)
       attempts++
     }
-    // Truly exhausted the word bank (only possible with an unusually
-    // large count) — a numbered suffix beats a silent duplicate.
-    if (usedNames.has(result.name)) result = { ...result, name: `${result.name} ${Math.floor(idx / 40) + 2}` }
-    if (usedDescs.has(result.desc)) result = { ...result, desc: `${result.desc}, ${Math.floor(idx / 40) + 2}` }
-    usedNames.add(result.name)
-    usedDescs.add(result.desc)
+    usedDescs.add(desc)
     idx++
-    return result
+    return { name, desc }
   }
 
   const pushUnique = (l, direction) => {
@@ -265,7 +297,7 @@ export function generateShadesFromHex(inputHex, count = 45) {
       attempts++
     }
     usedColors.add(color)
-    items.push({ color, ...describeUnique(l) })
+    items.push({ color, ...describeUnique(l, color) })
   }
 
   for (let i = 0; i < hexIndex; i++) {
@@ -273,7 +305,7 @@ export function generateShadesFromHex(inputHex, count = 45) {
     pushUnique(l, 1)
   }
 
-  items.push({ color: hex, ...describeUnique(inputLight) })
+  items.push({ color: hex, ...describeUnique(inputLight, hex) })
 
   const darkSteps = isLightInput ? 0 : count - 1 - hexIndex
   for (let i = 1; i <= darkSteps; i++) {
