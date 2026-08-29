@@ -136,14 +136,36 @@ function colorFamily(h, s, l) {
   return HUE_FAMILIES.find((b) => h <= b.max) ?? HUE_FAMILIES[HUE_FAMILIES.length - 1]
 }
 
+// A word describing what the hue itself feels like, for the desc's own
+// sentence — kept specific to that hue family, not a brightness scale.
+function hueTexture(h, s, l) {
+  if (l < 14) return 'near-black'
+  if (s < 12) return l > 80 ? 'warm neutral' : 'muted grey'
+  if (h <= 12 || h > 350) return 'crimson'
+  if (h <= 30) return 'earthy brown'
+  if (h <= 45) return 'copper'
+  if (h <= 65) return 'golden'
+  if (h <= 90) return 'olive'
+  if (h <= 150) return 'sage green'
+  if (h <= 195) return 'teal'
+  if (h <= 225) return 'denim blue'
+  if (h <= 255) return 'indigo'
+  if (h <= 285) return 'plum-wine'
+  if (h <= 320) return 'orchid'
+  return 'berry'
+}
+
+// 'tone' and 'hue' (the literal words) replaced with 'shade' — 'glow',
+// 'cast', and 'note' stay as their own options.
+const TONE_WORDS = ['shade', 'shade', 'shade', 'glow', 'cast', 'note']
+
 // Builds a name/desc pair from a swatch's own h/s/l, cycling through
 // every noun x modifier combo in that hue family's own word bank
 // (comboIdx counts up across noun then modifier, so it exhausts every
 // pairing before any repeats) instead of a universal Deep/Rich/Soft/
 // Pale scale — none of those words appear anywhere here. desc uses a
 // different modifier (offset by one) than the name, so the two don't
-// just restate each other — always ending in "shade" (not a rotating
-// tone/hue/glow word bank).
+// just restate each other.
 function describeShade(h, s, l, comboIdx) {
   const family = colorFamily(h, s, l)
   const nounIdx = comboIdx % family.nouns.length
@@ -152,7 +174,9 @@ function describeShade(h, s, l, comboIdx) {
     ? `${family.nouns[nounIdx]} ${family.mods[modIdx]}`
     : `${family.mods[modIdx]} ${family.nouns[nounIdx]}`
   const descModIdx = (modIdx + 1) % family.mods.length
-  const desc = `${family.mods[descModIdx]} shade`
+  const hueWord = hueTexture(h, s, l)
+  const tone = TONE_WORDS[comboIdx % TONE_WORDS.length]
+  const desc = `${family.mods[descModIdx]} ${hueWord} ${tone}`
   return { name, desc }
 }
 
