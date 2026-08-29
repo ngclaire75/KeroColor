@@ -100,21 +100,59 @@ function hexToHsl(hex) {
   return [h, s * 100, l * 100]
 }
 
-// Reasonably wide hue buckets — precision doesn't matter here, this is
-// just for naming, not color math.
-const HUE_NAMES = [
-  { max: 12, name: 'Ruby' }, { max: 40, name: 'Amber' }, { max: 65, name: 'Gold' },
-  { max: 85, name: 'Olive' }, { max: 150, name: 'Sage' }, { max: 170, name: 'Emerald' },
-  { max: 195, name: 'Teal' }, { max: 225, name: 'Azure' }, { max: 255, name: 'Indigo' },
-  { max: 285, name: 'Violet' }, { max: 320, name: 'Orchid' }, { max: 350, name: 'Rose' },
-  { max: 360, name: 'Ruby' },
+// Real, specific color-family names (the way a paint catalog names
+// swatches — Mahogany, Blush, Espresso — not generic gem words), a few
+// per hue band so consecutive swatches in the same rough hue don't all
+// land on the same noun. Near-black and near-grey/near-white swatches
+// get their own vocabulary regardless of hue — a very dark red and a
+// very dark blue both just read as "near-black" to the eye, which is
+// why PalettePage's own hand-written names include things like "Night
+// Rider" and "Espresso Dark" for colors that aren't red or brown at all.
+const HUE_FAMILIES = [
+  { max: 12,  names: ['Crimson', 'Cherry', 'Scarlet'] },
+  { max: 30,  names: ['Mahogany', 'Rust', 'Terracotta', 'Sienna'] },
+  { max: 45,  names: ['Amber', 'Copper', 'Ginger'] },
+  { max: 65,  names: ['Gold', 'Honey', 'Mustard'] },
+  { max: 90,  names: ['Olive', 'Moss'] },
+  { max: 150, names: ['Sage', 'Forest', 'Ivy'] },
+  { max: 195, names: ['Teal', 'Lagoon', 'Jade'] },
+  { max: 225, names: ['Azure', 'Denim', 'Slate'] },
+  { max: 255, names: ['Indigo', 'Navy', 'Cobalt'] },
+  { max: 285, names: ['Violet', 'Plum', 'Aubergine'] },
+  { max: 320, names: ['Orchid', 'Mauve', 'Lilac'] },
+  { max: 350, names: ['Rose', 'Blush', 'Berry'] },
+  { max: 360, names: ['Crimson', 'Cherry', 'Scarlet'] },
 ]
+const NEAR_BLACK_NAMES = ['Espresso', 'Onyx', 'Charcoal', 'Raven', 'Ebony']
+const NEAR_GREY_NAMES = ['Stone', 'Ash', 'Pewter', 'Fog']
+const NEAR_WHITE_NAMES = ['Linen', 'Cream', 'Ivory', 'Powder']
 
-function hueName(h) {
-  return HUE_NAMES.find((b) => h <= b.max)?.name ?? 'Rose'
+// A word describing what the hue itself feels like — used to build
+// specific-reading descriptions ("Deep plum-wine richness") instead of
+// a generic "[adjective] [hue] tone" formula repeated for every swatch.
+function hueTexture(h) {
+  if (h <= 12 || h > 350) return 'crimson'
+  if (h <= 30) return 'earthy brown'
+  if (h <= 45) return 'copper'
+  if (h <= 65) return 'golden'
+  if (h <= 90) return 'olive'
+  if (h <= 150) return 'sage green'
+  if (h <= 195) return 'teal'
+  if (h <= 225) return 'denim blue'
+  if (h <= 255) return 'indigo'
+  if (h <= 285) return 'plum-wine'
+  if (h <= 320) return 'orchid'
+  return 'berry'
 }
 
-function lightnessDescriptor(l) {
+function colorNoun(h, s, l, idx) {
+  if (l < 14) return NEAR_BLACK_NAMES[idx % NEAR_BLACK_NAMES.length]
+  if (s < 12) return (l > 80 ? NEAR_WHITE_NAMES : NEAR_GREY_NAMES)[idx % NEAR_GREY_NAMES.length]
+  const family = HUE_FAMILIES.find((b) => h <= b.max) ?? HUE_FAMILIES[HUE_FAMILIES.length - 1]
+  return family.names[idx % family.names.length]
+}
+
+function lightnessAdjective(l) {
   if (l < 15) return 'Deepest'
   if (l < 28) return 'Deep'
   if (l < 42) return 'Rich'
@@ -124,15 +162,28 @@ function lightnessDescriptor(l) {
   return 'Palest'
 }
 
-// Describes a swatch's actual saturation, the same way lightnessDescriptor
-// above describes its actual lightness — both used to build the name/desc
-// straight from that swatch's own real HSL values, not a rotating list of
-// words unrelated to the color itself.
-function saturationDescriptor(s) {
-  if (s < 25) return 'muted'
-  if (s < 40) return 'soft'
-  if (s < 55) return 'balanced'
-  return 'vivid'
+const LIGHT_TEXTURE = ['warm', 'soft', 'rich', 'muted', 'dusty', 'quiet']
+const TONE_WORDS = ['tone', 'shade', 'hue', 'richness', 'depth', 'warmth']
+
+// Builds a name/desc pair straight from a swatch's own h/s/l — name is
+// [adjective] [specific color noun] (occasionally reversed, like
+// PalettePage's own "Espresso Dark"), desc varies its sentence shape by
+// idx instead of repeating one fixed "[adjective], [tone] [hue] tone"
+// formula for every single swatch.
+function describeShade(h, s, l, idx) {
+  const noun = colorNoun(h, s, l, idx)
+  const adj = lightnessAdjective(l)
+  const name = idx % 3 === 2 ? `${noun} ${adj}` : `${adj} ${noun}`
+  const texture = LIGHT_TEXTURE[idx % LIGHT_TEXTURE.length]
+  const hueWord = hueTexture(h)
+  const tone = TONE_WORDS[idx % TONE_WORDS.length]
+  const descTemplates = [
+    `${adj} ${texture} ${hueWord} ${tone}`,
+    `${texture[0].toUpperCase()}${texture.slice(1)}, ${adj.toLowerCase()} ${hueWord} ${tone}`,
+    `${adj} ${hueWord} ${tone}`,
+    `A ${texture} ${hueWord} ${tone}`,
+  ]
+  return { name, desc: descTemplates[idx % descTemplates.length] }
 }
 
 export function isValidHex(value) {
@@ -173,18 +224,10 @@ export function generateShadesFromHex(inputHex, count = 45) {
   const isLightInput = inputLight >= 65
   const hexIndex = Math.min(LIGHTER_STEPS, count - 1)
   const items = []
-  const hue = hueName(h)
-  const satWord = saturationDescriptor(sat)
-  // Both name and desc are computed straight from each swatch's own
-  // actual lightness (and the shared hue/saturation) — nothing rotated
-  // from a fixed word list unrelated to the real color.
-  const describe = (l) => {
-    const lightWord = lightnessDescriptor(l)
-    return {
-      name: `${lightWord} ${hue}`,
-      desc: `A ${satWord}, ${lightWord.toLowerCase()} ${hue.toLowerCase()} tone.`,
-    }
-  }
+  // Shared across every push below (not reset per-loop) so the name/
+  // desc variety (see describeShade) stays spread across the whole
+  // grid instead of restarting at each segment.
+  let idx = 0
 
   // Guards against two steps landing on the exact same hex — the eased
   // curve below (and the small LIGHT_STEP increments above) can put two
@@ -203,7 +246,8 @@ export function generateShadesFromHex(inputHex, count = 45) {
       attempts++
     }
     usedColors.add(color)
-    items.push({ color, ...describe(l) })
+    items.push({ color, ...describeShade(h, sat, l, idx) })
+    idx++
   }
 
   for (let i = 0; i < hexIndex; i++) {
@@ -211,14 +255,15 @@ export function generateShadesFromHex(inputHex, count = 45) {
     pushUnique(l, 1)
   }
 
-  items.push({ color: hex, ...describe(inputLight) })
+  items.push({ color: hex, ...describeShade(h, sat, inputLight, idx) })
+  idx++
 
   const darkSteps = isLightInput ? 0 : count - 1 - hexIndex
   for (let i = 1; i <= darkSteps; i++) {
     const t = i / Math.max(darkSteps, 1)
     // Eased (t^1.4), not linear — a milder curve than t^2 so it doesn't
     // bunch the first couple of steps too close to the input itself,
-    // while still delaying the drop into a darker lightnessDescriptor
+    // while still delaying the drop into a darker lightnessAdjective
     // bucket rather than crossing it right after the anchor and then
     // sitting there, unchanged-looking, for most of the remaining run.
     const eased = Math.pow(t, 1.4)
