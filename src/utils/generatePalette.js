@@ -102,75 +102,18 @@ function hexToHsl(hex) {
   return [h, s * 100, l * 100]
 }
 
-// Modifier vocabulary per hue family, specific to what that family
-// actually feels like (Mossy/Woodland for greens, Molten/Burnished for
-// coppers, Twilight/Velvet for purples, ...) instead of a single Deep/
-// Rich/Soft/Pale scale applied uniformly to any color — used to build
-// the desc sentence. Near-black and near-grey/near-white swatches get
-// their own vocabulary regardless of hue, since a very dark red and a
-// very dark blue both just read as "near-black" to the eye.
-const HUE_FAMILIES = [
-  { max: 12,  mods: ['Smoldering', 'Blazing', 'Sunburnt', 'Molten'] },
-  { max: 30,  mods: ['Charred', 'Weathered', 'Sunbaked', 'Burnished'] },
-  { max: 45,  mods: ['Molten', 'Burnished', 'Glowing', 'Honeyed'] },
-  { max: 65,  mods: ['Burnt', 'Toasted', 'Gilded', 'Sunlit'] },
-  { max: 90,  mods: ['Shadowed', 'Weathered', 'Mossy', 'Sunlit'] },
-  { max: 150, mods: ['Shadowed', 'Woodland', 'Mossy', 'Misted'] },
-  { max: 195, mods: ['Murky', 'Oceanic', 'Glassy', 'Misted'] },
-  { max: 225, mods: ['Stormy', 'Weathered', 'Faded', 'Hazy'] },
-  { max: 255, mods: ['Midnight', 'Twilight', 'Stormy', 'Hazy'] },
-  { max: 285, mods: ['Smoldering', 'Twilight', 'Velvet', 'Misted'] },
-  { max: 320, mods: ['Twilight', 'Powdery', 'Faded', 'Sunlit'] },
-  { max: 350, mods: ['Smoldering', 'Sunkissed', 'Powdery', 'Sunlit'] },
-  { max: 360, mods: ['Smoldering', 'Blazing', 'Sunburnt', 'Molten'] },
-]
-const NEAR_BLACK_MODS = ['Smoky', 'Shadowed', 'Charred', 'Midnight', 'Inky']
-const NEAR_GREY_MODS = ['Weathered', 'Overcast', 'Misted', 'Faded']
-const NEAR_WHITE_MODS = ['Sunwashed', 'Powdery', 'Bleached', 'Hazy']
-
-function familyMods(h, s, l) {
-  if (l < 14) return NEAR_BLACK_MODS
-  if (s < 12) return l > 80 ? NEAR_WHITE_MODS : NEAR_GREY_MODS
-  return (HUE_FAMILIES.find((b) => h <= b.max) ?? HUE_FAMILIES[HUE_FAMILIES.length - 1]).mods
-}
-
-// A word describing what the hue itself feels like, for the desc's own
-// sentence — kept specific to that hue family, not a brightness scale.
-function hueTexture(h, s, l) {
-  if (l < 14) return 'near-black'
-  if (s < 12) return l > 80 ? 'warm neutral' : 'muted grey'
-  if (h <= 12 || h > 350) return 'crimson'
-  if (h <= 30) return 'earthy brown'
-  if (h <= 45) return 'copper'
-  if (h <= 65) return 'golden'
-  if (h <= 90) return 'olive'
-  if (h <= 150) return 'sage green'
-  if (h <= 195) return 'teal'
-  if (h <= 225) return 'denim blue'
-  if (h <= 255) return 'indigo'
-  if (h <= 285) return 'plum-wine'
-  if (h <= 320) return 'orchid'
-  return 'berry'
-}
-
-// 'tone' and 'hue' (the literal words) replaced with 'shade' — 'glow',
-// 'cast', and 'note' stay as their own options.
-const TONE_WORDS = ['shade', 'shade', 'shade', 'glow', 'cast', 'note']
-
-// Builds this swatch's desc from its own h/s/l — a family-specific
-// modifier plus what the hue itself feels like plus a tone word, cycled
-// by comboIdx for variety. True cartesian counting (not two independent
-// % operations, whose combined period is only lcm(mods.length,
-// TONE_WORDS.length) — 12 for a 4-word mods list, which collided with
-// this page's own 12-item grid) so all mods.length * TONE_WORDS.length
-// combos get used before any repeat.
-function describeShadeText(h, s, l, comboIdx) {
-  const mods = familyMods(h, s, l)
-  const modIdx = comboIdx % mods.length
-  const toneIdx = Math.floor(comboIdx / mods.length) % TONE_WORDS.length
-  const hueWord = hueTexture(h, s, l)
-  const tone = TONE_WORDS[toneIdx]
-  return `${mods[modIdx]} ${hueWord} ${tone}`
+// desc is now the swatch's own RGB and CMYK values — genuinely
+// specific to that exact hex (not a word-bank sentence), and
+// automatically unique across a grid as long as the colors themselves
+// are (already guaranteed by usedColors in generateShadesFromHex), so
+// no separate uniqueness bookkeeping is needed for desc at all.
+function rgbCmykText(hex) {
+  const [r, g, b] = hexToRgb(hex)
+  const k = 1 - Math.max(r, g, b) / 255
+  const toPct = (channel) => Math.round(k < 1 ? ((1 - channel / 255 - k) / (1 - k)) * 100 : 0)
+  const c = toPct(r), m = toPct(g), y = toPct(b)
+  const kPct = Math.round(k * 100)
+  return `RGB ${r}, ${g}, ${b} · CMYK ${c}%, ${m}%, ${y}%, ${kPct}%`
 }
 
 // The real, recognized name of the closest color in WIKI_COLOR_NAMES by
@@ -246,10 +189,6 @@ export function generateShadesFromHex(inputHex, count = 45) {
   const isLightInput = inputLight >= 65
   const hexIndex = Math.min(LIGHTER_STEPS, count - 1)
   const items = []
-  // Shared across every push below (not reset per-loop) so the desc
-  // variety (see describeShadeText) stays spread across the whole
-  // grid instead of restarting at each segment.
-  let idx = 0
 
   // Guards against two steps landing on the exact same hex — the eased
   // curve below (and the small LIGHT_STEP increments above) can put two
@@ -259,33 +198,17 @@ export function generateShadesFromHex(inputHex, count = 45) {
   // lighter, darker items push darker) rather than toward the anchor,
   // so the light -> dark order stays intact.
   const usedColors = new Set([hex])
-  // Guards name/desc uniqueness the same way usedColors guards the hex
-  // itself — comboIdx already cycles through a hue family's full noun x
-  // modifier combo space without repeating, but this is the backstop
-  // for whenever count exceeds that space (or a near-black/grey/white
-  // override collapses several steps into the same small word bank).
-  const usedNames = new Set()
-  const usedDescs = new Set()
   // name: the real, closest-matching color name from WIKI_COLOR_NAMES
-  // (nearestColorName already skips names in usedNames, so it's never a
+  // (nearestColorName skips names already in usedNames, so it's never a
   // duplicate — no numbered suffix needed, since 764 real names is far
-  // more than this grid ever needs). desc: still generated from h/s/l,
-  // retried at a later comboIdx on collision (the mods x tone combo
-  // space is comfortably larger than any count this page actually uses,
-  // so this never needs to fall back to a numbered suffix either).
-  const describeUnique = (l, color) => {
+  // more than this grid ever needs). desc: that same swatch's own RGB/
+  // CMYK values, so it's automatically unique as long as the color
+  // itself is (already guaranteed by usedColors above).
+  const usedNames = new Set()
+  const describeUnique = (color) => {
     const name = nearestColorName(color, usedNames)
     usedNames.add(name)
-    let desc = describeShadeText(h, sat, l, idx)
-    let attempts = 0
-    while (usedDescs.has(desc) && attempts < 40) {
-      idx++
-      desc = describeShadeText(h, sat, l, idx)
-      attempts++
-    }
-    usedDescs.add(desc)
-    idx++
-    return { name, desc }
+    return { name, desc: rgbCmykText(color) }
   }
 
   const pushUnique = (l, direction) => {
@@ -297,7 +220,7 @@ export function generateShadesFromHex(inputHex, count = 45) {
       attempts++
     }
     usedColors.add(color)
-    items.push({ color, ...describeUnique(l, color) })
+    items.push({ color, ...describeUnique(color) })
   }
 
   for (let i = 0; i < hexIndex; i++) {
@@ -305,7 +228,7 @@ export function generateShadesFromHex(inputHex, count = 45) {
     pushUnique(l, 1)
   }
 
-  items.push({ color: hex, ...describeUnique(inputLight, hex) })
+  items.push({ color: hex, ...describeUnique(hex) })
 
   const darkSteps = isLightInput ? 0 : count - 1 - hexIndex
   for (let i = 1; i <= darkSteps; i++) {
