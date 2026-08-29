@@ -232,7 +232,7 @@
 
 @media (min-width: 641px) {
   .dp-hex-big {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     /* A bit more room between the swatch and the hex text below it,
        desktop only. */
     margin-top: 0.6rem;
