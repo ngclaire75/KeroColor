@@ -157,22 +157,20 @@ function hueTexture(h, s, l) {
 // 'cast', and 'note' stay as their own options.
 const TONE_WORDS = ['shade', 'shade', 'shade', 'glow', 'cast', 'note']
 
-// Builds this swatch's desc from its own h/s/l AND its real matched
-// name — a family-specific modifier plus what the hue itself feels
-// like plus a tone word (cycled by comboIdx for variety; true cartesian
-// counting, not two independent % operations, whose combined period is
-// only lcm(mods.length, TONE_WORDS.length) — 12 for a 4-word mods list,
-// which collided with this page's own 12-item grid), closed out with
-// the actual name it matched to, so the sentence is tied to both the
-// hex itself and the specific real color it landed on, not just a
-// hue/lightness formula alone.
-function describeShadeText(h, s, l, name, comboIdx) {
+// Builds this swatch's desc from its own h/s/l — a family-specific
+// modifier plus what the hue itself feels like plus a tone word, cycled
+// by comboIdx for variety. True cartesian counting (not two independent
+// % operations, whose combined period is only lcm(mods.length,
+// TONE_WORDS.length) — 12 for a 4-word mods list, which collided with
+// this page's own 12-item grid) so all mods.length * TONE_WORDS.length
+// combos get used before any repeat.
+function describeShadeText(h, s, l, comboIdx) {
   const mods = familyMods(h, s, l)
   const modIdx = comboIdx % mods.length
   const toneIdx = Math.floor(comboIdx / mods.length) % TONE_WORDS.length
   const hueWord = hueTexture(h, s, l)
   const tone = TONE_WORDS[toneIdx]
-  return `${mods[modIdx]} ${hueWord} ${tone}, closest to ${name}`
+  return `${mods[modIdx]} ${hueWord} ${tone}`
 }
 
 // The real, recognized name of the closest color in WIKI_COLOR_NAMES by
@@ -278,11 +276,11 @@ export function generateShadesFromHex(inputHex, count = 45) {
   const describeUnique = (l, color) => {
     const name = nearestColorName(color, usedNames)
     usedNames.add(name)
-    let desc = describeShadeText(h, sat, l, name, idx)
+    let desc = describeShadeText(h, sat, l, idx)
     let attempts = 0
     while (usedDescs.has(desc) && attempts < 40) {
       idx++
-      desc = describeShadeText(h, sat, l, name, idx)
+      desc = describeShadeText(h, sat, l, idx)
       attempts++
     }
     usedDescs.add(desc)
