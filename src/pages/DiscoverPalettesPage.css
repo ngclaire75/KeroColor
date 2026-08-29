@@ -227,12 +227,13 @@
    sizes/breakpoints exactly, in PalettePage.css), not .pp-palette-hex's
    smaller default. */
 .dp-hex-big {
-  font-size: 1.6rem;
+  font-size: 1.1rem;
+  font-weight: 300;
 }
 
 @media (min-width: 641px) {
   .dp-hex-big {
-    font-size: 1.5rem;
+    font-size: 1.05rem;
     /* A bit more room between the swatch and the hex text below it,
        desktop only. */
     margin-top: 0.6rem;
@@ -241,6 +242,6 @@
 
 @media (max-width: 640px) {
   .dp-hex-big {
-    font-size: 1.2rem;
+    font-size: 0.95rem;
   }
 }
