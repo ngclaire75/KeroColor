@@ -15,6 +15,7 @@ import mod2 from '../../images/mod2.webp'
 import mod3 from '../../images/mod3.webp'
 import GallerySection from '../components/GallerySection'
 import NextSection from '../components/NextSection'
+import ExploreMore from '../components/ExploreMore'
 import Footer from '../components/Footer'
 import './ExplorePage.css'
 
@@ -98,6 +99,13 @@ export default function ExplorePage() {
 
       {/* Fourth section — 3x3 card grid */}
       <NextSection searchResult={searchResult} />
+
+      {/* Styling, fabric, pairings, and family switcher — themed by the
+          same active color family as everything above. */}
+      <ExploreMore
+        searchResult={searchResult}
+        onFamilyChange={(family) => setSearchResult({ query: family, valid: true, colorFamily: family })}
+      />
       <Footer />
     </div>
   )

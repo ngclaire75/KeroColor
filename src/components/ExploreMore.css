@@ -1,0 +1,500 @@
+/* Sections below the Explore page's card grid. Same cream canvas, Inter,
+   thin dark card borders, and pill-shaped labels as the gallery and card
+   grid above; --xm-accent is the active color family's own hero color
+   (set inline by ExploreMore.jsx), so these sections re-theme along with
+   the rest of the page. */
+.xm {
+  --xm-ink: #2a1a1e;
+  --xm-muted: rgba(42, 26, 30, 0.6);
+  --xm-line: rgba(42, 26, 30, 0.18);
+  background: #f8f2ea;
+  color: var(--xm-ink);
+  font-family: 'Inter', sans-serif;
+}
+
+.xm-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 1.4s cubic-bezier(0.22, 1, 0.36, 1), transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.xm-reveal--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xm-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+.xm-section {
+  width: min(1100px, 100% - 6rem);
+  margin: 0 auto;
+  padding: 5.5rem 0 0;
+}
+
+.xm-section--last {
+  padding-bottom: 6rem;
+}
+
+.xm-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-areas:
+    "kicker kicker"
+    "title lede";
+  column-gap: 3rem;
+  align-items: end;
+  padding-bottom: 1.6rem;
+  margin-bottom: 2.2rem;
+  border-bottom: 1px solid var(--xm-line);
+}
+
+.xm-kicker {
+  grid-area: kicker;
+  justify-self: start;
+  margin-bottom: 1rem;
+  padding: 0.22rem 0.7rem;
+  border-radius: 999px;
+  background: var(--xm-accent);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  transition: background 0.4s ease;
+}
+
+.xm-title {
+  grid-area: title;
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--xm-ink);
+}
+
+.xm-lede {
+  grid-area: lede;
+  margin: 0;
+  max-width: 30rem;
+  justify-self: end;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: var(--xm-muted);
+}
+
+.xm-card-title {
+  margin: 1rem 0 0.35rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-transform: lowercase;
+  color: var(--xm-ink);
+}
+
+.xm-card-copy {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.65;
+  color: var(--xm-muted);
+}
+
+/* ── Wear it three ways ── */
+.xm-ways {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.xm-way-stack {
+  display: flex;
+  flex-direction: column;
+  height: 340px;
+  border: 1px solid var(--xm-ink);
+  overflow: hidden;
+}
+
+.xm-way-block {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  min-height: 0;
+  padding: 0 0.7rem 0.55rem;
+  transition: flex 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.xm-way-stack:hover .xm-way-block:hover {
+  flex-grow: 80 !important;
+}
+
+.xm-way-pct,
+.xm-way-hex {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: inherit;
+}
+
+.xm-way-hex {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.xm-way-block:hover .xm-way-hex {
+  opacity: 1;
+}
+
+/* ── Fabric & finish ── */
+.xm-finishes {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.xm-finish-swatch {
+  aspect-ratio: 3 / 4;
+  border: 1px solid var(--xm-ink);
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.xm-finish:hover .xm-finish-swatch {
+  transform: translateY(-6px);
+}
+
+/* ── Metals & neutrals ── */
+.xm-pairs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3rem;
+}
+
+.xm-pairs-label {
+  display: block;
+  margin-bottom: 1rem;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--xm-muted);
+}
+
+.xm-metals,
+.xm-neutrals {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.xm-metal,
+.xm-neutral {
+  display: flex;
+  flex-direction: column;
+  transition: opacity 0.3s ease;
+}
+
+.xm-metal--muted {
+  opacity: 0.4;
+}
+
+.xm-metal-swatch,
+.xm-neutral-swatch {
+  position: relative;
+  aspect-ratio: 1;
+  margin-bottom: 0.7rem;
+  border: 1px solid var(--xm-ink);
+  border-radius: 50%;
+}
+
+.xm-metal-name {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: lowercase;
+}
+
+.xm-metal-rank {
+  margin-top: 0.2rem;
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--xm-muted);
+}
+
+/* ── Lighting ── */
+.xm-lights {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.xm-light-swatch {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border: 1px solid var(--xm-ink);
+}
+
+.xm-light-kelvin {
+  position: absolute;
+  top: 0.8rem;
+  left: 0.8rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(248, 242, 234, 0.9);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--xm-ink);
+}
+
+.xm-light-hex {
+  position: absolute;
+  left: 0.8rem;
+  bottom: 0.8rem;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ── Design with it (contrast) ── */
+.xm-contrast {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.xm-contrast-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  padding: 1.2rem 1.2rem 1.4rem;
+  border: 1px solid var(--xm-ink);
+}
+
+.xm-contrast-label {
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.xm-contrast-row {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.xm-contrast-sample {
+  font-size: 2.4rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.xm-contrast-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.xm-contrast-ratio {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.xm-contrast-grade {
+  align-self: flex-start;
+  padding: 0.12rem 0.5rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: 0.52rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+
+/* ── Keep exploring ── */
+.xm-families {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.xm-family {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  padding: 0;
+  border: 1px solid var(--xm-ink);
+  overflow: hidden;
+  cursor: pointer;
+  background: #000;
+  text-align: left;
+  font-family: 'Inter', sans-serif;
+}
+
+.xm-family img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.xm-family-tint {
+  position: absolute;
+  inset: 0;
+  opacity: 0.55;
+  mix-blend-mode: multiply;
+  transition: opacity 0.4s ease;
+}
+
+.xm-family:hover img {
+  transform: scale(1.05);
+}
+
+.xm-family:hover .xm-family-tint {
+  opacity: 0.3;
+}
+
+.xm-family-name {
+  position: absolute;
+  left: 1rem;
+  bottom: 2.4rem;
+  font-size: clamp(1.4rem, 2.6vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.xm-family-cta {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  padding: 0.2rem 0.65rem;
+  border: 1px solid #fff;
+  border-radius: 999px;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.xm-family--active {
+  cursor: default;
+  outline: 2px solid var(--xm-accent);
+  outline-offset: 4px;
+}
+
+.xm-family--active .xm-family-cta {
+  background: #fff;
+  color: var(--xm-ink);
+}
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+
+  .xm-lights,
+  .xm-contrast {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .xm-lights {
+    row-gap: 1.6rem;
+  }
+
+  .xm-contrast-card {
+    padding: 0.9rem 0.8rem 1rem;
+  }
+
+  .xm-contrast-sample {
+    font-size: 1.7rem;
+  }
+
+  .xm-contrast-ratio {
+    font-size: 0.72rem;
+  }
+
+  .xm-contrast-grade {
+    font-size: 0.44rem;
+  }
+
+  .xm-section {
+    width: calc(100% - 1.6rem);
+    padding-top: 3.5rem;
+  }
+
+  .xm-section--last {
+    padding-bottom: 3.5rem;
+  }
+
+  .xm-head {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "kicker"
+      "title"
+      "lede";
+    row-gap: 0.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .xm-kicker {
+    margin-bottom: 0;
+  }
+
+  .xm-lede {
+    justify-self: start;
+    font-size: 0.78rem;
+  }
+
+  .xm-ways {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .xm-way-stack {
+    height: 240px;
+  }
+
+  .xm-finishes,
+  .xm-families {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .xm-finishes {
+    row-gap: 1.6rem;
+  }
+
+  .xm-pairs {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .xm-metals,
+  .xm-neutrals {
+    gap: 10px;
+  }
+
+  .xm-metal-name {
+    font-size: 0.7rem;
+  }
+
+  .xm-metal-rank {
+    font-size: 0.5rem;
+  }
+
+  .xm-card-copy {
+    font-size: 0.72rem;
+  }
+}
