@@ -526,8 +526,198 @@
   margin-top: 2.5rem;
 }
 
+/* ── Masthead: mirrors the Inspiration page's cover (.in-cover) — same
+   960px column, Akzidenz gradient title, and lede / index / stats row. ── */
+/* Bottom margin tops up the intro's own padding so the space before the
+   first chapter matches the space before the Zendaya chapter. */
+.ed-masthead {
+  width: 960px;
+  max-width: calc(100% - 6rem);
+  margin: 4rem auto 80px;
+}
+
+.ed-mh-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.ed-mh-title {
+  margin: 1.4rem 0 2rem -0.04em;
+  font-family: 'Akzidenz Grotesk BQ', sans-serif;
+  font-size: 7.4rem;
+  font-weight: 700;
+  line-height: 0.88;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  background: linear-gradient(to right, #fff 0%, #fff 30%, #e8d8c4 48%, #c7b7a3 58%, #6d2932 78%, #fff 100%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: ed-mh-shimmer 9s ease-in-out infinite alternate;
+}
+
+@keyframes ed-mh-shimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+.ed-mh-body {
+  display: grid;
+  grid-template-columns: 1.25fr 1.2fr 0.75fr;
+  gap: 2.75rem;
+  align-items: start;
+}
+
+.ed-mh-lede {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.ed-mh-label {
+  display: block;
+  margin-bottom: 0.6rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.ed-mh-index ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.ed-mh-index button {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  padding: 0.62rem 0;
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: 'Inter', sans-serif;
+}
+
+.ed-mh-num {
+  flex: 0 0 1.4rem;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: #c7b7a3;
+}
+
+.ed-mh-item {
+  flex: 1;
+  font-size: 0.8rem;
+  color: #fff;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ed-mh-arrow {
+  font-size: 0.75rem;
+  color: #fff;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ed-mh-index button:hover .ed-mh-item,
+.ed-mh-index button:focus-visible .ed-mh-item {
+  transform: translateX(4px);
+}
+
+.ed-mh-index button:hover .ed-mh-arrow,
+.ed-mh-index button:focus-visible .ed-mh-arrow {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ed-mh-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.4rem 1rem;
+  margin: 0;
+}
+
+.ed-mh-stats dt {
+  font-family: 'Akzidenz Grotesk BQ', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+}
+
+.ed-mh-stats dd {
+  margin: 0.35rem 0 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.56rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
 /* ── Mobile ── */
 @media (max-width: 640px) {
+  .ed-masthead {
+    max-width: calc(100% - 2.5rem);
+    margin-top: 2.75rem;
+    margin-bottom: 53px;
+  }
+
+  .ed-mh-meta {
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.52rem;
+  }
+
+  .ed-mh-title {
+    margin: 1rem 0 1.4rem -0.03em;
+    font-size: 14.2vw;
+  }
+
+  .ed-mh-body {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  .ed-mh-lede {
+    font-size: 0.8rem;
+  }
+
+  .ed-mh-stats {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+  }
+
+  .ed-mh-stats dt {
+    font-size: 1.5rem;
+  }
+
+  .ed-mh-stats dd {
+    font-size: 0.48rem;
+  }
+
   .ed-nav {
     flex-wrap: wrap;
     padding: 0.75rem 1.25rem;

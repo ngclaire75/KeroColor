@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SearchLoader from '../components/SearchLoader'
 import Footer from '../components/Footer'
+import { getLenis } from '../lenis'
 import bnd1 from '../../images/bnd1.webp'
 import bnd2 from '../../images/bnd2.webp'
 import edp1 from '../../images/edp1.webp'
@@ -14,6 +15,12 @@ import z10v2 from '../../images/z10v2.webp'
 import './EditorialPage.css'
 
 const NAV_ITEMS = ['All', 'Seasonal Edition', 'Editorial', 'Inspiration']
+
+// Masthead index; each entry glides to its section.
+const CHAPTERS = [
+  { id: 'ch-intro', title: 'Facts, Myths & Artistry' },
+  { id: 'ch-zendaya', title: 'Case Study: Zendaya' },
+]
 
 export default function EditorialPage() {
   const navigate = useNavigate()
@@ -63,6 +70,15 @@ export default function EditorialPage() {
     return () => observer.disconnect()
   }, [])
 
+  // Masthead index glides through Lenis, which drives scrolling.
+  const scrollToChapter = (id) => {
+    const el = document.getElementById(id)
+    if (!el) return
+    const lenis = getLenis()
+    if (lenis) lenis.scrollTo(el, { offset: -30, duration: 1.4 })
+    else el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
   const handleNavClick = (item) => {
     if (item === 'Editorial') return
     if (item === 'Inspiration') { navigate('/inspiration'); return }
@@ -85,8 +101,45 @@ export default function EditorialPage() {
         ))}
       </nav>
 
+      {/* ── Masthead: same cover layout as the Inspiration page — issue
+          line, title, lede, chapter index, and counts. ── */}
+      <header className="ed-masthead">
+        <div className="ed-mh-meta">
+          <span>Issue 03 · Autumn Winter 2026</span>
+          <span>The color report, curated by Kerocolor</span>
+        </div>
+        <h1 className="ed-mh-title">Editorial</h1>
+        <div className="ed-mh-body">
+          <p className="ed-mh-lede">
+            How color analysis actually works, where its rules come from, and what happens when one of
+            the most photographed people in the world wears color on purpose. Read it start to finish, or
+            turn straight to a chapter.
+          </p>
+          <nav className="ed-mh-index" aria-label="In this issue">
+            <span className="ed-mh-label">In this issue</span>
+            <ol>
+              {CHAPTERS.map((ch, i) => (
+                <li key={ch.id}>
+                  <button type="button" onClick={() => scrollToChapter(ch.id)}>
+                    <span className="ed-mh-num">{String(i + 1).padStart(2, '0')}</span>
+                    <span className="ed-mh-item">{ch.title}</span>
+                    <span className="ed-mh-arrow" aria-hidden="true">↓</span>
+                  </button>
+                </li>
+              ))}
+            </ol>
+          </nav>
+          <dl className="ed-mh-stats">
+            <div><dt>{CHAPTERS.length}</dt><dd>chapters</dd></div>
+            <div><dt>1</dt><dd>case study</dd></div>
+            <div><dt>2</dt><dd>looks</dd></div>
+            <div><dt>2</dt><dd>events</dd></div>
+          </dl>
+        </div>
+      </header>
+
       {/* ── Intro section ── */}
-      <section className="ed-intro">
+      <section className="ed-intro" id="ch-intro">
         <h2 className="ed-intro-heading">A closer look at the facts, myths, and artistry of color analysis</h2>
 
         <div className="ed-intro-media">
@@ -122,7 +175,7 @@ export default function EditorialPage() {
       </section>
 
       {/* ── "When the rules become a starting point" section ── */}
-      <section ref={moreRef} className={`ed-more${moreVisible ? ' ed-fade-in--visible' : ''}`}>
+      <section ref={moreRef} id="ch-zendaya" className={`ed-more${moreVisible ? ' ed-fade-in--visible' : ''}`}>
         <h2 className="ed-intro-heading">When the rules<br className="ed-more-break" /> become a starting point</h2>
         <div className="ed-intro-text">
           <p className="ed-intro-item">If color analysis tells us which shades are most naturally harmonious, fashion asks a more interesting question: what happens when we deliberately step outside them? Zendaya offers an especially compelling case study. Her red-carpet wardrobe moves between warm metallics, vivid greens, icy whites, electric blues, silver, black, pink, and red, often within the same few years. Rather than proving that color analysis is useless, these looks demonstrate something more nuanced: a color can be visually successful for reasons that extend beyond whether it belongs to a predetermined seasonal palette.</p>
