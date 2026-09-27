@@ -10,8 +10,8 @@ import './ExploreMore.css'
 // Everything below the Explore page's card grid, themed by whichever
 // color family is active (red by default, or pink/blue/green from a
 // search) — the same families the hero and gallery above already switch
-// between. The focus is wearing and styling the color (proportions,
-// fabric, pairings), which no other page covers.
+// between. The focus is wearing and styling the color (proportions and
+// fabric), which no other page covers.
 const FAMILIES = {
   red: {
     name: 'Red',
@@ -19,7 +19,6 @@ const FAMILIES = {
     img: explore1,
     shades: { dark: '#4a0a0e', main: '#941e1a', mid: '#aa7877', light: '#e3d1cf' },
     neutrals: [['Cream', '#efe6da'], ['Camel', '#c19a6b'], ['Black', '#1c1a1a'], ['Denim', '#4a6583']],
-    metals: ['Gold', 'Rose Gold'],
   },
   pink: {
     name: 'Pink',
@@ -27,7 +26,6 @@ const FAMILIES = {
     img: explorepink2,
     shades: { dark: '#8e4a66', main: '#c97a9b', mid: '#e5a9c2', light: '#f8d8e7' },
     neutrals: [['White', '#fbf8f6'], ['Dove Grey', '#a8a4a6'], ['Navy', '#1f2a44'], ['Taupe', '#8b7d72']],
-    metals: ['Rose Gold', 'Silver'],
   },
   blue: {
     name: 'Blue',
@@ -35,7 +33,6 @@ const FAMILIES = {
     img: exploreblue1,
     shades: { dark: '#15294d', main: '#445471', mid: '#8a94a6', light: '#d3d9e4' },
     neutrals: [['White', '#fbfaf7'], ['Camel', '#c19a6b'], ['Charcoal', '#3a3a3c'], ['Stone', '#b8b0a2']],
-    metals: ['Silver', 'Gold'],
   },
   green: {
     name: 'Green',
@@ -43,7 +40,6 @@ const FAMILIES = {
     img: mod1,
     shades: { dark: '#25302b', main: '#495750', mid: '#868f8b', light: '#d2d8d3' },
     neutrals: [['Cream', '#f1ece2'], ['Tan', '#b89b72'], ['Chocolate', '#4b3226'], ['Black', '#1c1c1a']],
-    metals: ['Gold', 'Bronze'],
   },
 }
 
@@ -88,13 +84,6 @@ const LIGHTS = [
   { name: 'Candlelight', kelvin: '1900K', note: 'Low and amber. Colors deepen, so go a shade brighter for evenings.', tint: '#ff8a2a', amount: 0.28, brightness: 0.62, glow: 'rgba(255,150,60,0.4)' },
 ]
 const TEXT_DARK = '#1c1a1a'
-
-const METALS = {
-  Gold: 'linear-gradient(135deg, #8a6b1f 0%, #e6c76a 45%, #b8913a 70%, #f3dc92 100%)',
-  Silver: 'linear-gradient(135deg, #7d7f84 0%, #e9eaec 45%, #a4a6aa 70%, #f7f7f8 100%)',
-  'Rose Gold': 'linear-gradient(135deg, #8d5a52 0%, #e8b3a4 45%, #b87c6e 70%, #f4d0c5 100%)',
-  Bronze: 'linear-gradient(135deg, #5e3a1a 0%, #c98b4e 45%, #8f5a2c 70%, #e0ad78 100%)',
-}
 
 // Proportions follow the 60-30-10 rule; each block is drawn to scale.
 const waysFor = (f) => [
@@ -205,44 +194,6 @@ export default function ExploreMore({ searchResult, onFamilyChange }) {
               <p className="xm-card-copy">{fin.copy}</p>
             </article>
           ))}
-        </div>
-      </section>
-
-      {/* ── Metals & neutrals ── */}
-      <section className="xm-section xm-reveal">
-        <div className="xm-head">
-          <span className="xm-kicker">Pairings</span>
-          <h2 className="xm-title">Metals &amp; Neutrals</h2>
-          <p className="xm-lede">What to put next to {f.name.toLowerCase()} so it stays the star: the jewelry tones that flatter it, and the neutrals that let it breathe.</p>
-        </div>
-        <div className="xm-pairs">
-          <div className="xm-pairs-col">
-            <span className="xm-pairs-label">Metals</span>
-            <div className="xm-metals">
-              {Object.keys(METALS).map((metal) => {
-                const rank = f.metals.indexOf(metal)
-                return (
-                  <div className={`xm-metal${rank === -1 ? ' xm-metal--muted' : ''}`} key={metal}>
-                    <div className="xm-metal-swatch" style={{ background: METALS[metal] }} />
-                    <span className="xm-metal-name">{metal}</span>
-                    <span className="xm-metal-rank">{rank === 0 ? 'best match' : rank === 1 ? 'works well' : 'use sparingly'}</span>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-          <div className="xm-pairs-col">
-            <span className="xm-pairs-label">Neutrals</span>
-            <div className="xm-neutrals">
-              {f.neutrals.map(([name, hex]) => (
-                <div className="xm-neutral" key={name}>
-                  <div className="xm-neutral-swatch" style={{ background: hex }} />
-                  <span className="xm-metal-name">{name}</span>
-                  <span className="xm-metal-rank">{hex}</span>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       </section>
 

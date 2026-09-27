@@ -169,64 +169,6 @@
   transform: translateY(-6px);
 }
 
-/* ── Metals & neutrals ── */
-.xm-pairs {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 3rem;
-}
-
-.xm-pairs-label {
-  display: block;
-  margin-bottom: 1rem;
-  font-size: 0.6rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--xm-muted);
-}
-
-.xm-metals,
-.xm-neutrals {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
-}
-
-.xm-metal,
-.xm-neutral {
-  display: flex;
-  flex-direction: column;
-  transition: opacity 0.3s ease;
-}
-
-.xm-metal--muted {
-  opacity: 0.4;
-}
-
-.xm-metal-swatch,
-.xm-neutral-swatch {
-  position: relative;
-  aspect-ratio: 1;
-  margin-bottom: 0.7rem;
-  border: 1px solid var(--xm-ink);
-  border-radius: 50%;
-}
-
-.xm-metal-name {
-  font-size: 0.78rem;
-  font-weight: 600;
-  text-transform: lowercase;
-}
-
-.xm-metal-rank {
-  margin-top: 0.2rem;
-  font-size: 0.6rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--xm-muted);
-}
-
 /* ── Lighting ── */
 .xm-lights {
   display: grid;
@@ -474,24 +416,6 @@
 
   .xm-finishes {
     row-gap: 1.6rem;
-  }
-
-  .xm-pairs {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-
-  .xm-metals,
-  .xm-neutrals {
-    gap: 10px;
-  }
-
-  .xm-metal-name {
-    font-size: 0.7rem;
-  }
-
-  .xm-metal-rank {
-    font-size: 0.5rem;
   }
 
   .xm-card-copy {
