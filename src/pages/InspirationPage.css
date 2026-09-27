@@ -96,7 +96,7 @@
 .in-cover {
   width: 960px;
   max-width: 960px;
-  margin: 4rem auto 0;
+  margin: 4rem auto 5rem;
 }
 
 .in-cover-meta {
@@ -1124,7 +1124,7 @@
   .in-cover {
     width: 100%;
     max-width: calc(100% - 2.5rem);
-    margin: 2.75rem auto 0;
+    margin: 2.75rem auto 3.25rem;
   }
 
   .in-cover-meta {
