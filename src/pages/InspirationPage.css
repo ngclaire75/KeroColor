@@ -90,6 +90,156 @@
 }
 
 
+/* ── Issue cover — the page's opening spread, above the first video.
+   Same 960px column, Akzidenz uppercase, and burgundy-to-beige
+   gradient as everything below it. ── */
+.in-cover {
+  width: 960px;
+  max-width: 960px;
+  margin: 4rem auto 0;
+}
+
+.in-cover-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.in-cover-title {
+  margin: 1.4rem 0 2rem -0.04em;
+  font-family: 'Akzidenz Grotesk BQ', sans-serif;
+  font-size: 7.4rem;
+  font-weight: 700;
+  line-height: 0.88;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  background: linear-gradient(to right, #fff 0%, #fff 30%, #e8d8c4 48%, #c7b7a3 58%, #6d2932 78%, #fff 100%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: in-cover-shimmer 9s ease-in-out infinite alternate;
+}
+
+@keyframes in-cover-shimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+.in-cover-body {
+  display: grid;
+  grid-template-columns: 1.25fr 1.2fr 0.75fr;
+  gap: 2.75rem;
+  align-items: start;
+}
+
+.in-cover-lede {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.in-cover-label {
+  display: block;
+  margin-bottom: 0.6rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.in-cover-index ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.in-cover-index button {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  padding: 0.62rem 0;
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: 'Inter', sans-serif;
+}
+
+.in-cover-index-num {
+  flex: 0 0 1.4rem;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: #c7b7a3;
+}
+
+.in-cover-index-label {
+  flex: 1;
+  font-size: 0.8rem;
+  color: #fff;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.in-cover-index-arrow {
+  font-size: 0.75rem;
+  color: #fff;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.in-cover-index button:hover .in-cover-index-label,
+.in-cover-index button:focus-visible .in-cover-index-label {
+  transform: translateX(4px);
+}
+
+.in-cover-index button:hover .in-cover-index-arrow,
+.in-cover-index button:focus-visible .in-cover-index-arrow {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.in-cover-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.4rem 1rem;
+  margin: 0;
+}
+
+.in-cover-stats dt {
+  font-family: 'Akzidenz Grotesk BQ', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+}
+
+.in-cover-stats dd {
+  margin: 0.35rem 0 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.56rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
 /* ── Hero rectangle — seulgi.jpeg, bottom+center aligned within its own
    box, two-line heading centered over it. ── */
 /* Fixed to the YouTube video's exact native size (1280x720), not a
@@ -196,19 +346,17 @@
 }
 
 /* ── Figure ticker — one continuously auto-scrolling row of 16:9 frames
-   with a thin black border. .in-figures-track renders the image list
+   with a thin white border. .in-figures-track renders the image list
    twice back-to-back and loops via a pure CSS animation (compositor
-   thread — immune to any main-thread jank elsewhere on the page, unlike
-   a JS-driven per-frame transform). A plain translateX(-50%) keyframe
-   assumes the halfway point of the track's total width is the exact
-   repeat distance, but it isn't once `gap` is involved (the total width
-   includes a gap after all 15 cell-boundaries, while the true repeat
-   distance — start of cell 1 to the start of its duplicate, cell 9 —
-   only spans 8 of those gaps), so -50% was off by half a gap and every
-   loop restart visibly snapped. InspirationPage.jsx measures the real
-   distance at runtime and sets it as --figures-repeat below, so this
-   stays correct at any viewport/breakpoint without needing separate
-   hardcoded desktop/mobile values. */
+   thread — immune to main-thread jank elsewhere on the page).
+
+   The loop distance is the exact width of one full set: 8 cells x (cell
+   width + gap) = 8 x (240 + 10) = 2000px here, 8 x (150 + 10) = 1280px
+   on mobile. It's a plain constant per breakpoint rather than a runtime-
+   measured CSS custom property: that property used to be re-written on
+   every resize, which mobile browsers fire constantly while scrolling,
+   and Safari restarts an animation whenever a variable its keyframes
+   read gets written — the source of the ticker snapping back to start. */
 .in-figures {
   width: 960px;
   max-width: 960px;
@@ -222,15 +370,17 @@
   width: max-content;
   will-change: transform;
   backface-visibility: hidden;
-  /* Fallback (2000px) covers the moment before InspirationPage.jsx's
-     effect measures and sets the real value, and non-JS contexts. */
-  --figures-repeat: 2000px;
   animation: in-figures-scroll 30s linear infinite;
 }
 
 @keyframes in-figures-scroll {
   from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(calc(-1 * var(--figures-repeat)), 0, 0); }
+  to { transform: translate3d(-2000px, 0, 0); }
+}
+
+@keyframes in-figures-scroll-mobile {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-1280px, 0, 0); }
 }
 
 .in-figure-cell {
@@ -407,6 +557,395 @@
   margin: 0 auto 0.5rem;
 }
 
+/* ── Sections below the studio carousel (lookbook, undertone guide,
+   routine, closing CTA) — same 960px column, 4.5rem rhythm, and
+   Akzidenz uppercase headings as the studio section above, so the page
+   reads as one continuous editorial rather than bolted-on blocks. ── */
+.in-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 1.4s cubic-bezier(0.22, 1, 0.36, 1), transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.in-reveal--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .in-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+.in-section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 1.75rem;
+}
+
+.in-section-heading {
+  margin: 0;
+  color: #fff;
+  font-family: 'Akzidenz Grotesk BQ', sans-serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.in-section-meta {
+  margin: 0;
+  max-width: 16rem;
+  text-align: right;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 1.6;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ── Lookbook ── */
+.in-looks {
+  width: 960px;
+  max-width: 960px;
+  margin: 0 auto 4.5rem;
+}
+
+.in-looks-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2.75rem 18px;
+}
+
+.in-look-img {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #111;
+}
+
+.in-look-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1);
+  transition: filter 0.4s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Same hover language as the figure ticker above: hovering the grid
+   desaturates every look except the one under the cursor. */
+.in-looks-grid:hover .in-look-img img {
+  filter: grayscale(100%);
+}
+
+.in-looks-grid:hover .in-look:hover .in-look-img img {
+  filter: grayscale(0%);
+  transform: scale(1.04);
+}
+
+.in-look-num {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: #fff;
+}
+
+.in-look-info {
+  padding-top: 0.85rem;
+}
+
+.in-look-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.in-look-name {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #fff;
+  text-transform: lowercase;
+}
+
+.in-look-tag {
+  flex-shrink: 0;
+  padding: 0.18rem 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.52rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.in-look-tag--warm {
+  background: #561c24;
+  border-color: #561c24;
+}
+
+.in-look-tag--neutral {
+  background: #c7b7a3;
+  border-color: #c7b7a3;
+  color: #1a1212;
+}
+
+.in-look-note {
+  margin: 0.45rem 0 0.7rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.in-chips {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.in-chip {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.25s ease;
+}
+
+.in-chip:hover,
+.in-chip:focus-visible {
+  transform: scale(1.2);
+}
+
+/* ── Undertone guide ── */
+.in-undertone {
+  width: 960px;
+  max-width: 960px;
+  margin: 0 auto 4.5rem;
+}
+
+.in-undertone-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.in-undertone-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.6rem 1.5rem 1.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: #0d0d0d;
+}
+
+.in-undertone-name {
+  margin: 0 0 0.6rem;
+  font-family: 'Akzidenz Grotesk BQ', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.in-undertone-tell {
+  margin: 0 0 1.3rem;
+  min-height: 2.6em;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.76rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Joined swatch strip — the hovered shade widens so it can be read
+   individually without breaking the strip apart. */
+.in-undertone-strip {
+  display: flex;
+  height: 46px;
+  margin-bottom: 1.4rem;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.in-undertone-swatch {
+  flex: 1;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  transition: flex 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.in-undertone-swatch:hover,
+.in-undertone-swatch:focus-visible {
+  flex: 1.9;
+}
+
+.in-undertone-reach {
+  margin: auto 0 0;
+}
+
+.in-undertone-reach-row {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.55rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.in-undertone-reach-row dt {
+  flex: 0 0 3.2rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.56rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.9;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.in-undertone-reach-row dd {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.74rem;
+  line-height: 1.6;
+  color: #fff;
+}
+
+/* ── Routine ── */
+.in-steps {
+  width: 960px;
+  max-width: 960px;
+  margin: 0 auto 4.5rem;
+}
+
+.in-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.in-step {
+  padding-top: 1.1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.in-step-num {
+  display: block;
+  margin-bottom: 1.6rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: #c7b7a3;
+}
+
+.in-step-title {
+  margin: 0 0 0.6rem;
+  font-family: 'Akzidenz Grotesk BQ', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.in-step-body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.74rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* ── Closing CTA ── */
+.in-cta {
+  width: 960px;
+  max-width: 960px;
+  margin: 0 auto 5.5rem;
+  padding: 3.5rem 3rem;
+  border-radius: 8px;
+  background: linear-gradient(to right, #561c24 0%, #6d2932 55%, #c7b7a3 92%, #e8d8c4 100%);
+  box-sizing: border-box;
+}
+
+.in-cta-heading {
+  margin: 0 0 0.9rem;
+  font-family: 'Akzidenz Grotesk BQ', sans-serif;
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1.02;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.in-cta-text {
+  max-width: 26rem;
+  margin: 0 0 1.8rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.in-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.in-cta-btn {
+  padding: 0.7rem 1.5rem;
+  border: 1px solid #fff;
+  border-radius: 999px;
+  background: transparent;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.in-cta-btn:hover {
+  background: #fff;
+  color: #561c24;
+}
+
+.in-cta-btn--solid {
+  background: #fff;
+  color: #561c24;
+}
+
+.in-cta-btn--solid:hover {
+  background: #561c24;
+  border-color: #561c24;
+  color: #fff;
+}
+
 /* ── Mobile ── */
 @media (max-width: 640px) {
 
@@ -480,6 +1019,11 @@
     width: 150px;
   }
 
+  /* Cells are 150px here, so one full set is 8 x (150 + 10) = 1280px. */
+  .in-figures-track {
+    animation-name: in-figures-scroll-mobile;
+  }
+
   .in-studio {
     width: 100%;
     max-width: calc(100% - 2.5rem);
@@ -514,4 +1058,106 @@
     aspect-ratio: 16 / 9;
     margin: 0 auto 0.5rem;
   }
+
+  .in-looks,
+  .in-undertone,
+  .in-steps {
+    width: 100%;
+    max-width: calc(100% - 2.5rem);
+    margin: 0 auto 3.25rem;
+  }
+
+  .in-section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .in-section-heading {
+    font-size: 1.6rem;
+  }
+
+  .in-section-meta {
+    text-align: left;
+    max-width: none;
+  }
+
+  .in-looks-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem 14px;
+  }
+
+  .in-look-name {
+    font-size: 0.8rem;
+  }
+
+  .in-undertone-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .in-undertone-tell {
+    min-height: 0;
+  }
+
+  .in-steps-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.75rem 1rem;
+  }
+
+  .in-step-num {
+    margin-bottom: 1rem;
+  }
+
+  .in-cta {
+    width: 100%;
+    max-width: calc(100% - 2.5rem);
+    margin: 0 auto 3.5rem;
+    padding: 2.25rem 1.5rem;
+    background: linear-gradient(to bottom right, #561c24 0%, #6d2932 60%, #c7b7a3 100%);
+  }
+
+  .in-cta-heading {
+    font-size: 1.7rem;
+  }
+
+  .in-cover {
+    width: 100%;
+    max-width: calc(100% - 2.5rem);
+    margin: 2.75rem auto 0;
+  }
+
+  .in-cover-meta {
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.52rem;
+  }
+
+  .in-cover-title {
+    margin: 1rem 0 1.4rem -0.03em;
+    font-size: 14.2vw;
+  }
+
+  .in-cover-body {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  .in-cover-lede {
+    font-size: 0.8rem;
+  }
+
+  .in-cover-stats {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+  }
+
+  .in-cover-stats dt {
+    font-size: 1.5rem;
+  }
+
+  .in-cover-stats dd {
+    font-size: 0.48rem;
+  }
+
 }

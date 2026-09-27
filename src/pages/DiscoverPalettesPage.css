@@ -122,7 +122,7 @@
 
 @media (max-width: 640px) {
   .dp-hex-search {
-    padding: 1.8rem 9vw 1.5rem;
+    padding: 1.8rem 7vw 1.5rem;
   }
 
   /* Real box now (not display:contents) — this is what actually takes
@@ -138,34 +138,33 @@
     /* font-size must be >=16px for mobile browsers to skip auto-zooming
        the page on focus — no per-input CSS below 16px avoids that, it's
        a hard browser rule. transform: scale() then visually renders it
-       back down to match .dp-hex-btn's own 0.7rem (11.2px) text size —
-       scale = 11.2/16 = 0.7 — and width/height are inflated by the
-       inverse of that same 0.7 (1/0.7 ≈ 142.86%) so the post-scale box
+       back down to match .dp-hex-btn's own 0.75rem (12px) text size —
+       scale = 12/16 = 0.75 — and width/height are inflated by the
+       inverse of that same 0.75 (1/0.75 ≈ 133.33%) so the post-scale box
        still exactly fills the wrapper's 100% width and matches the
-       button's 30px height, same technique as ContactSection's name/
+       button's 34px height, same technique as ContactSection's name/
        email/subject fields. */
-    height: 42.86px;
-    line-height: 42.86px;
-    padding: 0 0.8rem;
-    width: 142.86%;
+    height: 45.33px;
+    line-height: 45.33px;
+    padding: 0 0.9rem;
+    width: 133.33%;
     font-size: 16px;
-    transform: scale(0.7);
+    transform: scale(0.75);
     transform-origin: left center;
   }
 
   /* Explicit height (not padding-derived) to exactly match the input's
-     own post-scale 30px height above — padding alone can't guarantee
+     own post-scale 34px height above — padding alone can't guarantee
      that once one side's height comes from a transform: scale(). */
   .dp-hex-btn {
-    height: 30px;
-    padding: 0 1rem;
-    font-size: 0.7rem;
+    height: 34px;
+    padding: 0 1.15rem;
+    font-size: 0.75rem;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 }
-
 @media (max-width: 640px) {
   /* Left edge matches .pp-palette-grid's own left edge on mobile
      (width:88%, centered -> 6% inset each side), so the tab row and the
