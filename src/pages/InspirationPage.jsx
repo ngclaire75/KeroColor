@@ -102,9 +102,6 @@ const ISSUE_INDEX = [
   { id: 'in-steps', label: 'Four Steps, One Palette' },
 ]
 
-// Distinct shades across the lookbook, for the cover's stats.
-const LOOK_SHADE_COUNT = new Set(LOOKS.flatMap((l) => l.shades)).size
-
 const ROUTINE_STEPS = [
   { title: 'Prep', body: 'Start with a hydrated base. Color reads truer on skin that isn’t dry or patchy, so moisturize and let it settle for a minute before anything else.' },
   { title: 'Base', body: 'Match foundation to your undertone, not just your depth. Check along the jaw in daylight; the right shade disappears rather than sitting on top.' },
@@ -432,8 +429,8 @@ export default function InspirationPage() {
       </nav>
 
       {/* ── Issue cover — reads like the opening spread of a magazine:
-          title, issue line, lede, a clickable index of every section on
-          the page, and live counts. ── */}
+          title, issue line, lede, and a clickable index of every section
+          on the page. ── */}
       <header className="in-cover">
         <div className="in-cover-meta">
           <span>Issue 03 · Autumn Winter 2026</span>
@@ -459,12 +456,6 @@ export default function InspirationPage() {
               ))}
             </ol>
           </nav>
-          <dl className="in-cover-stats">
-            <div><dt>{LOOKS.length}</dt><dd>looks</dd></div>
-            <div><dt>{STUDIO_VIDEOS.length + 1}</dt><dd>creator films</dd></div>
-            <div><dt>{UNDERTONES.length}</dt><dd>undertones</dd></div>
-            <div><dt>{LOOK_SHADE_COUNT}</dt><dd>shades</dd></div>
-          </dl>
         </div>
       </header>
 

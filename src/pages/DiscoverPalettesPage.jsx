@@ -31,7 +31,14 @@ export default function DiscoverPalettesPage() {
   const initialHex = isValidHex(location.state?.hex || '') ? location.state.hex : DEFAULT_HEX
   const [fullMenuOpen, setFullMenuOpen] = useState(false)
   const [hexInput, setHexInput] = useState(initialHex)
-  const [palette, setPalette] = useState(() => generateShadesFromHex(initialHex, TOTAL_COUNT))
+  // anchorFirst (sent by Seasonal Edition's Discover button) opens the
+  // grid on the passed color itself, followed by its shades light to dark.
+  const [palette, setPalette] = useState(() => {
+    const shades = generateShadesFromHex(initialHex, TOTAL_COUNT)
+    if (!location.state?.anchorFirst) return shades
+    const i = shades.findIndex((s) => s.color.toLowerCase() === initialHex.toLowerCase())
+    return i > 0 ? [shades[i], ...shades.slice(0, i), ...shades.slice(i + 1)] : shades
+  })
   const [hexError, setHexError] = useState(false)
   const giantTextRef = useRef(null)
 

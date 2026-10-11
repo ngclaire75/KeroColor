@@ -89,7 +89,6 @@
   transition: none;
 }
 
-
 /* ── Issue cover — the page's opening spread, above the first video.
    Same 960px column, Akzidenz uppercase, and burgundy-to-beige
    gradient as everything below it. ── */
@@ -136,7 +135,7 @@
 
 .in-cover-body {
   display: grid;
-  grid-template-columns: 1.25fr 1.2fr 0.75fr;
+  grid-template-columns: 1fr 1fr;
   gap: 2.75rem;
   align-items: start;
 }
@@ -213,31 +212,6 @@
 .in-cover-index button:focus-visible .in-cover-index-arrow {
   opacity: 1;
   transform: translateY(0);
-}
-
-.in-cover-stats {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.4rem 1rem;
-  margin: 0;
-}
-
-.in-cover-stats dt {
-  font-family: 'Akzidenz Grotesk BQ', sans-serif;
-  font-size: 2.2rem;
-  font-weight: 700;
-  line-height: 1;
-  color: #fff;
-}
-
-.in-cover-stats dd {
-  margin: 0.35rem 0 0;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.56rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
 }
 
 /* ── Hero rectangle — seulgi.jpeg, bottom+center aligned within its own
@@ -1145,19 +1119,6 @@
 
   .in-cover-lede {
     font-size: 0.8rem;
-  }
-
-  .in-cover-stats {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.5rem;
-  }
-
-  .in-cover-stats dt {
-    font-size: 1.5rem;
-  }
-
-  .in-cover-stats dd {
-    font-size: 0.48rem;
   }
 
 }

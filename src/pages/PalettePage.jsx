@@ -326,10 +326,13 @@ export default function PalettePage() {
       </div>
 
       {/* ── Discover more button — always leads to the one Discover
-          Palettes page now (the separate Seasonal Edition variant of
-          this page was removed). ── */}
+          Palettes page; Seasonal Edition opens it on its matcha green,
+          #484537, as the first swatch. ── */}
       <div className="pp-discover-wrap">
-        <button className="pp-discover-btn" onClick={() => navigate('/palette/discover')}>
+        <button
+          className="pp-discover-btn"
+          onClick={() => navigate('/palette/discover', activeTab === 'Seasonal Edition' ? { state: { hex: '#484537', anchorFirst: true } } : undefined)}
+        >
           Discover More Palettes
         </button>
       </div>

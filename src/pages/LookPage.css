@@ -63,6 +63,37 @@
   width: 230px;
 }
 
+/* --k-band: the card's top band and its outline, in the color
+   KEROCOLOR's text used to be in each theme. */
+.look-page {
+  --k-band: #be2c37;
+}
+
+.look-page--pink { --k-band: #d4687a; }
+.look-page--blue { --k-band: #445471; }
+.look-page--green { --k-band: #35443d; }
+
+.look-card-outline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 230px;
+  height: 310px;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.look-card-outline path {
+  fill: none;
+  stroke: var(--k-band);
+  stroke-width: 4;
+  stroke-linejoin: round;
+}
+
+.look-card-outline--mobile {
+  display: none;
+}
+
 /* Card body — true rounded corners (TL, BL, BR) + step notch with rounded inner edge at TR */
 .look-card {
   background: #f8f2ea;
@@ -75,15 +106,34 @@
   clip-path: path("M 16 0 L 168 0 Q 184 0 184 16 L 184 34 Q 184 46 196 46 L 214 46 Q 230 46 230 62 L 230 294 Q 230 310 214 310 L 16 310 Q 0 310 0 294 L 0 16 Q 0 0 16 0 Z");
 }
 
+.look-card {
+  position: relative;
+}
+
+/* Top band, down to the divider line (y=46, where the step's second curve
+   ends); the card's clip-path trims it to the tab shape. */
+.look-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 46px;
+  background: var(--k-band);
+}
+
 .look-card-brand {
+  position: relative;
   display: block;
   font-family: 'Inter', sans-serif;
   font-size: 1.2rem;
   font-weight: 700;
-  color: #be2c37;
+  color: #fff;
   letter-spacing: 0.1em;
   margin-bottom: 0.5rem;
-  margin-top: -0.7rem;
+  /* Extra px centers the capitals in the top band, between its outline
+     and the divider line. */
+  margin-top: calc(-0.7rem - 3.4px);
 }
 
 .look-card-label {
@@ -101,7 +151,7 @@
   width: 100%;
   height: 195px;
   border-radius: 12px;
-  margin-top: 3.4rem;
+  margin-top: 3rem;
   overflow: hidden;
 }
 
@@ -260,7 +310,6 @@
 }
 
 /* ── Pink theme ── */
-.look-page--pink .look-card-brand,
 .look-page--pink .look-card-label {
   color: #d4687a;
 }
@@ -291,7 +340,6 @@
 }
 
 /* ── Blue theme ── */
-.look-page--blue .look-card-brand,
 .look-page--blue .look-card-label {
   color: #445471;
 }
@@ -322,7 +370,6 @@
 }
 
 /* ── Green theme ── */
-.look-page--green .look-card-brand,
 .look-page--green .look-card-label {
   color: #35443d;
 }
@@ -403,9 +450,30 @@
     clip-path: path("M 10 0 L 109 0 Q 120 0 120 10 L 120 22 Q 120 30 127 30 L 139 30 Q 150 30 150 40 L 150 191 Q 150 202 139 202 L 10 202 Q 0 202 0 191 L 0 10 Q 0 0 10 0 Z");
   }
 
+  /* Fixed px, not rem: the root font size grows with screen width,
+     which would push the text into the card's top-right notch. */
+  .look-card::before {
+    height: 30px;
+  }
+
+  .look-card-outline--desktop {
+    display: none;
+  }
+
+  .look-card-outline--mobile {
+    display: block;
+    width: 150px;
+    height: 202px;
+  }
+
+  .look-card-outline path {
+    stroke-width: 3.25;
+  }
+
   .look-card-brand {
-    font-size: 0.8rem;
-    margin-top: -0.2rem;
+    font-size: 13.5px;
+    letter-spacing: 0.06em;
+    margin-top: calc(-0.35rem - 2.25px);
   }
 
   .look-card-label {
@@ -415,6 +483,7 @@
 
   .look-card-thumb {
     height: 120px;
+    margin-top: 2.7rem;
   }
 
   .look-card-thumb img {

@@ -509,6 +509,19 @@ export default function LookPage() {
                 />
               </div>
             </div>
+            {/* Outline tracing the card's clip-path (rounded corners and the
+                top-right step), in the K's own color, plus a divider under
+                KEROCOLOR level with where the step's second curve ends. One
+                set per breakpoint because the card's size and radii change
+                on mobile. */}
+            <svg className="look-card-outline look-card-outline--desktop" viewBox="0 0 230 310" aria-hidden="true">
+              <path d="M 16 0 L 168 0 Q 184 0 184 16 L 184 34 Q 184 46 196 46 L 214 46 Q 230 46 230 62 L 230 294 Q 230 310 214 310 L 16 310 Q 0 310 0 294 L 0 16 Q 0 0 16 0 Z" />
+              <path d="M 0 46 L 196 46" />
+            </svg>
+            <svg className="look-card-outline look-card-outline--mobile" viewBox="0 0 150 202" aria-hidden="true">
+              <path d="M 10 0 L 109 0 Q 120 0 120 10 L 120 22 Q 120 30 127 30 L 139 30 Q 150 30 150 40 L 150 191 Q 150 202 139 202 L 10 202 Q 0 202 0 191 L 0 10 Q 0 0 10 0 Z" />
+              <path d="M 0 30 L 127 30" />
+            </svg>
           </div>
         </div>
 

@@ -53,37 +53,6 @@ const inkFor = (hex) => {
 }
 
 
-// ── Color math for the lighting and contrast sections ──
-const hexToRgb = (hex) => {
-  const n = parseInt(hex.replace('#', ''), 16)
-  return [(n >> 16) & 255, (n >> 8) & 255, n & 255]
-}
-const rgbToHex = (rgb) => '#' + rgb.map((v) => Math.round(Math.max(0, Math.min(255, v))).toString(16).padStart(2, '0')).join('')
-// Linear mix toward a light source's tint, then scaled by its brightness.
-const underLight = (hex, tint, amount, brightness) => {
-  const c = hexToRgb(hex), t = hexToRgb(tint)
-  return rgbToHex(c.map((v, i) => (v * (1 - amount) + t[i] * amount) * brightness))
-}
-// WCAG 2.1 relative luminance / contrast ratio.
-const luminance = (hex) => {
-  const [r, g, b] = hexToRgb(hex).map((v) => {
-    const c = v / 255
-    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4
-  })
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b
-}
-const contrast = (a, b) => {
-  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x)
-  return (hi + 0.05) / (lo + 0.05)
-}
-
-const LIGHTS = [
-  { name: 'Daylight', kelvin: '5500K', note: 'The color as it truly is. Check shades by a window before you buy.', tint: '#ffffff', amount: 0, brightness: 1, glow: 'rgba(255,255,255,0.35)' },
-  { name: 'Office LED', kelvin: '6500K', note: 'Cool and flat. Warm shades lose a little life, cool ones sharpen.', tint: '#dbe6ff', amount: 0.16, brightness: 0.98, glow: 'rgba(214,228,255,0.4)' },
-  { name: 'Golden Hour', kelvin: '3000K', note: 'Warm and flattering. Everything picks up a honeyed glow.', tint: '#ffb35c', amount: 0.24, brightness: 1.02, glow: 'rgba(255,190,110,0.45)' },
-  { name: 'Candlelight', kelvin: '1900K', note: 'Low and amber. Colors deepen, so go a shade brighter for evenings.', tint: '#ff8a2a', amount: 0.28, brightness: 0.62, glow: 'rgba(255,150,60,0.4)' },
-]
-const TEXT_DARK = '#1c1a1a'
 
 // Proportions follow the 60-30-10 rule; each block is drawn to scale.
 const waysFor = (f) => [
@@ -104,32 +73,133 @@ const waysFor = (f) => [
   },
 ]
 
-// The same core shade rendered as four finishes, with CSS lighting only.
-const finishesFor = (c) => [
-  { name: 'Matte', copy: 'True color, no light play. Reads darkest and most grounded.', bg: c },
+// The same core shade rendered as four real fabrics, as SVG filters tinted
+// with the active family's color. Cotton and lamé are lighting renders:
+// noise builds a height map (drape folds plus fiber grain), diffuse light
+// shades it and specular light adds the shine. Satin and velvet use a
+// `tone` render instead, mapping smooth fold noise straight to shadow and
+// highlight bands, since their glassy surfaces would show the height
+// map's 8-bit steps as contour lines under lighting.
+//   tone: shadeMin + shadeRange scale the color from fold valley to
+//   crest, hl is the highlight curve (only crests light up), grain adds
+//   pile texture
+//   foldFreq / foldAmp: size and depth of the drape folds
+//   grainFreq / grainAmp: fiber texture (weave, pile, foil crinkle)
+//   blur: smooths the surface (satin is glassy, cotton is not)
+//   relief: surfaceScale, how pronounced the light and shadow are
+//   elevation: light angle (lower = deeper shadows)
+//   gain: multiplies the lit color back toward the true shade
+//   spec: [constant, exponent] for the highlight, null for none
+//   specTint: highlight color (metal reflects tinted light)
+const FABRICS = [
   {
-    name: 'Satin',
-    copy: 'A soft sheen along the folds lifts the color a shade lighter.',
-    bg: `linear-gradient(115deg, rgba(0,0,0,0.18) 0%, rgba(255,255,255,0) 30%, rgba(255,255,255,0.32) 48%, rgba(255,255,255,0) 64%, rgba(0,0,0,0.15) 100%), ${c}`,
+    name: 'Matte Cotton',
+    sheen: 1,
+    copy: 'Short, spun fibers scatter light evenly, so the shade reads true and flat. The most accurate way to judge a color.',
+    foldFreq: '0.014 0.0025', foldAmp: 0.5, grainFreq: '0.9 0.9', grainAmp: 0.18, grainType: 'turbulence',
+    blur: 0, relief: 4, elevation: 58, gain: 1.16, spec: null,
+  },
+  {
+    name: 'Silk Satin',
+    sheen: 3,
+    copy: 'Long floating threads mirror light in bands along every fold, so highlights run paler and shadows deeper than the true shade.',
+    tone: { foldFreq: '0.008 0.0016', blur: 2.5, shadeMin: 0.5, shadeRange: 0.8, hl: '0 0 0 0 0.12 0.55 1', hlStrength: 0.42, grain: 0 },
   },
   {
     name: 'Velvet',
-    copy: 'Pile absorbs light at the edges, so the color looks deeper and richer.',
-    bg: `radial-gradient(ellipse at 45% 40%, rgba(255,255,255,0.14) 0%, rgba(0,0,0,0) 45%, rgba(0,0,0,0.45) 100%), ${c}`,
+    sheen: 2,
+    copy: 'Upright pile traps light, so the color sits deeper and richer, with a soft glow only where the fabric bends toward you.',
+    tone: { foldFreq: '0.011 0.0022', blur: 3.5, shadeMin: 0.42, shadeRange: 0.72, hl: '0 0 0 0 0 0.25 0.6', hlStrength: 0.2, grain: 0.28 },
   },
   {
-    name: 'Metallic',
-    copy: 'Reflective foil turns it high shine, best kept to a single piece.',
-    bg: `repeating-linear-gradient(100deg, rgba(255,255,255,0) 0px, rgba(255,255,255,0.22) 6px, rgba(255,255,255,0) 14px), linear-gradient(130deg, rgba(255,255,255,0.35) 0%, rgba(0,0,0,0.25) 55%, rgba(255,255,255,0.3) 100%), ${c}`,
+    name: 'Metallic Lamé',
+    sheen: 4,
+    copy: 'Woven with metallic yarn that reflects like foil. Every crinkle flashes almost white, so keep it to one statement piece.',
+    foldFreq: '0.02 0.016', foldAmp: 0.8, grainFreq: '0.07 0.07', grainAmp: 0.22, grainType: 'fractalNoise',
+    blur: 1.4, relief: 5, elevation: 48, gain: 1, spec: [1.2, 30], specTint: true,
   },
 ]
+
+// Mixes a hex color toward white by t (0..1), for the metallic highlight.
+const tint = (hex, t) => {
+  const n = parseInt(hex.slice(1), 16)
+  const ch = [n >> 16, (n >> 8) & 255, n & 255].map((v) => Math.round(v + (255 - v) * t))
+  return `#${ch.map((v) => v.toString(16).padStart(2, '0')).join('')}`
+}
+
+function ToneFilter({ id, tone, color }) {
+  const curve = (values) => ['R', 'G', 'B'].map((ch) => {
+    const Fn = `feFunc${ch}`
+    return <Fn key={ch} type="table" tableValues={values} />
+  })
+  return (
+    <filter id={id} x="-30" y="-30" width="360" height="460" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency={tone.foldFreq} numOctaves="2" seed="7" result="folds" />
+      <feColorMatrix in="folds" type="matrix" values="1 0 0 0 0  1 0 0 0 0  1 0 0 0 0  0 0 0 0 1" result="gray" />
+      <feComponentTransfer in="gray" result="stretched">
+        <feFuncR type="linear" slope="2.4" intercept="-0.7" />
+        <feFuncG type="linear" slope="2.4" intercept="-0.7" />
+        <feFuncB type="linear" slope="2.4" intercept="-0.7" />
+      </feComponentTransfer>
+      <feGaussianBlur in="stretched" stdDeviation={tone.blur} result="shape" />
+      <feComponentTransfer in="shape" result="hl">{curve(tone.hl)}</feComponentTransfer>
+      <feFlood floodColor={color} result="base" />
+      <feComposite in="base" in2="shape" operator="arithmetic" k1={tone.shadeRange} k2={tone.shadeMin} result="shaded" />
+      {tone.grain ? (
+        <>
+          <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="1" seed="3" result="pile" />
+          <feColorMatrix in="pile" type="matrix" values="1 0 0 0 0  1 0 0 0 0  1 0 0 0 0  0 0 0 0 1" result="pileGray" />
+          <feComposite in="shaded" in2="pileGray" operator="arithmetic" k1={tone.grain} k2={1 - tone.grain / 2} result="lit" />
+        </>
+      ) : (
+        <feOffset in="shaded" result="lit" />
+      )}
+      <feComposite in="lit" in2="hl" operator="arithmetic" k2="1" k3={tone.hlStrength} />
+    </filter>
+  )
+}
+
+function FabricSwatch({ fabric, color, uid }) {
+  const id = `xm-fab-${uid}`
+  const light = (el) => <feDistantLight azimuth="235" elevation={fabric.elevation}>{el}</feDistantLight>
+  return (
+    <svg className="xm-finish-swatch" viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" role="img" aria-label={`${fabric.name} in ${color}`}>
+      <defs>
+        {fabric.tone ? <ToneFilter id={id} tone={fabric.tone} color={color} /> : (
+        <filter id={id} x="-30" y="-30" width="360" height="460" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+          <feTurbulence type="fractalNoise" baseFrequency={fabric.foldFreq} numOctaves="2" seed="7" result="folds" />
+          <feColorMatrix in="folds" type="matrix" values={`0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  ${fabric.foldAmp} 0 0 0 0`} result="foldH" />
+          <feTurbulence type={fabric.grainType} baseFrequency={fabric.grainFreq} numOctaves="2" seed="3" result="grain" />
+          <feColorMatrix in="grain" type="matrix" values={`0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  ${fabric.grainAmp} 0 0 0 0`} result="grainH" />
+          <feComposite in="foldH" in2="grainH" operator="arithmetic" k2="1" k3="1" result="rawH" />
+          <feGaussianBlur in="rawH" stdDeviation={fabric.blur} result="height" />
+          <feDiffuseLighting in="height" surfaceScale={fabric.relief} diffuseConstant="1" lightingColor="#ffffff" result="shade">
+            {light()}
+          </feDiffuseLighting>
+          <feFlood floodColor={color} result="base" />
+          <feComposite in="base" in2="shade" operator="arithmetic" k1={fabric.gain} result="lit" />
+          {fabric.spec ? (
+            <>
+              <feSpecularLighting in="height" surfaceScale={fabric.relief} specularConstant={fabric.spec[0]} specularExponent={fabric.spec[1]} lightingColor={fabric.specTint ? tint(color, 0.7) : '#ffffff'} result="spec">
+                {light()}
+              </feSpecularLighting>
+              <feComposite in="lit" in2="spec" operator="arithmetic" k2="1" k3="1" />
+            </>
+          ) : null}
+        </filter>
+        )}
+      </defs>
+      {/* Oversized so the lighting's edge falloff lands outside the crop. */}
+      <rect x="-30" y="-30" width="360" height="460" fill="#000" filter={`url(#${id})`} />
+    </svg>
+  )
+}
 
 export default function ExploreMore({ searchResult, onFamilyChange }) {
   const key = FAMILIES[searchResult?.colorFamily] ? searchResult.colorFamily : 'red'
   const f = FAMILIES[key]
   const rootRef = useRef(null)
   const navigate = useNavigate()
-  const scale = [['Dark', f.shades.dark], ['Core', f.shades.main], ['Mid', f.shades.mid], ['Light', f.shades.light]]
 
   // Same eased fade-up as the Inspiration and Editorial pages' sections.
   useEffect(() => {
@@ -187,65 +257,15 @@ export default function ExploreMore({ searchResult, onFamilyChange }) {
           <p className="xm-lede">The same {f.name.toLowerCase()} ({f.shades.main}) reads differently in every texture. Choose the finish by how much light you want the color to catch.</p>
         </div>
         <div className="xm-finishes">
-          {finishesFor(f.shades.main).map((fin) => (
-            <article className="xm-finish" key={fin.name}>
-              <div className="xm-finish-swatch" style={{ background: fin.bg }} />
-              <h3 className="xm-card-title">{fin.name}</h3>
-              <p className="xm-card-copy">{fin.copy}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Lighting — the core shade as it reads under four light sources. ── */}
-      <section className="xm-section xm-reveal">
-        <div className="xm-head">
-          <span className="xm-kicker">Lighting</span>
-          <h2 className="xm-title">Light Changes Everything</h2>
-          <p className="xm-lede">The same {f.name.toLowerCase()} under four light sources. Color temperature, measured in Kelvin, shifts how every shade reads, which is why a lipstick can look different at home than in the store.</p>
-        </div>
-        <div className="xm-lights">
-          {LIGHTS.map((light) => {
-            const seen = underLight(f.shades.main, light.tint, light.amount, light.brightness)
-            return (
-              <article className="xm-light" key={light.name}>
-                <div className="xm-light-swatch" style={{ background: `radial-gradient(circle at 50% 0%, ${light.glow} 0%, rgba(0,0,0,0) 60%), ${seen}` }}>
-                  <span className="xm-light-kelvin">{light.kelvin}</span>
-                  <span className="xm-light-hex" style={{ color: contrast(seen, '#ffffff') >= 3 ? '#fff' : TEXT_DARK }}>{seen}</span>
-                </div>
-                <h3 className="xm-card-title">{light.name}</h3>
-                <p className="xm-card-copy">{light.note}</p>
-              </article>
-            )
-          })}
-        </div>
-      </section>
-
-      {/* ── Design with it — live WCAG contrast for text on each shade. ── */}
-      <section className="xm-section xm-reveal">
-        <div className="xm-head">
-          <span className="xm-kicker">For Designers</span>
-          <h2 className="xm-title">Design With It</h2>
-          <p className="xm-lede">Using {f.name.toLowerCase()} for a brand, a poster, or a feed? These are the real contrast ratios for white and black text on each shade, checked against the WCAG standard (4.5 to 1 for body text, 3 to 1 for large type).</p>
-        </div>
-        <div className="xm-contrast">
-          {scale.map(([label, hex]) => (
-            <article className="xm-contrast-card" key={label} style={{ background: hex }}>
-              <span className="xm-contrast-label" style={{ color: contrast(hex, '#ffffff') >= contrast(hex, TEXT_DARK) ? '#fff' : TEXT_DARK }}>{label} · {hex}</span>
-              {[['#ffffff', 'White'], [TEXT_DARK, 'Black']].map(([ink, inkName]) => {
-                const ratio = contrast(hex, ink)
-                // Every row gets its badge; a failing one just drops the grade.
-                const grade = ratio >= 7 ? 'AAA' : ratio >= 4.5 ? 'AA' : ratio >= 3 ? 'AA Large' : null
-                return (
-                  <div className="xm-contrast-row" key={inkName} style={{ color: ink }}>
-                    <span className="xm-contrast-sample">Aa</span>
-                    <span className="xm-contrast-meta">
-                      <span className="xm-contrast-ratio">{ratio.toFixed(2)} : 1</span>
-                      <span className="xm-contrast-grade">{inkName} text{grade ? ` · ${grade}` : ''}</span>
-                    </span>
-                  </div>
-                )
-              })}
+          {FABRICS.map((fab, i) => (
+            <article className="xm-finish" key={fab.name}>
+              <FabricSwatch fabric={fab} color={f.shades.main} uid={`${key}-${i}`} />
+              <h3 className="xm-card-title">{fab.name}</h3>
+              <div className="xm-sheen" aria-label={`Sheen ${fab.sheen} of 4`}>
+                <span className="xm-sheen-label">Sheen</span>
+                {[1, 2, 3, 4].map((n) => <i key={n} className={n <= fab.sheen ? 'xm-sheen-on' : undefined} />)}
+              </div>
+              <p className="xm-card-copy">{fab.copy}</p>
             </article>
           ))}
         </div>

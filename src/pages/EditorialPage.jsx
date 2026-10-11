@@ -102,7 +102,7 @@ export default function EditorialPage() {
       </nav>
 
       {/* ── Masthead: same cover layout as the Inspiration page — issue
-          line, title, lede, chapter index, and counts. ── */}
+          line, title, lede, and chapter index. ── */}
       <header className="ed-masthead">
         <div className="ed-mh-meta">
           <span>Issue 03 · Autumn Winter 2026</span>
@@ -129,12 +129,6 @@ export default function EditorialPage() {
               ))}
             </ol>
           </nav>
-          <dl className="ed-mh-stats">
-            <div><dt>{CHAPTERS.length}</dt><dd>chapters</dd></div>
-            <div><dt>1</dt><dd>case study</dd></div>
-            <div><dt>2</dt><dd>looks</dd></div>
-            <div><dt>2</dt><dd>events</dd></div>
-          </dl>
         </div>
       </header>
 
