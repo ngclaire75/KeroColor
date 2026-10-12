@@ -42,7 +42,7 @@ export default function ExplorePage() {
   // tab navigated from (browsers preserve scroll across client-side route
   // changes by default).
   useEffect(() => {
-    window.scrollTo(0, 0)
+    window.scrollTo({ top: 0, behavior: 'instant' })
   }, [])
 
   useEffect(() => {

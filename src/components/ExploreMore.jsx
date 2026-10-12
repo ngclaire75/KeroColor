@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getLenis } from '../lenis'
 import explore1 from '../../images/explore1.webp'
 import explorepink2 from '../../images/explorepink2.webp'
 import exploreblue1 from '../../images/exploreblue1.webp'
@@ -219,7 +218,7 @@ export default function ExploreMore({ searchResult, onFamilyChange }) {
   const switchFamily = (next) => {
     if (next === key) return
     onFamilyChange(next)
-    getLenis()?.scrollTo(0, { duration: 1.4 })
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return (

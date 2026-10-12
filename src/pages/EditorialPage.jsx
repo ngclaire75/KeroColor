@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SearchLoader from '../components/SearchLoader'
 import Footer from '../components/Footer'
-import { getLenis } from '../lenis'
 import bnd1 from '../../images/bnd1.webp'
 import bnd2 from '../../images/bnd2.webp'
 import edp1 from '../../images/edp1.webp'
@@ -39,7 +38,7 @@ export default function EditorialPage() {
   // tab navigated from (browsers preserve scroll across client-side route
   // changes by default).
   useEffect(() => {
-    window.scrollTo(0, 0)
+    window.scrollTo({ top: 0, behavior: 'instant' })
   }, [])
 
   useEffect(() => {
@@ -70,13 +69,11 @@ export default function EditorialPage() {
     return () => observer.disconnect()
   }, [])
 
-  // Masthead index glides through Lenis, which drives scrolling.
+  // Masthead index: glide to the chapter, stopping 30px above it.
   const scrollToChapter = (id) => {
     const el = document.getElementById(id)
     if (!el) return
-    const lenis = getLenis()
-    if (lenis) lenis.scrollTo(el, { offset: -30, duration: 1.4 })
-    else el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 30, behavior: 'smooth' })
   }
 
   const handleNavClick = (item) => {

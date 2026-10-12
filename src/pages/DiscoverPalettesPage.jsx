@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import FullMenu from '../components/FullMenu'
-import { getLenis } from '../lenis'
 import { generateShadesFromHex, isValidHex, SAMPLE_HEX_CODES } from '../utils/generatePalette'
 import bearImg from '../../images/bear.webp'
 // Reused wholesale (not just the class names) so the nav, grid, fonts,
@@ -44,12 +43,9 @@ export default function DiscoverPalettesPage() {
 
   // Land on this page at the top, regardless of scroll position on the
   // tab navigated from (browsers preserve scroll across client-side route
-  // changes by default). Resets Lenis's own scroll state too, not just
-  // the native one — Lenis drives scrolling itself, so without this it
-  // can animate back toward wherever it still thinks the page is.
+  // changes by default).
   useEffect(() => {
-    window.scrollTo(0, 0)
-    getLenis()?.scrollTo(0, { immediate: true })
+    window.scrollTo({ top: 0, behavior: 'instant' })
   }, [])
 
   // Same flashlight hover effect on the giant footer "kero." text as

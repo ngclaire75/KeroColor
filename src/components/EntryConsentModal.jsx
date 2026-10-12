@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react'
-import { getLenis } from '../lenis'
 import trail2 from '../../images/trail2.webp'
 import './EntryConsentModal.css'
 
@@ -84,10 +83,9 @@ export default function EntryConsentModal({ open, onAgree }) {
   }
 
   // Scroll-locked the same way FullMenu locks it: overflow:hidden alone
-  // doesn't hold on iOS Safari or against Lenis, which intercepts
-  // wheel/touch directly, so both the body and Lenis itself need to be
-  // stopped/restored together. Locked for as long as the banner is
-  // actually on screen, including the closing animation.
+  // doesn't hold on iOS Safari, so the body is also fixed in place.
+  // Locked for as long as the banner is actually on screen, including the
+  // closing animation.
   useEffect(() => {
     if (!mounted) return
     const b = document.body
@@ -97,14 +95,12 @@ export default function EntryConsentModal({ open, onAgree }) {
     b.style.position = 'fixed'
     b.style.width = '100%'
     b.style.top = `-${scrollY}px`
-    getLenis()?.stop()
     return () => {
       b.style.overflow = prev.overflow
       b.style.position = prev.position
       b.style.width = prev.width
       b.style.top = prev.top
-      window.scrollTo(0, scrollY)
-      getLenis()?.start()
+      window.scrollTo({ top: scrollY, behavior: 'instant' })
     }
   }, [mounted])
 

@@ -98,7 +98,7 @@ export default function PalettePage() {
   // tab navigated from (browsers preserve scroll across client-side route
   // changes by default).
   useEffect(() => {
-    window.scrollTo(0, 0)
+    window.scrollTo({ top: 0, behavior: 'instant' })
   }, [])
 
   // Flashlight hover effect on the giant footer "kero." text — tracks the

@@ -4,7 +4,6 @@ import { useHeroVideo } from '../HeroVideoContext'
 import SearchLoader from '../components/SearchLoader'
 import Footer from '../components/Footer'
 import EntryConsentModal from '../components/EntryConsentModal'
-import { getLenis } from '../lenis'
 import heroPoster from '../../images/inspiration-hero-poster.webp'
 import figure1 from '../../images/figure1.webp'
 import figure2 from '../../images/figure2.webp'
@@ -323,7 +322,7 @@ export default function InspirationPage() {
   // tab navigated from (browsers preserve scroll across client-side route
   // changes by default).
   useEffect(() => {
-    window.scrollTo(0, 0)
+    window.scrollTo({ top: 0, behavior: 'instant' })
   }, [])
 
   useEffect(() => {
@@ -370,14 +369,11 @@ export default function InspirationPage() {
   // Discover Palettes page.
   const openShade = (hex) => navigate('/palette/discover', { state: { hex } })
 
-  // Cover index: glide to the section through Lenis (it drives scrolling
-  // site-wide, so a native scrollIntoView would fight it).
+  // Cover index: glide to the section, stopping 40px above it.
   const scrollToSection = (id) => {
     const el = document.getElementById(id)
     if (!el) return
-    const lenis = getLenis()
-    if (lenis) lenis.scrollTo(el, { offset: -40, duration: 1.4 })
-    else el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 40, behavior: 'smooth' })
   }
 
   const handleNavClick = (item) => {

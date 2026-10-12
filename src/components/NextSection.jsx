@@ -208,7 +208,7 @@ export default function NextSection({ searchResult }) {
     if (!saved) return
     sessionStorage.removeItem('explore-scroll-y')
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => window.scrollTo(0, parseInt(saved, 10)))
+      requestAnimationFrame(() => window.scrollTo({ top: parseInt(saved, 10), behavior: 'instant' }))
     })
   }, [])
   const [progress, setProgress] = useState(0)

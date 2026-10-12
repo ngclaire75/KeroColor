@@ -13,8 +13,6 @@ import AboutUs         from './components/AboutUs'
 import ContactSection  from './components/ContactSection'
 import FaqSection      from './components/FaqSection'
 import Footer          from './components/Footer'
-import LenisProvider    from './components/LenisProvider'
-import { getLenis } from './lenis'
 import cakeImg    from '../images/model2.webp'
 import drinkImg   from '../images/model1.webp'
 import './App.css'
@@ -38,15 +36,7 @@ function ScrollToHash() {
     if (!location.hash) return
     const el = document.querySelector(location.hash)
     if (!el) return
-    // Route through Lenis rather than native scrollIntoView, so the jump
-    // is smoothed by the same engine handling wheel/touch scroll — two
-    // different smoothing systems both trying to own the scroll position
-    // at once is what causes stutter/fighting.
-    requestAnimationFrame(() => {
-      const lenis = getLenis()
-      if (lenis) lenis.scrollTo(el, { offset: 0 })
-      else el.scrollIntoView({ behavior: 'smooth' })
-    })
+    requestAnimationFrame(() => el.scrollIntoView({ behavior: 'smooth' }))
   }, [location])
 
   return null
@@ -80,7 +70,6 @@ export default function App() {
   return (
     <SearchProvider>
     <HeroVideoProvider>
-    <LenisProvider />
     <ScrollToHash />
     {/* Each lazy page already shows its own SearchLoader overlay once it
         starts mounting — this fallback only covers the brief window
