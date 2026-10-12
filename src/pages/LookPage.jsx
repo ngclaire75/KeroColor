@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useSearch } from '../SearchContext'
 import SearchLoader from '../components/SearchLoader'
@@ -447,6 +447,13 @@ export default function LookPage() {
   const [overlayFading, setOverlayFading] = useState(false)
   const [overlayGone, setOverlayGone] = useState(false)
   const [contentReady, setContentReady] = useState(false)
+
+  // Open at the top, not wherever the gallery was scrolled to (browsers
+  // keep scroll position across client-side route changes). Layout effect
+  // so it happens before the first paint, with no visible jump.
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' })
+  }, [])
 
   useEffect(() => {
     const t1 = setTimeout(() => { setOverlayFading(true); setContentReady(true) }, 1700)
