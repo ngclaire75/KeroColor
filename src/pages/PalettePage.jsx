@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useLayoutEffect, useRef } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import SearchLoader from '../components/SearchLoader'
 import FullMenu from '../components/FullMenu'
@@ -96,10 +96,14 @@ export default function PalettePage() {
 
   // Land on this page at the top, regardless of scroll position on the
   // tab navigated from (browsers preserve scroll across client-side route
-  // changes by default).
-  useEffect(() => {
+  // changes by default). Layout effect so it happens before the first
+  // paint. Keyed on the navigation, so arriving again while already here
+  // (e.g. All or Seasonal Edition picked from another page's menu) also
+  // resets to the top and switches to the requested tab.
+  useLayoutEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' })
-  }, [])
+    setActiveTab(location.state?.tab || 'All')
+  }, [location.key])
 
   // Flashlight hover effect on the giant footer "kero." text — tracks the
   // cursor via CSS custom properties so the spotlight overlay's radial-gradient
@@ -139,6 +143,8 @@ export default function PalettePage() {
     setTabLoaderFading(false)
     setTabLoading(true)
     const t1 = setTimeout(() => {
+      // Swapped in at the top, while the loader still covers the page.
+      window.scrollTo({ top: 0, behavior: 'instant' })
       setActiveTab(tab)
       setTabLoaderFading(true)
     }, 900)
