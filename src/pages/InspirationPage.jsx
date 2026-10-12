@@ -109,8 +109,8 @@ const ROUTINE_STEPS = [
   { title: 'Set', body: 'Veil powder only where you need it, then mist. Too much powder mutes color, so keep it minimal over the cheeks.' },
 ]
 
-// sessionStorage, so agreeing lasts for the current visit only and the
-// banner appears again every time the site is revisited.
+// localStorage, so once the terms are agreed the banner never opens on
+// its own again on this device; the Read our T&C button can still reopen it.
 const CONSENT_KEY = 'kerocolor-inspiration-consent'
 
 // Splits text into one <span> per letter so each can be scaled
@@ -135,11 +135,7 @@ export default function InspirationPage() {
   // underneath SearchLoader and be already finished/invisible by the
   // time that overlay lifts.
   const [consentOpen, setConsentOpen] = useState(false)
-  // The floating T&C button goes away once the terms are agreed (or it's
-  // closed with its x), and stays away for the rest of this visit.
-  const [tcDismissed, setTcDismissed] = useState(() => {
-    try { return sessionStorage.getItem(CONSENT_KEY) === '1' } catch { return false }
-  })
+  const [tcDismissed, setTcDismissed] = useState(false)
 
   const [isPlaying, setIsPlaying] = useState(false)
   const [btnHidden, setBtnHidden] = useState(false)
@@ -336,12 +332,12 @@ export default function InspirationPage() {
     // Consent banner opens right as the loading overlay finishes clearing,
     // not before — so its own fade-in is the thing the user actually sees
     // happen, instead of playing out hidden underneath SearchLoader. Only
-    // opens at all if this visit hasn't already agreed.
+    // opens at all if this device hasn't already agreed.
     const t2 = setTimeout(() => {
       setOverlayGone(true)
       let alreadyAgreed = false
       try {
-        alreadyAgreed = sessionStorage.getItem(CONSENT_KEY) === '1'
+        alreadyAgreed = localStorage.getItem(CONSENT_KEY) === '1'
       } catch {
         // Private browsing / storage blocked — falls back to showing it.
       }
@@ -409,17 +405,16 @@ export default function InspirationPage() {
       open={consentOpen}
       onAgree={() => {
         setConsentOpen(false)
-        setTcDismissed(true)
         try {
-          sessionStorage.setItem(CONSENT_KEY, '1')
+          localStorage.setItem(CONSENT_KEY, '1')
         } catch {
           // Private browsing / storage blocked — nothing to persist to,
           // it'll just show again next visit.
         }
       }}
     />
-    {/* Floating button that reopens the terms & conditions banner. Hidden
-        for the rest of the visit once the terms are agreed or it's closed. */}
+    {/* Floating button that reopens the terms & conditions banner; the
+        small x dismisses it until the page is reloaded. */}
     {contentReady && !tcDismissed && (
       <div className={`in-tc${consentOpen ? ' in-tc--hidden' : ''}`}>
         <img src={tcBunnyImg} alt="" className="in-tc-bunny" aria-hidden="true" />
