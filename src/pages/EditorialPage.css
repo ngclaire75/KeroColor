@@ -528,12 +528,12 @@
 
 /* ── Masthead: mirrors the Inspiration page's cover (.in-cover) — same
    960px column, Akzidenz gradient title, and lede / index row. ── */
-/* Bottom margin tops up the intro's own padding so the space before the
-   first chapter matches the space before the Zendaya chapter. */
+/* Small bottom margin: with the intro's own top padding, a modest gap
+   before the first chapter. */
 .ed-masthead {
   width: 960px;
   max-width: calc(100% - 6rem);
-  margin: 4rem auto 80px;
+  margin: 4rem auto 24px;
 }
 
 .ed-mh-meta {
@@ -657,7 +657,7 @@
   .ed-masthead {
     max-width: calc(100% - 2.5rem);
     margin-top: 2.75rem;
-    margin-bottom: 53px;
+    margin-bottom: 12px;
   }
 
   .ed-mh-meta {

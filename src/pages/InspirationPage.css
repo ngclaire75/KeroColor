@@ -95,7 +95,7 @@
 .in-cover {
   width: 960px;
   max-width: 960px;
-  margin: 4rem auto 5rem;
+  margin: 4rem auto 3rem;
 }
 
 .in-cover-meta {
@@ -222,7 +222,7 @@
   position: relative;
   width: 960px;
   height: 540px;
-  margin: 4.5rem auto 0.5rem;
+  margin: 3rem auto 0.5rem;
   border-radius: 8px;
   overflow: hidden;
 }
@@ -939,7 +939,7 @@
     width: calc(100% - 2.5rem);
     height: auto;
     aspect-ratio: 16 / 9;
-    margin: 3.25rem auto 0.5rem;
+    margin: 2rem auto 0.5rem;
   }
 
   .in-hero-credit {
@@ -1098,7 +1098,7 @@
   .in-cover {
     width: 100%;
     max-width: calc(100% - 2.5rem);
-    margin: 2.75rem auto 3.25rem;
+    margin: 2.75rem auto 2rem;
   }
 
   .in-cover-meta {
