@@ -135,7 +135,11 @@ export default function InspirationPage() {
   // underneath SearchLoader and be already finished/invisible by the
   // time that overlay lifts.
   const [consentOpen, setConsentOpen] = useState(false)
-  const [tcDismissed, setTcDismissed] = useState(false)
+  // The floating T&C button goes away once the terms are agreed (or it's
+  // closed with its x), and stays away for the rest of this visit.
+  const [tcDismissed, setTcDismissed] = useState(() => {
+    try { return sessionStorage.getItem(CONSENT_KEY) === '1' } catch { return false }
+  })
 
   const [isPlaying, setIsPlaying] = useState(false)
   const [btnHidden, setBtnHidden] = useState(false)
@@ -405,6 +409,7 @@ export default function InspirationPage() {
       open={consentOpen}
       onAgree={() => {
         setConsentOpen(false)
+        setTcDismissed(true)
         try {
           sessionStorage.setItem(CONSENT_KEY, '1')
         } catch {
@@ -413,8 +418,8 @@ export default function InspirationPage() {
         }
       }}
     />
-    {/* Floating button that reopens the terms & conditions banner; the
-        small x dismisses it until the page is reloaded. */}
+    {/* Floating button that reopens the terms & conditions banner. Hidden
+        for the rest of the visit once the terms are agreed or it's closed. */}
     {contentReady && !tcDismissed && (
       <div className={`in-tc${consentOpen ? ' in-tc--hidden' : ''}`}>
         <img src={tcBunnyImg} alt="" className="in-tc-bunny" aria-hidden="true" />
