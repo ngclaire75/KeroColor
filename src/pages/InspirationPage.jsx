@@ -5,6 +5,7 @@ import SearchLoader from '../components/SearchLoader'
 import Footer from '../components/Footer'
 import EntryConsentModal from '../components/EntryConsentModal'
 import heroPoster from '../../images/inspiration-hero-poster.webp'
+import tcBunnyImg from '../../images/tc-bunny.webp'
 import figure1 from '../../images/figure1.webp'
 import figure2 from '../../images/figure2.webp'
 import figure3 from '../../images/figure3.webp'
@@ -108,8 +109,8 @@ const ROUTINE_STEPS = [
   { title: 'Set', body: 'Veil powder only where you need it, then mist. Too much powder mutes color, so keep it minimal over the cheeks.' },
 ]
 
-// localStorage (not sessionStorage) so "once per device" survives across
-// tabs/sessions, not just the current one.
+// sessionStorage, so agreeing lasts for the current visit only and the
+// banner appears again every time the site is revisited.
 const CONSENT_KEY = 'kerocolor-inspiration-consent'
 
 // Splits text into one <span> per letter so each can be scaled
@@ -134,6 +135,7 @@ export default function InspirationPage() {
   // underneath SearchLoader and be already finished/invisible by the
   // time that overlay lifts.
   const [consentOpen, setConsentOpen] = useState(false)
+  const [tcDismissed, setTcDismissed] = useState(false)
 
   const [isPlaying, setIsPlaying] = useState(false)
   const [btnHidden, setBtnHidden] = useState(false)
@@ -330,12 +332,12 @@ export default function InspirationPage() {
     // Consent banner opens right as the loading overlay finishes clearing,
     // not before — so its own fade-in is the thing the user actually sees
     // happen, instead of playing out hidden underneath SearchLoader. Only
-    // opens at all if this device hasn't already agreed.
+    // opens at all if this visit hasn't already agreed.
     const t2 = setTimeout(() => {
       setOverlayGone(true)
       let alreadyAgreed = false
       try {
-        alreadyAgreed = localStorage.getItem(CONSENT_KEY) === '1'
+        alreadyAgreed = sessionStorage.getItem(CONSENT_KEY) === '1'
       } catch {
         // Private browsing / storage blocked — falls back to showing it.
       }
@@ -404,13 +406,34 @@ export default function InspirationPage() {
       onAgree={() => {
         setConsentOpen(false)
         try {
-          localStorage.setItem(CONSENT_KEY, '1')
+          sessionStorage.setItem(CONSENT_KEY, '1')
         } catch {
           // Private browsing / storage blocked — nothing to persist to,
           // it'll just show again next visit.
         }
       }}
     />
+    {/* Floating button that reopens the terms & conditions banner; the
+        small x dismisses it until the page is reloaded. */}
+    {contentReady && !tcDismissed && (
+      <div className={`in-tc${consentOpen ? ' in-tc--hidden' : ''}`}>
+        <img src={tcBunnyImg} alt="" className="in-tc-bunny" aria-hidden="true" />
+        <button
+          type="button"
+          className="in-tc-btn"
+          onClick={() => setConsentOpen(true)}
+          aria-label="Read our terms and conditions"
+        >
+          Read our T&amp;C
+        </button>
+        {/* Same x as the KeroColor menu's close button. */}
+        <button type="button" className="in-tc-close" onClick={() => setTcDismissed(true)} aria-label="Hide this button">
+          <svg width="12" height="12" viewBox="0 0 11 11" fill="none" aria-hidden="true">
+            <path d="M1 1L10 10M10 1L1 10" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
+          </svg>
+        </button>
+      </div>
+    )}
     <div ref={pageRef} className={`in-page${contentReady ? ' in-page--revealed' : ' in-page--hidden'}`}>
       <nav className="in-nav">
         {NAV_ITEMS.map(item => (
