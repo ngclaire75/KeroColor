@@ -65,7 +65,7 @@
   width: auto;
   margin: -20px 0.6rem -5px 0.45rem;
   filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.4));
-  pointer-events: none;
+  cursor: pointer;
 }
 
 .in-tc-btn {

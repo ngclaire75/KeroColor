@@ -417,7 +417,7 @@ export default function InspirationPage() {
         small x dismisses it until the page is reloaded. */}
     {contentReady && !tcDismissed && (
       <div className={`in-tc${consentOpen ? ' in-tc--hidden' : ''}`}>
-        <img src={tcBunnyImg} alt="" className="in-tc-bunny" aria-hidden="true" />
+        <img src={tcBunnyImg} alt="" className="in-tc-bunny" aria-hidden="true" onClick={() => setConsentOpen(true)} />
         <button
           type="button"
           className="in-tc-btn"

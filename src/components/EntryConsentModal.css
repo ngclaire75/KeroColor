@@ -120,6 +120,12 @@
 }
 
 @media (min-width: 641px) {
+  /* Text block sits a touch below centre. */
+  .ecm-content {
+    padding-top: 3.4rem;
+    padding-bottom: 2.6rem;
+  }
+
   .ecm-heading {
     margin-bottom: 1.6rem;
   }
