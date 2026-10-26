@@ -57,6 +57,17 @@
   pointer-events: none;
 }
 
+/* x pressed: eases down off the screen as it fades — the same exit as
+   KeroMovie's kero tip bar. */
+@keyframes in-tc-out {
+  to { opacity: 0; transform: translate(-50%, 70px) scale(0.96); }
+}
+
+.in-tc--out {
+  animation: in-tc-out 0.46s cubic-bezier(0.55, 0, 0.75, 0.25) both;
+  pointer-events: none;
+}
+
 /* The bunny is taller than the container and sits low, so it pops up
    out of the top edge. */
 .in-tc-bunny {

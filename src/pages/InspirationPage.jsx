@@ -136,6 +136,13 @@ export default function InspirationPage() {
   // time that overlay lifts.
   const [consentOpen, setConsentOpen] = useState(false)
   const [tcDismissed, setTcDismissed] = useState(false)
+  // x: the bar eases down off the screen as it fades (same exit as
+  // KeroMovie's kero tip bar), then it's gone until the page reloads.
+  const [tcLeaving, setTcLeaving] = useState(false)
+  const dismissTc = () => {
+    setTcLeaving(true)
+    setTimeout(() => setTcDismissed(true), 480)
+  }
 
   const [isPlaying, setIsPlaying] = useState(false)
   const [btnHidden, setBtnHidden] = useState(false)
@@ -416,7 +423,7 @@ export default function InspirationPage() {
     {/* Floating button that reopens the terms & conditions banner; the
         small x dismisses it until the page is reloaded. */}
     {contentReady && !tcDismissed && (
-      <div className={`in-tc${consentOpen ? ' in-tc--hidden' : ''}`}>
+      <div className={`in-tc${consentOpen ? ' in-tc--hidden' : ''}${tcLeaving ? ' in-tc--out' : ''}`}>
         <img src={tcBunnyImg} alt="" className="in-tc-bunny" aria-hidden="true" onClick={() => setConsentOpen(true)} />
         <button
           type="button"
@@ -427,7 +434,7 @@ export default function InspirationPage() {
           Read our T&amp;C
         </button>
         {/* Same x as the KeroColor menu's close button. */}
-        <button type="button" className="in-tc-close" onClick={() => setTcDismissed(true)} aria-label="Hide this button">
+        <button type="button" className="in-tc-close" onClick={dismissTc} aria-label="Hide this button">
           <svg width="12" height="12" viewBox="0 0 11 11" fill="none" aria-hidden="true">
             <path d="M1 1L10 10M10 1L1 10" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
           </svg>
