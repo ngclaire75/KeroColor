@@ -46,17 +46,23 @@
   padding: 2.5rem 1.5rem 1.5rem;
 }
 
-/* Transparent on desktop — the input participates directly in
-   .dp-hex-search's row exactly as if this wrapper didn't exist. Only
-   becomes a real box on mobile (see the media query below). */
+/* Shrink-wraps the input so the clear (x) button can sit inside the
+   pill's right edge. On mobile it also clips the input's scale trick
+   (see the media query below). */
 .dp-hex-input-wrap {
-  display: contents;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .dp-hex-input {
+  /* No shrinking inside the flex wrapper — mobile's 133.33% width
+     trick depends on the input overflowing it. */
+  flex-shrink: 0;
   width: 420px;
   max-width: 70vw;
-  padding: 0.6rem 1rem;
+  /* Right padding leaves room for the clear (x) button. */
+  padding: 0.6rem 2.4rem 0.6rem 1rem;
   border: 1px solid #221616;
   border-radius: 999px;
   /* Same beige as the page itself, not white — the pill reads as part
@@ -95,21 +101,35 @@
   background: #221616;
 }
 
+/* Rouge, same red as the Search button. Inset 8px from the pill's
+   right edge — the same as its top/bottom gap (36px pill, 20px
+   button) — so it sits evenly inside the end of the pill. */
 .dp-hex-clear {
-  background: none;
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  padding: 0;
   border: none;
-  color: #221616;
-  opacity: 0.6;
+  border-radius: 50%;
+  background: #4d0c12;
+  color: #fff;
   cursor: pointer;
-  padding: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.2s;
+  transition: background 0.3s ease;
+}
+
+/* Block, not inline — no baseline gap nudging the x off-centre. */
+.dp-hex-clear svg {
+  display: block;
 }
 
 .dp-hex-clear:hover {
-  opacity: 1;
+  background: #221616;
 }
 
 .dp-hex-error {
@@ -127,10 +147,23 @@
 
   /* Real box now (not display:contents) — this is what actually takes
      the row's flex:1 share and clips the input's compensating overflow. */
+  /* The pill's border and background are drawn here, not on the
+     scaled input — the wrapper clips the input, and a border on the
+     input itself could lose a sub-pixel sliver at the right edge on
+     real devices. 34px tall, matching .dp-hex-btn. */
   .dp-hex-input-wrap {
-    display: block;
+    display: flex;
     flex: 1;
+    min-width: 0;
+    height: 34px;
     overflow: hidden;
+    border: 1px solid #221616;
+    border-radius: 999px;
+    background: #f2e8d9;
+  }
+
+  .dp-hex-input-wrap:focus-within {
+    border-color: #4d0c12;
   }
 
   .dp-hex-input {
@@ -146,7 +179,9 @@
        email/subject fields. */
     height: 45.33px;
     line-height: 45.33px;
-    padding: 0 0.9rem;
+    padding: 0 2.9rem 0 0.9rem;
+    border: none;
+    background: transparent;
     width: 133.33%;
     font-size: 16px;
     transform: scale(0.75);
@@ -156,6 +191,12 @@
   /* Explicit height (not padding-derived) to exactly match the input's
      own post-scale 34px height above — padding alone can't guarantee
      that once one side's height comes from a transform: scale(). */
+  /* Measured from inside the wrapper's 1px border: 6px + 1px = 7px
+     from the pill's outer edge, the same as its top/bottom gap. */
+  .dp-hex-clear {
+    right: 6px;
+  }
+
   .dp-hex-btn {
     height: 34px;
     padding: 0 1.15rem;

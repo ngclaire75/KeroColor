@@ -770,3 +770,29 @@ export const WIKI_COLOR_NAMES = [
   ['39a78e', 'Zomp'],
   ['301934', 'Citation Needed'],
 ]
+
+// Lets the Discover Palettes search take a colour name as well as a
+// hex. Spacing, punctuation and grey/gray don't matter. An exact name
+// wins; otherwise the best partial match — name prefix, then a word
+// prefix, then anywhere, shortest name first ("burg" -> Burgundy).
+const normalizeName = (s) => s.toLowerCase().replace(/grey/g, 'gray').replace(/[^a-z0-9]/g, '')
+
+export function colorNameToHex(query) {
+  const q = normalizeName(query)
+  if (!q) return null
+  const qWord = query.trim().toLowerCase().replace(/grey/g, 'gray')
+  let best = null
+  let bestScore = Infinity
+  for (const [hex, name] of WIKI_COLOR_NAMES) {
+    const key = normalizeName(name)
+    let score
+    if (key === q) return `#${hex}`
+    else if (key.startsWith(q)) score = 1
+    else if (name.toLowerCase().replace(/grey/g, 'gray').split(/[^a-z0-9]+/).some((w) => w && w.startsWith(qWord))) score = 2
+    else if (key.includes(q)) score = 3
+    else continue
+    score = score * 1000 + name.length
+    if (score < bestScore) { bestScore = score; best = `#${hex}` }
+  }
+  return best
+}

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import FullMenu from '../components/FullMenu'
 import { generateShadesFromHex, isValidHex, SAMPLE_HEX_CODES } from '../utils/generatePalette'
+import { colorNameToHex } from '../utils/colorNames'
 import bearImg from '../../images/bear.webp'
 // Reused wholesale (not just the class names) so the nav, grid, fonts,
 // and footer are pixel-for-pixel consistent with PalettePage.
@@ -40,6 +41,7 @@ export default function DiscoverPalettesPage() {
   })
   const [hexError, setHexError] = useState(false)
   const giantTextRef = useRef(null)
+  const hexInputRef = useRef(null)
 
   // Land on this page at the top, regardless of scroll position on the
   // tab navigated from (browsers preserve scroll across client-side route
@@ -64,13 +66,16 @@ export default function DiscoverPalettesPage() {
     return () => window.removeEventListener('mousemove', handleMove)
   }, [])
 
-  const runSearch = (hex) => {
-    if (!isValidHex(hex)) {
+  // Takes a hex or a colour name ("burgundy", "sage"). A name keeps
+  // what was typed in the bar; a hex is shown as typed too.
+  const runSearch = (query) => {
+    const hex = isValidHex(query) ? query : colorNameToHex(query)
+    if (!hex) {
       setHexError(true)
       return
     }
     setHexError(false)
-    setHexInput(hex)
+    setHexInput(query.trim())
     setPalette(generateShadesFromHex(hex, TOTAL_COUNT))
   }
 
@@ -133,15 +138,28 @@ export default function DiscoverPalettesPage() {
           <input
             type="text"
             className="dp-hex-input"
-            placeholder="Search a hex code, e.g. #7c1a2e"
+            placeholder="Search a hex code or colour"
             value={hexInput}
             onChange={(e) => { setHexInput(e.target.value); setHexError(false) }}
-            maxLength={7}
+            maxLength={30}
+            ref={hexInputRef}
           />
+          {hexInput && (
+            <button
+              type="button"
+              className="dp-hex-clear"
+              aria-label="Clear search"
+              onClick={() => { setHexInput(''); setHexError(false); hexInputRef.current?.focus() }}
+            >
+              <svg width="8" height="8" viewBox="0 0 10 10" fill="none">
+                <path d="M1 1l8 8M9 1l-8 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+              </svg>
+            </button>
+          )}
         </div>
         <button type="submit" className="dp-hex-btn">Search</button>
       </form>
-      {hexError && <p className="dp-hex-error">Enter a valid hex code, like #7c1a2e or #b06.</p>}
+      {hexError && <p className="dp-hex-error">Enter a hex code or colour name, like #7c1a2e or burgundy.</p>}
 
       {/* ── Palette grid — same swatch layout/fonts as PalettePage, the
           searched color swept light -> dark. ── */}
