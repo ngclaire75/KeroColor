@@ -206,6 +206,9 @@
   width: 960px;
   max-width: 960px;
   margin: 4rem auto 3rem;
+  /* Separator closing the issue section before the first chapter. */
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .in-cover-meta {

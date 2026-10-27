@@ -534,6 +534,9 @@
   width: 960px;
   max-width: calc(100% - 6rem);
   margin: 4rem auto 24px;
+  /* Separator closing the issue section before the first chapter. */
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .ed-mh-meta {
