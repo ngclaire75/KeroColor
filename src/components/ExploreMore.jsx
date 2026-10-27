@@ -1,9 +1,5 @@
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import explore1 from '../../images/explore1.webp'
-import explorepink2 from '../../images/explorepink2.webp'
-import exploreblue1 from '../../images/exploreblue1.webp'
-import mod1 from '../../images/mod1.webp'
 import './ExploreMore.css'
 
 // Everything below the Explore page's card grid, themed by whichever
@@ -15,34 +11,28 @@ const FAMILIES = {
   red: {
     name: 'Red',
     accent: '#74070d',
-    img: explore1,
     shades: { dark: '#4a0a0e', main: '#941e1a', mid: '#aa7877', light: '#e3d1cf' },
     neutrals: [['Cream', '#efe6da'], ['Camel', '#c19a6b'], ['Black', '#1c1a1a'], ['Denim', '#4a6583']],
   },
   pink: {
     name: 'Pink',
     accent: '#c97a9b',
-    img: explorepink2,
     shades: { dark: '#8e4a66', main: '#c97a9b', mid: '#e5a9c2', light: '#f8d8e7' },
     neutrals: [['White', '#fbf8f6'], ['Dove Grey', '#a8a4a6'], ['Navy', '#1f2a44'], ['Taupe', '#8b7d72']],
   },
   blue: {
     name: 'Blue',
     accent: '#15294d',
-    img: exploreblue1,
     shades: { dark: '#15294d', main: '#445471', mid: '#8a94a6', light: '#d3d9e4' },
     neutrals: [['White', '#fbfaf7'], ['Camel', '#c19a6b'], ['Charcoal', '#3a3a3c'], ['Stone', '#b8b0a2']],
   },
   green: {
     name: 'Green',
     accent: '#35443d',
-    img: mod1,
     shades: { dark: '#25302b', main: '#495750', mid: '#868f8b', light: '#d2d8d3' },
     neutrals: [['Cream', '#f1ece2'], ['Tan', '#b89b72'], ['Chocolate', '#4b3226'], ['Black', '#1c1c1a']],
   },
 }
-
-const FAMILY_ORDER = ['red', 'pink', 'blue', 'green']
 
 // Dark or light label text, whichever reads better on a given block.
 const inkFor = (hex) => {
@@ -194,7 +184,7 @@ function FabricSwatch({ fabric, color, uid }) {
   )
 }
 
-export default function ExploreMore({ searchResult, onFamilyChange }) {
+export default function ExploreMore({ searchResult }) {
   const key = FAMILIES[searchResult?.colorFamily] ? searchResult.colorFamily : 'red'
   const f = FAMILIES[key]
   const rootRef = useRef(null)
@@ -214,12 +204,6 @@ export default function ExploreMore({ searchResult, onFamilyChange }) {
     els.forEach((el) => observer.observe(el))
     return () => observer.disconnect()
   }, [])
-
-  const switchFamily = (next) => {
-    if (next === key) return
-    onFamilyChange(next)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
 
   return (
     <div className="xm" ref={rootRef} style={{ '--xm-accent': f.accent }}>
@@ -249,7 +233,7 @@ export default function ExploreMore({ searchResult, onFamilyChange }) {
       </section>
 
       {/* ── Fabric & finish ── */}
-      <section className="xm-section xm-reveal">
+      <section className="xm-section xm-section--last xm-reveal">
         <div className="xm-head">
           <span className="xm-kicker">Texture</span>
           <h2 className="xm-title">Fabric &amp; Finish</h2>
@@ -266,30 +250,6 @@ export default function ExploreMore({ searchResult, onFamilyChange }) {
               </div>
               <p className="xm-card-copy">{fab.copy}</p>
             </article>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Keep exploring — switches the whole page's color family ── */}
-      <section className="xm-section xm-section--last xm-reveal">
-        <div className="xm-head">
-          <span className="xm-kicker">Continue</span>
-          <h2 className="xm-title">Keep Exploring</h2>
-        </div>
-        <div className="xm-families">
-          {FAMILY_ORDER.map((fam) => (
-            <button
-              type="button"
-              key={fam}
-              className={`xm-family${fam === key ? ' xm-family--active' : ''}`}
-              onClick={() => switchFamily(fam)}
-              aria-current={fam === key ? 'true' : undefined}
-            >
-              <img src={FAMILIES[fam].img} alt="" loading="lazy" />
-              <span className="xm-family-tint" style={{ background: FAMILIES[fam].accent }} />
-              <span className="xm-family-name">{FAMILIES[fam].name}</span>
-              <span className="xm-family-cta">{fam === key ? 'you are here' : 'explore'}</span>
-            </button>
           ))}
         </div>
       </section>

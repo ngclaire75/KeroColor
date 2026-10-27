@@ -100,12 +100,9 @@ export default function ExplorePage() {
       {/* Fourth section — 3x3 card grid */}
       <NextSection searchResult={searchResult} />
 
-      {/* Styling, fabric, pairings, and family switcher — themed by the
-          same active color family as everything above. */}
-      <ExploreMore
-        searchResult={searchResult}
-        onFamilyChange={(family) => setSearchResult({ query: family, valid: true, colorFamily: family })}
-      />
+      {/* Styling, fabric, and pairings — themed by the same active
+          color family as everything above. */}
+      <ExploreMore searchResult={searchResult} />
       <Footer />
     </div>
   )
