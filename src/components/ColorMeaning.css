@@ -177,6 +177,9 @@
     width: 88vw;
     height: auto;
     align-self: center;
+    /* Fixed mobile height (a little under the original) so the wider text
+       below doesn't shrink it */
+    min-height: calc(173vw - 261px);
     padding: 2.7rem 6.7vw;
     gap: 0.6rem;
   }
@@ -201,7 +204,7 @@
 
   .cm-heading,
   .cm-body {
-    max-width: 210px;
+    max-width: 260px;
   }
 
   .cm-feat p {

@@ -1,13 +1,17 @@
 .ticker {
   background: #7c1a2e;
   overflow: hidden;
-  padding: 0.65rem 0;
+  /* Flex (not a plain block) so the track isn't sat on a line box sized
+     for the page's body font, which pushed the text below centre */
+  display: flex;
+  align-items: center;
+  height: 2.55rem;
 }
 
 .ticker-track {
   display: inline-flex;
   white-space: nowrap;
-  animation: ticker-scroll 18s linear infinite;
+  animation: ticker-scroll 24s linear infinite;
 }
 
 .ticker-track span {
@@ -16,11 +20,23 @@
   font-weight: 400;
   letter-spacing: 0.12em;
   color: #fff;
+  line-height: 1;
 }
 
 @media (max-width: 640px) {
+  /* Band and text scaled down together for mobile */
+  .ticker {
+    height: 2.17rem;
+  }
+
+  /* Longer duration — the bigger text makes the loop longer, so this
+     keeps the scroll pace the same as before the text grew */
+  .ticker-track {
+    animation-duration: 32s;
+  }
+
   .ticker-track span {
-    font-size: 0.44rem;
+    font-size: 0.58rem;
   }
 }
 
