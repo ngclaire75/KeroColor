@@ -527,7 +527,7 @@
 }
 
 /* ── Masthead: mirrors the Inspiration page's cover (.in-cover) — same
-   960px column, Akzidenz gradient title, and lede / index row. ── */
+   960px column, solid white Akzidenz title, and lede / index row. ── */
 /* Small bottom margin: with the intro's own top padding, a modest gap
    before the first chapter. */
 .ed-masthead {
@@ -558,17 +558,7 @@
   line-height: 0.88;
   letter-spacing: -0.02em;
   text-transform: uppercase;
-  background: linear-gradient(to right, #fff 0%, #fff 30%, #e8d8c4 48%, #c7b7a3 58%, #6d2932 78%, #fff 100%);
-  background-size: 220% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: ed-mh-shimmer 9s ease-in-out infinite alternate;
-}
-
-@keyframes ed-mh-shimmer {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
+  color: #fff;
 }
 
 .ed-mh-body {

@@ -200,8 +200,8 @@
 }
 
 /* ── Issue cover — the page's opening spread, above the first video.
-   Same 960px column, Akzidenz uppercase, and burgundy-to-beige
-   gradient as everything below it. ── */
+   Same 960px column and Akzidenz uppercase as everything below it,
+   with a solid white title. ── */
 .in-cover {
   width: 960px;
   max-width: 960px;
@@ -230,17 +230,7 @@
   line-height: 0.88;
   letter-spacing: -0.02em;
   text-transform: uppercase;
-  background: linear-gradient(to right, #fff 0%, #fff 30%, #e8d8c4 48%, #c7b7a3 58%, #6d2932 78%, #fff 100%);
-  background-size: 220% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: in-cover-shimmer 9s ease-in-out infinite alternate;
-}
-
-@keyframes in-cover-shimmer {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
+  color: #fff;
 }
 
 .in-cover-body {
