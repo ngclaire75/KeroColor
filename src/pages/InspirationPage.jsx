@@ -72,36 +72,6 @@ const LOOKS = [
   { img: lookModel4, name: 'Tomato Glaze', undertone: 'warm', note: 'Blush carried across the nose for a sun-kissed flush.', shades: ['#e3b6ad', '#cf9188', '#d63a39'] },
 ]
 
-const UNDERTONES = [
-  {
-    name: 'Warm',
-    tell: 'Veins read green, and gold jewelry glows against your skin.',
-    shades: ['#e0b07b', '#d98e5f', '#c65d3b', '#b5651d', '#8a3324'],
-    reach: [['Blush', 'peach, apricot, terracotta'], ['Lip', 'brick, coral, warm nude'], ['Eye', 'bronze, copper, olive']],
-  },
-  {
-    name: 'Cool',
-    tell: 'Veins read blue or purple, and silver flatters more than gold.',
-    shades: ['#b9c3e0', '#e3a6c0', '#c94f7c', '#a3325c', '#7b4a8c'],
-    reach: [['Blush', 'rose, berry, pink'], ['Lip', 'raspberry, plum, blue-red'], ['Eye', 'taupe, mauve, slate']],
-  },
-  {
-    name: 'Neutral',
-    tell: 'Veins read blue-green, and gold and silver both work.',
-    shades: ['#d4a996', '#c98f7f', '#b8988a', '#a8736a', '#8c5a52'],
-    reach: [['Blush', 'dusty rose, muted coral'], ['Lip', 'mauve nude, rosewood'], ['Eye', 'champagne, taupe, brown']],
-  },
-]
-
-// "In this issue" index on the cover — each entry scrolls to its section.
-const ISSUE_INDEX = [
-  { id: 'in-featured', label: 'Featured Film' },
-  { id: 'in-studio', label: 'Makeup Studio' },
-  { id: 'in-looks', label: 'The Lookbook' },
-  { id: 'in-undertone', label: 'Know Your Undertone' },
-  { id: 'in-steps', label: 'Four Steps, One Palette' },
-]
-
 const ROUTINE_STEPS = [
   { title: 'Prep', body: 'Start with a hydrated base. Color reads truer on skin that isn’t dry or patchy, so moisturize and let it settle for a minute before anything else.' },
   { title: 'Base', body: 'Match foundation to your undertone, not just your depth. Check along the jaw in daylight; the right shade disappears rather than sitting on top.' },
@@ -378,13 +348,6 @@ export default function InspirationPage() {
   // Discover Palettes page.
   const openShade = (hex) => navigate('/palette/discover', { state: { hex } })
 
-  // Cover index: glide to the section, stopping 40px above it.
-  const scrollToSection = (id) => {
-    const el = document.getElementById(id)
-    if (!el) return
-    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 40, behavior: 'smooth' })
-  }
-
   const handleNavClick = (item) => {
     if (item === 'Inspiration') return
     if (item === 'Editorial') { navigate('/editorial'); return }
@@ -453,37 +416,6 @@ export default function InspirationPage() {
           </button>
         ))}
       </nav>
-
-      {/* ── Issue cover — reads like the opening spread of a magazine:
-          title, issue line, lede, and a clickable index of every section
-          on the page. ── */}
-      <header className="in-cover">
-        <div className="in-cover-meta">
-          <span>Issue 03 · Autumn Winter 2026</span>
-          <span>Color led beauty, curated by Kerocolor</span>
-        </div>
-        <h1 className="in-cover-title">Inspiration</h1>
-        <div className="in-cover-body">
-          <p className="in-cover-lede">
-            Real routines from creators we love, broken down by the shades that make them work.
-            Watch the looks, borrow the colors, and learn which ones belong on you.
-          </p>
-          <nav className="in-cover-index" aria-label="In this issue">
-            <span className="in-cover-label">In this issue</span>
-            <ol>
-              {ISSUE_INDEX.map((item, i) => (
-                <li key={item.id}>
-                  <button type="button" onClick={() => scrollToSection(item.id)}>
-                    <span className="in-cover-index-num">{String(i + 1).padStart(2, '0')}</span>
-                    <span className="in-cover-index-label">{item.label}</span>
-                    <span className="in-cover-index-arrow" aria-hidden="true">↓</span>
-                  </button>
-                </li>
-              ))}
-            </ol>
-          </nav>
-        </div>
-      </header>
 
       {/* ── Hero rectangle ── */}
       <section className="in-hero" id="in-featured">
@@ -690,43 +622,6 @@ export default function InspirationPage() {
                 </div>
               </div>
             </article>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Undertone guide ── */}
-      <section className="in-undertone in-reveal" id="in-undertone">
-        <div className="in-section-header">
-          <h2 className="in-section-heading">Know Your<br />Undertone</h2>
-          <p className="in-section-meta">the quickest way to narrow down every shade below</p>
-        </div>
-        <div className="in-undertone-grid">
-          {UNDERTONES.map((u) => (
-            <div className="in-undertone-card" key={u.name}>
-              <h3 className="in-undertone-name">{u.name}</h3>
-              <p className="in-undertone-tell">{u.tell}</p>
-              <div className="in-undertone-strip">
-                {u.shades.map((hex) => (
-                  <button
-                    type="button"
-                    key={hex}
-                    className="in-undertone-swatch"
-                    style={{ background: hex }}
-                    title={hex}
-                    aria-label={`Explore ${hex}`}
-                    onClick={() => openShade(hex)}
-                  />
-                ))}
-              </div>
-              <dl className="in-undertone-reach">
-                {u.reach.map(([area, picks]) => (
-                  <div className="in-undertone-reach-row" key={area}>
-                    <dt>{area}</dt>
-                    <dd>{picks}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
           ))}
         </div>
       </section>

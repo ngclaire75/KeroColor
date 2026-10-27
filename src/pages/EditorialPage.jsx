@@ -15,12 +15,6 @@ import './EditorialPage.css'
 
 const NAV_ITEMS = ['All', 'Seasonal Edition', 'Editorial', 'Inspiration']
 
-// Masthead index; each entry glides to its section.
-const CHAPTERS = [
-  { id: 'ch-intro', title: 'Facts, Myths & Artistry' },
-  { id: 'ch-zendaya', title: 'Case Study: Zendaya' },
-]
-
 export default function EditorialPage() {
   const navigate = useNavigate()
   const moreRef = useRef(null)
@@ -69,13 +63,6 @@ export default function EditorialPage() {
     return () => observer.disconnect()
   }, [])
 
-  // Masthead index: glide to the chapter, stopping 30px above it.
-  const scrollToChapter = (id) => {
-    const el = document.getElementById(id)
-    if (!el) return
-    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 30, behavior: 'smooth' })
-  }
-
   const handleNavClick = (item) => {
     if (item === 'Editorial') return
     if (item === 'Inspiration') { navigate('/inspiration'); return }
@@ -97,37 +84,6 @@ export default function EditorialPage() {
           </button>
         ))}
       </nav>
-
-      {/* ── Masthead: same cover layout as the Inspiration page — issue
-          line, title, lede, and chapter index. ── */}
-      <header className="ed-masthead">
-        <div className="ed-mh-meta">
-          <span>Issue 03 · Autumn Winter 2026</span>
-          <span>The color report, curated by Kerocolor</span>
-        </div>
-        <h1 className="ed-mh-title">Editorial</h1>
-        <div className="ed-mh-body">
-          <p className="ed-mh-lede">
-            How color analysis actually works, where its rules come from, and what happens when one of
-            the most photographed people in the world wears color on purpose. Read it start to finish, or
-            turn straight to a chapter.
-          </p>
-          <nav className="ed-mh-index" aria-label="In this issue">
-            <span className="ed-mh-label">In this issue</span>
-            <ol>
-              {CHAPTERS.map((ch, i) => (
-                <li key={ch.id}>
-                  <button type="button" onClick={() => scrollToChapter(ch.id)}>
-                    <span className="ed-mh-num">{String(i + 1).padStart(2, '0')}</span>
-                    <span className="ed-mh-item">{ch.title}</span>
-                    <span className="ed-mh-arrow" aria-hidden="true">↓</span>
-                  </button>
-                </li>
-              ))}
-            </ol>
-          </nav>
-        </div>
-      </header>
 
       {/* ── Intro section ── */}
       <section className="ed-intro" id="ch-intro">

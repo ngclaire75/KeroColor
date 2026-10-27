@@ -199,124 +199,6 @@
   transition: none;
 }
 
-/* ── Issue cover — the page's opening spread, above the first video.
-   Same 960px column and Akzidenz uppercase as everything below it,
-   with a solid white title. ── */
-.in-cover {
-  width: 960px;
-  max-width: 960px;
-  margin: 4rem auto 3rem;
-  /* Separator closing the issue section before the first chapter. */
-  padding-bottom: 2.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.in-cover-meta {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-bottom: 0.8rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  font-family: 'Inter', sans-serif;
-  font-size: 0.6rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.55);
-}
-
-.in-cover-title {
-  margin: 1.4rem 0 2rem -0.04em;
-  font-family: 'Akzidenz Grotesk BQ', sans-serif;
-  font-size: 7.4rem;
-  font-weight: 700;
-  line-height: 0.88;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-  color: #fff;
-}
-
-.in-cover-body {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2.75rem;
-  align-items: start;
-}
-
-.in-cover-lede {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.88rem;
-  line-height: 1.75;
-  color: rgba(255, 255, 255, 0.78);
-}
-
-.in-cover-label {
-  display: block;
-  margin-bottom: 0.6rem;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.58rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.in-cover-index ol {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.in-cover-index button {
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
-  width: 100%;
-  padding: 0.62rem 0;
-  border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  background: none;
-  cursor: pointer;
-  text-align: left;
-  font-family: 'Inter', sans-serif;
-}
-
-.in-cover-index-num {
-  flex: 0 0 1.4rem;
-  font-size: 0.6rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  color: #c7b7a3;
-}
-
-.in-cover-index-label {
-  flex: 1;
-  font-size: 0.8rem;
-  color: #fff;
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.in-cover-index-arrow {
-  font-size: 0.75rem;
-  color: #fff;
-  opacity: 0;
-  transform: translateY(-4px);
-  transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.in-cover-index button:hover .in-cover-index-label,
-.in-cover-index button:focus-visible .in-cover-index-label {
-  transform: translateX(4px);
-}
-
-.in-cover-index button:hover .in-cover-index-arrow,
-.in-cover-index button:focus-visible .in-cover-index-arrow {
-  opacity: 1;
-  transform: translateY(0);
-}
-
 /* ── Hero rectangle — seulgi.jpeg, bottom+center aligned within its own
    box, two-line heading centered over it. ── */
 /* Fixed to the YouTube video's exact native size (1280x720), not a
@@ -325,7 +207,7 @@
   position: relative;
   width: 960px;
   height: 540px;
-  margin: 3rem auto 0.5rem;
+  margin: 4.5rem auto 0.5rem;
   border-radius: 8px;
   overflow: hidden;
 }
@@ -634,8 +516,8 @@
   margin: 0 auto 0.5rem;
 }
 
-/* ── Sections below the studio carousel (lookbook, undertone guide,
-   routine, closing CTA) — same 960px column, 4.5rem rhythm, and
+/* ── Sections below the studio carousel (lookbook, routine,
+   closing CTA) — same 960px column, 4.5rem rhythm, and
    Akzidenz uppercase headings as the studio section above, so the page
    reads as one continuous editorial rather than bolted-on blocks. ── */
 .in-reveal {
@@ -816,99 +698,6 @@
   transform: scale(1.2);
 }
 
-/* ── Undertone guide ── */
-.in-undertone {
-  width: 960px;
-  max-width: 960px;
-  margin: 0 auto 4.5rem;
-}
-
-.in-undertone-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
-.in-undertone-card {
-  display: flex;
-  flex-direction: column;
-  padding: 1.6rem 1.5rem 1.4rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
-  background: #0d0d0d;
-}
-
-.in-undertone-name {
-  margin: 0 0 0.6rem;
-  font-family: 'Akzidenz Grotesk BQ', sans-serif;
-  font-size: 1.6rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: #fff;
-}
-
-.in-undertone-tell {
-  margin: 0 0 1.3rem;
-  min-height: 2.6em;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.76rem;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-/* Joined swatch strip — the hovered shade widens so it can be read
-   individually without breaking the strip apart. */
-.in-undertone-strip {
-  display: flex;
-  height: 46px;
-  margin-bottom: 1.4rem;
-  border-radius: 6px;
-  overflow: hidden;
-}
-
-.in-undertone-swatch {
-  flex: 1;
-  padding: 0;
-  border: none;
-  cursor: pointer;
-  transition: flex 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.in-undertone-swatch:hover,
-.in-undertone-swatch:focus-visible {
-  flex: 1.9;
-}
-
-.in-undertone-reach {
-  margin: auto 0 0;
-}
-
-.in-undertone-reach-row {
-  display: flex;
-  gap: 0.75rem;
-  padding: 0.55rem 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.in-undertone-reach-row dt {
-  flex: 0 0 3.2rem;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.56rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  line-height: 1.9;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.in-undertone-reach-row dd {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.74rem;
-  line-height: 1.6;
-  color: #fff;
-}
-
 /* ── Routine ── */
 .in-steps {
   width: 960px;
@@ -1046,7 +835,7 @@
     width: calc(100% - 2.5rem);
     height: auto;
     aspect-ratio: 16 / 9;
-    margin: 2rem auto 0.5rem;
+    margin: 2.75rem auto 0.5rem;
   }
 
   .in-hero-credit {
@@ -1141,7 +930,6 @@
   }
 
   .in-looks,
-  .in-undertone,
   .in-steps {
     width: 100%;
     max-width: calc(100% - 2.5rem);
@@ -1173,14 +961,6 @@
     font-size: 0.8rem;
   }
 
-  .in-undertone-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .in-undertone-tell {
-    min-height: 0;
-  }
-
   .in-steps-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 1.75rem 1rem;
@@ -1201,32 +981,6 @@
 
   .in-cta-heading {
     font-size: 1.7rem;
-  }
-
-  .in-cover {
-    width: 100%;
-    max-width: calc(100% - 2.5rem);
-    margin: 2.75rem auto 2rem;
-  }
-
-  .in-cover-meta {
-    flex-direction: column;
-    gap: 0.25rem;
-    font-size: 0.52rem;
-  }
-
-  .in-cover-title {
-    margin: 1rem 0 1.4rem -0.03em;
-    font-size: 14.2vw;
-  }
-
-  .in-cover-body {
-    grid-template-columns: 1fr;
-    gap: 1.75rem;
-  }
-
-  .in-cover-lede {
-    font-size: 0.8rem;
   }
 
 }
