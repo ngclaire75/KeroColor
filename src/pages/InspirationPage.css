@@ -238,7 +238,8 @@
 
 .in-cover-body {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* Lede on top, "In this issue" index on its own row below. */
+  grid-template-columns: 1fr;
   gap: 2.75rem;
   align-items: start;
 }
