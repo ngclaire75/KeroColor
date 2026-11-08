@@ -417,6 +417,8 @@ export default function InspirationPage() {
         ))}
       </nav>
 
+      <h2 className="in-intro-heading">Color, worn with grace. A quiet study in effortless beauty.</h2>
+
       {/* ── Hero rectangle ── */}
       <section className="in-hero" id="in-featured">
         <div className="in-hero-video-wrap" onClick={togglePlay}>
@@ -473,11 +475,12 @@ export default function InspirationPage() {
 
       {/* ── Figure ticker — one continuously auto-scrolling row, 16:9
           frames with a thin black border. The image list is rendered
-          twice back-to-back so the CSS animation can scroll exactly one
-          set's width and loop seamlessly. ── */}
+          three times back-to-back so the CSS animation can scroll exactly
+          one set's width and loop seamlessly, with enough frames left over
+          to fill the full-width strip on very wide screens. ── */}
       <section className="in-figures">
         <div className="in-figures-track">
-          {[...FIGURE_IMAGES, ...FIGURE_IMAGES].map((src, i) => (
+          {[...FIGURE_IMAGES, ...FIGURE_IMAGES, ...FIGURE_IMAGES].map((src, i) => (
             <div className="in-figure-cell" key={i}>
               {/* Eager, not lazy: in a looping strip the duplicate copy of
                   each photo slides in from off-screen, and lazy loading only
