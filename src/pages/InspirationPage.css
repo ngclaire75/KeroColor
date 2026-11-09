@@ -6,7 +6,7 @@
 }
 
 /* Floating "Read our T&C" button, bottom centre. Grey frosted glass with
-   an outline that slowly rotates through the footer's gradient colors
+   an outline that slowly rotates through the burgundy-to-beige palette colors
    (a conic gradient masked down to a 1.5px ring). Label in the KeroColor
    menu's type; the x is the menu's close icon, inside the container. */
 @property --in-tc-angle {
@@ -115,14 +115,9 @@
   .in-tc-bunny { height: 46px; margin: -17px 0.5rem -4px 0.35rem; }
 }
 
-/* Legal footer — same gradient as .pp-footer on the All/Seasonal Edition tabs. */
+/* Legal footer — pinned to the bottom of the page when content is short. */
 .in-page .footer {
-  background: linear-gradient(to right, #561c24 0%, #6d2932 55%, #c7b7a3 92%, #e8d8c4 100%);
   margin-top: auto;
-}
-
-.in-page .footer-tag {
-  color: #561c24;
 }
 
 .in-page--hidden {
@@ -767,7 +762,7 @@
   margin: 0 auto 5.5rem;
   padding: 3.5rem 3rem;
   border-radius: 8px;
-  /* Same burgundy-to-beige as the footer. Stops
+  /* Burgundy-to-beige gradient. Stops
      follow a smoothstep ease computed in OKLab and weighted toward the
      burgundy, so most of the box stays red and it only warms into beige
      near the end, with no visible band mid-way. */

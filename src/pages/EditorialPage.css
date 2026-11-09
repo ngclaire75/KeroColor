@@ -3,15 +3,6 @@
   background: #000;
 }
 
-/* Legal footer — same gradient/text color as the Inspiration page's footer. */
-.ed-page .footer {
-  background: linear-gradient(to right, #561c24 0%, #6d2932 55%, #c7b7a3 92%, #e8d8c4 100%);
-}
-
-.ed-page .footer-tag {
-  color: #561c24;
-}
-
 .ed-page--hidden {
   filter: blur(14px);
   opacity: 0;

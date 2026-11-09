@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import FullMenu from '../components/FullMenu'
+import Footer from '../components/Footer'
 import { generateShadesFromHex, isValidHex, SAMPLE_HEX_CODES } from '../utils/generatePalette'
 import { colorNameToHex } from '../utils/colorNames'
 import bearImg from '../../images/bear.webp'
 // Reused wholesale (not just the class names) so the nav, grid, fonts,
-// and footer are pixel-for-pixel consistent with PalettePage.
+// and footer are consistent with PalettePage.
 import './PalettePage.css'
 import './DiscoverPalettesPage.css'
 
@@ -13,18 +14,6 @@ import './DiscoverPalettesPage.css'
 // light->dark steps of the same hex read as near-duplicate swatches.
 const TOTAL_COUNT = 12
 const DEFAULT_HEX = '#4d0c12' // same red as the hamburger menu overlay background
-
-const FOOTER_PAGES_LEFT = [
-  { label: 'Home',           href: '/',        type: 'link'   },
-  { label: 'About Us',       href: '/#about',  type: 'link'   },
-  { label: 'Color Palette',  href: '/palette', type: 'link'   },
-  { label: 'Explore',        href: '/explore', type: 'link'   },
-]
-
-const FOOTER_PAGES_RIGHT = [
-  { label: 'FAQ',            href: '/#faq',    type: 'link'   },
-  { label: 'Contact',        href: '/#contact', type: 'link'  },
-]
 
 export default function DiscoverPalettesPage() {
   const location = useLocation()
@@ -40,7 +29,6 @@ export default function DiscoverPalettesPage() {
     return i > 0 ? [shades[i], ...shades.slice(0, i), ...shades.slice(i + 1)] : shades
   })
   const [hexError, setHexError] = useState(false)
-  const giantTextRef = useRef(null)
   const hexInputRef = useRef(null)
 
   // Land on this page at the top, regardless of scroll position on the
@@ -48,22 +36,6 @@ export default function DiscoverPalettesPage() {
   // changes by default).
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' })
-  }, [])
-
-  // Same flashlight hover effect on the giant footer "kero." text as
-  // PalettePage — tracked globally via CSS custom properties so the
-  // spotlight is already correctly positioned the instant the cursor
-  // enters the text, rather than snapping from a stale last-known spot.
-  useEffect(() => {
-    const handleMove = (e) => {
-      const el = giantTextRef.current
-      if (!el) return
-      const rect = el.getBoundingClientRect()
-      el.style.setProperty('--spot-x', `${e.clientX - rect.left}px`)
-      el.style.setProperty('--spot-y', `${e.clientY - rect.top}px`)
-    }
-    window.addEventListener('mousemove', handleMove)
-    return () => window.removeEventListener('mousemove', handleMove)
   }, [])
 
   // Takes a hex or a colour name ("burgundy", "sage"). A name keeps
@@ -176,34 +148,7 @@ export default function DiscoverPalettesPage() {
         ))}
       </div>
 
-      {/* ── Footer — identical to PalettePage's ── */}
-      <footer className="pp-footer">
-        <div className="pp-footer-top">
-          <nav className="pp-footer-nav">
-            {FOOTER_PAGES_LEFT.map(p =>
-              p.type === 'link'
-                ? <Link key={p.label} to={p.href} className="pp-footer-nav-link">{p.label}</Link>
-                : <a key={p.label} href={p.href} className="pp-footer-nav-link">{p.label}</a>
-            )}
-          </nav>
-          <nav className="pp-footer-nav pp-footer-nav--right">
-            {FOOTER_PAGES_RIGHT.map(p =>
-              p.type === 'link'
-                ? <Link key={p.label} to={p.href} className="pp-footer-nav-link">{p.label}</Link>
-                : <a key={p.label} href={p.href} className="pp-footer-nav-link">{p.label}</a>
-            )}
-          </nav>
-        </div>
-        <div className="pp-footer-giant-wrap">
-          <div
-            ref={giantTextRef}
-            className="pp-footer-giant-inner"
-          >
-            <span className="pp-footer-giant-text">k<span className="pp-footer-giant-text-e">e</span><span className="pp-footer-giant-text-e">r</span>o<span className="pp-footer-giant-dot">.</span></span>
-            <span className="pp-footer-giant-text pp-footer-giant-text--spotlight" aria-hidden="true">k<span className="pp-footer-giant-text-e">e</span><span className="pp-footer-giant-text-e">r</span>o<span className="pp-footer-giant-dot">.</span></span>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
     </div>
   )

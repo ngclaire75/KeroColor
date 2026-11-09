@@ -645,8 +645,8 @@ export default function InspirationPage() {
         </ol>
       </section>
 
-      {/* ── Closing call to action — same burgundy-to-beige gradient as the
-          footer, so it reads as the page's natural sign-off. ── */}
+      {/* ── Closing call to action — burgundy-to-beige gradient, so it
+          reads as the page's natural sign-off. ── */}
       <section className="in-cta in-reveal">
         <h2 className="in-cta-heading">Find the shades<br />made for you</h2>
         <p className="in-cta-text">Search any hex to see its full family of shades, or explore palettes by color.</p>

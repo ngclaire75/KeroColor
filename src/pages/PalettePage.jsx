@@ -2,6 +2,7 @@ import { useState, useEffect, useLayoutEffect, useRef } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import SearchLoader from '../components/SearchLoader'
 import FullMenu from '../components/FullMenu'
+import Footer from '../components/Footer'
 import { useSearch } from '../SearchContext'
 import { SAMPLE_HEX_CODES } from '../utils/generatePalette'
 import heroImg from '../../images/fire.webp'
@@ -59,18 +60,6 @@ const DEFAULT_CONTENT = {
   duoItems: DUO_ITEMS,
 }
 
-const FOOTER_PAGES_LEFT = [
-  { label: 'Home',           href: '/',        type: 'link'   },
-  { label: 'About Us',       href: '/#about',  type: 'link'   },
-  { label: 'Color Palette',  href: '/palette', type: 'link'   },
-  { label: 'Explore',        href: '/explore', type: 'link'   },
-]
-
-const FOOTER_PAGES_RIGHT = [
-  { label: 'FAQ',            href: '/#faq',    type: 'link'   },
-  { label: 'Contact',        href: '/#contact', type: 'link'  },
-]
-
 const PALETTE_ITEMS = [
   { color: '#371a16', category: 'Earth Tones', name: 'Deep Mahogany', desc: 'Warm earthy dark tone' },
   { color: '#e9d9ca', category: 'Neutrals',    name: 'Linen Blush',   desc: 'Soft creamy neutral hue' },
@@ -92,7 +81,6 @@ export default function PalettePage() {
   const [tabLoading, setTabLoading] = useState(false)
   const [tabLoaderFading, setTabLoaderFading] = useState(false)
   const tabTimeoutsRef = useRef([])
-  const giantTextRef = useRef(null)
 
   // Land on this page at the top, regardless of scroll position on the
   // tab navigated from (browsers preserve scroll across client-side route
@@ -104,25 +92,6 @@ export default function PalettePage() {
     window.scrollTo({ top: 0, behavior: 'instant' })
     setActiveTab(location.state?.tab || 'All')
   }, [location.key])
-
-  // Flashlight hover effect on the giant footer "kero." text — tracks the
-  // cursor via CSS custom properties so the spotlight overlay's radial-gradient
-  // mask can follow it without triggering a React re-render per mousemove.
-  // Tracked globally (not just while the cursor is over the text) so the
-  // spotlight is already correctly positioned the moment the cursor enters
-  // the text, rather than snapping from a stale last-known position.
-  // Visibility itself still fades in/out purely via CSS :hover on the text.
-  useEffect(() => {
-    const handleMove = (e) => {
-      const el = giantTextRef.current
-      if (!el) return
-      const rect = el.getBoundingClientRect()
-      el.style.setProperty('--spot-x', `${e.clientX - rect.left}px`)
-      el.style.setProperty('--spot-y', `${e.clientY - rect.top}px`)
-    }
-    window.addEventListener('mousemove', handleMove)
-    return () => window.removeEventListener('mousemove', handleMove)
-  }, [])
 
   const content = activeTab === 'Seasonal Edition' ? SEASONAL_CONTENT : DEFAULT_CONTENT
   const paletteItems = content.paletteItems || PALETTE_ITEMS
@@ -343,34 +312,7 @@ export default function PalettePage() {
         </button>
       </div>
 
-      {/* ── Footer ── */}
-      <footer className="pp-footer">
-        <div className="pp-footer-top">
-          <nav className="pp-footer-nav">
-            {FOOTER_PAGES_LEFT.map(p =>
-              p.type === 'link'
-                ? <Link key={p.label} to={p.href} className="pp-footer-nav-link">{p.label}</Link>
-                : <a key={p.label} href={p.href} className="pp-footer-nav-link">{p.label}</a>
-            )}
-          </nav>
-          <nav className="pp-footer-nav pp-footer-nav--right">
-            {FOOTER_PAGES_RIGHT.map(p =>
-              p.type === 'link'
-                ? <Link key={p.label} to={p.href} className="pp-footer-nav-link">{p.label}</Link>
-                : <a key={p.label} href={p.href} className="pp-footer-nav-link">{p.label}</a>
-            )}
-          </nav>
-        </div>
-        <div className="pp-footer-giant-wrap">
-          <div
-            ref={giantTextRef}
-            className="pp-footer-giant-inner"
-          >
-            <span className="pp-footer-giant-text">k<span className="pp-footer-giant-text-e">e</span><span className="pp-footer-giant-text-e">r</span>o<span className="pp-footer-giant-dot">.</span></span>
-            <span className="pp-footer-giant-text pp-footer-giant-text--spotlight" aria-hidden="true">k<span className="pp-footer-giant-text-e">e</span><span className="pp-footer-giant-text-e">r</span>o<span className="pp-footer-giant-dot">.</span></span>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
     </div>
   )
