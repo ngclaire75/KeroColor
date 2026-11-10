@@ -1,0 +1,100 @@
+.pfl {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  /* solid deep brownish red straight away; handed over to the WebGL
+     curtain once it's drawing, so its lift-off reveals the real page */
+  background: #3b1310;
+}
+
+.pfl--covered {
+  background: transparent;
+}
+
+.pfl-curtain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.pfl-curtain canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.pfl-content {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.25rem;
+  padding: 0 1rem;
+}
+
+.pfl-stage {
+  position: relative;
+  width: min(900px, 100%);
+  height: min(62vh, 580px);
+}
+
+/* Centred on the stage (inset + auto margins, so anime.js can own the
+   transform for the scale/rise without fighting a centring translate). */
+.pfl-stage--model canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.pfl-item {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  opacity: 0;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.pfl-progress {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: min(340px, 72%);
+}
+
+.pfl-track {
+  flex: 1;
+  height: 3px;
+  background: rgba(242, 232, 217, 0.18);
+  overflow: hidden;
+}
+
+.pfl-bar {
+  height: 100%;
+  background: #f2e8d9;
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.pfl-pct {
+  min-width: 2.6em;
+  text-align: right;
+  font-family: 'Neue Haas Grotesk Text Pro 55 Roman', Arial, sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+  color: #f2e8d9;
+}
+
+@media (max-width: 768px) {
+  .pfl-content { gap: 1.5rem; }
+  .pfl-stage { height: min(56vh, 500px); }
+}

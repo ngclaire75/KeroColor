@@ -53,7 +53,10 @@ export default function App() {
   // Homepage intro loader — shown on the first homepage visit per page
   // load, not again when navigating back to it.
   const [homeLoaderDone, setHomeLoaderDone] = useState(false)
-  const handleHomeLoaderDone = useCallback(() => setHomeLoaderDone(true), [])
+  const handleHomeLoaderDone = useCallback(() => {
+    setHomeLoaderDone(true)
+    setPageLoaderDonePath('/')
+  }, [])
 
   // Loader for every other page — shown each time you arrive on one (a
   // different path, or the same path again after leaving it).
@@ -66,7 +69,10 @@ export default function App() {
     () => setPageLoaderDonePath(location.pathname),
     [location.pathname],
   )
-  const showPageLoader = location.pathname !== '/' && pageLoaderDonePath !== location.pathname
+  // The homepage uses its own intro loader the first time; after that,
+  // returning to it plays the quick loader like every other page.
+  const showPageLoader =
+    pageLoaderDonePath !== location.pathname && (location.pathname !== '/' || homeLoaderDone)
 
   // In-page switches (Explore colours, Palette tabs) ask for the loader via
   // playPageLoader(); each request mounts a fresh quick loader.

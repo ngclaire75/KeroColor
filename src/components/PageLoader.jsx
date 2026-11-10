@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import colorImg from '../../images/page-loader/center.webp'
-import dotsUrl from '../../images/page-loader/kiko-dots.bin?url'
 import { runTearExit } from './tearExit'
 import './PageLoader.css'
 
@@ -10,7 +9,7 @@ import './PageLoader.css'
 const MIN_DURATION = { full: 2800, fast: 450 }
 const DOT_COUNT = 24      // dots in the p5 progress indicator
 const LOADER_BG = '#3d110f' // keep in sync with .plx in PageLoader.css
-const DOT_PITCH = 4 / 900 // halftone grid spacing, in figure heights (see kiko-dots.bin)
+const DOT_PITCH = 4 / 900 // halftone grid spacing, in figure heights (see index.html)
 
 const TRAIL = 6   // smoky puffs per trail (lead puff + fading followers)
 const PUFFS = TRAIL * 2 // two trails: the cursor's, and one that drifts on its own
@@ -25,6 +24,7 @@ const MASK = /* glsl */ `
   uniform vec2 uTrail[${PUFFS}];
   uniform float uTrailR[${PUFFS}];
   uniform float uTime;
+  uniform float uReady; // 1 once the colour photo has loaded
   float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
   float noise(vec2 p) {
     vec2 i = floor(p), f = fract(p);
@@ -52,7 +52,7 @@ const MASK = /* glsl */ `
     for (int i = 0; i < ${PUFFS}; i++) {
       m = max(m, plume(length(p - uTrail[i]), uTrailR[i], s, 0.07));
     }
-    return clamp(m, 0.0, 1.0);
+    return clamp(m, 0.0, 1.0) * uReady;
   }
 `
 
@@ -109,16 +109,43 @@ const PHOTO_FRAG = /* glsl */ `
 `
 
 // Loading screen for every page: a black-and-white figure made of dots
-// (three.js / WebGL point cloud) whose colour photo is revealed through a
-// smoky puff that follows the cursor on desktop, with a p5.js dotted
-// progress bar. On exit it tears diagonally like paper to reveal the page
-// (three.js + p5.js + anime.js, see tearExit.js).
+// (three.js / WebGL point cloud) whose colour photo is revealed through
+// smoky puffs, with a dotted progress bar. On exit it tears diagonally like
+// paper to reveal the page (three.js + p5.js + anime.js, see tearExit.js).
+//
+// Shows instantly regardless of network: the dot figure's data and a 2D
+// drawing of it live inline in index.html (window.__kcLoader), which also
+// paints a static copy of this screen (#kc-boot) before any JS or CSS has
+// downloaded. This component draws the same still the moment it mounts,
+// takes over from #kc-boot once its own styles are in, and swaps the still
+// for the live WebGL figure when three.js arrives.
+const BOOT = typeof window !== 'undefined' ? window.__kcLoader : null
 export default function PageLoader({ onDone, fast = false }) {
   const rootRef = useRef(null)
   const centerRef = useRef(null)
-  const dotsRef = useRef(null)
+  const stillRef = useRef(null)
+  const barDotsRef = useRef([])
   const pctRef = useRef(null)
   const [gone, setGone] = useState(false)
+
+  // Instant still of the dot figure, then retire the boot screen from
+  // index.html once this loader's stylesheet has applied (on a slow network
+  // the CSS can arrive after this mounts).
+  useLayoutEffect(() => {
+    let raf
+    const takeOver = () => {
+      const root = rootRef.current
+      if (!root) return
+      if (getComputedStyle(root).position !== 'fixed' || !stillRef.current?.clientHeight) {
+        raf = requestAnimationFrame(takeOver)
+        return
+      }
+      BOOT?.draw(stillRef.current)
+      document.getElementById('kc-boot')?.remove()
+    }
+    takeOver()
+    return () => cancelAnimationFrame(raf)
+  }, [])
 
   // Lock scrolling while up, keeping the scrollbar's space reserved so the
   // page doesn't shift sideways when it's revealed.
@@ -140,43 +167,23 @@ export default function PageLoader({ onDone, fast = false }) {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const start = performance.now()
 
-    // Progress = the lower of elapsed time and real loading (libraries, the
-    // point cloud and the colour photo), eased so it never jumps.
+    // Progress = the lower of elapsed time and real loading (libraries and
+    // the colour photo), eased so it never jumps.
     let loaded = 0
-    const totalSteps = 3
+    const totalSteps = 2
     let shown = 0
     let barRaf
 
     const photo = new Image()
     photo.src = colorImg
-    const photoReady = photo.decode().catch(() => {}).then(() => { loaded += 1 })
-    const cloud = fetch(dotsUrl).then((r) => r.arrayBuffer()).then((buf) => { loaded += 1; return new Float32Array(buf) })
+    let onPhoto = () => {}
+    photo.decode().catch(() => {}).then(() => { loaded += 1; onPhoto() })
 
-    Promise.all([import('three'), import('animejs'), import('p5'), cloud, photoReady]).then(([THREE, anime, p5mod, data]) => {
+    Promise.all([import('three'), import('animejs'), import('p5')]).then(([THREE, anime, p5mod]) => {
       if (disposed) return
       loaded += 1
       const { animate } = anime
       const P5 = p5mod.default
-
-      // ── p5: dotted progress indicator ──
-      const dotsEl = dotsRef.current
-      const indicator = dotsEl && new P5((p) => {
-        p.setup = () => {
-          p.createCanvas(dotsEl.clientWidth, 14).parent(dotsEl)
-          p.pixelDensity(Math.min(window.devicePixelRatio, 2))
-          p.noStroke()
-        }
-        p.draw = () => {
-          p.clear()
-          const gap = p.width / DOT_COUNT
-          const filled = shown * DOT_COUNT
-          for (let i = 0; i < DOT_COUNT; i++) {
-            const f = Math.min(Math.max(filled - i, 0), 1)
-            p.fill(242, 232, 217, 50 + 205 * f)
-            p.circle(gap * (i + 0.5), 7, 3 + 3 * f)
-          }
-        }
-      })
 
       // ── three.js scene ──
       // Orthographic, 1 world unit = figure height, so the dots and the
@@ -192,8 +199,8 @@ export default function PageLoader({ onDone, fast = false }) {
       // it shows. The screen's bottom edge sits at BOTTOM_Y (figure units,
       // centre = 0): just above y = -0.377, where the photo's straight crop
       // through the right shoulder begins, so that cut is never seen.
-      const VIEW_H = 0.91
-      const BOTTOM_Y = -0.36
+      const VIEW_H = BOOT?.cfg.VIEW_H ?? 0.91    // shared with the instant still
+      const BOTTOM_Y = BOOT?.cfg.BOTTOM_Y ?? -0.36
       const camera = new THREE.OrthographicCamera(-0.5, 0.5, 0.5, -0.5, -10, 10)
       const camY = BOTTOM_Y + VIEW_H / 2
 
@@ -201,6 +208,7 @@ export default function PageLoader({ onDone, fast = false }) {
         uTrail: { value: Array.from({ length: PUFFS }, () => new THREE.Vector2(0, -10)) },
         uTrailR: { value: new Array(PUFFS).fill(0) },
         uTime: { value: 0 },
+        uReady: { value: 0 },
       }
 
       // colour photo
@@ -208,8 +216,15 @@ export default function PageLoader({ onDone, fast = false }) {
       tex.colorSpace = THREE.NoColorSpace
       tex.premultiplyAlpha = true
       tex.anisotropy = renderer.capabilities.getMaxAnisotropy()
-      tex.needsUpdate = true
-      const aspect = photo.naturalWidth / photo.naturalHeight || 0.75
+      // the photo may still be downloading: upload it, and switch the colour
+      // reveal on, as soon as it's decoded
+      onPhoto = () => {
+        if (!photo.naturalWidth) return
+        tex.needsUpdate = true
+        shared.uReady.value = 1
+      }
+      if (photo.complete) onPhoto()
+      const aspect = BOOT?.cfg.ASPECT ?? 0.7733
       const photoGeo = new THREE.PlaneGeometry(aspect, 1)
       const photoMat = new THREE.ShaderMaterial({
         vertexShader: PHOTO_VERT, fragmentShader: PHOTO_FRAG,
@@ -220,14 +235,16 @@ export default function PageLoader({ onDone, fast = false }) {
       photoMesh.renderOrder = 0
       scene.add(photoMesh)
 
-      // dots (flattened onto the photo plane so they register exactly)
-      const n = data.length / 4
+      // dots, from the inline grid (flattened onto the photo plane so they
+      // register exactly)
+      const pts = BOOT.points() // x, y, grey per dot
+      const n = pts.length / 3
       const pos = new Float32Array(n * 3)
       const gray = new Float32Array(n)
       for (let i = 0; i < n; i++) {
-        pos[i * 3] = data[i * 4]
-        pos[i * 3 + 1] = data[i * 4 + 1]
-        gray[i] = data[i * 4 + 3]
+        pos[i * 3] = pts[i * 3]
+        pos[i * 3 + 1] = pts[i * 3 + 1]
+        gray[i] = pts[i * 3 + 2]
       }
       const dotsGeo = new THREE.BufferGeometry()
       dotsGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3))
@@ -300,6 +317,8 @@ export default function PageLoader({ onDone, fast = false }) {
       const trailR = shared.uTrailR.value
       const tick = (now) => {
         raf = requestAnimationFrame(tick)
+      // the live figure is up — the instant still underneath can go
+      requestAnimationFrame(() => { if (stillRef.current) stillRef.current.style.visibility = 'hidden' })
         const dt = Math.min((now - last) / 1000, 0.05)
         last = now
         shared.uTime.value = (now - t0) / 1000
@@ -329,6 +348,8 @@ export default function PageLoader({ onDone, fast = false }) {
         renderer.render(scene, camera)
       }
       raf = requestAnimationFrame(tick)
+      // the live figure is up — the instant still underneath can go
+      requestAnimationFrame(() => { if (stillRef.current) stillRef.current.style.visibility = 'hidden' })
 
       cleanup = () => {
         cancelAnimationFrame(raf)
@@ -338,7 +359,6 @@ export default function PageLoader({ onDone, fast = false }) {
         window.removeEventListener('pointerup', onUp)
         window.removeEventListener('pointercancel', onUp)
         document.removeEventListener('pointerleave', onLeave)
-        indicator?.remove()
         tex.dispose()
         photoGeo.dispose()
         photoMat.dispose()
@@ -382,6 +402,13 @@ export default function PageLoader({ onDone, fast = false }) {
       shown += (target - shown) * 0.12
       if (target - shown < 0.001) shown = target
       if (pctRef.current) pctRef.current.textContent = `${Math.round(shown * 100)}%`
+      const filled = shown * DOT_COUNT
+      barDotsRef.current.forEach((el, i) => {
+        if (!el) return
+        const f = Math.min(Math.max(filled - i, 0), 1)
+        el.style.opacity = 0.2 + 0.8 * f
+        el.style.transform = `scale(${0.5 + 0.5 * f})`
+      })
       checkExit()
     }
     barTick()
@@ -397,9 +424,16 @@ export default function PageLoader({ onDone, fast = false }) {
 
   return (
     <div ref={rootRef} className="plx" role="progressbar" aria-label="Loading">
-      <div ref={centerRef} className="plx-center" aria-hidden="true" />
+      <div ref={centerRef} className="plx-center" aria-hidden="true">
+        {/* instant 2D still of the figure until the WebGL one is drawing */}
+        <canvas ref={stillRef} className="plx-still" />
+      </div>
       <div className="plx-progress">
-        <div ref={dotsRef} className="plx-dots" />
+        <div className="plx-dots">
+          {Array.from({ length: DOT_COUNT }, (_, i) => (
+            <span key={i} ref={(el) => { barDotsRef.current[i] = el }} />
+          ))}
+        </div>
         <span ref={pctRef} className="plx-pct">0%</span>
       </div>
     </div>
