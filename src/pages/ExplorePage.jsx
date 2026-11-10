@@ -18,6 +18,7 @@ import NextSection from '../components/NextSection'
 import ExploreMore from '../components/ExploreMore'
 import Footer from '../components/Footer'
 import './ExplorePage.css'
+import { playPageLoader } from '../utils/pageLoader'
 
 function getExploreImages(searchResult) {
   if (searchResult?.colorFamily === 'pink')  return [explorepink2, explorepink1, explorepink3]
@@ -94,7 +95,10 @@ export default function ExplorePage() {
       {/* Third section — gallery grid */}
       <GallerySection
         searchResult={searchResult}
-        onColorChange={(family) => setSearchResult({ query: family, valid: true, colorFamily: family })}
+        onColorChange={(family) => {
+          playPageLoader()
+          setSearchResult({ query: family, valid: true, colorFamily: family })
+        }}
       />
 
       {/* Fourth section — 3x3 card grid */}

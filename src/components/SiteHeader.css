@@ -8,8 +8,7 @@
 }
 
 .crest {
-  width: 85px;
-  margin-bottom: 2rem;
+  width: clamp(120px, 12vw, 150px);
 }
 
 .crest img {
@@ -19,13 +18,3 @@
   image-rendering: high-quality;
 }
 
-.brand-name {
-  font-family: 'Cinzel', serif;
-  font-size: clamp(2.6rem, 6vw, 4.2rem);
-  font-weight: 700;
-  color: #7c1a2e;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  margin: 0;
-  line-height: 1;
-}

@@ -1,6 +1,5 @@
-import { useState, useEffect, useLayoutEffect, useRef } from 'react'
+import { useState, useEffect, useLayoutEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import SearchLoader from '../components/SearchLoader'
 import FullMenu from '../components/FullMenu'
 import Footer from '../components/Footer'
 import { useSearch } from '../SearchContext'
@@ -11,8 +10,9 @@ import lipstickImg from '../../images/girlofmydreams.webp'
 import vogueImg from '../../images/vogue.webp'
 import deerImg from '../../images/deer.webp'
 import petalImg from '../../images/petal.webp'
-import bearImg from '../../images/bear.webp'
+import logoImg from '../../images/kc-logo.svg'
 import './PalettePage.css'
+import { playPageLoader } from '../utils/pageLoader'
 
 const TABS = ['All', 'Seasonal Edition', 'Editorial', 'Inspiration']
 
@@ -78,9 +78,6 @@ export default function PalettePage() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [fullMenuOpen, setFullMenuOpen] = useState(false)
   const [animPaused, setAnimPaused] = useState(false)
-  const [tabLoading, setTabLoading] = useState(false)
-  const [tabLoaderFading, setTabLoaderFading] = useState(false)
-  const tabTimeoutsRef = useRef([])
 
   // Land on this page at the top, regardless of scroll position on the
   // tab navigated from (browsers preserve scroll across client-side route
@@ -108,17 +105,9 @@ export default function PalettePage() {
     if (tab === 'Editorial') { navigate('/editorial'); return }
     if (tab === 'Inspiration') { navigate('/inspiration'); return }
     if (tab === activeTab) return
-    tabTimeoutsRef.current.forEach(clearTimeout)
-    setTabLoaderFading(false)
-    setTabLoading(true)
-    const t1 = setTimeout(() => {
-      // Swapped in at the top, while the loader still covers the page.
-      window.scrollTo({ top: 0, behavior: 'instant' })
-      setActiveTab(tab)
-      setTabLoaderFading(true)
-    }, 900)
-    const t2 = setTimeout(() => setTabLoading(false), 1600)
-    tabTimeoutsRef.current = [t1, t2]
+    playPageLoader()
+    window.scrollTo({ top: 0, behavior: 'instant' })
+    setActiveTab(tab)
   }
 
   // Every menu item is a sample hex code — navigates to Discover
@@ -141,7 +130,6 @@ export default function PalettePage() {
         onItemClick={handleMenuItemClick}
       />
 
-      {tabLoading && <SearchLoader fading={tabLoaderFading} />}
 
       {/* ── Announcement bar ── */}
       {barOpen && (
@@ -169,7 +157,7 @@ export default function PalettePage() {
                 className="pp-bar-underline"
                 onClick={() => setSearchResult({ query: 'green', valid: true, colorFamily: 'green' })}
               >
-                Verdant Collection
+                Matcha Collection
               </Link>
             </span>
           </div>
@@ -196,17 +184,11 @@ export default function PalettePage() {
         <div className="pp-nav-center">
           <Link to="/" className="pp-nav-brand">
             <span className="pp-nav-brand-text">KEROCOLOR</span>
-            <img loading="lazy" src={bearImg} alt="KeroColor" className="pp-nav-brand-img" />
+            <img loading="lazy" src={logoImg} alt="KeroColor" className="pp-nav-brand-img" />
           </Link>
         </div>
 
       </nav>
-
-      {/* ── Hero content ── */}
-      <header className="pp-hero">
-        <p className="pp-hero-sub">The KeroColor Studio</p>
-        <h1 className="pp-hero-title">Color Palettes</h1>
-      </header>
 
       {/* ── Tabs (desktop) ── */}
       <div className="pp-tabs-wrap">

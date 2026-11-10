@@ -4,7 +4,7 @@ import FullMenu from '../components/FullMenu'
 import Footer from '../components/Footer'
 import { generateShadesFromHex, isValidHex, SAMPLE_HEX_CODES } from '../utils/generatePalette'
 import { colorNameToHex } from '../utils/colorNames'
-import bearImg from '../../images/bear.webp'
+import logoImg from '../../images/kc-logo.svg'
 // Reused wholesale (not just the class names) so the nav, grid, fonts,
 // and footer are consistent with PalettePage.
 import './PalettePage.css'
@@ -87,9 +87,9 @@ export default function DiscoverPalettesPage() {
               <span className="pp-nav-brand-text">KEROCOLOR</span>
             </Link>
             {/* Back to the All tab on Color Palette, not home — this page
-                is reached from there, so the bear leads back to it. */}
+                is reached from there, so the logo leads back to it. */}
             <Link to="/palette" state={{ tab: 'All' }}>
-              <img loading="lazy" src={bearImg} alt="KeroColor" className="pp-nav-brand-img" />
+              <img loading="lazy" src={logoImg} alt="KeroColor" className="pp-nav-brand-img" />
             </Link>
           </div>
         </div>

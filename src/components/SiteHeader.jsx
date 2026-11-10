@@ -1,13 +1,12 @@
 import './SiteHeader.css'
-import bearImg from '../../images/bear.webp'
+import logoImg from '../../images/kc-logo.svg'
 
 export default function SiteHeader() {
   return (
     <header className="site-header">
       <div className="crest">
-        <img loading="lazy" src={bearImg} alt="KeroColor crest" />
+        <img loading="lazy" src={logoImg} alt="KeroColor" />
       </div>
-      <h1 className="brand-name">KEROCOLOR</h1>
     </header>
   )
 }

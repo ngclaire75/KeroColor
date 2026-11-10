@@ -1,0 +1,79 @@
+.plx {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: #3d110f; /* the logo red, darker and browner */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.25rem;
+  padding: 0 1rem;
+  will-change: transform;
+  /* let a finger drag the smoke reveal instead of trying to scroll */
+  touch-action: none;
+}
+
+.plx-center {
+  /* the dot figure, centred and standing on the bottom edge */
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  height: 100vh;
+  height: 100dvh;
+  aspect-ratio: 0.8;
+  max-width: 100%;
+}
+
+.plx-center canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.plx-progress {
+  /* top-left corner, clear of the figure's face */
+  position: absolute;
+  top: 1.75rem;
+  left: 1.75rem;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: min(240px, 60%);
+}
+
+/* torn-paper exit: the WebGL halves stand in for the loader, so its own
+   background and layers drop away and the page shows where they part */
+.plx--tearing {
+  background: transparent;
+}
+
+.plx--tearing > :not(canvas) {
+  visibility: hidden;
+}
+
+.plx-dots {
+  flex: 1;
+  height: 14px;
+}
+
+.plx-dots canvas {
+  display: block;
+}
+
+.plx-pct {
+  min-width: 2.6em;
+  text-align: right;
+  font-family: 'Neue Haas Grotesk Text Pro 55 Roman', Arial, sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+  color: #f2e8d9;
+}
+
+@media (max-width: 768px) {
+  .plx-center { height: 82vh; height: 82dvh; }
+  .plx-progress { left: 0.75rem; top: 1.25rem; }
+}

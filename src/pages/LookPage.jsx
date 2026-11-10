@@ -1,7 +1,6 @@
 import { useEffect, useLayoutEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useSearch } from '../SearchContext'
-import SearchLoader from '../components/SearchLoader'
 import './LookPage.css'
 
 const BATCH_META = {
@@ -444,21 +443,12 @@ export default function LookPage() {
   const cardMeta = meta.cards[cardIndex ?? 0] || meta.cards[0]
   const [thumbColor, setThumbColor] = useState('#8b1a1a')
   const [palette, setPalette] = useState([])
-  const [overlayFading, setOverlayFading] = useState(false)
-  const [overlayGone, setOverlayGone] = useState(false)
-  const [contentReady, setContentReady] = useState(false)
 
   // Open at the top, not wherever the gallery was scrolled to (browsers
   // keep scroll position across client-side route changes). Layout effect
   // so it happens before the first paint, with no visible jump.
   useLayoutEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' })
-  }, [])
-
-  useEffect(() => {
-    const t1 = setTimeout(() => { setOverlayFading(true); setContentReady(true) }, 1700)
-    const t2 = setTimeout(() => setOverlayGone(true), 2500)
-    return () => { clearTimeout(t1); clearTimeout(t2) }
   }, [])
 
   useEffect(() => {
@@ -488,8 +478,7 @@ export default function LookPage() {
 
   return (
     <>
-    {!overlayGone && <SearchLoader fading={overlayFading} />}
-    <div className={`look-page${isPink ? ' look-page--pink' : isBlue ? ' look-page--blue' : isGreen ? ' look-page--green' : ''}${contentReady ? ' look-page--revealed' : ' look-page--hidden'}`}>
+    <div className={`look-page${isPink ? ' look-page--pink' : isBlue ? ' look-page--blue' : isGreen ? ' look-page--green' : ''} look-page--revealed`}>
 
       {/* ── Left panel — image + card ── */}
       <div className="look-left">

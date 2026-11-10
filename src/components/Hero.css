@@ -69,13 +69,24 @@
 /* ── Center content ── */
 .hero-center {
   position: relative;
+  /* Eased blend from the beige into the footer red, through the warm
+     pinks — finely stepped so it reads as one smooth wash, no bands. */
   background: linear-gradient(
     to bottom,
     #f2e8d9 0%,
-    #f2e8d9 55%,
-    #e8c8bc 72%,
-    #c4878a 85%,
-    #7c1a2e 100%
+    #f2e8d9 42%,
+    #f1e3d4 47%,
+    #efdcce 52.5%,
+    #edd3c5 58%,
+    #e8c8bc 63%,
+    #e3bcb3 67.5%,
+    #ddaea9 72%,
+    #d49c9d 76.5%,
+    #c4878a 81%,
+    #a9696c 86%,
+    #854548 90.5%,
+    #642427 95%,
+    #4d0c12 100%
   );
   display: flex;
   flex-direction: column;
@@ -117,7 +128,7 @@
   font-size: clamp(2.4rem, 4.5vw, 3.6rem);
   font-weight: 700;
   font-style: italic;
-  color: #7c1a2e;
+  color: #4d0c12;
   line-height: 1.25;
   margin: 0;
 }
@@ -133,7 +144,7 @@
 
 .hero-btn {
   display: inline-block;
-  background: #7c1a2e;
+  background: #4d0c12;
   color: #fff;
   text-decoration: none;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;

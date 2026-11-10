@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import SearchLoader from '../components/SearchLoader'
 import Footer from '../components/Footer'
 import bnd1 from '../../images/bnd1.webp'
 import bnd2 from '../../images/bnd2.webp'
@@ -20,9 +19,6 @@ export default function EditorialPage() {
   const moreRef = useRef(null)
   const galaRef = useRef(null)
   const bndRef = useRef(null)
-  const [overlayFading, setOverlayFading] = useState(false)
-  const [overlayGone, setOverlayGone] = useState(false)
-  const [contentReady, setContentReady] = useState(false)
   const [moreVisible, setMoreVisible] = useState(false)
   const [galaVisible, setGalaVisible] = useState(false)
   const [bndVisible, setBndVisible] = useState(false)
@@ -33,12 +29,6 @@ export default function EditorialPage() {
   // changes by default).
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' })
-  }, [])
-
-  useEffect(() => {
-    const t1 = setTimeout(() => { setOverlayFading(true); setContentReady(true) }, 1700)
-    const t2 = setTimeout(() => setOverlayGone(true), 2500)
-    return () => { clearTimeout(t1); clearTimeout(t2) }
   }, [])
 
   // Fade in the "When the rules become a starting point", Gala grid, and
@@ -71,8 +61,7 @@ export default function EditorialPage() {
 
   return (
     <>
-    {!overlayGone && <SearchLoader fading={overlayFading} />}
-    <div className={`ed-page${contentReady ? ' ed-page--revealed' : ' ed-page--hidden'}`}>
+    <div className="ed-page ed-page--revealed">
       <nav className="ed-nav">
         {NAV_ITEMS.map(item => (
           <button
@@ -87,7 +76,7 @@ export default function EditorialPage() {
 
       {/* ── Intro section ── */}
       <section className="ed-intro" id="ch-intro">
-        <h2 className="ed-intro-heading">A closer look at the facts, myths, and artistry of color analysis</h2>
+        <h2 className="ed-intro-heading">A closer look at the facts, myths, and artistry of color analysis.</h2>
 
         <div className="ed-intro-media">
           <div className="ed-intro-media-big">

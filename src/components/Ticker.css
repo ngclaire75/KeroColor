@@ -1,5 +1,5 @@
 .ticker {
-  background: #7c1a2e;
+  background: #4d0c12;
   overflow: hidden;
   /* Flex (not a plain block) so the track isn't sat on a line box sized
      for the page's body font, which pushed the text below centre */

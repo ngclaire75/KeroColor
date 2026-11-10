@@ -10,7 +10,7 @@
   font-size: clamp(2.4rem, 4vw, 3.6rem);
   font-weight: 600;
   font-style: italic;
-  color: #7c1a2e;
+  color: #4d0c12;
   text-align: center;
   letter-spacing: 0.12em;
   margin: 0 0 2.5rem;
@@ -52,7 +52,7 @@
   font-family: 'Inter', sans-serif;
   font-size: 1.3rem;
   font-weight: 300;
-  color: #7c1a2e;
+  color: #4d0c12;
   flex-shrink: 0;
   line-height: 1;
 }

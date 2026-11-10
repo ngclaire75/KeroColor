@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useHeroVideo } from '../HeroVideoContext'
-import SearchLoader from '../components/SearchLoader'
 import Footer from '../components/Footer'
 import EntryConsentModal from '../components/EntryConsentModal'
 import heroPoster from '../../images/inspiration-hero-poster.webp'
@@ -95,15 +94,9 @@ const splitLetters = (text) =>
 
 export default function InspirationPage() {
   const navigate = useNavigate()
-  const [overlayFading, setOverlayFading] = useState(false)
-  const [overlayGone, setOverlayGone] = useState(false)
-  const [contentReady, setContentReady] = useState(false)
   // Persisted in localStorage — shown once per device, not on every
-  // visit. Starts false and only flips true (in the overlayGone timeout
-  // below) once the loading overlay has fully cleared AND this device
-  // hasn't agreed before — otherwise its fade-in would play silently
-  // underneath SearchLoader and be already finished/invisible by the
-  // time that overlay lifts.
+  // visit. Starts false and only flips true (in the effect below) if this
+  // device hasn't agreed before.
   const [consentOpen, setConsentOpen] = useState(false)
   const [tcDismissed, setTcDismissed] = useState(false)
   // x: the bar eases down off the screen as it fades (same exit as
@@ -304,23 +297,15 @@ export default function InspirationPage() {
     window.scrollTo({ top: 0, behavior: 'instant' })
   }, [])
 
+  // Consent banner only opens if this device hasn't already agreed.
   useEffect(() => {
-    const t1 = setTimeout(() => { setOverlayFading(true); setContentReady(true) }, 1700)
-    // Consent banner opens right as the loading overlay finishes clearing,
-    // not before — so its own fade-in is the thing the user actually sees
-    // happen, instead of playing out hidden underneath SearchLoader. Only
-    // opens at all if this device hasn't already agreed.
-    const t2 = setTimeout(() => {
-      setOverlayGone(true)
-      let alreadyAgreed = false
-      try {
-        alreadyAgreed = localStorage.getItem(CONSENT_KEY) === '1'
-      } catch {
-        // Private browsing / storage blocked — falls back to showing it.
-      }
-      if (!alreadyAgreed) setConsentOpen(true)
-    }, 2400)
-    return () => { clearTimeout(t1); clearTimeout(t2) }
+    let alreadyAgreed = false
+    try {
+      alreadyAgreed = localStorage.getItem(CONSENT_KEY) === '1'
+    } catch {
+      // Private browsing / storage blocked — falls back to showing it.
+    }
+    if (!alreadyAgreed) setConsentOpen(true)
   }, [])
 
   // Scroll-triggered fade-in for the sections below the studio carousel —
@@ -370,7 +355,6 @@ export default function InspirationPage() {
 
   return (
     <>
-    {!overlayGone && <SearchLoader fading={overlayFading} />}
     <EntryConsentModal
       open={consentOpen}
       onAgree={() => {
@@ -385,7 +369,7 @@ export default function InspirationPage() {
     />
     {/* Floating button that reopens the terms & conditions banner; the
         small x dismisses it until the page is reloaded. */}
-    {contentReady && !tcDismissed && (
+    {!tcDismissed && (
       <div className={`in-tc${consentOpen ? ' in-tc--hidden' : ''}${tcLeaving ? ' in-tc--out' : ''}`}>
         <img src={tcBunnyImg} alt="" className="in-tc-bunny" aria-hidden="true" onClick={() => setConsentOpen(true)} />
         <button
@@ -404,7 +388,7 @@ export default function InspirationPage() {
         </button>
       </div>
     )}
-    <div ref={pageRef} className={`in-page${contentReady ? ' in-page--revealed' : ' in-page--hidden'}`}>
+    <div ref={pageRef} className="in-page in-page--revealed">
       <nav className="in-nav">
         {NAV_ITEMS.map(item => (
           <button

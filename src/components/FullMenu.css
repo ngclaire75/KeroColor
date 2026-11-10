@@ -2,7 +2,7 @@
   position: fixed;
   inset: 0;
   z-index: 300;
-  background: #4d0c12;
+  background: #44100f; /* logo red, a touch darker and browner */
   color: #fff;
   display: flex;
   flex-direction: column;

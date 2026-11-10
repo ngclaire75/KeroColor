@@ -3,17 +3,6 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App.jsx'
 import './index.css'
-import loaderImg from '../images/bad.png.webp'
-
-// Preload the SearchLoader image at startup so it is already cached by the
-// time any page's loading overlay mounts — otherwise it is only requested
-// once the overlay renders and pops in a moment after the overlay itself.
-const preload = document.createElement('link')
-preload.rel = 'preload'
-preload.as = 'image'
-preload.href = loaderImg
-preload.fetchPriority = 'high'
-document.head.appendChild(preload)
 
 // Block the right-click menu on images site-wide (Save Image As / Copy
 // Image) — pairs with the user-select/drag CSS on `img` in index.css.
