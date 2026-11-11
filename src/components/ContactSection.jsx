@@ -46,7 +46,7 @@ export default function ContactSection() {
         </div>
         <div className="ct-info-group">
           <h4 className="ct-info-label">Headquarters</h4>
-          <p className="ct-info-value">KERO GROUP<br />WEST SURABAYA</p>
+          <p className="ct-info-value">KEROSANT STUDIOS<br />WEST SURABAYA</p>
         </div>
         <div className="ct-info-group">
           <h4 className="ct-info-label">Follow Us</h4>

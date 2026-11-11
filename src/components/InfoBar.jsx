@@ -20,7 +20,7 @@ export default function InfoBar({ onDateClick }) {
 
   return (
     <div className="info-bar">
-      <span className="newsletter-link">designed by claire.</span>
+      <span className="newsletter-link">designed by kerosant studios.</span>
       <div className="today-date-wrap">
         {showHint && (
           <div className="today-date-float">

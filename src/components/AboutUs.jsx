@@ -7,10 +7,10 @@ export default function AboutUs() {
         <div className="au-content">
           <div className="au-text">
             <h2 className="au-heading">meet our designer.</h2>
-            <p className="au-role">Designer &amp; Programmer — Kero Group</p>
+            <p className="au-role">Designer &amp; Programmer — KeroSant Studios</p>
             <p className="au-desc">
               Hi, I'm Claire. I'm the designer behind KeroColor, the color
-              consultancy arm of Kero Group. I believe that color is one of the
+              consultancy arm of KeroSant Studios. I believe that color is one of the
               most quietly powerful decisions a brand can make, and I've built
               my practice around helping people make it with intention.
             </p>
