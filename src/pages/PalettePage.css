@@ -866,13 +866,13 @@
   }
 
   .pp-oxblood { padding: 4.2rem 0 0.5rem 0.2rem; }
-  .pp-oxblood-title { font-size: 1.9rem; }
+  .pp-oxblood-title { font-size: 2.3rem; }
   .pp-oxblood-desc { font-size: 0.9rem; }
 
-  .pp-featured-label { font-size: 0.95rem; }
-  .pp-featured-title { font-size: 1.7rem; }
+  .pp-featured-label { font-size: 0.88rem; }
+  .pp-featured-title { font-size: 1.55rem; }
   .pp-featured-title-break { display: inline; }
-  .pp-featured-date { font-size: 1.1rem; }
+  .pp-featured-date { font-size: 1rem; }
 
   /* Palette grid — one row per item, swatch left / text right */
   .pp-palette-grid {
