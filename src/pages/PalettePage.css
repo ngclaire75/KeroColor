@@ -129,9 +129,9 @@
   align-items: center;
   gap: 1.6rem;
   min-width: 180px;
-  /* line up with the logo's centre — it sits 12px below the bar's middle
-     (28px top / 4px bottom margin) */
-  transform: translateY(12px);
+  /* line up with the logo's centre — it sits 23px below the bar's middle
+     (31px top / -15px bottom margin) */
+  transform: translateY(23px);
 }
 
 .pp-nav-right { justify-content: flex-end; }
@@ -168,9 +168,13 @@
 
 .pp-nav-brand-img {
   display: block;
-  height: 72px;
+  /* 31 + 88 − 15 = same 104px footprint; centre sits 23px below the bar's
+     middle, matched by the side icons' translateY */
+  height: 88px;
   width: auto;
-  margin: 28px 0 4px;
+  margin: 31px 0 -15px;
+  /* optical nudge — the heavy k makes the mark read left of centre */
+  transform: translateX(5px);
 }
 
 
@@ -838,9 +842,11 @@
     display: block;
     position: relative;
     z-index: 20;
-    height: 42px;
+    /* 56 + 5 + 5 = same 66px footprint as before, so nothing else shifts */
+    height: 56px;
     width: auto;
-    margin: 12px 0 12px;
+    margin: 5px 0 5px;
+    transform: translateX(3px);
   }
 
   .pp-nav-action svg { width: 15px; height: 11px; }
