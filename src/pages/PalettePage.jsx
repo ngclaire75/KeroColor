@@ -10,7 +10,7 @@ import lipstickImg from '../../images/girlofmydreams.webp'
 import vogueImg from '../../images/vogue.webp'
 import deerImg from '../../images/deer.webp'
 import petalImg from '../../images/petal.webp'
-import logoImg from '../../images/kc-logo.svg'
+import KcLogo3D from '../components/KcLogo3D'
 import './PalettePage.css'
 import { playPageLoader } from '../utils/pageLoader'
 
@@ -184,7 +184,7 @@ export default function PalettePage() {
         <div className="pp-nav-center">
           <Link to="/" className="pp-nav-brand">
             <span className="pp-nav-brand-text">KEROCOLOR</span>
-            <img loading="lazy" src={logoImg} alt="KeroColor" className="pp-nav-brand-img" />
+            <KcLogo3D className="pp-nav-brand-img" />
           </Link>
         </div>
 

@@ -1,0 +1,24 @@
+/* Box matches the flat logo (height comes from the caller's class, width
+   from the SVG's 884×568 viewBox), so swapping it in moves nothing. */
+.kc-logo3d {
+  position: relative;
+  display: block;
+  aspect-ratio: 884 / 568;
+}
+
+/* Oversized canvas centred on the box, so the sway isn't clipped */
+.kc-logo3d-canvas {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 130%;
+  height: 130%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.kc-logo3d-canvas canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}

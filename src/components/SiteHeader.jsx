@@ -1,11 +1,11 @@
 import './SiteHeader.css'
-import logoImg from '../../images/kc-logo.svg'
+import KcLogo3D from './KcLogo3D'
 
 export default function SiteHeader() {
   return (
     <header className="site-header">
       <div className="crest">
-        <img loading="lazy" src={logoImg} alt="KeroColor" />
+        <KcLogo3D />
       </div>
     </header>
   )
