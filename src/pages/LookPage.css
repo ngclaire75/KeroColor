@@ -10,91 +10,64 @@
   transition: filter 0.85s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.65s ease;
 }
 
+/* Full-bleed photo with the copy laid over it */
 .look-page {
-  display: flex;
+  position: relative;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
-  background: #f8f2ea;
+  background: #111;
 }
 
-/* ── Left panel ── */
+/* ── Photo, filling the page ── */
 .look-left {
-  position: relative;
-  width: 50%;
-  height: 100%;
-  flex-shrink: 0;
-  padding: 0.5rem 0.3rem 0.5rem 1rem;
-  box-sizing: border-box;
-  background: #f8f2ea;
+  position: absolute;
+  inset: 0;
 }
 
-/* Fill the entire left panel */
-.look-img-container {
-  position: relative;
+.look-img-container,
+.look-img-frame {
   width: 100%;
   height: 100%;
 }
 
 .look-img-frame {
-  width: 100%;
-  height: 100%;
-  border-radius: 14px;
   overflow: hidden;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
 }
 
+/* No-WebGL fallback */
 .look-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  filter: blur(1.5px);
-  transform: scale(1.02);
-  -webkit-transform: scale(1.02);
 }
 
-/* ── Right panel ── */
+/* ── Copy over the photo ── */
 .look-right {
-  flex: 1;
-  background: #f8f2ea;
-  padding: 0.5rem 1rem 0.5rem 0.3rem;
-  box-sizing: border-box;
-  display: flex;
-  align-items: flex-start;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Shade the lower corner so the white copy reads on any photo */
+  background: radial-gradient(ellipse 80% 75% at 100% 100%, rgba(0, 0, 0, 0.55), transparent 70%);
 }
 
 .look-right-panel {
-  width: 100%;
-  height: calc(100vh - 1rem);
-  border-radius: 14px;
-  background: linear-gradient(to bottom, #d42c3b 0%, #f8f2ea 80%);
   position: relative;
-  overflow: hidden;
-}
-
-.look-right-panel::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 45%;
-  background-image: radial-gradient(circle, #f8f2ea 2px, transparent 2px);
-  background-size: 20px 20px;
-  -webkit-mask-image: linear-gradient(to bottom, white 0%, transparent 100%);
-  mask-image: linear-gradient(to bottom, white 0%, transparent 100%);
-  border-radius: 14px 14px 0 0;
-  pointer-events: none;
+  width: 100%;
+  height: 100%;
 }
 
 .look-right-content {
   position: absolute;
-  bottom: 2.8rem;
-  left: 2.4rem;
-  right: 2.4rem;
+  bottom: 3rem;
+  right: 1.5rem;
+  width: clamp(340px, 36vw, 470px);
   z-index: 1;
+  pointer-events: auto;
+  /* lets the heading size itself to this block */
+  container-type: inline-size;
 }
 
 .look-palette {
@@ -119,30 +92,33 @@
 
 .look-right-heading {
   font-family: 'Inter', sans-serif;
-  font-size: 3.4rem;
+  /* the longest single words ("sophistication") still fit the block */
+  font-size: clamp(1.6rem, 10cqi, 3.4rem);
   font-weight: 800;
   font-style: normal;
-  color: #be2c37;
+  color: #fff;
   line-height: 1.2;
   margin: 0 0 0.9rem -0.35rem;
   white-space: pre-line;
-  text-shadow: 0 0 18px rgba(255,255,255,0.6), 0 0 40px rgba(255,255,255,0.3);
+  overflow-wrap: break-word;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
 }
 
 .look-right-desc {
   font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
-  color: #be2c37;
+  color: rgba(255, 255, 255, 0.9);
   line-height: 1.6;
   margin: 0 0 2rem;
-  max-width: 300px;
+  max-width: min(300px, 100%);
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
 }
 
 .look-right-buttons {
   display: flex;
   gap: 0.75rem;
   align-items: center;
-  width: fit-content;
+  flex-wrap: wrap;
   margin-left: -0.2rem;
 }
 
@@ -159,21 +135,25 @@
   cursor: pointer;
   border: none;
   transition: opacity 0.2s ease;
-  width: 220px;
+  flex: 1 1 200px;
+  max-width: 230px;
+  white-space: nowrap;
   box-sizing: border-box;
 }
 
 .look-btn:hover { opacity: 0.85; }
 
 .look-btn--outline {
-  background: #f8f2ea;
-  color: #be2c37;
-  border: 1px solid rgba(0,0,0,0.12);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
 }
 
 .look-btn--filled {
-  background: #be2c37;
-  color: #f8f2ea;
+  background: #fff;
+  color: #1a1a1a;
 }
 
 .look-btn-icon {
@@ -186,8 +166,8 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.25);
-  color: #fff;
+  background: rgba(0, 0, 0, 0.08);
+  color: #1a1a1a;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -195,142 +175,21 @@
 }
 
 .look-btn-icon--heart {
-  background: rgba(190, 44, 55, 0.12);
-  color: #be2c37;
-}
-
-.look-page--pink .look-right-panel {
-  background: linear-gradient(to bottom, #e8899a 0%, #f8f2ea 80%);
-}
-
-.look-page--pink .look-right-heading {
-  color: #d4687a;
-}
-
-.look-page--pink .look-right-desc {
-  color: #d4687a;
-}
-
-.look-page--pink .look-btn--outline {
-  color: #d4687a;
-}
-
-.look-page--pink .look-btn--filled {
-  background: #d4687a;
-}
-
-.look-page--pink .look-btn-icon--heart {
-  background: rgba(212, 104, 122, 0.12);
-  color: #d4687a;
-}
-
-.look-page--blue .look-right-panel {
-  background: linear-gradient(to bottom, #5b6982 0%, #f8f2ea 80%);
-}
-
-.look-page--blue .look-right-heading {
-  color: #445471;
-}
-
-.look-page--blue .look-right-desc {
-  color: #5b6982;
-}
-
-.look-page--blue .look-btn--outline {
-  color: #445471;
-}
-
-.look-page--blue .look-btn--filled {
-  background: #445471;
-}
-
-.look-page--blue .look-btn-icon--heart {
-  background: rgba(68, 84, 113, 0.12);
-  color: #445471;
-}
-
-.look-page--green .look-right-panel {
-  background: linear-gradient(to bottom, #495750 0%, #f8f2ea 80%);
-}
-
-.look-page--green .look-right-heading {
-  color: #35443d;
-}
-
-.look-page--green .look-right-desc {
-  color: #495750;
-}
-
-.look-page--green .look-btn--outline {
-  color: #35443d;
-}
-
-.look-page--green .look-btn--filled {
-  background: #35443d;
-}
-
-.look-page--green .look-btn-icon--heart {
-  background: rgba(134, 143, 139, 0.18);
-  color: #35443d;
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
 }
 
 /* ── Mobile ── */
 @media (max-width: 640px) {
-  .look-page {
-    flex-direction: column;
-    height: auto;
-    min-height: 100vh;
-    overflow-y: auto;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE/legacy Edge */
-  }
-
-  .look-page::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, modern Edge */
-  }
-
-  .look-left {
-    width: 100%;
-    height: 55vh;
-    flex-shrink: 0;
-    padding: 0.75rem;
-    margin-bottom: 0;
-    border-radius: 14px;
-    overflow: hidden;
-  }
-
-  .look-img-container {
-    height: 100%;
-  }
-
-  .look-img-frame {
-    clip-path: inset(0 round 14px);
-    -webkit-clip-path: inset(0 round 14px);
-  }
-
-  .look-img {
-    border-radius: 14px;
-  }
-
   .look-right {
-    display: flex;
-    width: 100%;
-    padding: 0.3rem 0.75rem 1.5rem 0.75rem;
-    flex-shrink: 0;
-  }
-
-  .look-right-panel {
-    height: auto;
-    min-height: 60vh;
-    border-radius: 14px;
-    position: relative;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent 60%);
   }
 
   .look-right-content {
-    position: absolute;
     bottom: 1.6rem;
-    left: 1.6rem;
-    right: 1.6rem;
+    left: 1.25rem;
+    right: 1.25rem;
+    width: auto;
   }
 
   .look-palette {
@@ -344,37 +203,91 @@
   }
 
   .look-right-heading {
-    font-size: 1.7rem;
+    font-size: clamp(1.4rem, 10cqi, 2.2rem);
     margin: 0 0 0.5rem 0;
   }
 
   .look-right-desc {
     max-width: 100%;
-    font-size: 0.78rem;
+    font-size: 0.8rem;
     margin-bottom: 1rem;
     line-height: 1.5;
   }
 
   .look-right-buttons {
     flex-direction: column;
-    width: 88%;
+    width: 100%;
     margin-left: -0.2rem;
     gap: 0.5rem;
   }
 
+  /* 44px tall, a comfortable tap target */
   .look-btn {
+    flex: none;
     width: 100%;
-    font-size: 0.78rem;
-    padding: 0.4rem 0.4rem 0.4rem 0.9rem;
+    max-width: none;
+    min-height: 44px;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.4rem 0.4rem 1rem;
   }
 
   .look-btn-icon--circle {
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
   }
 
   .look-btn-icon--circle svg {
     width: 16px;
     height: 16px;
+  }
+}
+
+/* Phones held sideways: little height, so keep the copy compact */
+@media (max-height: 500px) and (orientation: landscape) {
+  .look-right {
+    background: radial-gradient(ellipse 80% 90% at 100% 100%, rgba(0, 0, 0, 0.6), transparent 75%);
+  }
+
+  .look-right-content {
+    bottom: 1rem;
+    left: 40%;
+    right: 1.5rem;
+    width: auto;
+  }
+
+  .look-palette { margin-bottom: 0.5rem; }
+
+  .look-palette-dot {
+    width: 24px;
+    height: 24px;
+  }
+
+  .look-right-heading {
+    font-size: clamp(1.2rem, 8cqi, 1.6rem);
+    margin-bottom: 0.4rem;
+  }
+
+  .look-right-desc {
+    font-size: 0.78rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .look-right-buttons {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
+  .look-btn {
+    flex: 1 1 170px;
+    width: auto;
+    max-width: 220px;
+    min-height: 44px;
+    font-size: 0.8rem;
+    padding: 0.35rem 0.35rem 0.35rem 0.9rem;
+  }
+
+  .look-btn-icon--circle {
+    width: 30px;
+    height: 30px;
   }
 }

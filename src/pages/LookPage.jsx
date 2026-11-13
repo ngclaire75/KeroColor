@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useSearch } from '../SearchContext'
+import VhsImage from '../components/VhsImage'
 import './LookPage.css'
 
 const BATCH_META = {
@@ -485,7 +486,12 @@ export default function LookPage() {
 
         <div className="look-img-container">
           <div className="look-img-frame">
-            <img loading="lazy" src={imgSrc} alt="" className="look-img" style={isGreen && cardIndex === 6 ? { objectPosition: 'center 90%' } : undefined} />
+            <VhsImage
+              src={imgSrc}
+              focusY={isGreen && cardIndex === 6 ? 0.1 : 0.5}
+              imgClassName="look-img"
+              imgStyle={isGreen && cardIndex === 6 ? { objectPosition: 'center 90%' } : undefined}
+            />
           </div>
 
         </div>

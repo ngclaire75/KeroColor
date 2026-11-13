@@ -1,0 +1,47 @@
+.vhs {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.vhs-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.vhs-canvas canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* VCR on-screen display */
+.vhs-osd {
+  position: absolute;
+  inset: 0;
+  padding: 1.4rem 1.6rem;
+  pointer-events: none;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: clamp(1.1rem, 2vw, 1.7rem);
+  letter-spacing: 0.06em;
+  color: #f4f1e8;
+  text-shadow: 2px 0 rgba(255, 40, 60, 0.6), -2px 0 rgba(40, 200, 255, 0.5), 0 0 6px rgba(255, 255, 255, 0.35);
+}
+
+.vhs-osd > span {
+  position: absolute;
+}
+
+.vhs-osd-play    { top: 1.2rem; left: 1.6rem; }
+.vhs-osd-counter { top: 1.2rem; right: 1.6rem; }
+.vhs-osd-date    { bottom: 1.2rem; left: 1.6rem; }
+
+@media (max-width: 640px) {
+  .vhs-osd-play,
+  .vhs-osd-counter { top: 0.8rem; }
+  .vhs-osd-play,
+  .vhs-osd-date    { left: 1rem; }
+  .vhs-osd-counter { right: 1rem; }
+  /* the page's copy sits along the bottom on phones */
+  .vhs-osd-date    { top: 2.6rem; bottom: auto; }
+}
