@@ -489,6 +489,7 @@ export default function LookPage() {
             <VhsImage
               src={imgSrc}
               focusY={isGreen && cardIndex === 6 ? 0.1 : 0.5}
+              explorable
               imgClassName="look-img"
               imgStyle={isGreen && cardIndex === 6 ? { objectPosition: 'center 90%' } : undefined}
             />

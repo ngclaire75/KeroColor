@@ -18,7 +18,9 @@ uniform vec2 uRes;
 uniform vec2 uImg;
 uniform float uTime;
 uniform float uGlitch;
-uniform float uFocusY;
+uniform vec2 uCenter;
+uniform float uZoom;
+uniform float uVel;
 varying vec2 vUv;
 
 float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
@@ -29,11 +31,12 @@ float noise(vec2 p) {
              mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y);
 }
 
-// object-fit: cover, with a vertical focus point (0 = bottom, 1 = top)
+// object-fit: cover, zoomed in by uZoom, looking at uCenter
+// (0..1 across the spare picture on each axis; y: 0 = bottom, 1 = top)
 vec2 cover(vec2 uv) {
   float rs = uRes.x / uRes.y, ri = uImg.x / uImg.y;
-  vec2 s = rs > ri ? vec2(1.0, ri / rs) : vec2(rs / ri, 1.0);
-  return clamp(uv, 0.0, 1.0) * s + vec2((1.0 - s.x) * 0.5, (1.0 - s.y) * uFocusY);
+  vec2 s = (rs > ri ? vec2(1.0, ri / rs) : vec2(rs / ri, 1.0)) / uZoom;
+  return clamp(uv, 0.0, 1.0) * s + (1.0 - s) * uCenter;
 }
 
 // Tape is soft sideways: a small horizontal smear
@@ -62,7 +65,8 @@ void main() {
   uv.x += (hash(vec2(block, frame + 3.0)) - 0.5) * 0.07 * uGlitch * jump;
 
   // Colour bleed: red and blue pull apart
-  float ca = 0.0022 + 0.005 * band + 0.012 * uGlitch;
+  // ...and further while the picture is being dragged around
+  float ca = 0.0022 + 0.005 * band + 0.012 * uGlitch + 0.01 * uVel;
   vec3 col = vec3(
     tape(uv + vec2(ca, 0.0)).r,
     tape(uv).g,
@@ -118,6 +122,10 @@ void main() {
 }
 `
 
+const ZOOM = 1.3           // resting zoom when the photo can be explored
+const ZOOM_MIN = 1.12
+const ZOOM_MAX = 2.6
+
 const REDUCE = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 function stamp(date) {
@@ -126,9 +134,15 @@ function stamp(date) {
 }
 
 // The card photo played back off a dusty VHS tape. Falls back to a plain
-// <img> without WebGL.
-export default function VhsImage({ src, focusY = 0.5, imgClassName = '', imgStyle }) {
+// <img> without WebGL. With `explorable`, desktop and tablet visitors can
+// drag the photo (mouse, trackpad or finger) to look around it, and pinch
+// to zoom. Phones keep the still framing.
+export default function VhsImage({ src, focusY = 0.5, explorable = false, imgClassName = '', imgStyle }) {
   const hostRef = useRef(null)
+  const cursorRef = useRef(null)
+  const cursorDotRef = useRef(null)
+  const [explore] = useState(() => explorable
+    && window.matchMedia('(min-width: 641px) and (min-height: 501px)').matches)
   const playRef = useRef(null)
   const counterRef = useRef(null)
   const [fallback, setFallback] = useState(false)
@@ -159,7 +173,9 @@ export default function VhsImage({ src, focusY = 0.5, imgClassName = '', imgStyl
       uImg: { value: new THREE.Vector2(1, 1) },
       uTime: { value: 0 },
       uGlitch: { value: 0 },
-      uFocusY: { value: focusY },
+      uCenter: { value: new THREE.Vector2(0.5, focusY) },
+      uZoom: { value: 1 },
+      uVel: { value: 0 },
     }
     const material = new THREE.ShaderMaterial({ vertexShader: VERT, fragmentShader: FRAG, uniforms })
     const geometry = new THREE.PlaneGeometry(2, 2)
@@ -203,9 +219,137 @@ export default function VhsImage({ src, focusY = 0.5, imgClassName = '', imgStyl
       })
     }
 
+    // Velocity of the view, so the picture smears a little as it moves
+    const center = uniforms.uCenter.value
+    let lastCX = center.x
+    let lastCY = center.y
     const tick = (time) => {
       uniforms.uTime.value = time
+      const v = Math.min(1, Math.hypot(center.x - lastCX, center.y - lastCY) * 40)
+      uniforms.uVel.value += (v - uniforms.uVel.value) * 0.2
+      lastCX = center.x
+      lastCY = center.y
       render()
+    }
+
+    // ── Look around: drag, trackpad scroll, pinch zoom, arrow keys ──
+    const frame = host.parentElement
+    const target = { x: center.x, y: center.y, zoom: explore ? ZOOM : 1 }
+    const ease = reduce ? { duration: 0 } : { duration: 0.9, ease: 'power3.out' }
+    const toX = gsap.quickTo(center, 'x', ease)
+    const toY = gsap.quickTo(center, 'y', ease)
+    const toZoom = gsap.quickTo(uniforms.uZoom, 'value', reduce ? ease : { duration: 0.6, ease: 'power3.out' })
+    let intro
+
+    // Pixels of hidden picture on each axis at the target zoom
+    const slack = () => {
+      const w = uniforms.uRes.value.x
+      const h = uniforms.uRes.value.y
+      const ri = uniforms.uImg.value.x / uniforms.uImg.value.y
+      const rs = w / h
+      const sx = (rs > ri ? 1 : rs / ri) / target.zoom
+      const sy = (rs > ri ? ri / rs : 1) / target.zoom
+      return { x: ((1 - sx) / sx) * w, y: ((1 - sy) / sy) * h }
+    }
+    // Move the view by screen pixels (content follows the pointer)
+    const pan = (dx, dy) => {
+      const sl = slack()
+      if (sl.x > 1) target.x = gsap.utils.clamp(0, 1, target.x - dx / sl.x)
+      if (sl.y > 1) target.y = gsap.utils.clamp(0, 1, target.y + dy / sl.y)
+      toX(target.x)
+      toY(target.y)
+      if (reduce) render()
+    }
+    const zoomBy = (factor) => {
+      intro?.kill()
+      target.zoom = gsap.utils.clamp(ZOOM_MIN, ZOOM_MAX, target.zoom * factor)
+      toZoom(target.zoom)
+      if (reduce) render()
+    }
+
+    // One pointer drags; two fingers on a tablet pinch to zoom
+    const pointers = new Map()
+    let drag = null
+    let pinch = null
+    const spread = () => {
+      const [a, b] = [...pointers.values()]
+      return Math.hypot(a.x - b.x, a.y - b.y) || 1
+    }
+    const startDrag = (e) => {
+      drag = { x: e.clientX, y: e.clientY, t: performance.now(), vx: 0, vy: 0 }
+    }
+    const onDown = (e) => {
+      if (e.button !== 0) return
+      frame.setPointerCapture(e.pointerId)
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+      if (pointers.size === 2) {
+        drag = null
+        pinch = spread()
+      } else if (pointers.size === 1) {
+        startDrag(e)
+      }
+      frame.classList.add('vhs--dragging')
+    }
+    const onMove = (e) => {
+      if (!pointers.has(e.pointerId)) return
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+      if (pinch) {
+        const d = spread()
+        zoomBy(d / pinch)
+        pinch = d
+        return
+      }
+      if (!drag) return
+      const now = performance.now()
+      const dx = e.clientX - drag.x
+      const dy = e.clientY - drag.y
+      const dt = Math.max(1, now - drag.t)
+      drag.vx = drag.vx * 0.6 + (dx / dt) * 0.4
+      drag.vy = drag.vy * 0.6 + (dy / dt) * 0.4
+      drag.x = e.clientX
+      drag.y = e.clientY
+      drag.t = now
+      pan(dx, dy)
+    }
+    const onUp = (e) => {
+      if (!pointers.delete(e.pointerId)) return
+      if (frame.hasPointerCapture(e.pointerId)) frame.releasePointerCapture(e.pointerId)
+      if (pinch) {
+        // Lifting one finger of a pinch carries on as a drag, no fling
+        pinch = null
+        const [id, p] = [...pointers.entries()][0] || []
+        if (id !== undefined) startDrag({ clientX: p.x, clientY: p.y })
+        return
+      }
+      // Fling: carry on in the direction of the throw, unless the pointer
+      // had already come to rest
+      if (drag && !reduce && performance.now() - drag.t < 80) pan(drag.vx * 260, drag.vy * 260)
+      drag = null
+      frame.classList.remove('vhs--dragging')
+    }
+    const onWheel = (e) => {
+      e.preventDefault()
+      const k = e.deltaMode === 1 ? 16 : 1
+      // Trackpad pinch arrives as ctrl + wheel
+      if (e.ctrlKey) zoomBy(Math.exp(-e.deltaY * k * 0.01))
+      else pan(-e.deltaX * k, -e.deltaY * k)
+    }
+    const onKey = (e) => {
+      const step = 140
+      const moves = { ArrowLeft: [step, 0], ArrowRight: [-step, 0], ArrowUp: [0, step], ArrowDown: [0, -step] }
+      if (moves[e.key]) {
+        e.preventDefault()
+        pan(...moves[e.key])
+      } else if (e.key === '+' || e.key === '=') zoomBy(1.15)
+      else if (e.key === '-') zoomBy(1 / 1.15)
+    }
+    if (explore) {
+      frame.addEventListener('pointerdown', onDown)
+      frame.addEventListener('pointermove', onMove)
+      frame.addEventListener('pointerup', onUp)
+      frame.addEventListener('pointercancel', onUp)
+      frame.addEventListener('wheel', onWheel, { passive: false })
+      window.addEventListener('keydown', onKey)
     }
 
     new THREE.TextureLoader().load(src, (tex) => {
@@ -218,9 +362,12 @@ export default function VhsImage({ src, focusY = 0.5, imgClassName = '', imgStyl
       uniforms.uImg.value.set(tex.image.width, tex.image.height)
       if (reduce) {
         uniforms.uTime.value = 1.3
+        uniforms.uZoom.value = target.zoom
         render()
         return
       }
+      // Slow push in to the explore zoom as the tape starts
+      if (explore) intro = gsap.to(uniforms.uZoom, { value: target.zoom, duration: 2.2, ease: 'expo.out', delay: 0.2 })
       // Tape catching as it starts to play
       uniforms.uGlitch.value = 1
       tweens.push(gsap.to(uniforms.uGlitch, { value: 0, duration: 1.1, ease: 'power3.out' }))
@@ -232,7 +379,6 @@ export default function VhsImage({ src, focusY = 0.5, imgClassName = '', imgStyl
     })
 
     const onEnter = () => !reduce && glitch(0.7)
-    const frame = host.parentElement
     frame.addEventListener('pointerenter', onEnter)
 
     function dispose() {
@@ -242,6 +388,14 @@ export default function VhsImage({ src, focusY = 0.5, imgClassName = '', imgStyl
       nextGlitch?.kill()
       tweens.forEach((t) => t.kill())
       frame.removeEventListener('pointerenter', onEnter)
+      frame.removeEventListener('pointerdown', onDown)
+      frame.removeEventListener('pointermove', onMove)
+      frame.removeEventListener('pointerup', onUp)
+      frame.removeEventListener('pointercancel', onUp)
+      frame.removeEventListener('wheel', onWheel)
+      window.removeEventListener('keydown', onKey)
+      intro?.kill()
+      gsap.killTweensOf([center, uniforms.uZoom])
       ro.disconnect()
       texture?.dispose()
       geometry.dispose()
@@ -252,7 +406,75 @@ export default function VhsImage({ src, focusY = 0.5, imgClassName = '', imgStyl
     }
     return dispose
     // focusY is read once; the page remounts per card
-  }, [src])
+  }, [src, explore])
+
+  // Drag cursor: GSAP trails the pointer, anime.js pops and squeezes it.
+  // On a tablet it rides just above the finger, and waits in the middle
+  // of the photo as a hint until the first touch.
+  useEffect(() => {
+    if (!explore || fallback) return
+    const wrap = cursorRef.current
+    const dot = cursorDotRef.current
+    const frame = wrap.parentElement
+    const reduce = REDUCE()
+    const toX = gsap.quickTo(wrap, 'x', { duration: reduce ? 0 : 0.35, ease: 'power3.out' })
+    const toY = gsap.quickTo(wrap, 'y', { duration: reduce ? 0 : 0.35, ease: 'power3.out' })
+    let anim
+    const to = (params) => {
+      anim?.pause()
+      anim = animate(dot, { duration: reduce ? 0 : 450, ...params })
+    }
+    // A fingertip would cover the bubble, so lift it clear
+    const at = (e) => {
+      const r = frame.getBoundingClientRect()
+      return { x: e.clientX - r.left, y: e.clientY - r.top - (e.pointerType === 'touch' ? 90 : 0) }
+    }
+    const place = (e) => {
+      const { x, y } = at(e)
+      toX(x)
+      toY(y)
+    }
+    const onEnter = (e) => {
+      gsap.set(wrap, at(e))
+      to({ scale: [0, 1], opacity: [0, 1], ease: 'outElastic(1, .6)', duration: reduce ? 0 : 700 })
+    }
+    const onLeave = () => to({ scale: 0, opacity: 0, ease: 'inQuad', duration: reduce ? 0 : 220 })
+    let hint
+    const onDown = () => {
+      hint?.kill()
+      to({ scale: 0.78, opacity: 1, ease: 'outQuad', duration: reduce ? 0 : 180 })
+    }
+    const onUp = () => to({ scale: 1, ease: 'outElastic(1, .5)' })
+
+    // Touch screens have no hover, so show the hint until it is used
+    if (!window.matchMedia('(hover: hover)').matches) {
+      gsap.set(wrap, { x: frame.clientWidth / 2, y: frame.clientHeight / 2 })
+      hint = gsap.delayedCall(reduce ? 0 : 1.2, () => {
+        to({ scale: [0, 1], opacity: [0, 1], ease: 'outElastic(1, .6)', duration: reduce ? 0 : 700 })
+        if (!reduce) {
+          anim = animate(dot, { scale: [1, 1.12], duration: 900, ease: 'inOutSine', loop: true, alternate: true, delay: 700 })
+        }
+      })
+    }
+
+    frame.addEventListener('pointerenter', onEnter)
+    frame.addEventListener('pointerleave', onLeave)
+    frame.addEventListener('pointermove', place)
+    frame.addEventListener('pointerdown', onDown)
+    frame.addEventListener('pointerup', onUp)
+    frame.addEventListener('pointercancel', onUp)
+    return () => {
+      hint?.kill()
+      anim?.pause()
+      gsap.killTweensOf(wrap)
+      frame.removeEventListener('pointerenter', onEnter)
+      frame.removeEventListener('pointerleave', onLeave)
+      frame.removeEventListener('pointermove', place)
+      frame.removeEventListener('pointerdown', onDown)
+      frame.removeEventListener('pointerup', onUp)
+      frame.removeEventListener('pointercancel', onUp)
+    }
+  }, [explore, fallback])
 
   // On-screen tape display (anime.js): blinking PLAY and a running counter
   useEffect(() => {
@@ -284,8 +506,13 @@ export default function VhsImage({ src, focusY = 0.5, imgClassName = '', imgStyl
   }
 
   return (
-    <div className="vhs">
+    <div className={`vhs${explore ? ' vhs--explore' : ''}`}>
       <div ref={hostRef} className="vhs-canvas" />
+      {explore && (
+        <div ref={cursorRef} className="vhs-cursor" aria-hidden="true">
+          <span ref={cursorDotRef} className="vhs-cursor-dot">DRAG</span>
+        </div>
+      )}
       <div className="vhs-osd" aria-hidden="true">
         <span ref={playRef} className="vhs-osd-play">PLAY ▶</span>
         <span ref={counterRef} className="vhs-osd-counter">SP 00:00:00</span>

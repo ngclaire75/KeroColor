@@ -45,3 +45,49 @@
   /* the page's copy sits along the bottom on phones */
   .vhs-osd-date    { top: 2.6rem; bottom: auto; }
 }
+
+/* Explorable photo: drag to look around (desktop only) */
+.vhs--explore {
+  user-select: none;
+  -webkit-user-select: none;
+  /* fingers drag and pinch the photo, not the page */
+  touch-action: none;
+}
+
+@media (hover: hover) {
+  .vhs--explore { cursor: none; }
+}
+
+.vhs-cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.vhs-cursor-dot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 110px;
+  height: 110px;
+  margin: -55px 0 0 -55px;
+  border-radius: 50%;
+  border: 1px solid rgba(244, 241, 232, 0.85);
+  background: rgba(17, 17, 17, 0.18);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 1.9rem;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  color: #f4f1e8;
+  text-shadow: 1px 0 rgba(255, 40, 60, 0.6), -1px 0 rgba(40, 200, 255, 0.5);
+  opacity: 0;
+  transform: scale(0);
+}
+
+.vhs--dragging .vhs-cursor-dot {
+  background: rgba(17, 17, 17, 0.32);
+}
