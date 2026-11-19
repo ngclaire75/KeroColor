@@ -449,59 +449,25 @@
   object-position: center 25%;
 }
 
-/* ── Featured content ── */
-.pp-featured {
-  text-align: center;
-  padding: 0.6rem 1rem 1.2rem;
-}
-
-.pp-featured-label {
-  font-size: 0.73rem;
-  font-weight: 300;
-  letter-spacing: 0.08em;
-  color: #111;
-  margin: 0 0 1.1rem;
-}
-
-.pp-featured-title {
-  font-family: 'Inter', sans-serif;
-  font-size: clamp(1rem, 2vw, 1.55rem);
-  font-weight: 300;
-  color: #111;
-  margin: 0 0 1rem;
-  letter-spacing: 0;
-  line-height: 1.25;
-}
-
-.pp-featured-title-break {
-  display: none;
-}
-
-.pp-featured-date {
-  font-size: 0.87rem;
-  font-weight: 300;
-  color: #111;
-  margin: 0;
-  letter-spacing: 0.05em;
-}
-
-/* ── Oxblood promo ── */
 .pp-oxblood {
   width: 90%;
   max-width: 2000px;
   margin: 0 auto;
-  padding: 6.2rem 0 1.2rem;
+  padding: 3rem 0 1.2rem;
   text-align: left;
 }
 
 .pp-oxblood-title {
   display: flex;
   align-items: flex-end;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
   font-size: 3.5rem;
-  font-weight: 300;
-  color: #111;
-  margin: 0 0 0.8rem -0.06em;
+  font-weight: 700;
+  font-style: italic;
+  text-transform: lowercase;
+  color: #222;
+  margin: 0 0 0.35rem -0.06em;
+  line-height: 1.05;
   letter-spacing: -0.01em;
 }
 
@@ -778,9 +744,9 @@
 
 /* ── Desktop: Oxblood picks text + grids ── */
 @media (min-width: 641px) {
-  .pp-oxblood { width: 82%; max-width: 1800px; }
-  .pp-oxblood-title { font-size: 3rem; }
-  .pp-oxblood-desc { font-size: 1rem; }
+  .pp-oxblood { width: 82%; max-width: 1800px; text-align: center; }
+  .pp-oxblood-title { font-size: 3rem; justify-content: center; margin-left: 0; }
+  .pp-oxblood-desc { font-size: 1rem; margin: 0 auto; }
 
   .pp-palette-grid {
     gap: 3rem 1.7rem;
@@ -865,14 +831,9 @@
     margin: 0 auto 2.5rem;
   }
 
-  .pp-oxblood { padding: 4.2rem 0 0.5rem 0.2rem; }
-  .pp-oxblood-title { font-size: 2.3rem; }
+  .pp-oxblood { padding: 0.6rem 0 0.5rem 0.2rem; }
+  .pp-oxblood-title { font-size: 2.3rem; margin-bottom: 0.7rem; }
   .pp-oxblood-desc { font-size: 0.9rem; }
-
-  .pp-featured-label { font-size: 0.88rem; }
-  .pp-featured-title { font-size: 1.55rem; }
-  .pp-featured-title-break { display: inline; }
-  .pp-featured-date { font-size: 1rem; }
 
   /* Palette grid — one row per item, swatch left / text right */
   .pp-palette-grid {

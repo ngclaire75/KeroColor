@@ -42,8 +42,6 @@ const SEASONAL_PALETTE_ITEMS = [
 
 const SEASONAL_CONTENT = {
   heroImg: springImg,
-  featuredLabel: '- Blossom Reverie',
-  featuredTitle: <>Petal Symphony<br className="pp-featured-title-break" /> Secret Sonata</>,
   oxbloodTitle: 'Our Spring Blossom Picks',
   oxbloodDesc: 'A delicate blend of rosy pinks and leafy greens that captures the beauty of spring blossoms and new beginnings.',
   paletteItems: SEASONAL_PALETTE_ITEMS,
@@ -52,8 +50,6 @@ const SEASONAL_CONTENT = {
 
 const DEFAULT_CONTENT = {
   heroImg,
-  featuredLabel: '- Rouge de Rêve',
-  featuredTitle: <>The Language of<br className="pp-featured-title-break" /> Natural Color</>,
   oxbloodTitle: 'Our Oxblood Picks',
   oxbloodDesc: 'Meet our Oxblood color palette - a curated collection of deep, velvety shades that redefine classic elegance.',
   paletteItems: null,
@@ -234,13 +230,6 @@ export default function PalettePage() {
       {/* ── Feature image ── */}
       <div className="pp-feature">
         <img loading="lazy" src={content.heroImg} alt="" className={`pp-feature-img${activeTab === 'Seasonal Edition' ? ' pp-feature-img--spring' : ''}`} />
-      </div>
-
-      {/* ── Featured content ── */}
-      <div className="pp-featured">
-        <p className="pp-featured-label">{content.featuredLabel}</p>
-        <h2 className="pp-featured-title">{content.featuredTitle}</h2>
-        <p className="pp-featured-date">{new Date().getFullYear()}</p>
       </div>
 
       {/* ── Oxblood promo ── */}

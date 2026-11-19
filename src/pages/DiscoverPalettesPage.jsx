@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom'
 import FullMenu from '../components/FullMenu'
 import Footer from '../components/Footer'
 import { generateShadesFromHex, isValidHex, SAMPLE_HEX_CODES } from '../utils/generatePalette'
-import { colorNameToHex } from '../utils/colorNames'
 import KcLogo3D from '../components/KcLogo3D'
 // Reused wholesale (not just the class names) so the nav, grid, fonts,
 // and footer are consistent with PalettePage.
@@ -38,17 +37,15 @@ export default function DiscoverPalettesPage() {
     window.scrollTo({ top: 0, behavior: 'instant' })
   }, [])
 
-  // Takes a hex or a colour name ("burgundy", "sage"). A name keeps
-  // what was typed in the bar; a hex is shown as typed too.
+  // Hex codes only (#7c1a2e, 7c1a2e or #c12); shown as typed.
   const runSearch = (query) => {
-    const hex = isValidHex(query) ? query : colorNameToHex(query)
-    if (!hex) {
+    if (!isValidHex(query)) {
       setHexError(true)
       return
     }
     setHexError(false)
     setHexInput(query.trim())
-    setPalette(generateShadesFromHex(hex, TOTAL_COUNT))
+    setPalette(generateShadesFromHex(query, TOTAL_COUNT))
   }
 
   const handleHexSearch = (e) => {
@@ -110,10 +107,10 @@ export default function DiscoverPalettesPage() {
           <input
             type="text"
             className="dp-hex-input"
-            placeholder="Search a hex code or colour"
+            placeholder="Search a hex code"
             value={hexInput}
             onChange={(e) => { setHexInput(e.target.value); setHexError(false) }}
-            maxLength={30}
+            maxLength={7}
             ref={hexInputRef}
           />
           {hexInput && (
@@ -131,7 +128,7 @@ export default function DiscoverPalettesPage() {
         </div>
         <button type="submit" className="dp-hex-btn">Search</button>
       </form>
-      {hexError && <p className="dp-hex-error">Enter a hex code or colour name, like #7c1a2e or burgundy.</p>}
+      {hexError && <p className="dp-hex-error">Enter a hex code, like #7c1a2e.</p>}
 
       {/* ── Palette grid — same swatch layout/fonts as PalettePage, the
           searched color swept light -> dark. ── */}

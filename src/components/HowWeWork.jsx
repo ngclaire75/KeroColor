@@ -9,21 +9,21 @@ const steps = [
     num: '01',
     title: 'Discover',
     img: endorse1,
-    body: "We explore your brand's mood, industry, and aesthetic vision to uncover exactly which colors will make your identity unforgettable.",
+    body: 'Wander through images grouped by hue and let a shade find you before you even go looking for it.',
     deco: true,
   },
   {
     num: '02',
-    title: 'Curate',
+    title: 'Explore',
     img: endorse2,
-    body: 'We handpick harmonious palettes built around your story, from bold hero hues to subtle neutrals that hold everything together.',
+    body: 'Step inside a single image to pull out the colors hiding in it and see how they balance one another.',
     deco: true,
   },
   {
     num: '03',
-    title: 'Deliver',
+    title: 'Create',
     img: endorse3,
-    body: 'Your custom color system arrives ready to use across digital, print, packaging, and every touchpoint your brand lives on.',
+    body: 'Carry what you found into whatever you make next, whether that is a wardrobe, a brand, a canvas, or a bedroom wall.',
   },
 ]
 

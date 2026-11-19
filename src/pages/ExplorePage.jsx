@@ -84,8 +84,8 @@ export default function ExplorePage() {
           <img loading="lazy" src={img1} alt="" className="explore-img explore-img--center" />
           <img loading="lazy" src={img3} alt="" className="explore-img explore-img--right" />
           <div className="explore-labels">
-            <span>NEW IN</span>
-            <span>/PALETTE - 25/</span>
+            <span>KEROCOLOR</span>
+            <span>/A COLOR INSPIRATION ARCHIVE/</span>
             <span>WHEN COLOR SPEAKS</span>
           </div>
           <p ref={wonderlandRef} className="explore-wonderland">FLUORESCENT</p>

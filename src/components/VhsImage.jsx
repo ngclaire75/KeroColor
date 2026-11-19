@@ -514,7 +514,7 @@ export default function VhsImage({ src, focusY = 0.5, explorable = false, imgCla
         </div>
       )}
       <div className="vhs-osd" aria-hidden="true">
-        <span ref={playRef} className="vhs-osd-play">PLAY ▶</span>
+        <span ref={playRef} className="vhs-osd-play">PLAY</span>
         <span ref={counterRef} className="vhs-osd-counter">SP 00:00:00</span>
         <span className="vhs-osd-date">{stamp(new Date())}</span>
       </div>
