@@ -355,7 +355,17 @@
   transform: rotate(180deg);
 }
 
+/* Overlays the page below the toggle instead of sitting in flow. In flow,
+   opening it while the dropdown is stuck grows the page above the viewport,
+   the browser's scroll anchoring nudges scrollY to compensate, and that
+   scroll event trips the close-on-scroll handler — so it shut instantly. */
 .pp-menu-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #f2e8d9;
+  pointer-events: none;
   display: grid;
   grid-template-rows: 0fr;
   opacity: 0;
@@ -365,6 +375,7 @@
 .pp-menu-list--open {
   grid-template-rows: 1fr;
   opacity: 1;
+  pointer-events: auto;
 }
 
 .pp-menu-list-inner {
