@@ -579,8 +579,8 @@
 }
 
 .pp-discover-btn {
-  background: #221616;
-  border: 1px solid #221616;
+  background: #4d0c12;
+  border: 1px solid #4d0c12;
   border-radius: 999px;
   padding: 1rem 2.8rem;
   font-family: 'Inter', sans-serif;
@@ -593,8 +593,8 @@
 }
 
 .pp-discover-btn:hover {
-  background: #f2e8d9;
-  color: #111;
+  background: #38090d;
+  color: #fff;
 }
 
 .pp-discover-btn:disabled {
@@ -603,7 +603,7 @@
 }
 
 .pp-discover-btn:disabled:hover {
-  background: #221616;
+  background: #4d0c12;
   color: #fff;
 }
 
@@ -1040,11 +1040,11 @@
 .pp-editorial .pp-palette-name,
 .pp-editorial .pp-palette-hex { color: #fff; }
 .pp-editorial .pp-discover-btn {
-  background: #fff;
-  border-color: #fff;
-  color: #221616;
+  background: #4d0c12;
+  border-color: #4d0c12;
+  color: #fff;
 }
-.pp-editorial .pp-discover-btn:hover { background: transparent; border-color: #fff; color: #fff; }
+.pp-editorial .pp-discover-btn:hover { background: #38090d; border-color: #4d0c12; color: #fff; }
 
 @media (max-width: 640px) {
   .pp-editorial-nav { gap: 0.9rem 1.5rem; padding: 0.75rem 1.25rem; }

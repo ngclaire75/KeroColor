@@ -1,411 +1,53 @@
-/* ── Tab selector — deliberately different from PalettePage's underlined
-   text tabs (.pp-tab): filled red chips instead (same red as the
-   hamburger menu overlay), so this page reads as its own thing while
-   everything else (nav, grid, fonts, footer) stays identical for
-   consistency. ── */
-.dp-tabs-wrap {
-  display: flex;
-  justify-content: center;
-  padding: 2.5rem 1.5rem 1rem;
-}
+.dp-page { background: #f0ebe5; color: #231b20; }
+.dp-page .pp-editorial-nav { background: #000; }
+.dp-page .pp-editorial-nav-item { color: #fff; }
+.dp-hero { position: relative; min-height: min(760px, 82vh); overflow: hidden; background: #4d0c12; color: #fff; }
+.dp-hero::before { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .08; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E"); }
+.dp-hero::after { content: ''; position: absolute; z-index: 2; bottom: -1px; left: 0; width: 100%; height: clamp(32px, 5vw, 70px); pointer-events: none; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -30 1440 150' preserveAspectRatio='none'%3E%3Cpath fill='%23703b40' d='M0 28 C240 -22 480 -22 720 23 S1200 68 1440 13 V120 H0 Z'/%3E%3Cpath fill='%23946465' d='M0 40 C240 -10 480 -10 720 35 S1200 80 1440 25 V120 H0 Z'/%3E%3Cpath fill='%23b78d87' d='M0 52 C240 2 480 2 720 47 S1200 92 1440 37 V120 H0 Z'/%3E%3Cpath fill='%23d5bdb3' d='M0 64 C240 14 480 14 720 59 S1200 104 1440 49 V120 H0 Z'/%3E%3Cpath fill='%23f0ebe5' d='M0 76 C240 26 480 26 720 71 S1200 116 1440 61 V120 H0 Z'/%3E%3C/svg%3E") center bottom / 100% 100% no-repeat; }
+.dp-hero-content { position: relative; z-index: 1; min-height: inherit; padding: 2rem 5vw 2.5rem; display: flex; flex-direction: column; justify-content: space-between; }
+.dp-hero-top, .dp-hero-bottom { display: flex; justify-content: space-between; align-items: center; gap: 1rem; font: 500 .62rem/1.3 'Inter', sans-serif; letter-spacing: .14em; }
+.dp-hero-top { padding-bottom: 1.2rem; }
+.dp-hero-main { padding: 5rem 0; }
+.dp-eyebrow, .dp-section-label { font: 600 .65rem/1.3 'Inter', sans-serif; letter-spacing: .15em; }
+.dp-eyebrow { display: flex; gap: .7rem; align-items: center; margin: 0 0 2rem; }
+.dp-hero h1 { margin: 0; max-width: 1100px; font: 500 clamp(4rem, 9.5vw, 9.5rem)/.9 'Neue Haas Grotesk Text Pro 55 Roman', Arial, sans-serif; letter-spacing: -.065em; }
+.dp-hero h1 em, .dp-search-heading h2 em { font-family: Georgia, serif; font-weight: 400; letter-spacing: -.07em; }
+.dp-intro { max-width: 330px; margin: 2rem 0 0; font: 400 .95rem/1.6 'Inter', sans-serif; color: #ffffffc9; }
+.dp-hero-bottom { padding-top: 1.4rem; }
+.dp-hero-bottom a { color: inherit; text-decoration: none; }
+.dp-hero-bottom a span { font-size: 1.2rem; margin-left: .8rem; }
+.dp-workspace { padding: 4rem 5vw 7rem; max-width: 1800px; margin: auto; }
+.dp-search-heading { display: flex; justify-content: space-between; align-items: end; gap: 2rem; }
+.dp-section-label { color: #806c6c; margin: 0 0 1.5rem; }
+.dp-search-heading h2 { margin: 0; font: 500 clamp(3.5rem, 6.5vw, 7rem)/.95 'Neue Haas Grotesk Text Pro 55 Roman', Arial, sans-serif; letter-spacing: -.06em; }
+.dp-search-heading > p { max-width: 260px; margin: 0 0 .3rem; font: 400 .9rem/1.6 'Inter', sans-serif; color: #706568; }
+.dp-search { margin: 4rem 0 5rem; }
+.dp-search label { display: block; margin-bottom: 1rem; font: 600 .63rem 'Inter', sans-serif; letter-spacing: .13em; }
+.dp-search-row { display: flex; align-items: center; gap: 1.25rem; border: 1px solid #000; padding: .5rem; }
+.dp-current-color { flex: none; width: 2.6rem; height: 2.6rem; border-radius: 50%; border: 1px solid #0002; }
+.dp-search input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; color: #231b20; font: 400 clamp(1.35rem, 2.7vw, 2.2rem) 'Inter', sans-serif; text-transform: uppercase; }
+.dp-search input::placeholder { color: #a79d9d; }
 
-.dp-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.7rem;
-  max-width: 900px;
-}
+.dp-search button { border: 0; padding: .6rem; background: transparent; color: #231b20; cursor: pointer; }
+.dp-search button svg { display: block; width: 28px; height: 28px; }
+.dp-search button span { margin-left: 2.5rem; font-size: 1.1rem; }
+.dp-error { margin: 1rem 0 0; color: #8b1826; font: .9rem 'Inter', sans-serif; }
+.dp-collection-header { display: flex; align-items: end; justify-content: space-between; gap: 1rem; margin-bottom: 2rem; }
+.dp-collection-header h3 { margin: 0; font: 400 clamp(2rem, 3.5vw, 3.5rem)/1 Georgia, serif; letter-spacing: -.02em; text-transform: uppercase; }
+.dp-collection-header h3 span { color: #a95d52; }
+.dp-collection-header > p { font: 600 .63rem 'Inter', sans-serif; letter-spacing: .1em; color: #806c6c; }
+.dp-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2.75rem 1rem; }
+.dp-swatch { display: block; min-width: 0; padding: 0; border: 0; background: none; color: inherit; text-align: left; }
+.dp-swatch-color { position: relative; display: block; height: clamp(180px, 23vw, 340px); overflow: hidden; }
 
-.dp-tab {
-  background: #4d0c12;
-  opacity: 0.55;
-  border: 1px solid #4d0c12;
-  border-radius: 999px;
-  padding: 0.6rem 1.4rem;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 400;
-  letter-spacing: 0.04em;
-  color: #fff;
-  cursor: pointer;
-  transition: opacity 0.3s ease;
-}
-
-.dp-tab--active {
-  opacity: 1;
-}
-
-/* ── Hex search — an alternative way to fill the grid below: type a
-   color instead of picking a tab. ── */
-.dp-hex-search {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
-  padding: 2.5rem 1.5rem 1.5rem;
-}
-
-/* Shrink-wraps the input so the clear (x) button can sit inside the
-   pill's right edge. On mobile it also clips the input's scale trick
-   (see the media query below). */
-.dp-hex-input-wrap {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.dp-hex-input {
-  /* No shrinking inside the flex wrapper — mobile's 133.33% width
-     trick depends on the input overflowing it. */
-  flex-shrink: 0;
-  width: 420px;
-  max-width: 70vw;
-  /* Right padding leaves room for the clear (x) button. */
-  padding: 0.6rem 2.4rem 0.6rem 1rem;
-  border: 1px solid #221616;
-  border-radius: 999px;
-  /* Same beige as the page itself, not white — the pill reads as part
-     of the page rather than a separate white card sitting on it. */
-  background: #f2e8d9;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.8rem;
-  color: #221616;
-}
-
-.dp-hex-input::placeholder {
-  color: rgba(34, 22, 22, 0.45);
-}
-
-.dp-hex-input:focus {
-  outline: none;
-  border-color: #4d0c12;
-}
-
-.dp-hex-btn {
-  /* Same red as the hamburger menu overlay background. */
-  background: #4d0c12;
-  border: 1px solid #4d0c12;
-  border-radius: 999px;
-  padding: 0.6rem 1.4rem;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 400;
-  letter-spacing: 0.04em;
-  color: #fff;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.dp-hex-btn:hover {
-  background: #221616;
-}
-
-/* Rouge, same red as the Search button. Inset 8px from the pill's
-   right edge — the same as its top/bottom gap (36px pill, 20px
-   button) — so it sits evenly inside the end of the pill. */
-.dp-hex-clear {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 20px;
-  height: 20px;
-  padding: 0;
-  border: none;
-  border-radius: 50%;
-  background: #4d0c12;
-  color: #fff;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.3s ease;
-}
-
-/* Block, not inline — no baseline gap nudging the x off-centre. */
-.dp-hex-clear svg {
-  display: block;
-}
-
-.dp-hex-clear:hover {
-  background: #221616;
-}
-
-.dp-hex-error {
-  text-align: center;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.75rem;
-  color: #4d0c12;
-  margin: -0.5rem 0 1rem;
-}
-
-@media (max-width: 640px) {
-  .dp-hex-search {
-    padding: 1.8rem 7vw 1.5rem;
-  }
-
-  /* Real box now (not display:contents) — this is what actually takes
-     the row's flex:1 share and clips the input's compensating overflow. */
-  /* The pill's border and background are drawn here, not on the
-     scaled input — the wrapper clips the input, and a border on the
-     input itself could lose a sub-pixel sliver at the right edge on
-     real devices. 34px tall, matching .dp-hex-btn. */
-  .dp-hex-input-wrap {
-    display: flex;
-    flex: 1;
-    min-width: 0;
-    height: 34px;
-    overflow: hidden;
-    border: 1px solid #221616;
-    border-radius: 999px;
-    background: #f2e8d9;
-  }
-
-  .dp-hex-input-wrap:focus-within {
-    border-color: #4d0c12;
-  }
-
-  .dp-hex-input {
-    max-width: none;
-    /* font-size must be >=16px for mobile browsers to skip auto-zooming
-       the page on focus — no per-input CSS below 16px avoids that, it's
-       a hard browser rule. transform: scale() then visually renders it
-       back down to match .dp-hex-btn's own 0.75rem (12px) text size —
-       scale = 12/16 = 0.75 — and width/height are inflated by the
-       inverse of that same 0.75 (1/0.75 ≈ 133.33%) so the post-scale box
-       still exactly fills the wrapper's 100% width and matches the
-       button's 34px height, same technique as ContactSection's name/
-       email/subject fields. */
-    height: 45.33px;
-    line-height: 45.33px;
-    padding: 0 2.9rem 0 0.9rem;
-    border: none;
-    background: transparent;
-    width: 133.33%;
-    font-size: 16px;
-    transform: scale(0.75);
-    transform-origin: left center;
-  }
-
-  /* Explicit height (not padding-derived) to exactly match the input's
-     own post-scale 34px height above — padding alone can't guarantee
-     that once one side's height comes from a transform: scale(). */
-  /* Measured from inside the wrapper's 1px border: 6px + 1px = 7px
-     from the pill's outer edge, the same as its top/bottom gap. */
-  .dp-hex-clear {
-    right: 6px;
-  }
-
-  .dp-hex-btn {
-    height: 34px;
-    padding: 0 1.15rem;
-    font-size: 0.75rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-}
-@media (max-width: 640px) {
-  /* Left edge matches .pp-palette-grid's own left edge on mobile
-     (width:88%, centered -> 6% inset each side), so the tab row and the
-     grid below it line up instead of the tabs sitting flush left. */
-  .dp-tabs-wrap {
-    padding: 1.8rem 0 1.1rem 6vw;
-    justify-content: flex-start;
-  }
-
-  /* Single row, horizontally swipeable, instead of wrapping — 13 tabs
-     wrapped to several lines was a lot of vertical space on a phone.
-     Scrollbar hidden the same way as the rest of the site (see
-     html::-webkit-scrollbar in index.css). Right padding keeps the last
-     chip from sitting flush against (and reading as cropped by) the
-     viewport edge. Setting overflow-x alone implicitly makes overflow-y
-     'auto' too (a CSS overflow-box quirk), so the pills' rounded bottom
-     edge was getting clipped right at the row's own box edge — the
-     vertical padding here is what gives them room instead of sitting
-     flush against that clip boundary. */
-  .dp-tabs {
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    padding: 0.35rem 6vw 0.35rem 0;
-    max-width: none;
-    /* Stops this row's own scroll from rubber-banding into the page
-       scroll at either end. */
-    overscroll-behavior-x: contain;
-    /* Promotes the row to its own GPU layer so scrolling translates an
-       already-rasterized bitmap instead of re-rasterizing every pill's
-       rounded border/edges each frame — that per-frame re-rasterization
-       (not overscroll) is what actually reads as vibration
-       during a touch-scroll, distinct from both fixes above. */
-    transform: translateZ(0);
-    backface-visibility: hidden;
-  }
-
-  .dp-tabs::-webkit-scrollbar {
-    display: none;
-  }
-
-  .dp-tab {
-    /* Same GPU-layer promotion, per pill — the row-level one alone can
-       still leave each child re-rasterizing independently in some
-       browsers. */
-    transform: translateZ(0);
-    flex-shrink: 0;
-    padding: 0.5rem 1.1rem;
-    font-size: 0.7rem;
-  }
-}
-
-.pp-editorial .dp-hex-error {
-  color: #fff;
-}
-
-.dp-heading {
-  width: min(82%, 900px);
-  margin: 4.5rem auto 0;
-  color: #fff;
-  font-family: 'Neue Haas Grotesk Text Pro 55 Roman', Arial, sans-serif;
-  font-size: 3rem;
-  font-weight: 600;
-  line-height: 1;
-  text-align: center;
-  text-transform: uppercase;
-}
-
-@media (max-width: 640px) {
-  .dp-heading {
-    width: 88%;
-    margin-top: 3rem;
-    font-size: clamp(2rem, 8vw, 3rem);
-    text-align: left;
-  }
-}
-
-
-/* Match the palette grid and keep the search controls bright on black. */
-.pp-editorial .dp-hex-search {
-  width: 82%;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 3.5rem 0 1.5rem;
-}
-.pp-editorial .dp-hex-input-wrap { flex: 1; min-width: 0; }
-.pp-editorial .dp-hex-input {
-  width: 100%;
-  max-width: none;
-  background: #f2e8d9;
-  border-color: #f2e8d9;
-  color: #221616;
-}
-.pp-editorial .dp-hex-input::placeholder { color: #756b65; }
-.pp-editorial .dp-hex-btn,
-.pp-editorial .dp-hex-btn:hover {
-  background: #fff;
-  border-color: #fff;
-  color: #221616;
-}
-
-.dp-page { background: #000; color: #fff; }
-.dp-page .dp-heading,
-.dp-page .pp-palette-name,
-.dp-page .pp-palette-hex,
-.dp-page .dp-hex-error { color: #fff; }
-.dp-page .pp-palette-desc { color: #bcbcbc; }
-.pp-editorial .dp-hex-btn:focus-visible {
-  outline: 2px solid #d8c2ba;
-  outline-offset: 3px;
-}
-.pp-editorial .dp-hex-input:focus-visible { outline: none; }
-@media (max-width: 640px) {
-  .pp-editorial .dp-hex-search { width: 88%; padding: 2.8rem 0 1.5rem; }
-  .pp-editorial .dp-hex-input-wrap { background: #f2e8d9; border-color: #f2e8d9; }
-  .pp-editorial .dp-hex-input { width: 133.33%; background: transparent; }
-}
-
-.pp-editorial .dp-hex-input { padding-right: 5.5rem; }
-.pp-editorial .dp-hex-clear { right: 45px; }
-.pp-editorial .dp-hex-btn,
-.pp-editorial .dp-hex-btn:hover {
-  position: absolute;
-  right: 5px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: #221616;
-}
-
-.dp-page .dp-hex-input {
-  background: #000;
-  border-color: #000;
-  color: #fff;
-}
-.dp-page .dp-hex-input::placeholder { color: rgba(255, 255, 255, 0.72); }
-.dp-page .dp-hex-btn,
-.dp-page .dp-hex-btn:hover { color: #fff; }
-@media (max-width: 640px) {
-  .dp-page .dp-hex-input-wrap { background: #000; border-color: #000; }
-  .dp-page .dp-hex-input { background: transparent; }
-}
-
-.dp-page .dp-hex-input {
-  background: rgba(42, 26, 30, 0.82);
-  border: 1px solid rgba(255, 255, 255, 0.36);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 8px 24px rgba(42, 26, 30, 0.12);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-}
-@media (max-width: 640px) {
-  .dp-page .dp-hex-input-wrap {
-    background: rgba(42, 26, 30, 0.82);
-    border-color: rgba(255, 255, 255, 0.36);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 8px 24px rgba(42, 26, 30, 0.12);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-  }
-  .dp-page .dp-hex-input { background: transparent; border: 0; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
-}
-
-.dp-page .dp-hex-input,
-.dp-page .dp-hex-input-wrap { border-radius: 999px; }
-
-.dp-page .dp-hex-input {
-  background: #4d0c12;
-  border-color: #4d0c12;
-  box-shadow: none;
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-}
-@media (max-width: 640px) {
-  .dp-page .dp-hex-input-wrap {
-    background: #4d0c12;
-    border-color: #4d0c12;
-    box-shadow: none;
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-  }
-  .dp-page .dp-hex-input { background: transparent; }
-}
-
-.dp-page .dp-hex-input {
-  background: #f2e8d9;
-  border-color: #f2e8d9;
-  color: #221616;
-}
-.dp-page .dp-hex-input::placeholder { color: #756b65; }
-.dp-page .dp-hex-btn,
-.dp-page .dp-hex-btn:hover { color: #221616; }
-@media (max-width: 640px) {
-  .dp-page .dp-hex-input-wrap { background: #f2e8d9; border-color: #f2e8d9; }
-  .dp-page .dp-hex-input { background: transparent; }
+.dp-swatch-number { position: absolute; top: 1rem; font: 500 .65rem 'Inter', sans-serif; color: #fff; }
+.dp-swatch-number { left: 1rem; }
+.dp-swatch-meta { display: flex; justify-content: space-between; gap: .5rem; padding-top: 1rem; }
+.dp-swatch-meta strong, .dp-swatch-meta small { display: block; }.dp-swatch-meta strong { font: 500 1.1rem 'Inter', sans-serif; }.dp-swatch-meta small { margin-top: .4rem; font: .72rem/1.4 'Inter', sans-serif; color: #817677; }
+.dp-swatch-hex { font: 500 .7rem 'Inter', sans-serif; text-transform: uppercase; color: #817677; white-space: nowrap; }
+.dp-page :focus-visible { outline: 2px solid #a95d52; outline-offset: 4px; }
+.dp-page .dp-search input:focus-visible { outline: none; }
+@media (max-width: 700px) {
+  .dp-hero { min-height: 580px; min-height: 68svh; }.dp-hero-content { padding: 1.5rem 6vw 2rem; }.dp-hero-top span:last-child, .dp-hero-bottom > span { display: none; }.dp-hero h1 { font-size: clamp(3.8rem, 13.5vw, 6.2rem); }.dp-eyebrow { font-size: .7rem; }.dp-intro { font-size: 1rem; }.dp-hero-main { padding: 3rem 0 4rem; }.dp-hero-bottom { justify-content: flex-end; }
+  .dp-workspace { padding: 3rem 6vw 5rem; }.dp-search-heading { display: block; }.dp-search-heading > p { margin-top: 1.5rem; }.dp-search { margin: 3rem 0 4rem; }.dp-search-row { gap: .75rem; }.dp-current-color { width: 2rem; height: 2rem; }.dp-search input { font-size: max(22px, 1.5rem); }.dp-search button { padding: .6rem; }.dp-search button span { margin-left: .5rem; }.dp-collection-header { align-items: start; }.dp-collection-header > p { text-align: right; line-height: 1.5; }.dp-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem .75rem; }.dp-swatch-color { height: 48vw; }.dp-swatch-meta { display: block; }.dp-swatch-meta strong { font-size: .95rem; }.dp-swatch-hex { display: block; margin-top: .6rem; }
 }
