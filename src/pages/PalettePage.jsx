@@ -1,4 +1,5 @@
-import { useState, useLayoutEffect } from 'react'
+import { useState, useLayoutEffect, useEffect, useRef } from 'react'
+import * as THREE from 'three'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import Footer from '../components/Footer'
 import heroImg from '../../images/fire.webp'
@@ -9,6 +10,100 @@ import deerImg from '../../images/deer.webp'
 import petalImg from '../../images/petal.webp'
 import './PalettePage.css'
 import { playPageLoader } from '../utils/pageLoader'
+
+function DiscoverButton({ onClick }) {
+  const buttonRef = useRef(null)
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const button = buttonRef.current
+    let renderer
+    try {
+      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true })
+    } catch {
+      return
+    }
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    renderer.domElement.className = 'pp-discover-smoke'
+    button.prepend(renderer.domElement)
+    const scene = new THREE.Scene()
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1)
+    const trail = Array.from({ length: 6 }, () => new THREE.Vector2(-10, -10))
+    const radii = new Float32Array(6)
+    const uniforms = { uTrail: { value: trail }, uTrailR: { value: radii }, uTime: { value: 0 }, uAspect: { value: 1 } }
+    const material = new THREE.ShaderMaterial({
+      uniforms, transparent: true, depthWrite: false,
+      vertexShader: 'varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position, 1.0); }',
+      fragmentShader: `
+        uniform vec2 uTrail[6]; uniform float uTrailR[6]; uniform float uTime; uniform float uAspect;
+        varying vec2 vUv;
+        float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+        float noise(vec2 p) {
+          vec2 i = floor(p), f = fract(p), u = f * f * (3.0 - 2.0 * f);
+          return mix(mix(hash(i), hash(i + vec2(1., 0.)), u.x), mix(hash(i + vec2(0., 1.)), hash(i + vec2(1., 1.)), u.x), u.y);
+        }
+        float fbm(vec2 p) { float v = 0., a = .5; for (int i = 0; i < 5; i++) { v += a * noise(p); p = p * 2.03 + 17.1; a *= .5; } return v; }
+        void main() {
+          vec2 p = vec2(vUv.x * uAspect, vUv.y);
+          vec2 q = p * 4.0 + vec2(0., -uTime * .35);
+          vec2 w = vec2(fbm(q + uTime * .12), fbm(q + vec2(5.2, 1.3) - uTime * .1));
+          float s = fbm(q + w * 1.6), mask = 0.;
+          for (int i = 0; i < 6; i++) {
+            float d = length(p - uTrail[i]) + (s - .5) * .55;
+            mask = max(mask, 1. - smoothstep(uTrailR[i] - .09, uTrailR[i] + .22, d));
+          }
+          gl_FragColor = vec4(vec3(0.0), mask * .95);
+        }`,
+    })
+    const geometry = new THREE.PlaneGeometry(2, 2)
+    scene.add(new THREE.Mesh(geometry, material))
+    const pointer = new THREE.Vector2(-10, -10)
+    let active = false, frame, last = performance.now()
+    const resize = () => {
+      const { width, height } = button.getBoundingClientRect()
+      renderer.setSize(width, height, false)
+      uniforms.uAspect.value = width / height
+    }
+    const move = (event) => {
+      if (event.pointerType === 'touch') return
+      const rect = button.getBoundingClientRect()
+      pointer.set((event.clientX - rect.left) / rect.height, 1 - (event.clientY - rect.top) / rect.height)
+      if (!active) trail.forEach((point) => point.copy(pointer))
+      active = true
+    }
+    const leave = () => { active = false }
+    button.addEventListener('pointermove', move)
+    button.addEventListener('pointerleave', leave)
+    const observer = new ResizeObserver(resize)
+    observer.observe(button)
+    resize()
+    const tick = (now) => {
+      const dt = Math.min((now - last) / 1000, .05)
+      last = now
+      uniforms.uTime.value = now / 1000
+      trail.forEach((point, i) => {
+        point.lerp(i === 0 ? pointer : trail[i - 1], 1 - Math.exp(-dt * (i === 0 ? 9 : 7)))
+        const target = active ? 1.0 * (1 - i / 7) : 0
+        radii[i] += (target - radii[i]) * (1 - Math.exp(-dt * (active ? 6 : 2.5)))
+      })
+      renderer.render(scene, camera)
+      frame = requestAnimationFrame(tick)
+    }
+    frame = requestAnimationFrame(tick)
+    return () => {
+      cancelAnimationFrame(frame)
+      observer.disconnect()
+      button.removeEventListener('pointermove', move)
+      button.removeEventListener('pointerleave', leave)
+      geometry.dispose()
+      material.dispose()
+      renderer.dispose()
+      renderer.domElement.remove()
+    }
+  }, [])
+
+  return <button ref={buttonRef} className="pp-discover-btn" onClick={onClick}><span className="pp-discover-label">Discover More Palettes</span></button>
+}
 
 const TABS = ['All', 'Seasonal Edition', 'Editorial', 'Inspiration']
 
@@ -138,12 +233,9 @@ export default function PalettePage() {
           Palettes page; Seasonal Edition opens it on its matcha green,
           #484537, as the first swatch. ── */}
       <div className="pp-discover-wrap">
-        <button
-          className="pp-discover-btn"
+        <DiscoverButton
           onClick={() => navigate('/palette/discover', activeTab === 'Seasonal Edition' ? { state: { hex: '#484537', anchorFirst: true } } : undefined)}
-        >
-          Discover More Palettes
-        </button>
+        />
       </div>
 
       <Footer />
