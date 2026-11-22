@@ -74,7 +74,7 @@ export default function DiscoverPalettesPage() {
             <div className="dp-search-row"><span className="dp-current-color" style={{ background: activeHex }} aria-hidden="true" /><input id="dp-hex" value={hexInput} onChange={(e) => { setHexInput(e.target.value); setHexError(false) }} placeholder="#4D0C12" maxLength={7} spellCheck="false" aria-invalid={hexError} aria-describedby={hexError ? 'dp-error' : undefined} /><button type="submit" aria-label="Search color"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" strokeWidth="1.7" /><path d="m15.5 15.5 4.5 4.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" /></svg></button></div>
             {hexError && <p id="dp-error" className="dp-error" role="alert">Enter a hex code, like #7c1a2e.</p>}
           </form>
-          <div className="dp-collection-header"><div><p className="dp-section-label">THE SHADE COLLECTION</p><h3>From light to deep</h3></div><p>12 SHADES / {activeHex.toUpperCase()}</p></div>
+          <div className="dp-collection-header"><p className="dp-section-label">THE SHADE COLLECTION</p><p>12 SHADES / {activeHex.toUpperCase()}</p></div>
           <div ref={gridRef} className="dp-grid">{palette.map((item, index) => <div className="dp-swatch" key={`${item.color}-${index}`}><span className="dp-swatch-color" style={{ backgroundColor: item.color }}><span className="dp-swatch-number">{String(index + 1).padStart(2, '0')}</span></span><span className="dp-swatch-meta"><span><strong>{item.name}</strong><small>{item.desc}</small></span><span className="dp-swatch-hex">{item.color}</span></span></div>)}</div>
         </section>
       </main>

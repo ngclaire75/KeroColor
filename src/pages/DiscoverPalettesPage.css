@@ -32,10 +32,8 @@
 .dp-search button svg { display: block; width: 28px; height: 28px; }
 .dp-search button span { margin-left: 2.5rem; font-size: 1.1rem; }
 .dp-error { margin: 1rem 0 0; color: #8b1826; font: .9rem 'Inter', sans-serif; }
-.dp-collection-header { display: flex; align-items: end; justify-content: space-between; gap: 1rem; margin-bottom: 2rem; }
-.dp-collection-header h3 { margin: 0; font: 400 clamp(2rem, 3.5vw, 3.5rem)/1 Georgia, serif; letter-spacing: -.02em; text-transform: uppercase; }
-.dp-collection-header h3 span { color: #a95d52; }
-.dp-collection-header > p { font: 600 .63rem 'Inter', sans-serif; letter-spacing: .1em; color: #806c6c; }
+.dp-collection-header { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 2rem; }
+.dp-collection-header > p { margin: 0; font: 600 .63rem/1.3 'Inter', sans-serif; letter-spacing: .1em; color: #806c6c; }
 .dp-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2.75rem 1rem; }
 .dp-swatch { display: block; min-width: 0; padding: 0; border: 0; background: none; color: inherit; text-align: left; }
 .dp-swatch-color { position: relative; display: block; height: clamp(180px, 23vw, 340px); overflow: hidden; }
