@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Footer from '../components/Footer'
 import bnd1 from '../../images/bnd1.webp'
 import bnd2 from '../../images/bnd2.webp'
@@ -63,6 +63,7 @@ export default function EditorialPage() {
     <>
     <div className="ed-page ed-page--revealed">
       <nav className="ed-nav">
+        <Link to="/" className="ed-nav-item"><span>home</span></Link>
         {NAV_ITEMS.map(item => (
           <button
             key={item}

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useHeroVideo } from '../HeroVideoContext'
 import Footer from '../components/Footer'
 import EntryConsentModal from '../components/EntryConsentModal'
@@ -390,6 +390,7 @@ export default function InspirationPage() {
     )}
     <div ref={pageRef} className="in-page in-page--revealed">
       <nav className="in-nav">
+        <Link to="/" className="in-nav-item"><span>home</span></Link>
         {NAV_ITEMS.map(item => (
           <button
             key={item}
