@@ -32,7 +32,7 @@
 }
 
 .xm-section {
-  width: min(1100px, 100% - 6rem);
+  width: calc(100% - 36rem);
   margin: 0 auto;
   padding: 5.5rem 0 0;
 }
@@ -50,7 +50,6 @@
   display: grid;
   grid-template-columns: 1fr;
   grid-template-areas:
-    "kicker"
     "title"
     "lede";
   margin-bottom: 2.2rem;
@@ -115,6 +114,7 @@
 }
 
 .xm-way-stack {
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 340px;
@@ -129,11 +129,7 @@
   justify-content: space-between;
   min-height: 0;
   padding: 0 0.7rem 0.55rem;
-  transition: flex 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.xm-way-stack:hover .xm-way-block:hover {
-  flex-grow: 80 !important;
+  transition: flex-grow 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .xm-way-pct,
@@ -150,14 +146,25 @@
   transition: opacity 0.3s ease;
 }
 
-.xm-way-block:hover .xm-way-hex {
+.xm-way-block--active .xm-way-hex {
   opacity: 1;
+}
+
+.xm-way-hit-areas {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xm-way-block { transition: none; }
 }
 
 /* ── Fabric & finish ── */
 .xm-finishes {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
@@ -214,7 +221,6 @@
   .xm-head {
     grid-template-columns: 1fr;
     grid-template-areas:
-      "kicker"
       "title"
       "lede";
     row-gap: 0.8rem;

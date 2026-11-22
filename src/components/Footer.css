@@ -9,22 +9,6 @@
   box-sizing: border-box;
 }
 
-.footer::before {
-  content: '';
-  position: absolute;
-  top: 1px;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background-image: repeating-linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.85) 0px,
-    rgba(255, 255, 255, 0.85) 9px,
-    transparent 9px,
-    transparent 14px
-  );
-}
-
 .footer-brand {
   font-family: 'Inter', sans-serif;
   font-size: 0.72rem;
@@ -52,16 +36,6 @@
 
 .theme-pink .footer {
   background: #151611;
-}
-
-.theme-pink .footer::before {
-  background-image: repeating-linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.85) 0px,
-    rgba(255, 255, 255, 0.85) 9px,
-    transparent 9px,
-    transparent 14px
-  );
 }
 
 .theme-pink .footer-brand {

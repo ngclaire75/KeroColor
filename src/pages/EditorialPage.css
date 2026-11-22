@@ -3,17 +3,6 @@
   background: #000;
 }
 
-.ed-page--hidden {
-  filter: blur(14px);
-  opacity: 0;
-}
-
-.ed-page--revealed {
-  filter: blur(0);
-  opacity: 1;
-  transition: filter 0.85s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.65s ease;
-}
-
 .ed-nav {
   background: #4d0c12;
   min-height: 48px;

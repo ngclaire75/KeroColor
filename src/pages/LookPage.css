@@ -1,15 +1,3 @@
-/* ── Content reveal ── */
-.look-page--hidden {
-  filter: blur(14px);
-  opacity: 0;
-}
-
-.look-page--revealed {
-  filter: blur(0);
-  opacity: 1;
-  transition: filter 0.85s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.65s ease;
-}
-
 /* Full-bleed photo with the copy laid over it */
 .look-page {
   position: relative;

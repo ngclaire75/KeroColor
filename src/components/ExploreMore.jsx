@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './ExploreMore.css'
 
@@ -184,6 +184,30 @@ function FabricSwatch({ fabric, color, uid }) {
   )
 }
 
+function WearStack({ blocks }) {
+  const [activeBlock, setActiveBlock] = useState(null)
+
+  return (
+    <div className="xm-way-stack" onMouseLeave={() => setActiveBlock(null)}>
+      {blocks.map(([pct, hex], i) => (
+        <div
+          className={`xm-way-block${activeBlock === i ? ' xm-way-block--active' : ''}`}
+          key={i}
+          style={{ flex: activeBlock === i ? 80 : pct, background: hex, color: inkFor(hex) }}
+        >
+          <span className="xm-way-pct">{pct}%</span>
+          <span className="xm-way-hex">{hex}</span>
+        </div>
+      ))}
+      <div className="xm-way-hit-areas" aria-hidden="true">
+        {blocks.map(([pct], i) => (
+          <div key={i} style={{ flex: pct }} onMouseEnter={() => setActiveBlock(i)} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export default function ExploreMore({ searchResult }) {
   const key = FAMILIES[searchResult?.colorFamily] ? searchResult.colorFamily : 'red'
   const f = FAMILIES[key]
@@ -210,21 +234,13 @@ export default function ExploreMore({ searchResult }) {
       {/* ── Wear it three ways ── */}
       <section className="xm-section xm-reveal">
         <div className="xm-head">
-          <span className="xm-kicker">Styling</span>
           <h2 className="xm-title">Wear {f.name} Three Ways</h2>
           <p className="xm-lede">Every look follows the 60 30 10 rule: a main color, a supporting one, and a small accent. Each block below is drawn to scale.</p>
         </div>
         <div className="xm-ways">
           {waysFor(f).map((way) => (
             <article className="xm-way" key={way.title}>
-              <div className="xm-way-stack">
-                {way.blocks.map(([pct, hex], i) => (
-                  <div className="xm-way-block" key={i} style={{ flex: pct, background: hex, color: inkFor(hex) }}>
-                    <span className="xm-way-pct">{pct}%</span>
-                    <span className="xm-way-hex">{hex}</span>
-                  </div>
-                ))}
-              </div>
+              <WearStack blocks={way.blocks} />
               <h3 className="xm-card-title">{way.title}</h3>
               <p className="xm-card-copy">{way.copy}</p>
             </article>
@@ -235,7 +251,6 @@ export default function ExploreMore({ searchResult }) {
       {/* ── Fabric & finish ── */}
       <section className="xm-section xm-section--last xm-reveal">
         <div className="xm-head">
-          <span className="xm-kicker">Texture</span>
           <h2 className="xm-title">Fabric &amp; Finish</h2>
           <p className="xm-lede">The same {f.name.toLowerCase()} ({f.shades.main}) reads differently in every texture. Choose the finish by how much light you want the color to catch.</p>
         </div>

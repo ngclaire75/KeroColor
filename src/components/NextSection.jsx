@@ -391,7 +391,6 @@ export default function NextSection({ searchResult }) {
   return (
     <section className="next-section">
       <div className="next-head">
-        <span className="next-kicker">Moodboards</span>
         <h2 className="next-title">See The Color In Real Life</h2>
         <p className="next-lede">Each moodboard gathers photos that share one palette, from fabrics to landscapes and city streets. Tap any board to open the full look with its color swatches.</p>
       </div>

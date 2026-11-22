@@ -1,25 +1,16 @@
-import { useState, useEffect, useLayoutEffect } from 'react'
+import { useState, useLayoutEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import FullMenu from '../components/FullMenu'
 import Footer from '../components/Footer'
-import { useSearch } from '../SearchContext'
-import { SAMPLE_HEX_CODES } from '../utils/generatePalette'
 import heroImg from '../../images/fire.webp'
 import springImg from '../../images/spr.webp'
 import lipstickImg from '../../images/girlofmydreams.webp'
 import vogueImg from '../../images/vogue.webp'
 import deerImg from '../../images/deer.webp'
 import petalImg from '../../images/petal.webp'
-import KcLogo3D from '../components/KcLogo3D'
 import './PalettePage.css'
 import { playPageLoader } from '../utils/pageLoader'
 
 const TABS = ['All', 'Seasonal Edition', 'Editorial', 'Inspiration']
-
-// Discover Palettes is browsed by hex search now, not named tabs — the
-// menu shows the same 9 sample hex codes as that page's own hamburger,
-// each opening straight into that color's grid there.
-const DISCOVER_MENU_ITEMS = SAMPLE_HEX_CODES
 
 const DUO_ITEMS = [
   { img: lipstickImg, name: 'Velvet Keepsake', desc: 'A heart kept safe in ruby velvet', hexes: ['#742833'] },
@@ -42,16 +33,14 @@ const SEASONAL_PALETTE_ITEMS = [
 
 const SEASONAL_CONTENT = {
   heroImg: springImg,
-  oxbloodTitle: 'Our Spring Blossom Picks',
-  oxbloodDesc: 'A delicate blend of rosy pinks and leafy greens that captures the beauty of spring blossoms and new beginnings.',
+  oxbloodTitle: 'Our Spring Blossom Picks. Discover the colors of a new season.',
   paletteItems: SEASONAL_PALETTE_ITEMS,
   duoItems: SEASONAL_DUO_ITEMS,
 }
 
 const DEFAULT_CONTENT = {
   heroImg,
-  oxbloodTitle: 'Our Oxblood Picks',
-  oxbloodDesc: 'Meet our Oxblood color palette - a curated collection of deep, velvety shades that redefine classic elegance.',
+  oxbloodTitle: 'Our Oxblood Picks. Discover the depth of a timeless shade.',
   paletteItems: null,
   duoItems: DUO_ITEMS,
 }
@@ -68,13 +57,7 @@ const PALETTE_ITEMS = [
 export default function PalettePage() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { setSearchResult } = useSearch()
   const [activeTab, setActiveTab] = useState(location.state?.tab || 'All')
-  const [barOpen, setBarOpen] = useState(true)
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [fullMenuOpen, setFullMenuOpen] = useState(false)
-  const [animPaused, setAnimPaused] = useState(false)
-
   // Land on this page at the top, regardless of scroll position on the
   // tab navigated from (browsers preserve scroll across client-side route
   // changes by default). Layout effect so it happens before the first
@@ -90,13 +73,6 @@ export default function PalettePage() {
   const paletteItems = content.paletteItems || PALETTE_ITEMS
   const duoItems = content.duoItems
 
-  useEffect(() => {
-    if (!menuOpen) return
-    const closeOnScroll = () => setMenuOpen(false)
-    window.addEventListener('scroll', closeOnScroll, { passive: true })
-    return () => window.removeEventListener('scroll', closeOnScroll)
-  }, [menuOpen])
-
   const handleTabClick = (tab) => {
     if (tab === 'Editorial') { navigate('/editorial'); return }
     if (tab === 'Inspiration') { navigate('/inspiration'); return }
@@ -106,137 +82,24 @@ export default function PalettePage() {
     setActiveTab(tab)
   }
 
-  // Every menu item is a sample hex code — navigates to Discover
-  // Palettes with that color pre-searched.
-  const handleMenuItemClick = (hex) => {
-    setFullMenuOpen(false)
-    navigate('/palette/discover', { state: { hex } })
-  }
-
   return (
-    <div className="pp-page">
-      {/* Capped at 9 for both mobile and desktop — same as Discover
-          Palettes' own hamburger (FullMenu's entrance animation only
-          staggers up to 9 rows anyway, see .fm-item:nth-child in
-          FullMenu.css). */}
-      <FullMenu
-        open={fullMenuOpen}
-        onClose={() => setFullMenuOpen(false)}
-        items={DISCOVER_MENU_ITEMS.slice(0, 9)}
-        onItemClick={handleMenuItemClick}
-      />
-
-
-      {/* ── Announcement bar ── */}
-      {barOpen && (
-        <div className="pp-bar">
-          <button className="pp-bar-playpause" onClick={() => setAnimPaused(p => !p)} aria-label={animPaused ? 'Play' : 'Pause'}>
-            {animPaused ? (
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
-                <path fill="#fff" d="M4 3.857c0-1.48 1.66-2.364 2.898-1.542l12.273 8.142a1.85 1.85 0 0 1 0 3.086L6.898 21.686C5.659 22.507 4 21.623 4 20.142z"/>
-              </svg>
-            ) : (
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
-                <path fill="#fff" d="M8 3a1.5 1.5 0 0 1 1.5 1.5v15a1.5 1.5 0 0 1-3 0v-15A1.5 1.5 0 0 1 8 3m8 0a1.5 1.5 0 0 1 1.5 1.5v15a1.5 1.5 0 0 1-3 0v-15A1.5 1.5 0 0 1 16 3"/>
-              </svg>
-            )}
+    <div className="pp-page pp-editorial">
+      <nav className="pp-editorial-nav" aria-label="Palette navigation">
+        <Link to="/" className="pp-editorial-nav-item pp-editorial-home"><span>home</span></Link>
+        {TABS.map(tab => (
+          <button key={tab} className={`pp-editorial-nav-item${activeTab === tab ? ' pp-editorial-nav-item--active' : ''}`}
+            onClick={() => handleTabClick(tab)} aria-current={activeTab === tab ? 'page' : undefined}>
+            <span>{tab}</span>
           </button>
-          <div className={`pp-bar-texts${animPaused ? ' pp-bar-texts--paused' : ''}`}>
-            <span className="pp-bar-text pp-bar-text--1">
-              Discover colors related to your favorite{' '}
-              <Link to="/palette/discover" className="pp-bar-underline">hexcode!</Link>
-            </span>
-            <span className="pp-bar-text pp-bar-text--2">
-              Have a Look at Our{' '}
-              <Link
-                to="/explore"
-                className="pp-bar-underline"
-                onClick={() => setSearchResult({ query: 'green', valid: true, colorFamily: 'green' })}
-              >
-                Matcha Collection
-              </Link>
-            </span>
-          </div>
-          <button className="pp-bar-close" onClick={() => setBarOpen(false)} aria-label="Close">
-            <svg width="13" height="13" viewBox="0 0 11 11" fill="none">
-              <path d="M1 1L10 10M10 1L1 10" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
-            </svg>
-          </button>
-        </div>
-      )}
-
-      {/* ── Navigation ── */}
-      <nav className="pp-nav">
-        <div className="pp-nav-left">
-          <button className="pp-nav-action" onClick={() => setFullMenuOpen(true)} aria-label="Open menu">
-            <svg width="17" height="12" viewBox="0 0 17 12" fill="none">
-              <rect width="17" height="1.6" rx="0.8" fill="#371a16"/>
-              <rect y="5.2" width="17" height="1.6" rx="0.8" fill="#371a16"/>
-              <rect y="10.4" width="17" height="1.6" rx="0.8" fill="#371a16"/>
-            </svg>
-          </button>
-        </div>
-
-        <div className="pp-nav-center">
-          <Link to="/" className="pp-nav-brand">
-            <span className="pp-nav-brand-text">KEROCOLOR</span>
-            <KcLogo3D className="pp-nav-brand-img" />
-          </Link>
-        </div>
-
+        ))}
       </nav>
 
-      {/* ── Tabs (desktop) ── */}
-      <div className="pp-tabs-wrap">
-        <div className="pp-tabs">
-          {TABS.map(tab => (
-            <button
-              key={tab}
-              className={`pp-tab${activeTab === tab ? ' pp-tab--active' : ''}`}
-              onClick={() => handleTabClick(tab)}
-            >
-              <span>{tab}</span>
-            </button>
-          ))}
+      <section className="pp-editorial-intro">
+        <h1 className="pp-oxblood-title">{content.oxbloodTitle}</h1>
+        <div className="pp-feature">
+          <img src={content.heroImg} alt="" className={`pp-feature-img${activeTab === 'Seasonal Edition' ? ' pp-feature-img--spring' : ''}`} />
         </div>
-      </div>
-
-      {/* ── Menu dropdown (mobile) ── */}
-      <div className="pp-menu-dropdown">
-        <button className="pp-menu-toggle" onClick={() => setMenuOpen(o => !o)}>
-          <span>Menu</span>
-          <svg
-            className={`pp-menu-chevron${menuOpen ? ' pp-menu-chevron--open' : ''}`}
-            fill="none" viewBox="0 0 24 24" focusable="false" aria-hidden="true"
-          >
-            <path fill="#000" d="m11.558 16.505.496.495 7.949-8.01v-.987L19.999 8h-.985l-6.967 7.017L4.992 8H4v.987z"></path>
-          </svg>
-        </button>
-        <div className={`pp-menu-list${menuOpen ? ' pp-menu-list--open' : ''}`}>
-          <div className="pp-menu-list-inner">
-            {TABS.map(tab => (
-              <button
-                key={tab}
-                className={`pp-menu-item${activeTab === tab ? ' pp-menu-item--active' : ''}`}
-                onClick={() => { handleTabClick(tab); setMenuOpen(false) }}
-              >
-                <span>{tab}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ── Feature image ── */}
-      <div className="pp-feature">
-        <img loading="lazy" src={content.heroImg} alt="" className={`pp-feature-img${activeTab === 'Seasonal Edition' ? ' pp-feature-img--spring' : ''}`} />
-      </div>
-
-      {/* ── Oxblood promo ── */}
-      <div className="pp-oxblood">
-        <h2 className="pp-oxblood-title">{content.oxbloodTitle}</h2>
-        <p className="pp-oxblood-desc">{content.oxbloodDesc}</p>
-      </div>
+      </section>
 
       {/* ── Palette grid ── */}
       <div className="pp-palette-grid">
