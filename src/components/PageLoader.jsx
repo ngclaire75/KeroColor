@@ -385,7 +385,6 @@ export default function PageLoader({ onDone, fast = false }) {
           root: rootRef.current,
           figureCanvas: renderer.domElement,
           background: LOADER_BG,
-          fast,
           onDone: finish,
         }).catch((err) => {
           // never leave the loader stuck: fall back to a quick fade

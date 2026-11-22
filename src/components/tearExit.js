@@ -194,7 +194,7 @@ async function createTear({ THREE, P5, root, figureCanvas, background }) {
 
 // Exit: the white torn edge runs from the bottom-left corner to the top-
 // right, then the halves pull apart and away, revealing the page.
-export async function runTearExit({ THREE, animate, P5, root, figureCanvas, background, fast = false, onDone }) {
+export async function runTearExit({ THREE, animate, P5, root, figureCanvas, background, onDone }) {
   const t = await createTear({ THREE, P5, root, figureCanvas, background })
   t.tear.run = 0
   t.tear.sep = 0
@@ -202,8 +202,8 @@ export async function runTearExit({ THREE, animate, P5, root, figureCanvas, back
   // The halves now stand in for the loader, so its own layers can go —
   // when they part, the real page shows through.
   root.classList.add('plx--tearing')
-  // fast: ≈0.65s, for reloads/page switches; otherwise the full ≈1.6s
-  const T = fast ? { run: 260, sep: 460, delay: 190 } : { run: 650, sep: 1050, delay: 520 }
+  // Keep the tear quick even when the first-load progress bar runs longer.
+  const T = { run: 260, sep: 460, delay: 190 }
   animate(t.tear, { run: [0, 1], duration: T.run, ease: 'inOutSine' })
   animate(t.tear, {
     sep: [0, 1],
