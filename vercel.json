@@ -1,6 +1,0 @@
-{
-  "rewrites": [
-    { "source": "/api/media/:path*", "destination": "/api/media?path=:path*" },
-    { "source": "/((?!api/).*)", "destination": "/index.html" }
-  ]
-}

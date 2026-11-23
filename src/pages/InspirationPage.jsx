@@ -27,14 +27,14 @@ import lookModel4 from '../../images/model4.webp'
 import './InspirationPage.css'
 
 // Source files live on Cloudflare R2 (full original quality, well over
-// GitHub's/Vercel's 100MB per-file limits for normal repo/deploy assets),
-// but are served through /api/media/* — a same-origin Vercel proxy —
+// GitHub's 100MB per-file limit for normal repo/deploy assets),
+// but are served through /api/media/* — a same-origin Netlify edge proxy —
 // rather than the browser hitting the R2 pub-*.r2.dev subdomain directly.
 // That auto-generated subdomain showed real DNS resolution failures on
 // multiple independent networks ("hostname could not be found," even on a
 // zero-JS <link rel="preconnect">). Since the browser has already
-// resolved kerocolor.vercel.app to load the page, routing videos through
-// that same origin needs no new DNS lookup at all — see api/media.js.
+// resolved kerocolor.kerosant.site to load the page, routing videos through
+// that same origin needs no new DNS lookup at all — see netlify/edge-functions/media.js.
 //
 // Tried adaptive-bitrate HLS for the hero video first (multiple quality
 // renditions, low-quality fast-start segment ramping up to full quality)
